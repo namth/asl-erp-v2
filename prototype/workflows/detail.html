@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <script>(function(){if(localStorage.getItem('asl_theme')==='dark'){document.documentElement.classList.add('dark');}else{document.documentElement.classList.remove('dark');}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASL LAW - Chi Tiết Mẫu Quy Trình (Workflow Detail)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/layout.css?v=3.1">
+  <script src="../assets/layout.js?v=3.1" defer></script>
+</head>
+<body class="min-h-screen bg-[#F4F8FA] text-slate-800 flex">  <!-- Modular Shared Sidebar (Auto-mounted by layout.js) -->
+  <aside id="sidebar" class="fixed top-0 left-0 bottom-0 w-72 bg-white/95 backdrop-blur-xl z-40 transition-all duration-300 ease-in-out flex flex-col justify-between shadow-xl shadow-slate-900/5"></aside>
+
+  <!-- Main Container -->
+  <div id="main-container" class="flex-1 md:ml-72 flex flex-col min-h-screen transition-all duration-300 ease-in-out">
+
+    <!-- Top Bar with Rich Brand Gradient -->
+    <header class="header-gradient text-white h-20 px-6 flex items-center justify-between sticky top-0 z-30 shadow-md">
+      <div class="flex items-center gap-4">
+        <button onclick="toggleSidebar()" class="md:hidden p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <div>
+          <div class="text-xs text-cyan-200/90 font-medium flex items-center gap-1.5">
+            <a href="index.html" class="hover:underline">Mẫu Quy Trình</a>
+            <span>/</span>
+            <span class="text-white font-semibold">Chi Tiết Template</span>
+          </div>
+          <h1 class="text-lg font-bold text-white tracking-tight">Sở Hữu Trí Tuệ (Tranh Chấp Nhãn Hiệu)</h1>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="px-3.5 py-2 rounded-xl bg-[#C59B27] hover:bg-[#B3891E] text-white font-bold text-xs transition-colors flex items-center gap-1.5 shadow-sm">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+          <span>Trình Thiết Kế Quy Trình Động</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 p-6 md:p-8 max-w-none mx-auto w-full space-y-8">
+
+      <!-- SLA Performance Summary (Solid Bold Cards theo phong cách Dashboard) -->
+      <section class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <!-- 1. Số Vụ Việc (Solid Deep Navy) -->
+        <div class="rounded-2xl p-6 relative overflow-hidden bg-[#002D54] text-white shadow-lg shadow-[#002D54]/25 transition-all hover:-translate-y-1">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-cyan-200/90 uppercase tracking-wider">Số Vụ Việc Áp Dụng</span>
+            <span class="p-2 rounded-xl bg-white/15 text-white backdrop-blur-sm">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            </span>
+          </div>
+          <div class="text-3xl font-extrabold text-white mt-3 font-mono">28 <span class="text-xs font-semibold text-cyan-200/80">vụ việc</span></div>
+          <div class="text-xs text-cyan-100/90 mt-2 flex items-center gap-1.5">
+            <span class="text-emerald-300 font-bold bg-white/10 px-2 py-0.5 rounded-md">66%</span> tổng số vụ của hãng
+          </div>
+        </div>
+
+        <!-- 2. Thời Gian TB (Solid Emerald Green) -->
+        <div class="rounded-2xl p-6 relative overflow-hidden bg-[#047857] text-white shadow-lg shadow-emerald-950/25 transition-all hover:-translate-y-1">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-emerald-100 uppercase tracking-wider">Thời Gian Giải Quyết TB</span>
+            <span class="p-2 rounded-xl bg-white/15 text-white backdrop-blur-sm">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </span>
+          </div>
+          <div class="text-3xl font-extrabold text-white mt-3 font-mono">38.2 <span class="text-xs font-semibold text-emerald-200">ngày</span></div>
+          <div class="text-xs text-emerald-100/90 mt-2 flex items-center gap-1.5">
+            <span class="text-white font-bold bg-white/20 px-2 py-0.5 rounded-md text-[10px]">Đạt Cam Kết</span> SLA mục tiêu: 45 ngày
+          </div>
+        </div>
+
+        <!-- 3. Điểm Tắc Nghẽn (Solid Brand Orange) -->
+        <div class="rounded-2xl p-6 relative overflow-hidden bg-[#FF7A00] text-white shadow-lg shadow-orange-950/25 transition-all hover:-translate-y-1">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-orange-100 uppercase tracking-wider">Điểm Tắc Nghẽn (Bottleneck)</span>
+            <span class="p-2 rounded-xl bg-white/20 text-white backdrop-blur-sm">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            </span>
+          </div>
+          <div class="text-2xl font-extrabold text-white mt-3 font-mono">Stage 2 (42% Time)</div>
+          <div class="text-xs text-white mt-2 flex items-center gap-1.5 font-medium">
+            <span class="bg-white/20 px-2 py-0.5 rounded-md font-bold text-[10px]">Cục SHTT</span> phụ thuộc thời gian thụ lý
+          </div>
+        </div>
+      </section>
+
+      <!-- Active Cases using this Template -->
+      <section class="glass-card rounded-3xl p-6 md:p-8 space-y-4">
+        <h3 class="text-base font-bold text-[#002D54]">Các Hồ Sơ Vụ Việc Đang Chạy Mẫu Quy Trình Này</h3>
+        <div class="space-y-3 text-xs">
+          <div class="p-4 rounded-2xl bg-white border border-slate-200 flex items-center justify-between">
+            <div>
+              <a href="../cases/detail.html" class="font-bold text-[#002D54] text-sm hover:underline">CASE-2026-089: Tranh chấp bảo hộ nhãn hiệu ASL và đối thủ</a>
+              <div class="text-slate-500 mt-0.5">Khách hàng: Công ty CP Sao Nam • Đang ở Stage 2 (Thẩm định)</div>
+            </div>
+            <a href="../cases/detail.html" class="px-3 py-1.5 rounded-lg bg-[#002D54] text-white font-bold text-xs hover:bg-[#0082B4]">
+              Workspace &rarr;
+            </a>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+  </div>
+
+</body>
+</html>

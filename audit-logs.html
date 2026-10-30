@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="vi" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ERP ASL LAW - Nhật Ký Kiểm Toán Bất Biến (Audit Logs)</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+    .bg-mesh-light {
+      background-color: #F4F8FA;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(0, 130, 180, 0.08) 0px, transparent 55%),
+        radial-gradient(at 100% 0%, rgba(0, 45, 84, 0.06) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, rgba(255, 122, 0, 0.04) 0px, transparent 60%);
+    }
+    .glass-card-3d {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.95);
+      box-shadow: 
+        0 1px 3px 0 rgba(0, 45, 84, 0.04),
+        0 10px 28px -4px rgba(0, 45, 84, 0.07),
+        inset 0 1px 1px 0 rgba(255, 255, 255, 0.9);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .btn-3d-navy {
+      background: linear-gradient(180deg, #003B6D 0%, #002547 100%);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-top: 1px solid rgba(255, 255, 255, 0.5);
+      box-shadow: 0 4px 12px -2px rgba(0, 45, 84, 0.35), inset 0 1px 1px 0 rgba(255, 255, 255, 0.3);
+      transition: all 0.2s ease;
+    }
+  </style>
+</head>
+<body class="h-full bg-mesh-light text-slate-800 antialiased overflow-hidden flex flex-col select-none">
+
+  <!-- ================= MASTER TOP BAR ================= -->
+  <header class="h-16 bg-white/80 backdrop-blur-2xl border-b border-white/80 shadow-[0_2px_16px_rgba(0,45,84,0.05)] px-6 flex items-center justify-between shrink-0 z-40">
+    <div class="flex items-center gap-4">
+      <a href="dashboard.html" class="flex items-center gap-3">
+        <div class="h-10 px-2.5 py-1 bg-white rounded-xl shadow-xs border border-slate-200/60 flex items-center">
+          <img src="logo-asl.png" alt="ASL LAW" class="h-8 w-auto object-contain" />
+        </div>
+        <div class="hidden sm:flex flex-col">
+          <div class="flex items-center gap-1.5">
+            <span class="font-extrabold text-[#002D54] text-xs tracking-tight uppercase">Admin Security</span>
+            <span class="text-[10px] font-bold text-slate-700 bg-slate-100 border border-slate-300 px-1.5 py-0.2 rounded-full font-mono">SCR-13</span>
+          </div>
+          <span class="text-[10px] text-slate-400 font-medium">Nhật Ký Kiểm Toán Bất Biến • Immutable Audit Logs</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <a href="dashboard.html" class="px-4 py-2 bg-white hover:bg-slate-50 text-[#002D54] rounded-xl text-xs font-bold border border-slate-200/80 shadow-xs transition">
+        ← Về Dashboard
+      </a>
+      <button onclick="alert('Đã kết xuất toàn bộ Audit Trail sang định dạng JSON mã hóa!')" class="px-4 py-2 btn-3d-navy text-white rounded-xl text-xs font-bold shadow-md">
+        Kết Xuất Log (JSON Crypt)
+      </button>
+    </div>
+  </header>
+
+  <!-- ================= MAIN LAYOUT ================= -->
+  <div class="flex-1 flex overflow-hidden relative">
+
+    <!-- SIDEBAR -->
+    <aside class="w-64 bg-white/75 backdrop-blur-2xl border-r border-white/80 shadow-[4px_0_24px_rgba(0,45,84,0.03)] flex flex-col shrink-0 z-30">
+      
+      <div class="p-4 border-b border-slate-200/60 flex items-center gap-3 bg-gradient-to-r from-blue-50/50 to-transparent">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#002D54] to-[#0082B4] flex items-center justify-center font-extrabold text-white text-xs shadow-md">
+          AD
+        </div>
+        <div class="flex flex-col min-w-0">
+          <span class="text-xs font-bold text-[#002D54] truncate">Super Admin</span>
+          <span class="text-[10px] text-[#0082B4] font-semibold truncate">SECURITY OFFICER</span>
+        </div>
+      </div>
+
+      <nav class="flex-1 py-4 px-3 space-y-1.5 overflow-y-auto text-xs font-medium">
+        <div class="text-[10px] font-bold text-slate-400 px-3 uppercase tracking-wider mb-1 font-mono">Bàn Làm Việc</div>
+        
+        <a href="dashboard.html" class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-600 hover:bg-white hover:text-[#002D54] transition">
+          <div class="w-7 h-7 rounded-lg bg-slate-100 text-slate-500 flex items-center justify-center">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+          </div>
+          <span>Dashboard Cá nhân</span>
+        </a>
+
+        <a href="crm.html" class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-600 hover:bg-white hover:text-[#002D54] transition">
+          <div class="w-7 h-7 rounded-lg bg-slate-100 text-slate-500 flex items-center justify-center">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+          </div>
+          <span>Khách hàng & CRM</span>
+        </a>
+
+        <a href="cases.html" class="flex items-center justify-between px-3 py-2 rounded-xl text-slate-600 hover:bg-white hover:text-[#002D54] transition">
+          <div class="flex items-center gap-2.5">
+            <div class="w-7 h-7 rounded-lg bg-slate-100 text-slate-500 flex items-center justify-center">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            </div>
+            <span>Vụ việc & Hồ sơ</span>
+          </div>
+          <span class="text-[10px] bg-slate-100 text-slate-600 font-bold px-1.5 py-0.5 rounded">14</span>
+        </a>
+
+        <a href="kanban.html" class="flex items-center justify-between px-3 py-2 rounded-xl text-slate-600 hover:bg-white hover:text-[#002D54] transition">
+          <div class="flex items-center gap-2.5">
+            <div class="w-7 h-7 rounded-lg bg-slate-100 text-slate-500 flex items-center justify-center">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+            </div>
+            <span>Tác vụ Kanban (Jira)</span>
+          </div>
+        </a>
+
+        <div class="pt-4 text-[10px] font-bold text-slate-400 px-3 uppercase tracking-wider mb-1 font-mono">Tài Chính & Kế Toán</div>
+
+        <a href="accounting.html" class="flex items-center justify-between px-3 py-2 rounded-xl text-slate-600 hover:bg-white hover:text-[#002D54] transition">
+          <div class="flex items-center gap-2.5">
+            <div class="w-7 h-7 rounded-lg bg-slate-100 text-slate-500 flex items-center justify-center">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <span>Kế toán MISA</span>
+          </div>
+        </a>
+
+        <a href="finance.html" class="flex items-center justify-between px-3 py-2 rounded-xl text-slate-600 hover:bg-white hover:text-[#002D54] transition">
+          <div class="flex items-center gap-2.5">
+            <div class="w-7 h-7 rounded-lg bg-slate-100 text-slate-500 flex items-center justify-center">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+            </div>
+            <span>Hoa hồng Thực thu</span>
+          </div>
+        </a>
+
+        <div class="pt-4 text-[10px] font-bold text-[#FF7A00] px-3 uppercase tracking-wider mb-1 font-mono">Quản Trị Hệ Thống</div>
+
+        <a href="workflow-builder.html" class="flex items-center justify-between px-3 py-2 rounded-xl text-slate-600 hover:bg-white hover:text-[#002D54] transition">
+          <div class="flex items-center gap-2.5">
+            <div class="w-7 h-7 rounded-lg bg-orange-100 text-[#FF7A00] flex items-center justify-center">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/></svg>
+            </div>
+            <span>Workflow Builder</span>
+          </div>
+          <span class="text-[10px] bg-orange-500/10 text-orange-600 px-1.5 py-0.5 rounded font-mono font-bold">SCR-06</span>
+        </a>
+
+        <!-- Active Audit Logs -->
+        <a href="audit-logs.html" class="flex items-center justify-between px-3 py-2.5 rounded-xl font-bold bg-gradient-to-r from-blue-50 to-white text-[#002D54] border border-blue-200/80 shadow-xs">
+          <div class="flex items-center gap-2.5">
+            <div class="w-7 h-7 rounded-lg bg-[#002D54] text-white flex items-center justify-center shadow-xs">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            </div>
+            <span>Nhật ký Audit Logs</span>
+          </div>
+          <span class="text-[10px] bg-slate-900 text-white px-1.5 py-0.5 rounded font-mono font-bold">IMMUTABLE</span>
+        </a>
+
+        <a href="architecture.html" class="flex items-center justify-between px-3 py-2 rounded-xl text-slate-600 hover:bg-white hover:text-[#002D54] transition">
+          <div class="flex items-center gap-2.5">
+            <div class="w-7 h-7 rounded-lg bg-sky-100 text-sky-600 flex items-center justify-center">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+            </div>
+            <span>Kiến trúc Hệ thống</span>
+          </div>
+          <span class="text-[10px] bg-sky-500/10 text-sky-600 px-1.5 py-0.5 rounded font-mono font-bold">MÔ PHỎNG</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- MAIN SCROLLABLE CONTENT (ROW MARGINS PROPERLY SPACED) -->
+    <main class="flex-1 overflow-y-auto p-8 space-y-8">
+
+      <!-- HEADER INFO (ROW 1) -->
+      <div class="glass-card-3d rounded-3xl p-6 space-y-2">
+        <div class="flex items-center gap-2">
+          <h1 class="text-xl font-extrabold text-[#002D54]">Nhật Ký Kiểm Toán Bất Biến (PostgreSQL Append-Only)</h1>
+          <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2.5 py-0.5 rounded-full font-mono">100% WORM COMPLIANT</span>
+        </div>
+        <p class="text-xs text-slate-600">Ghi vết tuyệt đối: Ai đã làm gì, vào thời điểm nào, từ IP nào, và giá trị dữ liệu trước/sau khi thay đổi. Quyền cơ sở dữ liệu đã khóa triệt để lệnh UPDATE và DELETE.</p>
+      </div>
+
+      <!-- AUDIT LOGS TABLE (ROW 2 - AMPLE ROOM) -->
+      <div class="glass-card-3d rounded-3xl p-6 space-y-5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-slate-200/60">
+          <div class="flex items-center gap-2">
+            <span class="w-3 h-3 rounded-full bg-[#0082B4]"></span>
+            <h2 class="font-bold text-sm text-[#002D54]">Các Bản Ghi Thao Tác Hệ Thống Gần Đây</h2>
+          </div>
+          <span class="text-xs text-slate-500 font-mono">Tổng: 4,892 events</span>
+        </div>
+
+        <div class="overflow-x-auto rounded-2xl border border-slate-200 bg-white">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-slate-50 text-slate-600 font-semibold border-b border-slate-200">
+              <tr>
+                <th class="p-3.5">Thời Gian</th>
+                <th class="p-3.5">Người Thực Hiện (Actor)</th>
+                <th class="p-3.5">Hành Động</th>
+                <th class="p-3.5">Đối Tượng (Entity)</th>
+                <th class="p-3.5">Địa Chỉ IP</th>
+                <th class="p-3.5 text-right">Chi Tiết Diff</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 font-mono">
+              <tr class="hover:bg-slate-50/80 transition font-sans">
+                <td class="p-3.5 font-mono text-slate-500 text-[11px]">2026-10-27 13:28:17</td>
+                <td class="p-3.5 font-bold text-[#002D54]">Nguyễn Thị Thanh Hà (Accountant)</td>
+                <td class="p-3.5"><span class="bg-emerald-50 text-emerald-800 font-bold px-2 py-0.5 rounded text-[10px] font-mono">CONFIRM_MISA_PAYMENT</span></td>
+                <td class="p-3.5 text-slate-700">BillingMilestone: #MS-02</td>
+                <td class="p-3.5 text-slate-500 font-mono">192.168.1.45</td>
+                <td class="p-3.5 text-right">
+                  <button onclick="showDiffModal('CONFIRM_MISA_PAYMENT', 'HD-2026-00456')" class="text-xs text-[#0082B4] font-bold hover:underline font-sans cursor-pointer">
+                    Xem JSON Diff →
+                  </button>
+                </td>
+              </tr>
+
+              <tr class="hover:bg-slate-50/80 transition font-sans">
+                <td class="p-3.5 font-mono text-slate-500 text-[11px]">2026-10-27 13:21:40</td>
+                <td class="p-3.5 font-bold text-[#002D54]">LS. Phạm Quốc Tuấn (Supervisor)</td>
+                <td class="p-3.5"><span class="bg-purple-50 text-purple-800 font-bold px-2 py-0.5 rounded text-[10px] font-mono">APPROVE_STAGE_GATE</span></td>
+                <td class="p-3.5 text-slate-700">CaseStage: #GATE-02</td>
+                <td class="p-3.5 text-slate-500 font-mono">192.168.1.12</td>
+                <td class="p-3.5 text-right">
+                  <button onclick="showDiffModal('APPROVE_STAGE_GATE', 'APPROVED')" class="text-xs text-[#0082B4] font-bold hover:underline font-sans cursor-pointer">
+                    Xem JSON Diff →
+                  </button>
+                </td>
+              </tr>
+
+              <tr class="hover:bg-slate-50/80 transition font-sans">
+                <td class="p-3.5 font-mono text-slate-500 text-[11px]">2026-10-27 13:14:20</td>
+                <td class="p-3.5 font-bold text-[#002D54]">Trần Minh Tuấn (Sales)</td>
+                <td class="p-3.5"><span class="bg-blue-50 text-blue-800 font-bold px-2 py-0.5 rounded text-[10px] font-mono">CONVERT_OPPORTUNITY</span></td>
+                <td class="p-3.5 text-slate-700">Case: ASL-2026-IP-0045</td>
+                <td class="p-3.5 text-slate-500 font-mono">192.168.1.88</td>
+                <td class="p-3.5 text-right">
+                  <button onclick="showDiffModal('CONVERT_OPPORTUNITY', 'INITIALIZING')" class="text-xs text-[#0082B4] font-bold hover:underline font-sans cursor-pointer">
+                    Xem JSON Diff →
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- JSON DIFF MODAL -->
+  <div id="diff-modal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl shadow-2xl border border-white/80 max-w-2xl w-full overflow-hidden">
+      <div class="px-6 py-4 bg-[#002D54] text-white flex items-center justify-between">
+        <h3 class="font-bold text-sm">Chi Tiết Snapshot Dữ Liệu Trước & Sau (JSON Diff)</h3>
+        <button onclick="closeDiffModal()" class="text-slate-400 hover:text-white">✕</button>
+      </div>
+      <div class="p-6 space-y-4 text-xs font-mono">
+        <div class="grid grid-cols-2 gap-4">
+          <div class="space-y-1">
+            <span class="font-bold text-slate-500 font-sans">Trạng Thái Trước (before_state)</span>
+            <pre class="p-3 bg-slate-900 text-rose-300 rounded-xl overflow-x-auto text-[11px]">{ "status": "PENDING", "misa_invoice_no": null, "actual_amount": 0 }</pre>
+          </div>
+          <div class="space-y-1">
+            <span class="font-bold text-slate-500 font-sans">Trạng Thái Sau (after_state)</span>
+            <pre class="p-3 bg-slate-900 text-emerald-300 rounded-xl overflow-x-auto text-[11px]">{ "status": "PAID_CONFIRMED", "misa_invoice_no": "HD-2026-00456", "actual_amount": 60000000 }</pre>
+          </div>
+        </div>
+      </div>
+      <div class="px-6 py-3.5 bg-slate-50 border-t border-slate-200 flex justify-end">
+        <button onclick="closeDiffModal()" class="px-4 py-2 btn-3d-navy text-white rounded-xl text-xs font-bold">Đóng</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function showDiffModal(action, status) {
+      document.getElementById('diff-modal').classList.remove('hidden');
+    }
+    function closeDiffModal() {
+      document.getElementById('diff-modal').classList.add('hidden');
+    }
+  </script>
+</body>
+</html>

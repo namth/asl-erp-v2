@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <script>(function(){if(localStorage.getItem('asl_theme')==='dark'){document.documentElement.classList.add('dark');}else{document.documentElement.classList.remove('dark');}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASL LAW - Không Gian Vụ Việc (Case Workspace ASL-2026-TM109)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/layout.css?v=3.1">
+  <script src="../assets/layout.js?v=3.1" defer></script>
+  <style>
+    .state-item {
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .state-item:hover {
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-[#F4F8FA] text-slate-800 flex">
+
+  <!-- Modular Shared Sidebar (Auto-mounted by layout.js) -->
+  <aside id="sidebar" class="fixed top-0 left-0 bottom-0 w-72 bg-white/95 backdrop-blur-xl z-40 transition-all duration-300 ease-in-out flex flex-col justify-between shadow-xl shadow-slate-900/5"></aside>
+
+  <!-- Main Container -->
+  <div id="main-container" class="flex-1 md:ml-72 flex flex-col min-h-screen transition-all duration-300 ease-in-out">
+
+    <!-- Top Bar with Rich Brand Gradient -->
+    <header class="header-gradient text-white h-20 px-6 flex items-center justify-between sticky top-0 z-30 shadow-md">
+      <div class="flex items-center gap-4">
+        <button onclick="toggleSidebar()" class="md:hidden p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white" title="Mở menu">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <div>
+          <div class="text-xs text-cyan-200/90 font-medium flex items-center gap-1.5">
+            <a href="index.html" class="hover:underline">Vụ Việc & Hồ Sơ</a>
+            <span>/</span>
+            <span class="text-white font-semibold">ASL-2026-TM109</span>
+          </div>
+          <h1 class="text-lg font-bold text-white tracking-tight flex items-center gap-2">
+            <span>Đăng ký Nhãn hiệu 9OUTFIT tại Việt Nam & Quốc tế</span>
+            <span id="header-state-badge" class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-cyan-400/20 text-cyan-200 border border-cyan-300/30">Formality Acceptance</span>
+          </h1>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <!-- Quick Action AI Link -->
+        <a href="../ai-assistant/index.html" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-[#0082B4] hover:from-cyan-400 hover:to-cyan-600 text-white font-bold text-xs shadow-md flex items-center gap-1.5 border border-white/20">
+          <span class="w-2 h-2 rounded-full bg-emerald-300 animate-pulse"></span>
+          <span>Hỏi Trợ Lý AI</span>
+        </a>
+
+        <!-- Edit Case Button -->
+        <a href="edit.html" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs flex items-center gap-1.5 transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+          <span>Chỉnh Sửa</span>
+        </a>
+
+        <!-- User Profile Avatar -->
+        <div class="flex items-center gap-2 pl-2 border-l border-white/20">
+          <div class="w-8 h-8 rounded-full bg-[#FF7A00] text-white font-extrabold text-xs flex items-center justify-center ring-2 ring-white/50">
+            NA
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Workspace Content -->
+    <main class="flex-1 p-6 md:p-8 max-w-none mx-auto w-full space-y-8">
+
+      <!-- ======================================================== -->
+      <!-- Case State Pipeline Box (Theo Danh Sách State Của Cục SHTT) -->
+      <!-- ======================================================== -->
+      <section class="glass-card rounded-3xl p-6 md:p-8 space-y-6">
+        
+        <!-- Header Info Line (Không chứa giá trị hợp đồng, chỉ chứa thông tin cơ bản) -->
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+          <div>
+            <div class="flex items-center gap-2 flex-wrap mb-1.5">
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-[#002D54] text-white">ASL-2026-TM109</span>
+              <span class="px-2 py-0.5 rounded text-xs font-bold bg-blue-100 text-[#002D54]">Sở Hữu Trí Tuệ • Nhãn Hiệu</span>
+              <span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-100 text-emerald-800">Đang Thụ Lý</span>
+              <span class="text-xs text-slate-400 font-mono">REF Đối Tác: REF-SNA-2026/VN</span>
+            </div>
+            <div class="text-xs text-slate-600 mt-1 flex items-center gap-2 flex-wrap">
+              <span>Thân chủ: <a href="../crm/detail.html" class="font-bold text-[#002D54] hover:underline">Công ty TNHH Thời Trang 9Outfit (MST: 0109923881)</a></span>
+              <span>•</span>
+              <span>Cơ quan giải quyết: <strong class="text-slate-800">Cục Sở Hữu Trí Tuệ Việt Nam</strong></span>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2.5">
+            <button onclick="openApprovalModal()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-[#002D54] to-[#0082B4] text-white font-bold text-xs shadow-md hover:shadow-cyan-900/30 flex items-center gap-1.5 transition-all">
+              <svg class="w-4 h-4 text-cyan-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+              <span>Trình Phê Duyệt</span>
+            </button>
+            <a href="../tasks/index.html" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-[#002D54] font-bold text-xs transition-colors flex items-center gap-1">
+              <span>Xem Tác Vụ</span> &rarr;
+            </a>
+          </div>
+        </div>
+
+        <!-- Box States Header Label -->
+        <div class="flex items-center justify-between">
+          <div>
+            <h3 class="text-sm font-extrabold text-[#002D54] flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-[#0082B4]"></span>
+              <span>Quy Trình Trạng Thái Vụ Việc (Case Lifecycle States)</span>
+            </h3>
+            <p class="text-xs text-slate-400 mt-0.5">Tiến trình xét nghiệm và cấp văn bằng bảo hộ chuẩn Cục SHTT (Bấm vào trạng thái để kiểm tra hoặc cập nhật)</p>
+          </div>
+          <span class="text-[11px] font-semibold text-slate-500 bg-slate-100 px-3 py-1 rounded-full border border-slate-200">
+            Trạng thái hiện tại: <strong id="current-state-text" class="text-[#0082B4]">Formality Acceptance</strong>
+          </span>
+        </div>
+
+        <!-- 9 Specific Case States (Theo đúng ảnh đính kèm của Cục SHTT) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3.5 pt-1">
+          
+          <!-- State 1: Filed (Đã nộp đơn) - COMPLETED -->
+          <div onclick="selectState('filed', 'Filed (Đã nộp đơn)')" class="state-item cursor-pointer p-3.5 rounded-2xl bg-emerald-50/80 border-2 border-emerald-300 shadow-sm relative space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-extrabold uppercase tracking-wide text-emerald-800">State 1</span>
+              <span class="w-5 h-5 rounded-full bg-emerald-500 text-white text-[11px] font-bold flex items-center justify-center">✓</span>
+            </div>
+            <div class="font-bold text-xs text-[#002D54]">Filed</div>
+            <div class="text-[11px] text-emerald-700 font-semibold">Đã nộp đơn</div>
+            <div class="text-[10px] text-slate-500 pt-0.5">15/10/2026 • Số đơn: 4-2026-08991</div>
+          </div>
+
+          <!-- State 2: Formality Acceptance - CURRENT ACTIVE -->
+          <div id="state-formality_acceptance" onclick="selectState('formality_acceptance', 'Formality Acceptance')" class="state-item cursor-pointer p-3.5 rounded-2xl bg-white border-2 border-[#0082B4] shadow-md relative space-y-1 ring-2 ring-[#0082B4]/20">
+            <div class="absolute -top-2.5 right-3 px-2 py-0.5 rounded-full bg-[#0082B4] text-white text-[9px] font-black uppercase tracking-wider shadow-sm">
+              Đang Xử Lý
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-extrabold uppercase tracking-wide text-[#0082B4]">State 2</span>
+              <span class="w-2.5 h-2.5 rounded-full bg-[#0082B4] animate-ping"></span>
+            </div>
+            <div class="font-extrabold text-xs text-[#002D54]">Formality Acceptance</div>
+            <div class="text-[11px] text-[#0082B4] font-bold">Chấp nhận hình thức</div>
+            <div class="text-[10px] text-amber-700 font-medium pt-0.5">Hạn ra QĐ: 15/11/2026 (Chờ Cục)</div>
+          </div>
+
+          <!-- State 3: Formality correction (Nhánh bổ sung/sửa đổi hình thức) -->
+          <div onclick="selectState('formality_correction', 'Formality correction')" class="state-item cursor-pointer p-3.5 rounded-2xl bg-amber-50/50 hover:bg-amber-50 border border-amber-200/80 space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-extrabold uppercase tracking-wide text-amber-800">State 3 (Nhánh)</span>
+              <span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-amber-100 text-amber-800">Dự phòng</span>
+            </div>
+            <div class="font-bold text-xs text-slate-700">Formality correction</div>
+            <div class="text-[11px] text-slate-600">Sửa đổi hình thức</div>
+            <div class="text-[10px] text-slate-400 pt-0.5">Chưa có thông báo thiếu sót</div>
+          </div>
+
+          <!-- State 4: Publication -->
+          <div onclick="selectState('publication', 'Publication')" class="state-item cursor-pointer p-3.5 rounded-2xl bg-slate-50/80 hover:bg-white border border-slate-200 space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-extrabold uppercase tracking-wide text-slate-400">State 4</span>
+              <span class="text-[10px] text-slate-400">Dự kiến T12/2026</span>
+            </div>
+            <div class="font-bold text-xs text-slate-700">Publication</div>
+            <div class="text-[11px] text-slate-600">Công bố đơn</div>
+            <div class="text-[10px] text-slate-400 pt-0.5">Công báo SHTT Tập đoàn A</div>
+          </div>
+
+          <!-- State 5: Allowance notice -->
+          <div onclick="selectState('allowance_notice', 'Allowance notice')" class="state-item cursor-pointer p-3.5 rounded-2xl bg-slate-50/80 hover:bg-white border border-slate-200 space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-extrabold uppercase tracking-wide text-slate-400">State 5</span>
+              <span class="text-[10px] text-slate-400">Thẩm định ND</span>
+            </div>
+            <div class="font-bold text-xs text-slate-700">Allowance notice</div>
+            <div class="text-[11px] text-slate-600">Thông báo chấp thuận</div>
+            <div class="text-[10px] text-slate-400 pt-0.5">Dự kiến thẩm định nội dung 9 tháng</div>
+          </div>
+
+          <!-- State 6: Issuance notice -->
+          <div onclick="selectState('issuance_notice', 'Issuance notice')" class="state-item cursor-pointer p-3.5 rounded-2xl bg-slate-50/80 hover:bg-white border border-slate-200 space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-extrabold uppercase tracking-wide text-slate-400">State 6</span>
+              <span class="text-[10px] text-slate-400">Thông báo phí</span>
+            </div>
+            <div class="font-bold text-xs text-slate-700">Issuance notice</div>
+            <div class="text-[11px] text-slate-600">Thông báo cấp văn bằng</div>
+            <div class="text-[10px] text-slate-400 pt-0.5">Nộp lệ phí cấp bằng & đăng bạ</div>
+          </div>
+
+          <!-- State 7: Issue certificate -->
+          <div onclick="selectState('issue_certificate', 'Issue certificate')" class="state-item cursor-pointer p-3.5 rounded-2xl bg-slate-50/80 hover:bg-white border border-slate-200 space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-extrabold uppercase tracking-wide text-slate-400">State 7</span>
+              <span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-blue-50 text-blue-700">Văn bằng</span>
+            </div>
+            <div class="font-bold text-xs text-slate-700">Issue certificate</div>
+            <div class="text-[11px] text-slate-600">Cấp văn bằng bảo hộ</div>
+            <div class="text-[10px] text-slate-400 pt-0.5">Bàn giao GCN Nhãn hiệu độc quyền</div>
+          </div>
+
+          <!-- State 8: Decision on refusal (Nhánh từ chối) -->
+          <div onclick="selectState('refusal', 'Decision on refusal')" class="state-item cursor-pointer p-3.5 rounded-2xl bg-red-50/40 hover:bg-red-50 border border-red-200/70 space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-extrabold uppercase tracking-wide text-red-700">State 8 (Nhánh)</span>
+              <span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-red-100 text-red-700">Kháng biện</span>
+            </div>
+            <div class="font-bold text-xs text-slate-700">Decision on refusal</div>
+            <div class="text-[11px] text-red-700 font-semibold">Quyết định từ chối</div>
+            <div class="text-[10px] text-slate-400 pt-0.5">Khiếu nại / Khởi kiện hành chính</div>
+          </div>
+
+          <!-- State 9: Renewal / Annuity -->
+          <div onclick="selectState('renewal', 'Renewal/ Annuity')" class="state-item cursor-pointer p-3.5 rounded-2xl bg-slate-50/80 hover:bg-white border border-slate-200 space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-extrabold uppercase tracking-wide text-slate-400">State 9</span>
+              <span class="text-[10px] text-slate-400">Chu kỳ 10 năm</span>
+            </div>
+            <div class="font-bold text-xs text-slate-700">Renewal/ Annuity</div>
+            <div class="text-[11px] text-slate-600">Gia hạn / Duy trì hiệu lực</div>
+            <div class="text-[10px] text-slate-400 pt-0.5">Theo dõi lịch gia hạn văn bằng</div>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- Main Columns: Detailed Case Information -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+        <!-- Column 1 & 2: Detailed Domain Fields & Document Vault -->
+        <div class="lg:col-span-2 space-y-8">
+
+          <!-- Specific Fields Section (Kế thừa từ single-job.php: Nhãn hiệu, Sáng chế, Kiểu dáng, Dân sự...) -->
+          <div class="glass-card rounded-3xl p-6 md:p-8 space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+              <div>
+                <h3 class="text-base font-bold text-[#002D54] flex items-center gap-2">
+                  <span class="w-2.5 h-5 rounded-full bg-[#002D54]"></span>
+                  <span>Hồ Sơ Nghiệp Vụ Chi Tiết (Case Domain Data)</span>
+                </h3>
+                <p class="text-xs text-slate-400 mt-0.5">Dữ liệu đăng ký bảo hộ độc quyền và thông số pháp lý</p>
+              </div>
+
+              <!-- Case Domain Switcher Preview -->
+              <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-[11px] font-bold">
+                <button onclick="showDetailTab('nhan_hieu')" id="dtab-nhan_hieu" class="px-2.5 py-1 rounded-lg bg-white text-[#002D54] shadow-sm">Nhãn Hiệu</button>
+                <button onclick="showDetailTab('kieu_dang')" id="dtab-kieu_dang" class="px-2.5 py-1 rounded-lg text-slate-600 hover:text-[#002D54]">Kiểu Dáng</button>
+                <button onclick="showDetailTab('sang_che')" id="dtab-sang_che" class="px-2.5 py-1 rounded-lg text-slate-600 hover:text-[#002D54]">Sáng Chế</button>
+                <button onclick="showDetailTab('dan_su')" id="dtab-dan_su" class="px-2.5 py-1 rounded-lg text-slate-600 hover:text-[#002D54]">Dân Sự/Tranh Tụng</button>
+              </div>
+            </div>
+
+            <!-- Tab Content 1: Nhãn Hiệu (Mặc định) -->
+            <div id="content-nhan_hieu" class="detail-tab-content space-y-5">
+              <div class="flex flex-col sm:flex-row items-start gap-6 p-4 rounded-2xl bg-slate-50/70 border border-slate-200">
+                <!-- Logo Preview -->
+                <div class="w-32 h-32 rounded-2xl bg-white border border-slate-200 p-2 flex flex-col items-center justify-center shadow-sm flex-shrink-0">
+                  <div class="text-2xl font-black text-[#002D54] tracking-tighter">9OUTFIT</div>
+                  <div class="text-[8px] font-bold text-orange-500 uppercase tracking-widest mt-1">CASUAL WEAR</div>
+                  <span class="mt-2 text-[9px] font-bold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">Mẫu Logo</span>
+                </div>
+
+                <!-- Info Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 flex-1 text-xs">
+                  <div>
+                    <span class="text-slate-400 font-medium">Tên Nhãn Hiệu (ten_nhan_hieu):</span>
+                    <div class="font-extrabold text-[#002D54] text-sm mt-0.5">9OUTFIT CASUAL WEAR</div>
+                  </div>
+                  <div>
+                    <span class="text-slate-400 font-medium">Số Đơn Cục SHTT (so_don):</span>
+                    <div class="font-mono font-bold text-[#0082B4] text-sm mt-0.5">4-2026-08991</div>
+                  </div>
+                  <div>
+                    <span class="text-slate-400 font-medium">Phân Nhóm Nice (nhom):</span>
+                    <div class="font-bold text-slate-700 mt-0.5">Nhóm 25 (Quần áo, giày dép), Nhóm 35 (Bán lẻ thời trang)</div>
+                  </div>
+                  <div>
+                    <span class="text-slate-400 font-medium">Số Lượng Nhóm (so_luong_nhom):</span>
+                    <div class="font-bold text-slate-700 mt-0.5">02 Nhóm</div>
+                  </div>
+                  <div>
+                    <span class="text-slate-400 font-medium">Ngày Nộp Đơn (ngay_nop_don):</span>
+                    <div class="font-mono font-bold text-slate-800 mt-0.5">15/10/2026</div>
+                  </div>
+                  <div>
+                    <span class="text-slate-400 font-medium">Số Bằng & Ngày Cấp (so_bang):</span>
+                    <div class="font-bold text-amber-700 mt-0.5">Đang xét nghiệm (Dự kiến: 11/2027)</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tab Content 2: Kiểu Dáng Công Nghiệp -->
+            <div id="content-kieu_dang" class="detail-tab-content hidden space-y-5">
+              <div class="p-4 rounded-2xl bg-slate-50/70 border border-slate-200 text-xs space-y-3">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <span class="text-slate-400 font-medium">Bộ Ảnh / Phối Cảnh (bo_anh):</span>
+                    <div class="font-bold text-blue-700 mt-0.5"><a href="#" class="hover:underline flex items-center gap-1"><svg class="w-3 h-3 text-slate-400 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>Link OneDrive Bộ Ảnh 6 Hình Chiếu &rarr;</a></div>
+                  </div>
+                  <div>
+                    <span class="text-slate-400 font-medium">Số Lượng Phương Án (so_luong_phuong_an):</span>
+                    <div class="font-bold text-slate-800 mt-0.5">01 Phương Án Cơ Bản</div>
+                  </div>
+                  <div>
+                    <span class="text-slate-400 font-medium">Phân Loại Locarno:</span>
+                    <div class="font-bold text-slate-800 mt-0.5">06-01 (Bàn Ghế & Thiết Bị Nội Thất)</div>
+                  </div>
+                  <div>
+                    <span class="text-slate-400 font-medium">Tác Giả Kiểu Dáng:</span>
+                    <div class="font-bold text-slate-800 mt-0.5">Trần Minh Quân & Đỗ Hoàng Yến</div>
+                  </div>
+                </div>
+                <div class="pt-2 border-t border-slate-200">
+                  <span class="text-slate-400 font-medium">Bản Mô Tả Của Bộ Ảnh (ban_mo_ta_cua_bo_anh):</span>
+                  <p class="text-slate-700 mt-1 leading-relaxed">Kiểu dáng có hình khối khí động học bo tròn các góc 45 độ, bề mặt hoàn thiện mờ nhám chống bám vân tay, kết cấu module tháo lắp nhanh không dùng ốc vít.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tab Content 3: Sáng Chế -->
+            <div id="content-sang_che" class="detail-tab-content hidden space-y-5">
+              <div class="p-4 rounded-2xl bg-slate-50/70 border border-slate-200 text-xs space-y-3">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <span class="text-slate-400 font-medium">Bản Mô Tả Sáng Chế (ban_mo_ta_sang_che):</span>
+                    <div class="font-bold text-blue-700 mt-0.5"><a href="#" class="hover:underline"><span class="inline-flex items-center gap-1"><svg class="w-3 h-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/></svg><span>Ban_mo_ta_ky_thuat_sang_che_v3.docx</span></span></a></div>
+                  </div>
+                  <div>
+                    <span class="text-slate-400 font-medium">Phân Loại Quốc Tế (IPC Class):</span>
+                    <div class="font-mono font-bold text-slate-800 mt-0.5">G06F 17/00 • H04L 29/06</div>
+                  </div>
+                  <div>
+                    <span class="text-slate-400 font-medium">Số Yêu Cầu Bảo Hộ (so_luong_yeu_cau_bao_ho):</span>
+                    <div class="font-bold text-slate-800 mt-0.5">14 Điểm Yêu Cầu</div>
+                  </div>
+                  <div>
+                    <span class="text-slate-400 font-medium">Số Điểm Độc Lập (so_luong_yeu_cau_bao_ho_doc_lap):</span>
+                    <div class="font-bold text-slate-800 mt-0.5">03 Điểm Độc Lập (Independent Claims)</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tab Content 4: Luật Dân Sự & Tranh Tụng -->
+            <div id="content-dan_su" class="detail-tab-content hidden space-y-5">
+              <div class="p-4 rounded-2xl bg-slate-50/70 border border-slate-200 text-xs space-y-3">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <span class="text-slate-400 font-medium">Cơ Quan Thụ Lý Giải Quyết:</span>
+                    <div class="font-bold text-[#002D54] mt-0.5">TAND TP. Hồ Chí Minh - Tòa Kinh Tế</div>
+                  </div>
+                  <div>
+                    <span class="text-slate-400 font-medium">Số Thụ Lý Vụ Án:</span>
+                    <div class="font-mono font-bold text-red-600 mt-0.5">18/2026/TLST-KDTM (Ngày 05/09/2026)</div>
+                  </div>
+                  <div>
+                    <span class="text-slate-400 font-medium">Tư Cách Tố Tụng Thân Chủ:</span>
+                    <div class="font-bold text-[#0082B4] mt-0.5">Nguyên Đơn (Plaintiff)</div>
+                  </div>
+                  <div>
+                    <span class="text-slate-400 font-medium">Thẩm Phán Chủ Tọa & Thư Ký:</span>
+                    <div class="font-bold text-slate-800 mt-0.5">Thẩm phán Nguyễn Văn Bình (SĐT Thư ký: 028-3822-xxxx)</div>
+                  </div>
+                  <div>
+                    <span class="text-slate-400 font-medium">Giá Trị Tranh Chấp:</span>
+                    <div class="font-bold text-red-700 text-sm mt-0.5">45,000,000,000 VND</div>
+                  </div>
+                  <div>
+                    <span class="text-slate-400 font-medium">Biện Pháp Khẩn Cấp Tạm Thời (BPKCTT):</span>
+                    <div class="font-bold text-amber-800 mt-0.5">Phong tỏa tài khoản ngân hàng số tiền 15 tỷ đồng</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Common Additional Details (Link OneDrive Synced) -->
+            <div class="space-y-4 pt-4 border-t border-slate-100 text-xs">
+              <div class="p-3 rounded-xl bg-blue-50/50 border border-blue-200/80 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+                  <span class="font-bold text-slate-700">Link Thư Mục Hồ Sơ OneDrive:</span>
+                  <a href="https://asllaw-my.sharepoint.com/personal/cases/2026/ASL-2026-TM109" target="_blank" class="font-mono text-blue-700 underline font-semibold">https://asllaw-my.sharepoint.com/.../ASL-2026-TM109</a>
+                </div>
+                <span class="px-2 py-0.5 rounded text-[10px] bg-blue-100 text-blue-800 font-bold">OneDrive Synced</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Document Repository & Versioning -->
+          <div class="glass-card rounded-3xl p-6 md:p-8 space-y-5">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div>
+                <h3 class="text-base font-bold text-[#002D54] flex items-center gap-2">
+                  <span class="w-2.5 h-5 rounded-full bg-[#0082B4]"></span>
+                  <span>Tài Liệu Số & Chứng Từ Ký Số (DMS)</span>
+                </h3>
+                <p class="text-xs text-slate-400 mt-0.5">Lưu trữ văn bản tố tụng, tờ khai nộp đơn và biên lai phí</p>
+              </div>
+              <a href="../documents/detail.html" class="px-3 py-1.5 rounded-xl bg-indigo-50 text-indigo-700 font-bold text-xs hover:bg-indigo-100">
+                Mở Trình Ký Số &rarr;
+              </a>
+            </div>
+
+            <div class="space-y-3">
+              <div class="p-3.5 rounded-2xl bg-white border border-slate-200/80 flex items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-red-50 text-red-600 font-bold text-xs flex items-center justify-center flex-shrink-0">
+                    PDF
+                  </div>
+                  <div>
+                    <div class="font-bold text-xs text-[#002D54]">To_khai_dang_ky_nhan_hieu_9OUTFIT_signed.pdf</div>
+                    <div class="text-[11px] text-slate-500">Ký số bởi LS. Nguyễn Anh (Managing Partner) • Cục SHTT tiếp nhận</div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800">Đã Ký Số</span>
+                  <a href="../documents/detail.html" class="px-3 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold">Xem</a>
+                </div>
+              </div>
+
+              <div class="p-3.5 rounded-2xl bg-white border border-slate-200/80 flex items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 font-bold text-xs flex items-center justify-center flex-shrink-0">
+                    PDF
+                  </div>
+                  <div>
+                    <div class="font-bold text-xs text-[#002D54]">Bien_lai_thu_phi_le_phi_nop_don_Cuc_SHTT.pdf</div>
+                    <div class="text-[11px] text-slate-500">Số tiền: 2.300.000 đ • Đã đối soát MISA</div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-800">Biên Lai Gốc</span>
+                  <a href="../documents/detail.html" class="px-3 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold">Xem</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Column 3: Legal Team & Financial Summary (Sidebar Panels) -->
+        <div class="space-y-8">
+
+          <!-- Assigned Legal Team -->
+          <div class="glass-card rounded-3xl p-6 space-y-4">
+            <h3 class="text-sm font-bold text-[#002D54] border-b border-slate-100 pb-2">
+              Đội Ngũ Phụ Trách Vụ Việc
+            </h3>
+
+            <div class="space-y-3 text-xs">
+              <div class="flex items-center justify-between">
+                <div>
+                  <div class="text-slate-400 font-medium">Partner Phụ Trách (partner_1):</div>
+                  <div class="font-bold text-[#002D54]">LS. Nguyễn Anh</div>
+                  <div class="text-[10px] text-slate-400">Managing Partner</div>
+                </div>
+                <span class="w-7 h-7 rounded-full bg-[#002D54] text-white font-bold flex items-center justify-center text-xs">NA</span>
+              </div>
+
+              <div class="flex items-center justify-between pt-2 border-t border-slate-100">
+                <div>
+                  <div class="text-slate-400 font-medium">Người Quản Lý (manager):</div>
+                  <div class="font-bold text-[#002D54]">LS. Trần Mai Linh</div>
+                  <div class="text-[10px] text-slate-400">Senior IP Attorney</div>
+                </div>
+                <span class="w-7 h-7 rounded-full bg-[#0082B4] text-white font-bold flex items-center justify-center text-xs">ML</span>
+              </div>
+
+              <div class="flex items-center justify-between pt-2 border-t border-slate-100">
+                <div>
+                  <div class="text-slate-400 font-medium">Luật Sư Thực Hiện (member):</div>
+                  <div class="font-bold text-[#002D54]">LS. Hoàng Gia Huy</div>
+                  <div class="text-[10px] text-slate-400">Junior Associate</div>
+                </div>
+                <span class="w-7 h-7 rounded-full bg-slate-200 text-slate-700 font-bold flex items-center justify-center text-xs">GH</span>
+              </div>
+
+              <div class="flex items-center justify-between pt-2 border-t border-slate-100">
+                <div>
+                  <div class="text-slate-400 font-medium">Chi Nhánh & Quốc Gia:</div>
+                  <div class="font-bold text-slate-700">Trụ sở Hà Nội • Việt Nam</div>
+                </div>
+                <span class="px-2 py-0.5 rounded text-[10px] bg-slate-100 text-slate-700 font-bold">HN-VN</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Financial Snapshot (Chứa Đầy Đủ Giá Trị Hợp Đồng & Chi Tiết Quyết Toán) -->
+          <div class="glass-card rounded-3xl p-6 space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+              <div>
+                <h3 class="text-sm font-bold text-[#002D54]">Tài Chính & Hợp Đồng Dịch Vụ</h3>
+                <div class="text-[10px] text-slate-400 font-mono mt-0.5">Số HĐ: ASL-HĐ-2026/089</div>
+              </div>
+              <span class="px-2 py-0.5 rounded text-[10px] bg-emerald-100 text-emerald-800 font-bold">MISA Synced</span>
+            </div>
+
+            <!-- Prominent Contract Value Card -->
+            <div class="p-4 rounded-2xl bg-gradient-to-br from-blue-50/90 to-cyan-50/50 border border-blue-200/90 space-y-1">
+              <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Tổng Giá Trị Hợp Đồng (total_value)</div>
+              <div class="text-2xl font-black text-[#002D54] font-mono tracking-tight">180,000,000 ₫</div>
+              <div class="text-[10px] text-slate-500 font-medium">Gói tư vấn tra cứu, nộp đơn & đại diện sở hữu trí tuệ trọn gói</div>
+            </div>
+
+            <div class="space-y-3 text-xs pt-1">
+              <div class="flex justify-between items-center">
+                <span class="text-slate-500">Đã Thanh Toán (paid):</span>
+                <span class="font-bold text-emerald-600 font-mono text-sm">72,000,000 ₫ (40%)</span>
+              </div>
+
+              <div class="flex justify-between items-center">
+                <span class="text-slate-500">Còn Lại Phải Thu (remainning):</span>
+                <span class="font-bold text-red-600 font-mono text-sm">108,000,000 ₫</span>
+              </div>
+
+              <div class="flex justify-between items-center pt-2 border-t border-slate-100">
+                <span class="text-slate-500">Lệ Phí Nộp Nhà Nước (Cục SHTT):</span>
+                <span class="font-mono font-bold text-slate-700">2,300,000 ₫</span>
+              </div>
+
+              <div class="flex justify-between items-center">
+                <span class="text-slate-500">Chi Phí Hãng Luật Ngoài (Đối tác):</span>
+                <span class="font-mono font-bold text-slate-600">0 ₫</span>
+              </div>
+
+              <div class="pt-2 border-t border-slate-100 space-y-1">
+                <div class="flex items-center justify-between text-[11px]">
+                  <span class="font-semibold text-slate-600">Tiến độ thu tiền:</span>
+                  <span class="font-bold text-emerald-600">40% hoàn tất</span>
+                </div>
+                <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
+                  <div class="bg-gradient-to-r from-[#0082B4] to-emerald-500 h-full w-[40%] rounded-full"></div>
+                </div>
+              </div>
+            </div>
+
+            <a href="../accounting/detail.html" class="w-full py-2.5 rounded-xl bg-slate-100 hover:bg-[#002D54] hover:text-white text-[#002D54] font-bold text-xs text-center block transition-colors mt-2">
+              Xem Bàn Làm Việc Kế Toán &rarr;
+            </a>
+          </div>
+
+        </div>
+
+      </div>
+
+    </main>
+
+  </div>
+
+  <script>
+    function selectState(stateKey, stateName) {
+      document.getElementById('current-state-text').textContent = stateName;
+      document.getElementById('header-state-badge').textContent = stateName;
+      alert(`Đã cập nhật trạng thái hồ sơ vụ việc sang:\n"${stateName}"\n\nHệ thống đã lưu vết Audit Log và gửi thông báo cập nhật tiến độ tới Thân chủ.`);
+    }
+
+    function showDetailTab(typeKey) {
+      ['nhan_hieu', 'kieu_dang', 'sang_che', 'dan_su'].forEach(k => {
+        const btn = document.getElementById('dtab-' + k);
+        if (btn) {
+          if (k === typeKey) {
+            btn.className = "px-2.5 py-1 rounded-lg bg-white text-[#002D54] shadow-sm font-bold";
+          } else {
+            btn.className = "px-2.5 py-1 rounded-lg text-slate-600 hover:text-[#002D54] font-bold";
+          }
+        }
+      });
+
+      document.querySelectorAll('.detail-tab-content').forEach(c => c.classList.add('hidden'));
+      const activeContent = document.getElementById('content-' + typeKey);
+      if (activeContent) activeContent.classList.remove('hidden');
+    }
+
+    function openApprovalModal() {
+      alert("PHÊ DUYỆT VỤ VIỆC (GATE APPROVAL)\n\n• Vụ việc: ASL-2026-TM109\n• Hồ sơ cần duyệt: Tờ khai đăng ký & Ý kiến phản hồi hình thức\n• Thẩm quyền: Partner Nguyễn Anh\n\nBạn có muốn Chấp thuận Ký duyệt điện tử không?");
+    }
+  </script>
+
+</body>
+</html>

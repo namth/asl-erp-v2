@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <script>(function(){if(localStorage.getItem('asl_theme')==='dark'){document.documentElement.classList.add('dark');}else{document.documentElement.classList.remove('dark');}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASL LAW - Danh Bạ Khách Hàng Doanh Nghiệp</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/layout.css?v=3.1">
+  <script src="../assets/layout.js?v=3.1" defer></script>
+</head>
+<body class="min-h-screen bg-[#F4F8FA] text-slate-800 flex">
+
+  <!-- Modular Shared Sidebar (Auto-mounted by layout.js) -->
+  <aside id="sidebar" class="fixed top-0 left-0 bottom-0 w-72 bg-white/95 backdrop-blur-xl z-40 transition-all duration-300 ease-in-out flex flex-col justify-between shadow-xl shadow-slate-900/5"></aside>
+
+  <!-- Main Container -->
+  <div id="main-container" class="flex-1 md:ml-72 flex flex-col min-h-screen transition-all duration-300 ease-in-out">
+
+    <!-- Top Bar with Rich Brand Gradient -->
+    <header class="header-gradient text-white h-20 px-6 flex items-center justify-between sticky top-0 z-30 shadow-md">
+      <div class="flex items-center gap-4">
+        <button onclick="toggleSidebar()" class="md:hidden p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white" title="Mở menu">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <div>
+          <div class="text-xs text-cyan-200/90 font-medium flex items-center gap-1.5">
+            <a href="../index.html" class="hover:underline">ASL LAW</a>
+            <span>/</span>
+            <a href="index.html" class="hover:underline">Quản Trị CRM</a>
+            <span>/</span>
+            <span class="text-white font-semibold">Danh Bạ Khách Hàng</span>
+          </div>
+          <h1 class="text-lg font-bold text-white tracking-tight">Danh Bạ Thân Chủ Doanh Nghiệp & Cá Nhân</h1>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <!-- Switch to Pipeline Button -->
+        <a href="index.html" class="px-3.5 py-2 rounded-xl bg-white/15 hover:bg-white/25 border border-white/20 text-white font-bold text-xs flex items-center gap-1.5 transition-all">
+          <svg class="w-4 h-4 text-cyan-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+          <span>Xem Phễu Cơ Hội</span>
+        </a>
+
+        <!-- Add Customer Button -->
+        <a href="create-lead.html" class="px-3.5 py-2 rounded-xl bg-[#FF7A00] hover:bg-[#E66E00] text-white font-bold text-xs shadow-md shadow-orange-950/20 flex items-center gap-1.5 transition-all">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+          <span>Thêm Khách Hàng Mới</span>
+        </a>
+
+        <!-- User profile -->
+        <div class="flex items-center gap-2 pl-2 border-l border-white/20">
+          <div class="w-8 h-8 rounded-full bg-[#FF7A00] text-white font-extrabold text-xs flex items-center justify-center ring-2 ring-white/50">
+            NA
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Area: Full Width Layout -->
+    <main class="flex-1 p-6 md:p-8 w-full max-w-none space-y-6">
+
+      <!-- KPI Overview Cards (Solid Bold Colors giống trang Dashboard) -->
+      <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Metric 1: Tổng Thân Chủ (Solid Deep Navy) -->
+        <div class="rounded-2xl p-6 relative overflow-hidden bg-[#002D54] text-white shadow-lg shadow-[#002D54]/25 transition-all hover:-translate-y-1">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-cyan-200/90 uppercase tracking-wider">Tổng Thân Chủ Hồ Sơ</span>
+            <span class="p-2 rounded-xl bg-white/15 text-white backdrop-blur-sm">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+            </span>
+          </div>
+          <div class="text-3xl font-extrabold text-white mt-3 font-mono">142 <span class="text-xs font-semibold text-cyan-200/80">thân chủ</span></div>
+          <div class="text-xs text-cyan-100/90 mt-2 flex items-center gap-1.5 font-medium">
+            <span class="text-emerald-300 font-bold bg-white/10 px-2 py-0.5 rounded-md text-[10px]">100% Định danh</span> lưu vết MST đầy đủ
+          </div>
+        </div>
+
+        <!-- Metric 2: Doanh Nghiệp FDI (Solid ASL Cerulean) -->
+        <div class="rounded-2xl p-6 relative overflow-hidden bg-[#0082B4] text-white shadow-lg shadow-cyan-950/25 transition-all hover:-translate-y-1">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-cyan-100 uppercase tracking-wider">Doanh Nghiệp FDI Quốc Tế</span>
+            <span class="p-2 rounded-xl bg-white/15 text-white backdrop-blur-sm">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
+            </span>
+          </div>
+          <div class="text-3xl font-extrabold text-white mt-3 font-mono">36 <span class="text-xs font-semibold text-cyan-100">công ty</span></div>
+          <div class="text-xs text-cyan-100/90 mt-2 font-medium">
+            Đài Loan, Singapore, Nhật Bản, Mỹ
+          </div>
+        </div>
+
+        <!-- Metric 3: Doanh Nghiệp Trong Nước (Solid Emerald Green) -->
+        <div class="rounded-2xl p-6 relative overflow-hidden bg-[#047857] text-white shadow-lg shadow-emerald-950/25 transition-all hover:-translate-y-1">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-emerald-100 uppercase tracking-wider">Doanh Nghiệp Trong Nước</span>
+            <span class="p-2 rounded-xl bg-white/15 text-white backdrop-blur-sm">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+            </span>
+          </div>
+          <div class="text-3xl font-extrabold text-white mt-3 font-mono">82 <span class="text-xs font-semibold text-emerald-100">công ty</span></div>
+          <div class="text-xs text-emerald-100/90 mt-2 flex items-center gap-1.5 font-medium">
+            <span class="text-white font-bold bg-white/20 px-2 py-0.5 rounded-md text-[10px]">Chiếm 58%</span> Tập đoàn & DN SME
+          </div>
+        </div>
+
+        <!-- Metric 4: Thân Chủ Cá Nhân (Solid Alert Crimson) -->
+        <div class="rounded-2xl p-6 relative overflow-hidden bg-[#D9381E] text-white shadow-lg shadow-red-950/25 transition-all hover:-translate-y-1">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-red-100 uppercase tracking-wider">Thân Chủ Cá Nhân</span>
+            <span class="p-2 rounded-xl bg-white/20 text-white backdrop-blur-sm">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+            </span>
+          </div>
+          <div class="text-3xl font-extrabold text-white mt-3 font-mono">24 <span class="text-xs font-semibold text-red-100">khách hàng</span></div>
+          <div class="text-xs text-red-100/90 mt-2 font-medium">
+            Tranh chấp thừa kế, BĐS & Hôn nhân
+          </div>
+        </div>
+      </section>
+
+      <!-- Client Directory Table & Filters -->
+      <section class="glass-card rounded-3xl p-6 md:p-8 space-y-6">
+        
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+          <div>
+            <h2 class="text-base font-bold text-[#002D54]">Danh Sách Thân Chủ & Đối Tác Chiến Lược</h2>
+            <p class="text-xs text-slate-400 mt-0.5">Tra cứu thông tin liên hệ, mã số thuế, đại diện pháp luật và lịch sử vụ việc</p>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <input type="text" id="client-search" onkeyup="filterClients()" placeholder="Tìm kiếm tên công ty, MST, người đại diện..." class="px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-xs focus:border-[#0082B4] focus:outline-none shadow-sm w-72">
+            <button onclick="alert('Đã xuất danh bạ thân chủ ra file Excel!')" class="px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 font-bold text-xs hover:bg-slate-50 flex items-center gap-1.5 shadow-sm">
+              <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+              <span>Xuất Excel</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="border-b border-slate-200 text-[10px] text-slate-400 font-bold uppercase tracking-wider">
+                <th class="py-3.5 px-4 w-28">Mã KH</th>
+                <th class="py-3.5 px-4 min-w-[260px]">Tên Thân Chủ / Doanh Nghiệp</th>
+                <th class="py-3.5 px-4 w-44">Người Đại Diện & SĐT</th>
+                <th class="py-3.5 px-4 w-36">Phân Loại</th>
+                <th class="py-3.5 px-4 w-32">Số Vụ Việc</th>
+                <th class="py-3.5 px-4 w-40">Tổng Doanh Số HĐ</th>
+                <th class="py-3.5 px-4 w-36">Tình Trạng Công Nợ</th>
+                <th class="py-3.5 px-4 text-right w-24">Thao Tác</th>
+              </tr>
+            </thead>
+            <tbody id="clients-tbody" class="divide-y divide-slate-100 font-medium bg-white">
+
+              <!-- Client 1 -->
+              <tr class="client-row hover:bg-slate-50 transition-colors">
+                <td class="py-4 px-4 font-mono font-bold text-[#002D54]">
+                  CUST-089
+                </td>
+                <td class="py-4 px-4">
+                  <a href="detail.html" class="font-bold text-sm text-[#002D54] hover:text-[#0082B4] block">Công ty TNHH Thời Trang 9Outfit</a>
+                  <div class="text-[11px] text-slate-400 font-mono mt-0.5">MST: 0109923881 • Trụ sở: Hà Nội</div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-bold text-slate-800">Nguyễn Văn Bình (GĐ)</div>
+                  <div class="text-[10px] text-slate-500 font-mono">0912.888.xxx</div>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-blue-50 text-[#002D54] border border-blue-200/80">
+                    Khách Hàng Cũ
+                  </span>
+                </td>
+                <td class="py-4 px-4">
+                  <a href="../cases/detail.html" class="font-bold text-[#0082B4] hover:underline flex items-center gap-1">
+                    <span>2 Vụ việc</span> &rarr;
+                  </a>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-mono font-bold text-slate-800 text-xs">180,000,000 ₫</div>
+                  <div class="text-[10px] text-emerald-600 font-bold">Đã thanh toán 40%</div>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800">Còn lại 108M</span>
+                </td>
+                <td class="py-4 px-4 text-right">
+                  <div class="flex items-center justify-end gap-1">
+                    <a href="detail.html" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-[#0082B4] hover:bg-slate-100 transition-colors" title="Xem hồ sơ chi tiết khách hàng">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                    </a>
+                    <a href="../cases/create.html" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-amber-600 hover:bg-amber-50 transition-colors" title="Tạo hồ sơ vụ việc mới cho khách hàng này">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Client 2 -->
+              <tr class="client-row hover:bg-slate-50 transition-colors">
+                <td class="py-4 px-4 font-mono font-bold text-[#002D54]">
+                  CUST-072
+                </td>
+                <td class="py-4 px-4">
+                  <a href="detail.html" class="font-bold text-sm text-[#002D54] hover:text-[#0082B4] block">Foxconn Energy Vietnam Co., Ltd</a>
+                  <div class="text-[11px] text-slate-400 font-mono mt-0.5">MST: 2300994411 • Quốc tịch: Đài Loan (FDI)</div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-bold text-slate-800">Mr. Kevin Chen (Legal Dir)</div>
+                  <div class="text-[10px] text-slate-500 font-mono">+886-918-xxx</div>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-purple-50 text-purple-800 border border-purple-200/80">
+                    Doanh Nghiệp FDI
+                  </span>
+                </td>
+                <td class="py-4 px-4">
+                  <a href="../cases/index.html" class="font-bold text-[#0082B4] hover:underline flex items-center gap-1">
+                    <span>4 Vụ việc</span> &rarr;
+                  </a>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-mono font-bold text-slate-800 text-xs">770,000,000 ₫</div>
+                  <div class="text-[10px] text-emerald-600 font-bold">Thanh toán đúng hạn</div>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800">✓ Hết công nợ</span>
+                </td>
+                <td class="py-4 px-4 text-right">
+                  <div class="flex items-center justify-end gap-1">
+                    <a href="detail.html" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-[#0082B4] hover:bg-slate-100 transition-colors" title="Xem hồ sơ chi tiết khách hàng">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                    </a>
+                    <a href="../cases/create.html" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-amber-600 hover:bg-amber-50 transition-colors" title="Tạo hồ sơ vụ việc mới cho khách hàng này">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Client 3 -->
+              <tr class="client-row hover:bg-slate-50 transition-colors">
+                <td class="py-4 px-4 font-mono font-bold text-[#002D54]">
+                  CUST-061
+                </td>
+                <td class="py-4 px-4">
+                  <a href="detail.html" class="font-bold text-sm text-[#002D54] hover:text-[#0082B4] block">Công ty CP Tập Đoàn Thaco</a>
+                  <div class="text-[11px] text-slate-400 font-mono mt-0.5">MST: 0303881234 • Trụ sở: TP.HCM</div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-bold text-slate-800">Ban Pháp Chế M&A</div>
+                  <div class="text-[10px] text-slate-500 font-mono">028-3822-xxxx</div>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200/80">
+                    Khách Hàng VIP
+                  </span>
+                </td>
+                <td class="py-4 px-4">
+                  <a href="../cases/index.html" class="font-bold text-[#0082B4] hover:underline flex items-center gap-1">
+                    <span>1 Deal M&A</span> &rarr;
+                  </a>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-mono font-bold text-slate-800 text-xs">500,000,000 ₫</div>
+                  <div class="text-[10px] text-slate-400">Đã thu 250M</div>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-[#002D54]">Đợt 2 theo tiến độ</span>
+                </td>
+                <td class="py-4 px-4 text-right">
+                  <div class="flex items-center justify-end gap-1">
+                    <a href="detail.html" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-[#0082B4] hover:bg-slate-100 transition-colors" title="Xem hồ sơ chi tiết khách hàng">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                    </a>
+                    <a href="../cases/create.html" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-amber-600 hover:bg-amber-50 transition-colors" title="Tạo hồ sơ vụ việc mới cho khách hàng này">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Client 4 -->
+              <tr class="client-row hover:bg-slate-50 transition-colors">
+                <td class="py-4 px-4 font-mono font-bold text-[#002D54]">
+                  CUST-045
+                </td>
+                <td class="py-4 px-4">
+                  <a href="detail.html" class="font-bold text-sm text-[#002D54] hover:text-[#0082B4] block">Công ty CP Nhựa An Gia</a>
+                  <div class="text-[11px] text-slate-400 font-mono mt-0.5">MST: 0314998821 • Trụ sở: Bình Dương</div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-bold text-slate-800">Trần Minh Quân (TGĐ)</div>
+                  <div class="text-[10px] text-slate-500 font-mono">0908.112.xxx</div>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-cyan-50 text-cyan-800 border border-cyan-200/80">
+                    Kiểu Dáng SP
+                  </span>
+                </td>
+                <td class="py-4 px-4">
+                  <a href="../cases/index.html" class="font-bold text-[#0082B4] hover:underline flex items-center gap-1">
+                    <span>1 Vụ việc</span> &rarr;
+                  </a>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-mono font-bold text-slate-800 text-xs">85,000,000 ₫</div>
+                  <div class="text-[10px] text-emerald-600 font-bold">Đã thu 60M</div>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800">Còn lại 25M</span>
+                </td>
+                <td class="py-4 px-4 text-right">
+                  <div class="flex items-center justify-end gap-1">
+                    <a href="detail.html" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-[#0082B4] hover:bg-slate-100 transition-colors" title="Xem hồ sơ chi tiết khách hàng">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                    </a>
+                    <a href="../cases/create.html" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-amber-600 hover:bg-amber-50 transition-colors" title="Tạo hồ sơ vụ việc mới cho khách hàng này">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Client 5 -->
+              <tr class="client-row hover:bg-slate-50 transition-colors">
+                <td class="py-4 px-4 font-mono font-bold text-purple-700">
+                  CUST-019
+                </td>
+                <td class="py-4 px-4">
+                  <a href="detail.html" class="font-bold text-sm text-[#002D54] hover:text-[#0082B4] block">Bà Đỗ Mai Phương</a>
+                  <div class="text-[11px] text-slate-400 font-mono mt-0.5">CCCD: 00119800xxxx • Địa chỉ: Ba Đình, Hà Nội</div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-bold text-slate-800">Đỗ Mai Phương</div>
+                  <div class="text-[10px] text-slate-500 font-mono">0983.456.xxx</div>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-purple-50 text-purple-800 border border-purple-200/80">
+                    Cá Nhân
+                  </span>
+                </td>
+                <td class="py-4 px-4">
+                  <a href="../cases/index.html" class="font-bold text-[#0082B4] hover:underline flex items-center gap-1">
+                    <span>1 Vụ việc</span> &rarr;
+                  </a>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-mono font-bold text-slate-800 text-xs">30,000,000 ₫</div>
+                  <div class="text-[10px] text-slate-400">Tư vấn ly hôn</div>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800">Chờ tạm ứng</span>
+                </td>
+                <td class="py-4 px-4 text-right">
+                  <div class="flex items-center justify-end gap-1">
+                    <a href="detail.html" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-[#0082B4] hover:bg-slate-100 transition-colors" title="Xem hồ sơ chi tiết khách hàng">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                    </a>
+                    <a href="../cases/create.html" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-amber-600 hover:bg-amber-50 transition-colors" title="Tạo hồ sơ vụ việc mới cho khách hàng này">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="flex items-center justify-between border-t border-slate-100 pt-4 text-xs text-slate-500">
+          <div>Hiển thị 5 trên tổng số 142 thân chủ hồ sơ</div>
+          <div class="flex items-center gap-1.5">
+            <button class="px-3 py-1.5 rounded-lg border border-slate-200 text-slate-400 cursor-not-allowed">Trước</button>
+            <button class="px-3 py-1.5 rounded-lg bg-[#002D54] text-white font-bold">1</button>
+            <button class="px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-100">2</button>
+            <button class="px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-100">3</button>
+            <button class="px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-100">Tiếp</button>
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+  <script>
+    function filterClients() {
+      const q = document.getElementById('client-search').value.toLowerCase().trim();
+      const rows = document.querySelectorAll('.client-row');
+      rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        if (!q || text.includes(q)) {
+          row.classList.remove('hidden');
+        } else {
+          row.classList.add('hidden');
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <script>(function(){if(localStorage.getItem('asl_theme')==='dark'){document.documentElement.classList.add('dark');}else{document.documentElement.classList.remove('dark');}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASL LAW - Chỉnh Sửa Node Quy Trình (Edit Workflow Nodes)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/layout.css?v=3.1">
+  <script src="../assets/layout.js?v=3.1" defer></script>
+</head>
+<body class="min-h-screen bg-[#F4F8FA] text-slate-800 flex">  <!-- Modular Shared Sidebar (Auto-mounted by layout.js) -->
+  <aside id="sidebar" class="fixed top-0 left-0 bottom-0 w-72 bg-white/95 backdrop-blur-xl z-40 transition-all duration-300 ease-in-out flex flex-col justify-between shadow-xl shadow-slate-900/5"></aside>
+
+  <!-- Main Container -->
+  <div id="main-container" class="flex-1 md:ml-72 flex flex-col min-h-screen transition-all duration-300 ease-in-out">
+
+    <!-- Top Bar with Rich Brand Gradient -->
+    <header class="header-gradient text-white h-20 px-6 flex items-center justify-between sticky top-0 z-30 shadow-md">
+      <div class="flex items-center gap-4">
+        <button onclick="toggleSidebar()" class="md:hidden p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <div>
+          <div class="text-xs text-cyan-200/90 font-medium flex items-center gap-1.5">
+            <a href="index.html" class="hover:underline">Mẫu Quy Trình</a>
+            <span>/</span>
+            <span class="text-white font-semibold">Chỉnh Sửa Node</span>
+          </div>
+          <h1 class="text-lg font-bold text-white tracking-tight">Cấu Hình Node & Rẽ Nhánh Điều Kiện</h1>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition-colors">
+          &larr; Về Canvas Studio
+        </a>
+      </div>
+    </header>
+
+    <!-- Main Content Form -->
+    <main class="flex-1 p-6 md:p-8 max-w-none mx-auto w-full space-y-8">
+
+      <form onsubmit="event.preventDefault(); alert('Cập nhật cấu hình Stage và Cổng duyệt thành công!'); window.location.href='index.html';" class="space-y-8">
+
+        <div class="glass-card rounded-3xl p-6 md:p-8 space-y-6">
+          <div class="border-b border-slate-100 pb-3">
+            <h2 class="text-base font-bold text-[#002D54]">Cấu Hình Cổng Phê Duyệt Stage 3 (Approval Gate)</h2>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-xs">
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Tên Cổng Duyệt</label>
+              <input type="text" value="Approval Gate: Partner Giám Sát Ký Duyệt Hồ Sơ" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 font-semibold focus:border-[#0082B4]">
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Vai Trò Có Quyền Ký Duyệt</label>
+              <select class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 focus:border-[#0082B4] font-bold text-[#002D54]">
+                <option selected>Partner Giám Sát (Supervisor)</option>
+                <option>Managing Partner</option>
+                <option>Case Manager</option>
+              </select>
+            </div>
+
+            <div class="md:col-span-2">
+              <label class="block font-bold text-slate-700 mb-1">Điều Kiện Cần Thỏa Mãn Để Được Bấm Duyệt</label>
+              <div class="space-y-2">
+                <label class="flex items-center gap-2">
+                  <input type="checkbox" checked class="rounded text-[#002D54]">
+                  <span>Bắt buộc hoàn thành 100% các Tác vụ (Tasks) của Stage trước</span>
+                </label>
+                <label class="flex items-center gap-2">
+                  <input type="checkbox" checked class="rounded text-[#002D54]">
+                  <span>Bắt buộc Kế toán MISA xác nhận đã thu tiền Đợt 2</span>
+                </label>
+                <label class="flex items-center gap-2">
+                  <input type="checkbox" checked class="rounded text-[#002D54]">
+                  <span>Bắt buộc có tệp tài liệu PDF đính kèm kết luận giám định</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between pt-2">
+          <a href="index.html" class="px-5 py-2.5 rounded-xl border border-slate-300 text-slate-600 font-bold text-xs hover:bg-slate-100">
+            Hủy Bỏ
+          </a>
+          <button type="submit" class="px-6 py-2.5 rounded-xl bg-[#002D54] hover:bg-[#0082B4] text-white font-bold text-xs shadow-md">
+            Lưu Cấu Hình Node
+          </button>
+        </div>
+
+      </form>
+
+    </main>
+
+  </div>
+
+</body>
+</html>

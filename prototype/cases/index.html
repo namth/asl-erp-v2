@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <script>(function(){if(localStorage.getItem('asl_theme')==='dark'){document.documentElement.classList.add('dark');}else{document.documentElement.classList.remove('dark');}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASL LAW - Danh Sách Hồ Sơ Vụ Việc (Cases Directory)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/layout.css?v=3.1">
+  <script src="../assets/layout.js?v=3.1" defer></script>
+</head>
+<body class="min-h-screen bg-[#F4F8FA] text-slate-800 flex overflow-x-hidden w-full">
+
+  <!-- Modular Shared Sidebar (Auto-mounted by layout.js) -->
+  <aside id="sidebar" class="fixed top-0 left-0 bottom-0 w-72 bg-white/95 backdrop-blur-xl z-40 transition-all duration-300 ease-in-out flex flex-col justify-between shadow-xl shadow-slate-900/5"></aside>
+
+  <!-- Main Container -->
+  <div id="main-container" class="flex-1 md:ml-72 flex flex-col min-h-screen w-full min-w-0 max-w-full overflow-x-hidden transition-all duration-300 ease-in-out">
+
+    <!-- Top Bar with Rich Brand Gradient -->
+    <header class="header-gradient text-white min-h-[4.5rem] py-3 px-4 sm:px-6 flex flex-wrap lg:flex-nowrap items-center justify-between gap-3 sticky top-0 z-30 shadow-md">
+      <div class="flex items-center gap-3 min-w-0">
+        <button onclick="toggleSidebar()" class="md:hidden p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white flex-shrink-0" title="Mở menu">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <div class="min-w-0">
+          <div class="text-[11px] text-cyan-200/90 font-medium flex items-center gap-1.5 truncate">
+            <a href="../index.html" class="hover:underline">ASL LAW</a>
+            <span>/</span>
+            <span class="text-white font-semibold">Vụ Việc & Hồ Sơ</span>
+          </div>
+          <h1 class="text-base sm:text-lg font-bold text-white tracking-tight truncate">Hồ Sơ Vụ Việc Đang Thụ Lý</h1>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 sm:gap-3 flex-wrap sm:flex-nowrap">
+        <!-- Create Case Button -->
+        <a href="create.html" class="px-3 sm:px-3.5 py-2 rounded-xl bg-[#FF7A00] hover:bg-[#E66E00] text-white font-bold text-xs shadow-md shadow-orange-950/20 flex items-center gap-1.5 transition-all whitespace-nowrap">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+          <span>Tạo Vụ Việc Mới</span>
+        </a>
+
+        <!-- AI Assistant Direct Link -->
+        <a href="../ai-assistant/index.html" class="px-3 py-2 rounded-xl bg-white/15 hover:bg-white/25 border border-white/20 text-white font-bold text-xs flex items-center gap-1.5 transition-all whitespace-nowrap">
+          <span class="w-2 h-2 rounded-full bg-cyan-300 animate-pulse"></span>
+          <span class="hidden sm:inline">Trợ Lý AI</span>
+        </a>
+
+        <!-- User Profile Avatar -->
+        <div class="flex items-center gap-2 pl-2 border-l border-white/20">
+          <div class="w-8 h-8 rounded-full bg-[#FF7A00] text-white font-extrabold text-xs flex items-center justify-center ring-2 ring-white/50">
+            NA
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 p-4 sm:p-6 md:p-8 max-w-none mx-auto w-full min-w-0 max-w-full space-y-6 overflow-x-hidden">
+
+      <!-- 4 KPI Metrics (Được tối ưu nhỏ gọn & tập trung vào tiến độ nghiệp vụ thực tế) -->
+      <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+        <!-- Metric 1: Hồ Sơ Đang Thụ Lý (Solid Deep Navy) -->
+        <div class="rounded-2xl p-5 relative overflow-hidden bg-[#002D54] text-white shadow-md shadow-[#002D54]/20 transition-all hover:-translate-y-0.5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-cyan-200/90 uppercase tracking-wider">Hồ Sơ Đang Thụ Lý</span>
+            <span class="p-1.5 rounded-lg bg-white/15 text-white backdrop-blur-sm">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            </span>
+          </div>
+          <div class="text-xl sm:text-2xl font-bold text-white mt-2 font-mono tracking-tight">48 <span class="text-xs font-medium text-cyan-200/80">vụ việc</span></div>
+          <div class="text-xs text-cyan-100/80 mt-1.5 flex items-center gap-1.5">
+            <span class="text-emerald-300 font-bold bg-white/10 px-1.5 py-0.5 rounded text-[10px]">32 đang xử lý</span>
+            <span>• 16 chờ nghiệm thu</span>
+          </div>
+        </div>
+
+        <!-- Metric 2: Cảnh Báo Hạn Pháp Lý 7 Ngày Tới (Solid Alert Crimson) -->
+        <div class="rounded-2xl p-5 relative overflow-hidden bg-[#D9381E] text-white shadow-md shadow-red-950/20 transition-all hover:-translate-y-0.5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-red-100 uppercase tracking-wider flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-white animate-ping"></span>
+              Hạn Chót Pháp Lý (7 Ngày)
+            </span>
+            <span class="p-1.5 rounded-lg bg-white/20 text-white backdrop-blur-sm">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </span>
+          </div>
+          <div class="text-xl sm:text-2xl font-bold text-white mt-2 font-mono tracking-tight">05 <span class="text-xs font-medium text-red-100">vụ đến hạn</span></div>
+          <div class="text-xs text-red-100/80 mt-1.5 flex items-center gap-1.5">
+            <span class="text-white font-bold bg-white/20 px-1.5 py-0.5 rounded text-[10px]">3 Cục SHTT</span>
+            <span>• 2 Tòa án & Cấp phép</span>
+          </div>
+        </div>
+
+        <!-- Metric 3: Chờ Phê Duyệt Bước (Thay thế Tổng giá trị hợp đồng - Solid Brand Orange) -->
+        <div class="rounded-2xl p-5 relative overflow-hidden bg-[#FF7A00] text-white shadow-md shadow-orange-950/20 transition-all hover:-translate-y-0.5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-orange-100 uppercase tracking-wider">Chờ Phê Duyệt Bước</span>
+            <span class="p-1.5 rounded-lg bg-white/20 text-white backdrop-blur-sm">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+            </span>
+          </div>
+          <div class="text-xl sm:text-2xl font-bold text-white mt-2 font-mono tracking-tight">08 <span class="text-xs font-medium text-orange-100">yêu cầu</span></div>
+          <div class="text-xs text-white/90 mt-1.5 flex items-center gap-1.5">
+            <span class="bg-white/20 px-1.5 py-0.5 rounded text-[10px] font-bold">5 duyệt chuyên môn</span>
+            <span>• 3 duyệt đối soát</span>
+          </div>
+        </div>
+
+        <!-- Metric 4: Hoàn Tất & Bàn Giao (Thay thế Tỷ lệ đạt tiến độ - Solid Emerald Green) -->
+        <div class="rounded-2xl p-5 relative overflow-hidden bg-[#047857] text-white shadow-md shadow-emerald-950/20 transition-all hover:-translate-y-0.5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-emerald-100 uppercase tracking-wider">Hoàn Tất / Bàn Giao (Tháng)</span>
+            <span class="p-1.5 rounded-lg bg-white/15 text-white backdrop-blur-sm">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
+            </span>
+          </div>
+          <div class="text-xl sm:text-2xl font-bold text-white mt-2 font-mono tracking-tight">14 <span class="text-xs font-medium text-emerald-200">hồ sơ đã đóng</span></div>
+          <div class="text-xs text-emerald-100/80 mt-1.5 flex items-center gap-1.5">
+            <span class="text-white font-bold bg-white/20 px-1.5 py-0.5 rounded text-[10px]">100% đúng hạn</span>
+            <span>• Đã bàn giao văn bằng</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Status Tabs & Filter Bar (Gọn gàng, chuẩn nghiệp vụ pháp trị) -->
+      <section class="glass-card rounded-2xl p-4 sm:p-5 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
+          <!-- Filter Tabs -->
+          <div class="flex items-center gap-2 flex-wrap">
+            <button onclick="filterStatus('ALL')" class="status-tab px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-[#002D54] text-white font-bold text-xs shadow-sm">
+              Tất Cả (48)
+            </button>
+            <button onclick="filterStatus('IN_PROGRESS')" class="status-tab px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-colors">
+              Đang Thụ Lý (32)
+            </button>
+            <button onclick="filterStatus('PENDING_APPROVAL')" class="status-tab px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-orange-50 hover:bg-orange-100 text-[#FF7A00] font-bold text-xs transition-colors flex items-center gap-1.5">
+              <span>Chờ Phê Duyệt (8)</span>
+            </button>
+            <button onclick="filterStatus('CLOSED')" class="status-tab px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold text-xs transition-colors">
+              Hoàn Tất / Bàn Giao (14)
+            </button>
+          </div>
+
+          <!-- Expand / Collapse All Details & Export Actions -->
+          <div class="flex items-center gap-2">
+            <button onclick="toggleAllDetails()" id="btn-toggle-all" class="px-3.5 py-1.5 sm:py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-[#002D54] font-bold text-xs flex items-center gap-1.5 transition-all">
+              <svg id="icon-toggle-all" class="w-4 h-4 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+              <span id="text-toggle-all">Sổ Tất Cả Chi Tiết</span>
+            </button>
+            <button onclick="alert('Đã xuất danh sách hồ sơ vụ việc ra file Excel!')" class="px-3.5 py-1.5 sm:py-2 rounded-xl bg-white border border-slate-200 text-slate-700 font-bold text-xs hover:bg-slate-50 flex items-center gap-1.5 shadow-sm">
+              <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+              <span>Xuất Excel</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Filter Controls Form -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 text-xs">
+          <div>
+            <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Tìm Kiếm Nhanh</label>
+            <input type="text" id="case-search" onkeyup="filterCasesTable()" placeholder="Mã vụ, tên vụ, khách hàng, đối tác..." class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-xs focus:border-[#0082B4] focus:outline-none shadow-sm">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Lĩnh Vực Pháp Lý (Domain)</label>
+            <select id="case-domain-filter" onchange="filterCasesTable()" class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-xs font-semibold focus:border-[#0082B4] focus:outline-none shadow-sm">
+              <option value="ALL">Tất cả lĩnh vực</option>
+              <option value="TM">Nhãn Hiệu (Trademark)</option>
+              <option value="PAT">Sáng Chế (Patent)</option>
+              <option value="DES">Kiểu Dáng Công Nghiệp (Design)</option>
+              <option value="LIT">Luật Dân Sự & Tranh Tụng (Litigation)</option>
+              <option value="MNA">Doanh Nghiệp & M&A (Corporate)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Luật Sư Phụ Trách</label>
+            <select class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-xs focus:border-[#0082B4] focus:outline-none shadow-sm">
+              <option>Tất cả nhân sự</option>
+              <option>LS. Nguyễn Anh (Managing Partner)</option>
+              <option>LS. Trần Mai Linh (Senior Lawyer)</option>
+              <option>LS. Hoàng Gia Huy (Case Manager)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Chi Nhánh</label>
+            <select class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-xs focus:border-[#0082B4] focus:outline-none shadow-sm">
+              <option>Tất cả chi nhánh</option>
+              <option>Trụ sở Hà Nội</option>
+              <option>Chi nhánh TP. Hồ Chí Minh</option>
+              <option>Văn phòng Singapore</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <!-- Case Directory Table (Tối giản & tinh gọn: Số REF, Tên vụ việc, Lĩnh vực [Line Icon], Khách hàng, Đối tác, Tiến độ, Nguồn việc/Chi nhánh [Admin]) -->
+      <section class="glass-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 space-y-4 w-full min-w-0 max-w-full overflow-hidden">
+        
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border-collapse" id="cases-table">
+            <thead>
+              <tr class="border-b border-slate-200 text-[10px] text-slate-400 font-bold uppercase tracking-wider bg-slate-50/50">
+                <th class="py-3.5 px-4 w-36">Số REF</th>
+                <th class="py-3.5 px-4 min-w-[260px]">Tên Vụ Việc</th>
+                <th class="py-3.5 px-4 w-36">Lĩnh Vực</th>
+                <th class="py-3.5 px-4 min-w-[180px]">Khách Hàng</th>
+                <th class="py-3.5 px-4 min-w-[150px]">Đối Tác</th>
+                <th class="py-3.5 px-4 w-28">Tiến Độ</th>
+                <!-- Cột hiển thị riêng cho vai trò Admin -->
+                <th class="col-role-admin py-3.5 px-4 w-36">Nguồn Việc</th>
+                <th class="col-role-admin py-3.5 px-4 w-40">Chi Nhánh Thực Hiện</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 font-medium bg-white">
+
+              <!-- ========================================== -->
+              <!-- CASE 1: NHÃN HIỆU (ASL-2026-TM109)         -->
+              <!-- ========================================== -->
+              <tr class="case-row hover:bg-slate-50/90 transition-colors group cursor-pointer" data-domain="TM" data-status="IN_PROGRESS" data-detail-id="detail-tm109">
+                <td class="py-4 px-4 font-mono font-bold text-[#002D54]">
+                  <div class="flex items-center gap-2">
+                    <button onclick="event.stopPropagation(); toggleRowDetail('detail-tm109', this)" class="btn-chevron p-1 rounded-lg hover:bg-slate-200 text-slate-400 hover:text-slate-800 transition-colors" title="Sổ quy trình & chi tiết vụ việc">
+                      <svg class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                    </button>
+                    <a href="detail.html" class="hover:underline font-extrabold text-[#002D54]">ASL-2026-TM109</a>
+                  </div>
+                </td>
+                <td class="py-4 px-4">
+                  <a href="detail.html" class="font-bold text-sm text-[#002D54] hover:text-[#0082B4] block leading-snug">Đăng ký Nhãn hiệu 9OUTFIT tại Việt Nam & Quốc tế</a>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-blue-50 text-[#002D54] border border-blue-200/80">
+                    <svg class="w-3.5 h-3.5 text-[#0082B4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
+                    <span>Nhãn Hiệu</span>
+                  </span>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-bold text-slate-800">Công ty TNHH Thời Trang 9Outfit</div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-semibold text-slate-700">SNA & Partners (JP)</div>
+                  <div class="text-[10px] text-slate-400 font-mono">REF-SNA-2026/VN</div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="flex items-center gap-2">
+                    <div class="w-16 h-2 bg-slate-100 rounded-full overflow-hidden border border-slate-200/60">
+                      <div class="bg-[#0082B4] h-full w-[45%] rounded-full"></div>
+                    </div>
+                    <span class="text-[11px] font-bold text-slate-700">45%</span>
+                  </div>
+                </td>
+                <!-- Admin columns -->
+                <td class="col-role-admin py-4 px-4">
+                  <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-200">Đối tác giới thiệu</span>
+                </td>
+                <td class="col-role-admin py-4 px-4">
+                  <span class="font-semibold text-slate-700">Trụ sở Hà Nội</span>
+                </td>
+              </tr>
+
+              <!-- EXPANDABLE DETAILS PANEL FOR CASE 1 -->
+              <tr id="detail-tm109" class="row-detail hidden bg-slate-50/90 border-b border-slate-200">
+                <td colspan="8" class="p-5">
+                  <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm space-y-5">
+                    
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                      <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-4 rounded bg-[#0082B4]"></span>
+                        <span class="text-xs font-bold text-[#002D54] uppercase tracking-wider">Thông Số & Quy Trình Vụ Việc • ASL-2026-TM109</span>
+                      </div>
+                      <a href="detail.html" class="text-xs font-bold text-[#0082B4] hover:underline flex items-center gap-1">
+                        <span>Mở Toàn Diện Workspace</span> &rarr;
+                      </a>
+                    </div>
+
+                    <!-- STEP WIZARD COMPONENT (Theo ảnh đính kèm media_1793242252320_767d6e85.png) -->
+                    <div class="p-5 sm:p-6 rounded-2xl bg-[#FCFAF5] border border-[#E9DFCE] shadow-xs">
+                      <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-2">
+                          <span class="w-2 h-2 rounded-full bg-[#C89B3C] animate-pulse"></span>
+                          <span class="text-xs font-bold text-[#002D54] uppercase tracking-wider">Tiến Trình Quy Trình Vụ Việc</span>
+                        </div>
+                        <span class="text-[11px] font-bold text-[#94681E] bg-[#FDF6E2] px-3 py-1 rounded-full border border-[#E9DFCE]">
+                          Giai đoạn hiện tại: Chờ cấp bằng (Bước 5/5)
+                        </span>
+                      </div>
+
+                      <div class="relative px-6 sm:px-12 py-3 overflow-x-auto">
+                        <!-- Connecting Golden Line (Nối giữa các node) -->
+                        <div class="absolute top-[28px] left-12 right-12 h-[3px] bg-[#C89B3C] -z-0"></div>
+
+                        <div class="relative z-10 flex items-start justify-between min-w-[580px]">
+                          <!-- Step 1: Tra cứu & tư vấn (Done ✓) -->
+                          <div class="flex flex-col items-center text-center w-28">
+                            <div class="w-9 h-9 rounded-full bg-[#C89B3C] text-slate-900 flex items-center justify-center font-bold shadow-sm mb-2">
+                              <svg class="w-4 h-4 stroke-[3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                            </div>
+                            <span class="text-xs font-semibold text-slate-800 leading-snug">Tra cứu & tư vấn</span>
+                          </div>
+
+                          <!-- Step 2: Nộp đơn (Done ✓) -->
+                          <div class="flex flex-col items-center text-center w-28">
+                            <div class="w-9 h-9 rounded-full bg-[#C89B3C] text-slate-900 flex items-center justify-center font-bold shadow-sm mb-2">
+                              <svg class="w-4 h-4 stroke-[3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                            </div>
+                            <span class="text-xs font-semibold text-slate-800 leading-snug">Nộp đơn</span>
+                          </div>
+
+                          <!-- Step 3: Thẩm định hình thức (Done ✓) -->
+                          <div class="flex flex-col items-center text-center w-28">
+                            <div class="w-9 h-9 rounded-full bg-[#C89B3C] text-slate-900 flex items-center justify-center font-bold shadow-sm mb-2">
+                              <svg class="w-4 h-4 stroke-[3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                            </div>
+                            <span class="text-xs font-semibold text-slate-800 leading-snug">Thẩm định hình thức</span>
+                          </div>
+
+                          <!-- Step 4: Thẩm định nội dung (Done ✓) -->
+                          <div class="flex flex-col items-center text-center w-28">
+                            <div class="w-9 h-9 rounded-full bg-[#C89B3C] text-slate-900 flex items-center justify-center font-bold shadow-sm mb-2">
+                              <svg class="w-4 h-4 stroke-[3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                            </div>
+                            <span class="text-xs font-semibold text-slate-800 leading-snug">Thẩm định nội dung</span>
+                          </div>
+
+                          <!-- Step 5: Chờ cấp bằng (Active: Navy node + cream halo ring) -->
+                          <div class="flex flex-col items-center text-center w-28">
+                            <div class="relative mb-2">
+                              <div class="w-11 h-11 -m-1 rounded-full bg-[#F5E8D0]/80 flex items-center justify-center">
+                                <div class="w-9 h-9 rounded-full bg-[#132338] text-white flex items-center justify-center font-bold text-sm shadow-md">
+                                  5
+                                </div>
+                              </div>
+                            </div>
+                            <span class="text-xs font-bold text-slate-900 leading-snug">Chờ cấp bằng</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- 4 THẺ THÔNG SỐ PHÁP LÝ & TÀI CHÍNH -->
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs">
+                      <!-- Khối 1: Hồ Sơ Cục SHTT -->
+                      <div class="p-3.5 rounded-xl bg-slate-50/70 border border-slate-200 space-y-1.5">
+                        <div class="font-bold text-[#002D54] border-b border-slate-200/80 pb-1 flex items-center gap-1.5">
+                          <svg class="w-4 h-4 text-[#0082B4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/></svg>
+                          <span>Cục SHTT & Thẩm Quyền</span>
+                        </div>
+                        <div class="space-y-1 text-[11px] pt-0.5">
+                          <div><span class="text-slate-400">Số đơn:</span> <strong class="font-mono text-[#0082B4]">4-2026-08991</strong></div>
+                          <div><span class="text-slate-400">Ngày nộp:</span> <strong class="font-mono text-slate-700">15/10/2026</strong></div>
+                          <div><span class="text-slate-400">Phân nhóm Nice:</span> <strong class="text-slate-700">Nhóm 25, 35 (2 nhóm)</strong></div>
+                          <div><span class="text-slate-400">Trạng thái:</span> <span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800">Formality Acceptance</span></div>
+                        </div>
+                      </div>
+
+                      <!-- Khối 2: Tài Chính Hợp Đồng -->
+                      <div class="p-3.5 rounded-xl bg-slate-50/70 border border-slate-200 space-y-1.5">
+                        <div class="font-bold text-[#002D54] border-b border-slate-200/80 pb-1 flex items-center gap-1.5">
+                          <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                          <span>Tài Chính & Hợp Đồng</span>
+                        </div>
+                        <div class="space-y-1 text-[11px] pt-0.5">
+                          <div><span class="text-slate-400">Giá trị hợp đồng:</span> <strong class="font-mono text-slate-800 font-bold">180,000,000 ₫</strong></div>
+                          <div><span class="text-slate-400">Đã thanh toán:</span> <strong class="font-mono text-emerald-600 font-bold">72,000,000 ₫ (40%)</strong></div>
+                          <div><span class="text-slate-400">Còn lại phải thu:</span> <strong class="font-mono text-red-600 font-bold">108,000,000 ₫</strong></div>
+                          <div><span class="text-slate-400">Đồng bộ MISA:</span> <span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800">✓ Đã đối soát</span></div>
+                        </div>
+                      </div>
+
+                      <!-- Khối 3: Đội Ngũ Nhân Sự -->
+                      <div class="p-3.5 rounded-xl bg-slate-50/70 border border-slate-200 space-y-1.5">
+                        <div class="font-bold text-[#002D54] border-b border-slate-200/80 pb-1 flex items-center gap-1.5">
+                          <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                          <span>Đội Ngũ Phụ Trách</span>
+                        </div>
+                        <div class="space-y-1 text-[11px] pt-0.5">
+                          <div><span class="text-slate-400">Partner Lead:</span> <strong class="text-slate-800">LS. Nguyễn Anh</strong></div>
+                          <div><span class="text-slate-400">Luật sư thực hiện:</span> <strong class="text-slate-800">LS. Hoàng Gia Huy</strong></div>
+                          <div><span class="text-slate-400">Chi nhánh:</span> <strong class="text-slate-700">Trụ sở Hà Nội • Việt Nam</strong></div>
+                          <div><span class="text-slate-400">Đối tác REF:</span> <strong class="font-mono text-slate-600">REF-SNA-2026/VN</strong></div>
+                        </div>
+                      </div>
+
+                      <!-- Khối 4: Tài Liệu & OneDrive -->
+                      <div class="p-3.5 rounded-xl bg-slate-50/70 border border-slate-200 space-y-1.5">
+                        <div class="font-bold text-[#002D54] border-b border-slate-200/80 pb-1 flex items-center gap-1.5">
+                          <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z"/></svg>
+                          <span>Lưu Trữ & Thao Tác</span>
+                        </div>
+                        <div class="space-y-2 text-[11px] pt-0.5">
+                          <div>
+                            <span class="text-slate-400 block mb-0.5">Thư mục OneDrive:</span>
+                            <a href="https://asllaw-my.sharepoint.com/personal/cases/2026/ASL-2026-TM109" target="_blank" class="text-blue-600 hover:underline font-mono text-[10px] break-all block">
+                              asllaw-my.sharepoint.com/.../TM109 &rarr;
+                            </a>
+                          </div>
+                          <div class="pt-1 flex items-center gap-2">
+                            <a href="edit.html" class="px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-bold">Sửa vụ việc</a>
+                            <a href="detail.html" class="px-2.5 py-1 rounded bg-[#002D54] hover:bg-[#0082B4] text-white text-[10px] font-bold">Vào Workspace</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- ========================================== -->
+              <!-- CASE 2: SÁNG CHẾ (ASL-2026-PAT04)          -->
+              <!-- ========================================== -->
+              <tr class="case-row hover:bg-slate-50/90 transition-colors group cursor-pointer" data-domain="PAT" data-status="PENDING_APPROVAL" data-detail-id="detail-pat04">
+                <td class="py-4 px-4 font-mono font-bold text-[#002D54]">
+                  <div class="flex items-center gap-2">
+                    <button onclick="event.stopPropagation(); toggleRowDetail('detail-pat04', this)" class="btn-chevron p-1 rounded-lg hover:bg-slate-200 text-slate-400 hover:text-slate-800 transition-colors" title="Sổ quy trình & chi tiết vụ việc">
+                      <svg class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                    </button>
+                    <a href="detail.html" class="hover:underline font-extrabold text-[#002D54]">ASL-2026-PAT04</a>
+                  </div>
+                </td>
+                <td class="py-4 px-4">
+                  <a href="detail.html" class="font-bold text-sm text-[#002D54] hover:text-[#0082B4] block leading-snug">Hệ Thống Tối Ưu Hóa Năng Lượng Foxconn Smart Factory</a>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-purple-50 text-purple-900 border border-purple-200/80">
+                    <svg class="w-3.5 h-3.5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+                    <span>Sáng Chế</span>
+                  </span>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-bold text-slate-800">Foxconn Energy Vietnam Co., Ltd</div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-semibold text-slate-700">Foxconn IP Team</div>
+                  <div class="text-[10px] text-slate-400 font-mono">FDI Inbound</div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="flex items-center gap-2">
+                    <div class="w-16 h-2 bg-slate-100 rounded-full overflow-hidden border border-slate-200/60">
+                      <div class="bg-purple-600 h-full w-[30%] rounded-full"></div>
+                    </div>
+                    <span class="text-[11px] font-bold text-slate-700">30%</span>
+                  </div>
+                </td>
+                <!-- Admin columns -->
+                <td class="col-role-admin py-4 px-4">
+                  <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200">Referral Quốc tế</span>
+                </td>
+                <td class="col-role-admin py-4 px-4">
+                  <span class="font-semibold text-slate-700">Văn phòng Singapore</span>
+                </td>
+              </tr>
+
+              <!-- EXPANDABLE DETAILS PANEL FOR CASE 2 -->
+              <tr id="detail-pat04" class="row-detail hidden bg-slate-50/90 border-b border-slate-200">
+                <td colspan="8" class="p-5">
+                  <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm space-y-5">
+                    
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                      <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-4 rounded bg-purple-600"></span>
+                        <span class="text-xs font-bold text-[#002D54] uppercase tracking-wider">Thông Số & Quy Trình Vụ Việc • ASL-2026-PAT04</span>
+                      </div>
+                      <a href="detail.html" class="text-xs font-bold text-[#0082B4] hover:underline flex items-center gap-1">
+                        <span>Mở Toàn Diện Workspace</span> &rarr;
+                      </a>
+                    </div>
+
+                    <!-- STEP WIZARD COMPONENT (Sáng chế) -->
+                    <div class="p-5 sm:p-6 rounded-2xl bg-[#FCFAF5] border border-[#E9DFCE] shadow-xs">
+                      <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-2">
+                          <span class="w-2 h-2 rounded-full bg-[#C89B3C] animate-pulse"></span>
+                          <span class="text-xs font-bold text-[#002D54] uppercase tracking-wider">Tiến Trình Quy Trình Sáng Chế</span>
+                        </div>
+                        <span class="text-[11px] font-bold text-[#94681E] bg-[#FDF6E2] px-3 py-1 rounded-full border border-[#E9DFCE]">
+                          Giai đoạn hiện tại: Nộp đơn Cục SHTT (Bước 3/5)
+                        </span>
+                      </div>
+
+                      <div class="relative px-6 sm:px-12 py-3 overflow-x-auto">
+                        <!-- Connecting Line: Completed Gold then Remaining Gray -->
+                        <div class="absolute top-[28px] left-12 right-12 h-[3px] bg-slate-200 -z-0">
+                          <div class="h-full bg-[#C89B3C]" style="width: 50%;"></div>
+                        </div>
+
+                        <div class="relative z-10 flex items-start justify-between min-w-[580px]">
+                          <!-- Step 1: Tra cứu sáng chế (✓) -->
+                          <div class="flex flex-col items-center text-center w-28">
+                            <div class="w-9 h-9 rounded-full bg-[#C89B3C] text-slate-900 flex items-center justify-center font-bold shadow-sm mb-2">
+                              <svg class="w-4 h-4 stroke-[3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                            </div>
+                            <span class="text-xs font-semibold text-slate-800 leading-snug">Tra cứu & đánh giá</span>
+                          </div>
+
+                          <!-- Step 2: Soạn bản mô tả IPC (✓) -->
+                          <div class="flex flex-col items-center text-center w-28">
+                            <div class="w-9 h-9 rounded-full bg-[#C89B3C] text-slate-900 flex items-center justify-center font-bold shadow-sm mb-2">
+                              <svg class="w-4 h-4 stroke-[3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                            </div>
+                            <span class="text-xs font-semibold text-slate-800 leading-snug">Soạn bản mô tả</span>
+                          </div>
+
+                          <!-- Step 3: Nộp đơn Cục SHTT (Active) -->
+                          <div class="flex flex-col items-center text-center w-28">
+                            <div class="relative mb-2">
+                              <div class="w-11 h-11 -m-1 rounded-full bg-[#F5E8D0]/80 flex items-center justify-center">
+                                <div class="w-9 h-9 rounded-full bg-[#132338] text-white flex items-center justify-center font-bold text-sm shadow-md">
+                                  3
+                                </div>
+                              </div>
+                            </div>
+                            <span class="text-xs font-bold text-slate-900 leading-snug">Nộp đơn Cục SHTT</span>
+                          </div>
+
+                          <!-- Step 4: Công bố đơn (Pending) -->
+                          <div class="flex flex-col items-center text-center w-28">
+                            <div class="w-9 h-9 rounded-full bg-white border-2 border-slate-300 text-slate-400 flex items-center justify-center font-bold text-sm mb-2">
+                              4
+                            </div>
+                            <span class="text-xs font-semibold text-slate-400 leading-snug">Công bố đơn</span>
+                          </div>
+
+                          <!-- Step 5: Thẩm định & Cấp bằng (Pending) -->
+                          <div class="flex flex-col items-center text-center w-28">
+                            <div class="w-9 h-9 rounded-full bg-white border-2 border-slate-300 text-slate-400 flex items-center justify-center font-bold text-sm mb-2">
+                              5
+                            </div>
+                            <span class="text-xs font-semibold text-slate-400 leading-snug">Thẩm định & cấp bằng</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs">
+                      <div class="p-3.5 rounded-xl bg-slate-50/70 border border-slate-200 space-y-1.5">
+                        <div class="font-bold text-[#002D54] border-b border-slate-200/80 pb-1 flex items-center gap-1.5">
+                          <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+                          <span>Thông Số Sáng Chế</span>
+                        </div>
+                        <div class="space-y-1 text-[11px] pt-0.5">
+                          <div><span class="text-slate-400">Số đơn:</span> <strong class="font-mono text-purple-700">1-2026-00456</strong></div>
+                          <div><span class="text-slate-400">IPC Class:</span> <strong class="font-mono text-slate-700">G06F 17/00</strong></div>
+                          <div><span class="text-slate-400">Điểm bảo hộ:</span> <strong class="text-slate-700">14 điểm (3 độc lập)</strong></div>
+                          <div><span class="text-slate-400">Trạng thái:</span> <span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-800">Stage 1: Nộp đơn</span></div>
+                        </div>
+                      </div>
+
+                      <div class="p-3.5 rounded-xl bg-slate-50/70 border border-slate-200 space-y-1.5">
+                        <div class="font-bold text-[#002D54] border-b border-slate-200/80 pb-1 flex items-center gap-1.5">
+                          <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                          <span>Tài Chính & Hợp Đồng</span>
+                        </div>
+                        <div class="space-y-1 text-[11px] pt-0.5">
+                          <div><span class="text-slate-400">Giá trị hợp đồng:</span> <strong class="font-mono text-slate-800 font-bold">320,000,000 ₫</strong></div>
+                          <div><span class="text-slate-400">Đã thanh toán:</span> <strong class="font-mono text-emerald-600 font-bold">160,000,000 ₫ (50%)</strong></div>
+                          <div><span class="text-slate-400">Còn lại:</span> <strong class="font-mono text-red-600 font-bold">160,000,000 ₫</strong></div>
+                          <div><span class="text-slate-400">Đồng bộ MISA:</span> <span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800">✓ Đã đối soát</span></div>
+                        </div>
+                      </div>
+
+                      <div class="p-3.5 rounded-xl bg-slate-50/70 border border-slate-200 space-y-1.5">
+                        <div class="font-bold text-[#002D54] border-b border-slate-200/80 pb-1 flex items-center gap-1.5">
+                          <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                          <span>Đội Ngũ Phụ Trách</span>
+                        </div>
+                        <div class="space-y-1 text-[11px] pt-0.5">
+                          <div><span class="text-slate-400">Partner Lead:</span> <strong class="text-slate-800">LS. Lê Hoàng Nam</strong></div>
+                          <div><span class="text-slate-400">Luật sư thực hiện:</span> <strong class="text-slate-800">LS. Trần Mai Linh</strong></div>
+                          <div><span class="text-slate-400">Khách hàng:</span> <strong class="text-slate-700">Đài Loan (FDI)</strong></div>
+                        </div>
+                      </div>
+
+                      <div class="p-3.5 rounded-xl bg-slate-50/70 border border-slate-200 space-y-1.5">
+                        <div class="font-bold text-[#002D54] border-b border-slate-200/80 pb-1 flex items-center gap-1.5">
+                          <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z"/></svg>
+                          <span>Tài Liệu Hồ Sơ</span>
+                        </div>
+                        <div class="space-y-2 text-[11px] pt-0.5">
+                          <div>
+                            <span class="text-slate-400 block mb-0.5">Bản mô tả sáng chế:</span>
+                            <span class="font-mono text-[10px] text-blue-700"><span class="inline-flex items-center gap-1"><svg class="w-3 h-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/></svg><span>Ban_mo_ta_ky_thuat_v3.docx</span></span></span>
+                          </div>
+                          <div class="pt-1 flex items-center gap-2">
+                            <a href="edit.html" class="px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-bold">Sửa vụ việc</a>
+                            <a href="detail.html" class="px-2.5 py-1 rounded bg-[#002D54] hover:bg-[#0082B4] text-white text-[10px] font-bold">Vào Workspace</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- ========================================== -->
+              <!-- CASE 3: KIỂU DÁNG CÔNG NGHIỆP (DES02)      -->
+              <!-- ========================================== -->
+              <tr class="case-row hover:bg-slate-50/90 transition-colors group cursor-pointer" data-domain="DES" data-status="IN_PROGRESS" data-detail-id="detail-des02">
+                <td class="py-4 px-4 font-mono font-bold text-[#002D54]">
+                  <div class="flex items-center gap-2">
+                    <button onclick="event.stopPropagation(); toggleRowDetail('detail-des02', this)" class="btn-chevron p-1 rounded-lg hover:bg-slate-200 text-slate-400 hover:text-slate-800 transition-colors" title="Sổ quy trình & chi tiết vụ việc">
+                      <svg class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                    </button>
+                    <a href="detail.html" class="hover:underline font-extrabold text-[#002D54]">ASL-2026-DES02</a>
+                  </div>
+                </td>
+                <td class="py-4 px-4">
+                  <a href="detail.html" class="font-bold text-sm text-[#002D54] hover:text-[#0082B4] block leading-snug">Kiểu Dáng Công Nghiệp Mũ Bảo Hiểm Khí Động Học An Gia</a>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-cyan-50 text-cyan-900 border border-cyan-200/80">
+                    <svg class="w-3.5 h-3.5 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                    <span>Kiểu Dáng</span>
+                  </span>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-bold text-slate-800">Công ty CP Nhựa An Gia</div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-semibold text-slate-700">Khách Hàng Trực Tiếp</div>
+                  <div class="text-[10px] text-slate-400 font-mono">Nội địa VN</div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="flex items-center gap-2">
+                    <div class="w-16 h-2 bg-slate-100 rounded-full overflow-hidden border border-slate-200/60">
+                      <div class="bg-cyan-600 h-full w-[70%] rounded-full"></div>
+                    </div>
+                    <span class="text-[11px] font-bold text-slate-700">70%</span>
+                  </div>
+                </td>
+                <!-- Admin columns -->
+                <td class="col-role-admin py-4 px-4">
+                  <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">Khách hàng cũ</span>
+                </td>
+                <td class="col-role-admin py-4 px-4">
+                  <span class="font-semibold text-slate-700">CN TP. Hồ Chí Minh</span>
+                </td>
+              </tr>
+
+              <!-- EXPANDABLE DETAILS PANEL FOR CASE 3 -->
+              <tr id="detail-des02" class="row-detail hidden bg-slate-50/90 border-b border-slate-200">
+                <td colspan="8" class="p-5">
+                  <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm space-y-5">
+                    
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                      <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-4 rounded bg-cyan-600"></span>
+                        <span class="text-xs font-bold text-[#002D54] uppercase tracking-wider">Thông Số & Quy Trình Vụ Việc • ASL-2026-DES02</span>
+                      </div>
+                      <a href="detail.html" class="text-xs font-bold text-[#0082B4] hover:underline flex items-center gap-1">
+                        <span>Mở Toàn Diện Workspace</span> &rarr;
+                      </a>
+                    </div>
+
+                    <!-- STEP WIZARD COMPONENT (Kiểu dáng) -->
+                    <div class="p-5 sm:p-6 rounded-2xl bg-[#FCFAF5] border border-[#E9DFCE] shadow-xs">
+                      <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-2">
+                          <span class="w-2 h-2 rounded-full bg-[#C89B3C] animate-pulse"></span>
+                          <span class="text-xs font-bold text-[#002D54] uppercase tracking-wider">Tiến Trình Đăng Ký Kiểu Dáng</span>
+                        </div>
+                        <span class="text-[11px] font-bold text-[#94681E] bg-[#FDF6E2] px-3 py-1 rounded-full border border-[#E9DFCE]">
+                          Giai đoạn hiện tại: Công bố đơn trên Công báo (Bước 4/5)
+                        </span>
+                      </div>
+
+                      <div class="relative px-6 sm:px-12 py-3 overflow-x-auto">
+                        <div class="absolute top-[28px] left-12 right-12 h-[3px] bg-slate-200 -z-0">
+                          <div class="h-full bg-[#C89B3C]" style="width: 75%;"></div>
+                        </div>
+
+                        <div class="relative z-10 flex items-start justify-between min-w-[580px]">
+                          <!-- Step 1: Chuẩn bị ảnh 6 chiều (✓) -->
+                          <div class="flex flex-col items-center text-center w-28">
+                            <div class="w-9 h-9 rounded-full bg-[#C89B3C] text-slate-900 flex items-center justify-center font-bold shadow-sm mb-2">
+                              <svg class="w-4 h-4 stroke-[3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                            </div>
+                            <span class="text-xs font-semibold text-slate-800 leading-snug">Chụp ảnh 6 chiều</span>
+                          </div>
+
+                          <!-- Step 2: Nộp đơn đăng ký (✓) -->
+                          <div class="flex flex-col items-center text-center w-28">
+                            <div class="w-9 h-9 rounded-full bg-[#C89B3C] text-slate-900 flex items-center justify-center font-bold shadow-sm mb-2">
+                              <svg class="w-4 h-4 stroke-[3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                            </div>
+                            <span class="text-xs font-semibold text-slate-800 leading-snug">Nộp đơn đăng ký</span>
+                          </div>
+
+                          <!-- Step 3: Thẩm định hình thức (✓) -->
+                          <div class="flex flex-col items-center text-center w-28">
+                            <div class="w-9 h-9 rounded-full bg-[#C89B3C] text-slate-900 flex items-center justify-center font-bold shadow-sm mb-2">
+                              <svg class="w-4 h-4 stroke-[3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                            </div>
+                            <span class="text-xs font-semibold text-slate-800 leading-snug">Thẩm định hình thức</span>
+                          </div>
+
+                          <!-- Step 4: Công bố đơn (Active) -->
+                          <div class="flex flex-col items-center text-center w-28">
+                            <div class="relative mb-2">
+                              <div class="w-11 h-11 -m-1 rounded-full bg-[#F5E8D0]/80 flex items-center justify-center">
+                                <div class="w-9 h-9 rounded-full bg-[#132338] text-white flex items-center justify-center font-bold text-sm shadow-md">
+                                  4
+                                </div>
+                              </div>
+                            </div>
+                            <span class="text-xs font-bold text-slate-900 leading-snug">Công bố đơn</span>
+                          </div>
+
+                          <!-- Step 5: Cấp văn bằng bảo hộ (Pending) -->
+                          <div class="flex flex-col items-center text-center w-28">
+                            <div class="w-9 h-9 rounded-full bg-white border-2 border-slate-300 text-slate-400 flex items-center justify-center font-bold text-sm mb-2">
+                              5
+                            </div>
+                            <span class="text-xs font-semibold text-slate-400 leading-snug">Cấp văn bằng</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs">
+                      <div class="p-3.5 rounded-xl bg-slate-50/70 border border-slate-200 space-y-1.5">
+                        <div class="font-bold text-[#002D54] border-b border-slate-200/80 pb-1 flex items-center gap-1.5">
+                          <svg class="w-4 h-4 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                          <span>Kiểu Dáng Đăng Ký</span>
+                        </div>
+                        <div class="space-y-1 text-[11px] pt-0.5">
+                          <div><span class="text-slate-400">Số đơn:</span> <strong class="font-mono text-cyan-700">3-2026-00123</strong></div>
+                          <div><span class="text-slate-400">Phân loại Locarno:</span> <strong class="font-mono text-slate-700">06-01</strong></div>
+                          <div><span class="text-slate-400">Bộ ảnh:</span> <strong class="text-slate-700">6 hình chiếu chuẩn</strong></div>
+                          <div><span class="text-slate-400">Trạng thái:</span> <span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800">Stage 3: Công Bố Đơn</span></div>
+                        </div>
+                      </div>
+
+                      <div class="p-3.5 rounded-xl bg-slate-50/70 border border-slate-200 space-y-1.5">
+                        <div class="font-bold text-[#002D54] border-b border-slate-200/80 pb-1 flex items-center gap-1.5">
+                          <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                          <span>Tài Chính & Hợp Đồng</span>
+                        </div>
+                        <div class="space-y-1 text-[11px] pt-0.5">
+                          <div><span class="text-slate-400">Giá trị hợp đồng:</span> <strong class="font-mono text-slate-800 font-bold">85,000,000 ₫</strong></div>
+                          <div><span class="text-slate-400">Đã thanh toán:</span> <strong class="font-mono text-emerald-600 font-bold">60,000,000 ₫ (70%)</strong></div>
+                          <div><span class="text-slate-400">Còn lại:</span> <strong class="font-mono text-red-600 font-bold">25,000,000 ₫</strong></div>
+                          <div><span class="text-slate-400">Đồng bộ MISA:</span> <span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800">✓ Đã đối soát</span></div>
+                        </div>
+                      </div>
+
+                      <div class="p-3.5 rounded-xl bg-slate-50/70 border border-slate-200 space-y-1.5">
+                        <div class="font-bold text-[#002D54] border-b border-slate-200/80 pb-1 flex items-center gap-1.5">
+                          <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                          <span>Đội Ngũ Phụ Trách</span>
+                        </div>
+                        <div class="space-y-1 text-[11px] pt-0.5">
+                          <div><span class="text-slate-400">Partner Lead:</span> <strong class="text-slate-800">LS. Trần Mai Linh</strong></div>
+                          <div><span class="text-slate-400">Luật sư thực hiện:</span> <strong class="text-slate-800">LS. Đỗ Quốc Tuấn</strong></div>
+                          <div><span class="text-slate-400">Tác giả kiểu dáng:</span> <strong class="text-slate-700">Trần Minh Quân</strong></div>
+                        </div>
+                      </div>
+
+                      <div class="p-3.5 rounded-xl bg-slate-50/70 border border-slate-200 space-y-1.5">
+                        <div class="font-bold text-[#002D54] border-b border-slate-200/80 pb-1 flex items-center gap-1.5">
+                          <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z"/></svg>
+                          <span>OneDrive Bộ Ảnh</span>
+                        </div>
+                        <div class="space-y-2 text-[11px] pt-0.5">
+                          <div>
+                            <span class="text-slate-400 block mb-0.5">Thư mục ảnh 3D:</span>
+                            <a href="#" class="text-blue-600 hover:underline font-mono text-[10px] block">
+                              <svg class="w-3 h-3 text-slate-400 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>onedrive/.../Bo_anh_kieu_dang_6_chieu &rarr;
+                            </a>
+                          </div>
+                          <div class="pt-1 flex items-center gap-2">
+                            <a href="edit.html" class="px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-bold">Sửa vụ việc</a>
+                            <a href="detail.html" class="px-2.5 py-1 rounded bg-[#002D54] hover:bg-[#0082B4] text-white text-[10px] font-bold">Vào Workspace</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- ========================================== -->
+              <!-- CASE 4: DÂN SỰ & TRANH TỤNG (LIT03)        -->
+              <!-- ========================================== -->
+              <tr class="case-row hover:bg-slate-50/90 transition-colors group cursor-pointer" data-domain="LIT" data-status="PENDING_APPROVAL" data-detail-id="detail-lit03">
+                <td class="py-4 px-4 font-mono font-bold text-red-700">
+                  <div class="flex items-center gap-2">
+                    <button onclick="event.stopPropagation(); toggleRowDetail('detail-lit03', this)" class="btn-chevron p-1 rounded-lg hover:bg-slate-200 text-slate-400 hover:text-slate-800 transition-colors" title="Sổ quy trình & chi tiết vụ việc">
+                      <svg class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                    </button>
+                    <a href="detail.html" class="hover:underline font-extrabold text-red-700">ASL-2026-LIT03</a>
+                  </div>
+                </td>
+                <td class="py-4 px-4">
+                  <a href="detail.html" class="font-bold text-sm text-[#002D54] hover:text-[#0082B4] block leading-snug">Tranh Chấp Cổ Đông Sáng Lập Bất Động Sản Phúc Khang</a>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-rose-50 text-rose-900 border border-rose-200/80">
+                    <svg class="w-3.5 h-3.5 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/></svg>
+                    <span>Tranh Tụng</span>
+                  </span>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-bold text-slate-800">Nhóm Cổ Đông Sáng Lập</div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-semibold text-slate-700">Văn phòng LS Phúc An</div>
+                  <div class="text-[10px] text-slate-400 font-mono">Đồng đại diện</div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="flex items-center gap-2">
+                    <div class="w-16 h-2 bg-slate-100 rounded-full overflow-hidden border border-slate-200/60">
+                      <div class="bg-red-500 h-full w-[60%] rounded-full"></div>
+                    </div>
+                    <span class="text-[11px] font-bold text-slate-700">60%</span>
+                  </div>
+                </td>
+                <!-- Admin columns -->
+                <td class="col-role-admin py-4 px-4">
+                  <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200">Hotline & Tư vấn</span>
+                </td>
+                <td class="col-role-admin py-4 px-4">
+                  <span class="font-semibold text-slate-700">CN TP. Hồ Chí Minh</span>
+                </td>
+              </tr>
+
+              <!-- EXPANDABLE DETAILS PANEL FOR CASE 4 -->
+              <tr id="detail-lit03" class="row-detail hidden bg-slate-50/90 border-b border-slate-200">
+                <td colspan="8" class="p-5">
+                  <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm space-y-5">
+                    
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                      <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-4 rounded bg-red-600"></span>
+                        <span class="text-xs font-bold text-[#002D54] uppercase tracking-wider">Thông Số & Quy Trình Vụ Việc • ASL-2026-LIT03</span>
+                      </div>
+                      <a href="detail.html" class="text-xs font-bold text-[#0082B4] hover:underline flex items-center gap-1">
+                        <span>Mở Toàn Diện Workspace</span> &rarr;
+                      </a>
+                    </div>
+
+                    <!-- STEP WIZARD COMPONENT (Tranh tụng) -->
+                    <div class="p-5 sm:p-6 rounded-2xl bg-[#FCFAF5] border border-[#E9DFCE] shadow-xs">
+                      <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-2">
+                          <span class="w-2 h-2 rounded-full bg-[#C89B3C] animate-pulse"></span>
+                          <span class="text-xs font-bold text-[#002D54] uppercase tracking-wider">Tiến Trình Tố Tụng Tại Tòa Án</span>
+                        </div>
+                        <span class="text-[11px] font-bold text-[#94681E] bg-[#FDF6E2] px-3 py-1 rounded-full border border-[#E9DFCE]">
+                          Giai đoạn hiện tại: Hòa giải & Tiếp cận tài liệu (Bước 3/5)
+                        </span>
+                      </div>
+
+                      <div class="relative px-6 sm:px-12 py-3 overflow-x-auto">
+                        <div class="absolute top-[28px] left-12 right-12 h-[3px] bg-slate-200 -z-0">
+                          <div class="h-full bg-[#C89B3C]" style="width: 50%;"></div>
+                        </div>
+
+                        <div class="relative z-10 flex items-start justify-between min-w-[580px]">
+                          <!-- Step 1: Tiếp nhận chứng cứ (✓) -->
+                          <div class="flex flex-col items-center text-center w-28">
+                            <div class="w-9 h-9 rounded-full bg-[#C89B3C] text-slate-900 flex items-center justify-center font-bold shadow-sm mb-2">
+                              <svg class="w-4 h-4 stroke-[3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                            </div>
+                            <span class="text-xs font-semibold text-slate-800 leading-snug">Tiếp nhận chứng cứ</span>
+                          </div>
+
+                          <!-- Step 2: Nộp đơn khởi kiện TAND (✓) -->
+                          <div class="flex flex-col items-center text-center w-28">
+                            <div class="w-9 h-9 rounded-full bg-[#C89B3C] text-slate-900 flex items-center justify-center font-bold shadow-sm mb-2">
+                              <svg class="w-4 h-4 stroke-[3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                            </div>
+                            <span class="text-xs font-semibold text-slate-800 leading-snug">Nộp đơn khởi kiện</span>
+                          </div>
+
+                          <!-- Step 3: Hòa giải & Tiếp cận chứng cứ (Active) -->
+                          <div class="flex flex-col items-center text-center w-28">
+                            <div class="relative mb-2">
+                              <div class="w-11 h-11 -m-1 rounded-full bg-[#F5E8D0]/80 flex items-center justify-center">
+                                <div class="w-9 h-9 rounded-full bg-[#132338] text-white flex items-center justify-center font-bold text-sm shadow-md">
+                                  3
+                                </div>
+                              </div>
+                            </div>
+                            <span class="text-xs font-bold text-slate-900 leading-snug">Hòa giải & tài liệu</span>
+                          </div>
+
+                          <!-- Step 4: Phiên tòa sơ thẩm (Pending) -->
+                          <div class="flex flex-col items-center text-center w-28">
+                            <div class="w-9 h-9 rounded-full bg-white border-2 border-slate-300 text-slate-400 flex items-center justify-center font-bold text-sm mb-2">
+                              4
+                            </div>
+                            <span class="text-xs font-semibold text-slate-400 leading-snug">Phiên tòa sơ thẩm</span>
+                          </div>
+
+                          <!-- Step 5: Bản án & Thi hành án (Pending) -->
+                          <div class="flex flex-col items-center text-center w-28">
+                            <div class="w-9 h-9 rounded-full bg-white border-2 border-slate-300 text-slate-400 flex items-center justify-center font-bold text-sm mb-2">
+                              5
+                            </div>
+                            <span class="text-xs font-semibold text-slate-400 leading-snug">Bản án & thi hành</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs">
+                      <div class="p-3.5 rounded-xl bg-slate-50/70 border border-slate-200 space-y-1.5">
+                        <div class="font-bold text-[#002D54] border-b border-slate-200/80 pb-1 flex items-center gap-1.5">
+                          <svg class="w-4 h-4 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/></svg>
+                          <span>Tòa Án & Tố Tụng</span>
+                        </div>
+                        <div class="space-y-1 text-[11px] pt-0.5">
+                          <div><span class="text-slate-400">Số thụ lý:</span> <strong class="font-mono text-red-600 font-bold">18/2026/TLST-KDTM</strong></div>
+                          <div><span class="text-slate-400">Tòa án:</span> <strong class="text-slate-800">TAND TP. Hồ Chí Minh</strong></div>
+                          <div><span class="text-slate-400">Giá trị tranh chấp:</span> <strong class="text-red-700 font-bold">45 Tỷ VND</strong></div>
+                          <div><span class="text-slate-400">Tư cách tố tụng:</span> <span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-[#002D54]">Nguyên Đơn</span></div>
+                        </div>
+                      </div>
+
+                      <div class="p-3.5 rounded-xl bg-slate-50/70 border border-slate-200 space-y-1.5">
+                        <div class="font-bold text-[#002D54] border-b border-slate-200/80 pb-1 flex items-center gap-1.5">
+                          <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                          <span>Tài Chính Hợp Đồng</span>
+                        </div>
+                        <div class="space-y-1 text-[11px] pt-0.5">
+                          <div><span class="text-slate-400">Phí dịch vụ tranh tụng:</span> <strong class="font-mono text-slate-800 font-bold">650,000,000 ₫</strong></div>
+                          <div><span class="text-slate-400">Tạm ứng giai đoạn 1:</span> <strong class="font-mono text-emerald-600 font-bold">300,000,000 ₫</strong></div>
+                          <div><span class="text-slate-400">Còn lại theo mốc:</span> <strong class="font-mono text-red-600 font-bold">350,000,000 ₫</strong></div>
+                          <div><span class="text-slate-400">Đồng bộ MISA:</span> <span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800">✓ Đã đối soát</span></div>
+                        </div>
+                      </div>
+
+                      <div class="p-3.5 rounded-xl bg-slate-50/70 border border-slate-200 space-y-1.5">
+                        <div class="font-bold text-[#002D54] border-b border-slate-200/80 pb-1 flex items-center gap-1.5">
+                          <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                          <span>Đội Ngũ Luật Sư</span>
+                        </div>
+                        <div class="space-y-1 text-[11px] pt-0.5">
+                          <div><span class="text-slate-400">Partner Lead:</span> <strong class="text-slate-800">LS. Nguyễn Anh</strong></div>
+                          <div><span class="text-slate-400">Luật sư thực hiện:</span> <strong class="text-slate-800">LS. Phạm Thu Hương</strong></div>
+                          <div><span class="text-slate-400">Chi nhánh:</span> <strong class="text-slate-700">TP. Hồ Chí Minh</strong></div>
+                        </div>
+                      </div>
+
+                      <div class="p-3.5 rounded-xl bg-slate-50/70 border border-slate-200 space-y-1.5">
+                        <div class="font-bold text-[#002D54] border-b border-slate-200/80 pb-1 flex items-center gap-1.5">
+                          <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z"/></svg>
+                          <span>Hồ Sơ Chứng Cứ</span>
+                        </div>
+                        <div class="space-y-2 text-[11px] pt-0.5">
+                          <div>
+                            <span class="text-slate-400 block mb-0.5">Biện pháp khẩn cấp:</span>
+                            <span class="text-amber-800 font-bold text-[10px]">Đã phong tỏa tài khoản ngân hàng</span>
+                          </div>
+                          <div class="pt-1 flex items-center gap-2">
+                            <a href="edit.html" class="px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-bold">Sửa vụ việc</a>
+                            <a href="detail.html" class="px-2.5 py-1 rounded bg-[#002D54] hover:bg-[#0082B4] text-white text-[10px] font-bold">Vào Workspace</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- ========================================== -->
+              <!-- CASE 5: DOANH NGHIỆP & M&A (MNA01)         -->
+              <!-- ========================================== -->
+              <tr class="case-row hover:bg-slate-50/90 transition-colors group cursor-pointer" data-domain="MNA" data-status="CLOSED" data-detail-id="detail-mna01">
+                <td class="py-4 px-4 font-mono font-bold text-emerald-700">
+                  <div class="flex items-center gap-2">
+                    <button onclick="event.stopPropagation(); toggleRowDetail('detail-mna01', this)" class="btn-chevron p-1 rounded-lg hover:bg-slate-200 text-slate-400 hover:text-slate-800 transition-colors" title="Sổ quy trình & chi tiết vụ việc">
+                      <svg class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                    </button>
+                    <a href="detail.html" class="hover:underline font-extrabold text-emerald-700">ASL-2026-MNA01</a>
+                  </div>
+                </td>
+                <td class="py-4 px-4">
+                  <a href="detail.html" class="font-bold text-sm text-[#002D54] hover:text-[#0082B4] block leading-snug">Tư Vấn M&A Thâu Tóm & Tái Cấu Trúc HAGL Agrico</a>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-emerald-50 text-emerald-900 border border-emerald-200/80">
+                    <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                    <span>Doanh Nghiệp</span>
+                  </span>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-bold text-slate-800">Thaco Corporation</div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-semibold text-slate-700">Thaco Legal Team</div>
+                  <div class="text-[10px] text-slate-400 font-mono">Tư vấn Buyer</div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="flex items-center gap-2">
+                    <div class="w-16 h-2 bg-slate-100 rounded-full overflow-hidden border border-slate-200/60">
+                      <div class="bg-emerald-600 h-full w-[50%] rounded-full"></div>
+                    </div>
+                    <span class="text-[11px] font-bold text-slate-700">50%</span>
+                  </div>
+                </td>
+                <!-- Admin columns -->
+                <td class="col-role-admin py-4 px-4">
+                  <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-purple-50 text-purple-700 border border-purple-200">Website & Brand</span>
+                </td>
+                <td class="col-role-admin py-4 px-4">
+                  <span class="font-semibold text-slate-700">Trụ sở Hà Nội</span>
+                </td>
+              </tr>
+
+              <!-- EXPANDABLE DETAILS PANEL FOR CASE 5 -->
+              <tr id="detail-mna01" class="row-detail hidden bg-slate-50/90 border-b border-slate-200">
+                <td colspan="8" class="p-5">
+                  <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm space-y-5">
+                    
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                      <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-4 rounded bg-emerald-600"></span>
+                        <span class="text-xs font-bold text-[#002D54] uppercase tracking-wider">Thông Số & Quy Trình Vụ Việc • ASL-2026-MNA01</span>
+                      </div>
+                      <a href="detail.html" class="text-xs font-bold text-[#0082B4] hover:underline flex items-center gap-1">
+                        <span>Mở Toàn Diện Workspace</span> &rarr;
+                      </a>
+                    </div>
+
+                    <!-- STEP WIZARD COMPONENT (M&A) -->
+                    <div class="p-5 sm:p-6 rounded-2xl bg-[#FCFAF5] border border-[#E9DFCE] shadow-xs">
+                      <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-2">
+                          <span class="w-2 h-2 rounded-full bg-[#C89B3C] animate-pulse"></span>
+                          <span class="text-xs font-bold text-[#002D54] uppercase tracking-wider">Tiến Trình Giao Dịch M&A</span>
+                        </div>
+                        <span class="text-[11px] font-bold text-[#94681E] bg-[#FDF6E2] px-3 py-1 rounded-full border border-[#E9DFCE]">
+                          Giai đoạn hiện tại: Thẩm định pháp lý LDD (Bước 2/5)
+                        </span>
+                      </div>
+
+                      <div class="relative px-6 sm:px-12 py-3 overflow-x-auto">
+                        <div class="absolute top-[28px] left-12 right-12 h-[3px] bg-slate-200 -z-0">
+                          <div class="h-full bg-[#C89B3C]" style="width: 25%;"></div>
+                        </div>
+
+                        <div class="relative z-10 flex items-start justify-between min-w-[580px]">
+                          <!-- Step 1: Ký NDA & Khảo sát (✓) -->
+                          <div class="flex flex-col items-center text-center w-28">
+                            <div class="w-9 h-9 rounded-full bg-[#C89B3C] text-slate-900 flex items-center justify-center font-bold shadow-sm mb-2">
+                              <svg class="w-4 h-4 stroke-[3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                            </div>
+                            <span class="text-xs font-semibold text-slate-800 leading-snug">Ký NDA & khảo sát</span>
+                          </div>
+
+                          <!-- Step 2: Thẩm định pháp lý LDD (Active) -->
+                          <div class="flex flex-col items-center text-center w-28">
+                            <div class="relative mb-2">
+                              <div class="w-11 h-11 -m-1 rounded-full bg-[#F5E8D0]/80 flex items-center justify-center">
+                                <div class="w-9 h-9 rounded-full bg-[#132338] text-white flex items-center justify-center font-bold text-sm shadow-md">
+                                  2
+                                </div>
+                              </div>
+                            </div>
+                            <span class="text-xs font-bold text-slate-900 leading-snug">Thẩm định LDD</span>
+                          </div>
+
+                          <!-- Step 3: Đàm phán Hợp đồng SPA (Pending) -->
+                          <div class="flex flex-col items-center text-center w-28">
+                            <div class="w-9 h-9 rounded-full bg-white border-2 border-slate-300 text-slate-400 flex items-center justify-center font-bold text-sm mb-2">
+                              3
+                            </div>
+                            <span class="text-xs font-semibold text-slate-400 leading-snug">Đàm phán HĐ SPA</span>
+                          </div>
+
+                          <!-- Step 4: Chấp thuận sáp nhập (Pending) -->
+                          <div class="flex flex-col items-center text-center w-28">
+                            <div class="w-9 h-9 rounded-full bg-white border-2 border-slate-300 text-slate-400 flex items-center justify-center font-bold text-sm mb-2">
+                              4
+                            </div>
+                            <span class="text-xs font-semibold text-slate-400 leading-snug">Chấp thuận M&A</span>
+                          </div>
+
+                          <!-- Step 5: Đóng Deal & Chuyển giao (Pending) -->
+                          <div class="flex flex-col items-center text-center w-28">
+                            <div class="w-9 h-9 rounded-full bg-white border-2 border-slate-300 text-slate-400 flex items-center justify-center font-bold text-sm mb-2">
+                              5
+                            </div>
+                            <span class="text-xs font-semibold text-slate-400 leading-snug">Đóng Deal & bàn giao</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs">
+                      <div class="p-3.5 rounded-xl bg-slate-50/70 border border-slate-200 space-y-1.5">
+                        <div class="font-bold text-[#002D54] border-b border-slate-200/80 pb-1 flex items-center gap-1.5">
+                          <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                          <span>Giao Dịch M&A</span>
+                        </div>
+                        <div class="space-y-1 text-[11px] pt-0.5">
+                          <div><span class="text-slate-400">Deal Size:</span> <strong class="font-mono text-emerald-700 font-bold">5.0 Triệu USD</strong></div>
+                          <div><span class="text-slate-400">Tư cách:</span> <strong class="text-slate-800">Tư vấn Bên Mua (Buyer)</strong></div>
+                          <div><span class="text-slate-400">Báo cáo:</span> <strong class="text-slate-700">Due Diligence (120 Trang)</strong></div>
+                          <div><span class="text-slate-400">Trạng thái:</span> <span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800">Stage 2: Thẩm Định LDD</span></div>
+                        </div>
+                      </div>
+
+                      <div class="p-3.5 rounded-xl bg-slate-50/70 border border-slate-200 space-y-1.5">
+                        <div class="font-bold text-[#002D54] border-b border-slate-200/80 pb-1 flex items-center gap-1.5">
+                          <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                          <span>Tài Chính Hợp Đồng</span>
+                        </div>
+                        <div class="space-y-1 text-[11px] pt-0.5">
+                          <div><span class="text-slate-400">Giá trị hợp đồng:</span> <strong class="font-mono text-slate-800 font-bold">500,000,000 ₫</strong></div>
+                          <div><span class="text-slate-400">Đã thanh toán:</span> <strong class="font-mono text-emerald-600 font-bold">250,000,000 ₫ (50%)</strong></div>
+                          <div><span class="text-slate-400">Còn lại:</span> <strong class="font-mono text-red-600 font-bold">250,000,000 ₫</strong></div>
+                          <div><span class="text-slate-400">Đồng bộ MISA:</span> <span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800">✓ Đã đối soát</span></div>
+                        </div>
+                      </div>
+
+                      <div class="p-3.5 rounded-xl bg-slate-50/70 border border-slate-200 space-y-1.5">
+                        <div class="font-bold text-[#002D54] border-b border-slate-200/80 pb-1 flex items-center gap-1.5">
+                          <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                          <span>Đội Ngũ Phụ Trách</span>
+                        </div>
+                        <div class="space-y-1 text-[11px] pt-0.5">
+                          <div><span class="text-slate-400">Partner Lead:</span> <strong class="text-slate-800">LS. Trần Nam</strong></div>
+                          <div><span class="text-slate-400">Luật sư thực hiện:</span> <strong class="text-slate-800">LS. Hoàng Gia Huy</strong></div>
+                          <div><span class="text-slate-400">Chi nhánh:</span> <strong class="text-slate-700">Trụ sở Hà Nội • Việt Nam</strong></div>
+                        </div>
+                      </div>
+
+                      <div class="p-3.5 rounded-xl bg-slate-50/70 border border-slate-200 space-y-1.5">
+                        <div class="font-bold text-[#002D54] border-b border-slate-200/80 pb-1 flex items-center gap-1.5">
+                          <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z"/></svg>
+                          <span>OneDrive Dự Án</span>
+                        </div>
+                        <div class="space-y-2 text-[11px] pt-0.5">
+                          <div>
+                            <span class="text-slate-400 block mb-0.5">Thư mục Deal Room:</span>
+                            <a href="#" class="text-blue-600 hover:underline font-mono text-[10px] block">
+                              <svg class="w-3 h-3 text-slate-400 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>onedrive/.../MNA_Agrico_DealRoom &rarr;
+                            </a>
+                          </div>
+                          <div class="pt-1 flex items-center gap-2">
+                            <a href="edit.html" class="px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-bold">Sửa vụ việc</a>
+                            <a href="detail.html" class="px-2.5 py-1 rounded bg-[#002D54] hover:bg-[#0082B4] text-white text-[10px] font-bold">Vào Workspace</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="flex items-center justify-between border-t border-slate-100 pt-4 text-xs text-slate-500">
+          <div>Hiển thị 5 trên tổng số 48 hồ sơ vụ việc</div>
+          <div class="flex items-center gap-1.5">
+            <button class="px-3 py-1.5 rounded-lg border border-slate-200 text-slate-400 cursor-not-allowed">Trước</button>
+            <button class="px-3 py-1.5 rounded-lg bg-[#002D54] text-white font-bold">1</button>
+            <button class="px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-100">2</button>
+            <button class="px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-100">3</button>
+            <button class="px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-100">Tiếp</button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+  </div>
+
+  <script>
+    // Toggle single row detail
+    function toggleRowDetail(detailId, buttonEl) {
+      const detailRow = document.getElementById(detailId);
+      if (!detailRow) return;
+
+      const isHidden = detailRow.classList.contains('hidden');
+      const caseRow = detailRow.previousElementSibling;
+      const chevronSvg = caseRow ? caseRow.querySelector('.btn-chevron svg') : null;
+
+      if (isHidden) {
+        detailRow.classList.remove('hidden');
+        if (chevronSvg) chevronSvg.classList.add('rotate-90');
+      } else {
+        detailRow.classList.add('hidden');
+        if (chevronSvg) chevronSvg.classList.remove('rotate-90');
+      }
+    }
+
+    // Toggle all row details at once
+    let allExpanded = false;
+    function toggleAllDetails() {
+      allExpanded = !allExpanded;
+      const detailRows = document.querySelectorAll('.row-detail');
+      const chevronSvgs = document.querySelectorAll('.btn-chevron svg');
+      const btnToggleText = document.getElementById('text-toggle-all');
+      const iconToggleAll = document.getElementById('icon-toggle-all');
+
+      detailRows.forEach(row => {
+        if (allExpanded) {
+          row.classList.remove('hidden');
+        } else {
+          row.classList.add('hidden');
+        }
+      });
+
+      chevronSvgs.forEach(svg => {
+        if (allExpanded) svg.classList.add('rotate-90');
+        else svg.classList.remove('rotate-90');
+      });
+
+      if (btnToggleText) {
+        btnToggleText.textContent = allExpanded ? 'Thu Gọn Tất Cả' : 'Sổ Tất Cả Chi Tiết';
+      }
+      if (iconToggleAll) {
+        if (allExpanded) iconToggleAll.classList.add('rotate-180');
+        else iconToggleAll.classList.remove('rotate-180');
+      }
+    }
+
+    // Filter by text search & domain dropdown
+    function filterCasesTable() {
+      const q = document.getElementById('case-search').value.toLowerCase().trim();
+      const domain = document.getElementById('case-domain-filter').value;
+      const rows = document.querySelectorAll('.case-row');
+
+      rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        const rowDomain = row.getAttribute('data-domain');
+        const detailId = row.getAttribute('data-detail-id');
+        const detailRow = detailId ? document.getElementById(detailId) : null;
+
+        const matchQ = !q || text.includes(q);
+        const matchDomain = (domain === 'ALL' || rowDomain === domain);
+
+        if (matchQ && matchDomain) {
+          row.classList.remove('hidden');
+        } else {
+          row.classList.add('hidden');
+          if (detailRow) detailRow.classList.add('hidden');
+        }
+      });
+    }
+
+    // Filter by top status tabs
+    function filterStatus(statusKey) {
+      document.querySelectorAll('.status-tab').forEach(b => {
+        b.className = "status-tab px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-colors";
+      });
+      event.target.className = "status-tab px-4 py-2 rounded-xl bg-[#002D54] text-white font-bold text-xs shadow-sm";
+
+      const rows = document.querySelectorAll('.case-row');
+      rows.forEach(row => {
+        const rowStatus = row.getAttribute('data-status');
+        const detailId = row.getAttribute('data-detail-id');
+        const detailRow = detailId ? document.getElementById(detailId) : null;
+
+        if (statusKey === 'ALL' || rowStatus === statusKey) {
+          row.classList.remove('hidden');
+        } else {
+          row.classList.add('hidden');
+          if (detailRow) detailRow.classList.add('hidden');
+        }
+      });
+    }
+
+    // Đồng bộ hiển thị cột theo vai trò (Admin vs Các vai trò khác)
+    function syncRoleTableColumns() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const role = urlParams.get('role') || localStorage.getItem('asl_user_role') || 'admin';
+      const isAdmin = (role === 'admin');
+
+      const adminElements = document.querySelectorAll('.col-role-admin');
+      adminElements.forEach(el => {
+        el.style.display = isAdmin ? '' : 'none';
+      });
+
+      const detailTds = document.querySelectorAll('.row-detail > td');
+      detailTds.forEach(td => {
+        td.setAttribute('colspan', isAdmin ? '8' : '6');
+      });
+
+      // Bảo toàn ?role=... trên các đường link trong trang
+      document.querySelectorAll('a[href="detail.html"], a[href="edit.html"], a[href="create.html"]').forEach(a => {
+        try {
+          const href = a.getAttribute('href');
+          const cleanHref = href.split('?')[0];
+          a.setAttribute('href', cleanHref + '?role=' + role);
+        } catch(e) {}
+      });
+
+      // Cho phép click vào bất kỳ đâu trên hàng để mở rộng chi tiết (trừ khi click link/button)
+      document.querySelectorAll('.case-row').forEach(row => {
+        row.addEventListener('click', function(e) {
+          if (e.target.closest('a') || e.target.closest('button') || e.target.closest('input')) {
+            return;
+          }
+          const detailId = this.getAttribute('data-detail-id');
+          const btnChevron = this.querySelector('.btn-chevron');
+          if (detailId) {
+            toggleRowDetail(detailId, btnChevron);
+          }
+        });
+      });
+    }
+
+    // Khởi chạy khi DOM sẵn sàng
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', syncRoleTableColumns);
+    } else {
+      syncRoleTableColumns();
+    }
+  </script>
+
+</body>
+</html>

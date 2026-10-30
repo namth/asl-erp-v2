@@ -1,0 +1,129 @@
+<!-- ============================================================================== -->
+<!-- ASL LAW ERP - DEDICATED SIDEBAR COMPONENT: ACCOUNTANT -->
+<!-- Tệp sidebar độc lập cho vai trò: accountant -->
+<!-- Toàn bộ đường dẫn liên kết đều gắn tham số ?role=accountant để khi click menu chuyển trang thì sidebar KHÔNG bị thay đổi -->
+<!-- ============================================================================== -->
+<aside id="sidebar" data-role="accountant" class="fixed top-0 left-0 bottom-0 w-72 bg-white/95 backdrop-blur-xl z-40 transition-all duration-300 ease-in-out flex flex-col justify-between shadow-xl shadow-slate-900/5">
+
+    <!-- Top Branding / Logo Header -->
+    <div class="h-20 sidebar-header-gradient border-b border-white/10 flex items-center justify-between px-5">
+      <!-- Expanded Full Logo (White Background) -->
+      <a href="../index.html?role=accountant" id="sidebar-logo-full" class="flex flex-col items-start gap-1 group">
+        <div class="bg-white preserve-white logo-container px-3 py-1.5 rounded-xl shadow-sm border border-white/20 flex items-center justify-center group-hover:scale-[1.02] transition-all">
+          <img src="../assets/logo-asl.png" alt="ASL LAW Logo" class="h-8 w-auto max-w-[170px] object-contain">
+        </div>
+        <span class="text-[9px] font-extrabold text-cyan-200/90 uppercase tracking-widest pl-1">Firm ERP System</span>
+      </a>
+
+      <!-- Collapsed Logo Icon (Same White Background) -->
+      <div id="sidebar-logo-collapsed" class="hidden cursor-pointer group relative flex items-center justify-center w-full py-1" onclick="toggleSidebar()" title="Bấm để mở rộng sidebar (Phím [ )">
+        <div class="group-hover:hidden w-11 h-11 rounded-xl bg-white preserve-white logo-container shadow-md border border-white/30 flex items-center justify-center p-1.5 transition-transform">
+          <img src="../assets/logo-asl-icon.png" alt="ASL LAW Icon" class="w-8 h-8 object-contain">
+        </div>
+        <div class="hidden group-hover:flex w-11 h-11 rounded-xl bg-gradient-to-br from-[#FF7A00] to-[#E66E00] items-center justify-center text-white font-bold shadow-lg shadow-orange-500/30 transition-transform scale-105">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 5l7 7-7 7M5 5l7 7-7 7"/></svg>
+        </div>
+        <div class="absolute left-full ml-3 px-2.5 py-1 bg-slate-900 text-white text-xs rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-xl z-50">
+          Mở rộng menu (Phím [ )
+        </div>
+      </div>
+
+      <!-- Collapse Toggle Button (Desktop) -->
+      <button id="btn-collapse-sidebar" onclick="toggleSidebar()" class="p-2 rounded-xl text-white/80 hover:text-white hover:bg-white/10 transition-colors" title="Thu gọn sidebar (Phím [ )">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7"/></svg>
+      </button>
+    </div>
+
+    <!-- Role Switcher Component (Bộ Chọn Đối Tượng: Admin, Manager, Kế Toán, Luật Sư) -->
+    <div id="sidebar-role-selector" class="p-3 border-b border-slate-100 bg-slate-50/70">
+      <div class="space-y-1.5">
+        <div class="flex items-center justify-between text-[10px] font-extrabold uppercase tracking-wider text-slate-400">
+          <span class="flex items-center gap-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-[#0082B4]"></span>
+            <span>Vai trò đối tượng:</span>
+          </span>
+          <span class="text-[9px] px-1.5 py-0.5 rounded bg-white text-[#002D54] font-bold border border-slate-200">ERP Role</span>
+        </div>
+        <select onchange="window.switchRole(this.value)" class="w-full bg-white border border-slate-200 text-xs font-bold text-[#002D54] rounded-xl px-2.5 py-2 focus:outline-none focus:border-[#0082B4] shadow-sm hover:border-slate-300 transition-colors">
+          <option value="admin" >Quản trị viên (Admin)</option>
+          <option value="manager" >Người quản lý (Partner)</option>
+          <option value="accountant" selected>Kế toán tài chính</option>
+          <option value="attorney" >Luật sư chuyên môn</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Navigation Menu Items Container -->
+    <nav class="flex-1 overflow-y-auto px-3 py-4 space-y-6">
+      
+      <div>
+        <div class="nav-section-title px-3 mb-2 text-[11px] font-bold uppercase tracking-wider text-slate-400">Tổng Quan</div>
+        <div class="space-y-1">
+          <a href="../dashboard/index.html?role=accountant" class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-gradient-to-r from-[#002D54] to-[#0082B4] text-white text-xs font-bold shadow-md shadow-cyan-950/20 active-nav-item">
+            <svg class="text-white w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+            <span class="nav-text">Bàn làm việc cá nhân</span>
+            
+          </a>
+        </div>
+      </div>
+      <div>
+        <div class="nav-section-title px-3 mb-2 text-[11px] font-bold uppercase tracking-wider text-slate-400">Phê Duyệt Nhanh</div>
+        <div class="space-y-1">
+          <a href="../approvals/index.html?role=accountant" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 hover:text-[#002D54] hover:bg-slate-100/80 text-xs font-semibold transition-colors">
+            <svg class="w-5 h-5 text-[#FF7A00]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span class="nav-text">Duyệt nhanh tài chính</span>
+            <span class="nav-badge ml-auto px-1.5 py-0.5 rounded text-[10px] bg-red-500 text-white animate-pulse font-bold">4</span>
+          </a>
+        </div>
+      </div>
+      <div>
+        <div class="nav-section-title px-3 mb-2 text-[11px] font-bold uppercase tracking-wider text-slate-400">Nghiệp Vụ Tài Chính</div>
+        <div class="space-y-1">
+          <a href="../cases/index.html?role=accountant" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 hover:text-[#002D54] hover:bg-slate-100/80 text-xs font-semibold transition-colors">
+            <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
+            <span class="nav-text">Vụ việc có liên quan</span>
+            <span class="nav-badge ml-auto px-1.5 py-0.5 rounded text-[10px] bg-blue-100 text-[#002D54] dark:bg-cyan-950/80 dark:text-cyan-300 dark:border dark:border-cyan-500/35 font-bold">18</span>
+          </a>
+          <a href="../accounting/index.html?role=accountant" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 hover:text-[#002D54] hover:bg-slate-100/80 text-xs font-semibold transition-colors">
+            <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+            <span class="nav-text">Kế toán & Hóa đơn</span>
+            
+          </a>
+          <a href="../finance/index.html?role=accountant" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 hover:text-[#002D54] hover:bg-slate-100/80 text-xs font-semibold transition-colors">
+            <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span class="nav-text">Quản lý tài chính</span>
+            
+          </a>
+          <a href="../reports/index.html?role=accountant" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 hover:text-[#002D54] hover:bg-slate-100/80 text-xs font-semibold transition-colors">
+            <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+            <span class="nav-text">Báo cáo & Thống kê</span>
+            
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Bottom Footer Profile / Active Role Display -->
+    <div class="p-3 border-t border-slate-100 bg-slate-50/50">
+      <div class="flex items-center gap-3 p-2 rounded-xl hover:bg-slate-100 transition-colors">
+        <div class="w-8 h-8 rounded-full bg-[#002D54] text-white font-bold text-xs flex items-center justify-center flex-shrink-0 shadow-sm">
+          TT
+        </div>
+        <div class="nav-text text-xs leading-tight">
+          <div class="font-bold text-slate-800">Trần Thị Thu Trang</div>
+          <div class="text-[10px] text-[#0082B4] font-semibold">Kế Toán Trưởng</div>
+        </div>
+      </div>
+      <!-- Theme Switcher in Sidebar Footer -->
+      <div class="nav-text pt-2 mt-1 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
+        <span class="font-semibold flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+          <span>Giao diện tối</span>
+        </span>
+        <button onclick="window.toggleTheme()" class="sidebar-theme-toggle px-2 py-0.5 rounded-lg bg-slate-200 hover:bg-slate-300 transition-colors text-slate-700" title="Chuyển chế độ Sáng / Tối (Phím D)">
+          <span class="theme-mode-label text-[10px] font-bold">Tắt</span>
+        </button>
+      </div>
+    </div>
+    
+</aside>

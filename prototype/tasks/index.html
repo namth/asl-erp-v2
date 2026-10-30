@@ -1,0 +1,1678 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <script>(function(){if(localStorage.getItem('asl_theme')==='dark'){document.documentElement.classList.add('dark');}else{document.documentElement.classList.remove('dark');}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASL LAW - Quản Lý Tác Vụ Kanban</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/layout.css?v=3.2">
+  <script src="../assets/layout.js?v=3.2" defer></script>
+  <style>
+    /* Drag & Drop Visual Styles */
+    .task-card {
+      cursor: grab;
+      user-select: none;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+    }
+    .task-card:active {
+      cursor: grabbing;
+    }
+    .task-card.is-dragging {
+      opacity: 0.35 !important;
+      transform: scale(0.96) rotate(-1deg);
+      border: 2px dashed #0082B4 !important;
+      box-shadow: 0 15px 30px rgba(0, 45, 84, 0.2);
+    }
+    .kanban-cards-container.column-drag-over {
+      background-color: rgba(0, 130, 180, 0.08) !important;
+      border: 2px dashed #0082B4 !important;
+      border-radius: 1rem;
+    }
+    .drop-indicator {
+      height: 4px;
+      background: linear-gradient(90deg, #0082B4, #FF7A00);
+      border-radius: 9999px;
+      margin: 8px 0;
+      box-shadow: 0 0 10px rgba(0, 130, 180, 0.7);
+      animation: pulseIndicator 1s infinite alternate;
+    }
+    @keyframes pulseIndicator {
+      from { opacity: 0.6; transform: scaleY(0.9); }
+      to { opacity: 1; transform: scaleY(1.3); }
+    }
+    @keyframes shakeCard {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+    .shake-anim {
+      animation: shakeCard 0.45s ease-in-out !important;
+      border-color: #EF4444 !important;
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.3) !important;
+    }
+    .unlock-anim {
+      animation: unlockGlow 1.2s ease-out;
+    }
+    @keyframes unlockGlow {
+      0% { box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.8); transform: scale(1.02); }
+      100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); transform: scale(1); }
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-[#F4F8FA] text-slate-800 flex">
+
+  <!-- Modular Shared Sidebar (Auto-mounted by layout.js) -->
+  <aside id="sidebar" class="fixed top-0 left-0 bottom-0 w-72 bg-white/95 backdrop-blur-xl z-40 transition-all duration-300 ease-in-out flex flex-col justify-between shadow-xl shadow-slate-900/5"></aside>
+
+  <!-- Main Container -->
+  <div id="main-container" class="flex-1 md:ml-72 flex flex-col min-h-screen transition-all duration-300 ease-in-out">
+
+    <!-- Top Bar with Rich Brand Gradient -->
+    <header class="header-gradient text-white h-20 px-6 flex items-center justify-between sticky top-0 z-30 shadow-md">
+      <div class="flex items-center gap-4">
+        <button onclick="toggleSidebar()" class="md:hidden p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white" title="Mở menu">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <div>
+          <div class="text-xs text-cyan-200/90 font-medium flex items-center gap-1.5">
+            <a href="../index.html" class="hover:underline">ASL LAW</a>
+            <span>/</span>
+            <span class="text-white font-semibold">Quản Lý Tác Vụ</span>
+            <span>/</span>
+            <span class="text-cyan-300 font-semibold">Bảng Kanban Kéo Thả</span>
+          </div>
+          <h1 class="text-lg font-bold text-white tracking-tight">Bảng Quản Lý Tác Vụ Kanban</h1>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <!-- View Mode Switcher -->
+        <div class="flex items-center bg-white/10 p-1 rounded-xl border border-white/20 backdrop-blur-md">
+          <a href="index.html" class="px-3 py-1.5 rounded-lg bg-white text-[#002D54] font-extrabold text-xs shadow-md flex items-center gap-1.5 transition-all">
+            <svg class="w-4 h-4 text-[#0082B4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"/></svg>
+            <span>Bảng Kanban</span>
+          </a>
+          <a href="list.html" class="px-3 py-1.5 rounded-lg text-white hover:text-cyan-200 font-bold text-xs flex items-center gap-1.5 transition-all">
+            <svg class="w-4 h-4 text-cyan-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
+            <span>Dạng Danh Sách</span>
+          </a>
+        </div>
+
+        <!-- Create Task Button -->
+        <a href="create.html" class="px-3.5 py-2 rounded-xl bg-[#FF7A00] hover:bg-[#E66E00] text-white font-bold text-xs shadow-md shadow-orange-950/20 flex items-center gap-1.5 transition-all">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+          <span>Tạo Tác Vụ Mới</span>
+        </a>
+
+        <!-- User Profile Avatar -->
+        <div class="flex items-center gap-2 pl-2 border-l border-white/20">
+          <div class="w-8 h-8 rounded-full bg-[#FF7A00] text-white font-extrabold text-xs flex items-center justify-center ring-2 ring-white/50">
+            NA
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Kanban Content Area (Fullwidth Layout) -->
+    <main class="flex-1 p-6 md:p-8 w-full max-w-none space-y-6">
+
+      <!-- Metrics Summary Chips (Solid Bold Cards theo phong cách Dashboard) -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+        <!-- 1. Tổng Tác Vụ (Solid Deep Navy) -->
+        <div class="rounded-2xl p-4 bg-[#002D54] text-white shadow-lg shadow-[#002D54]/25 transition-all hover:-translate-y-1">
+          <div class="text-[11px] font-bold text-cyan-200/90 uppercase tracking-wider">Tổng Tác Vụ</div>
+          <div class="text-2xl font-extrabold text-white mt-1">8 <span class="text-xs font-normal text-cyan-200/80">task</span></div>
+          <div class="text-[10px] text-cyan-100/80 mt-1 flex items-center gap-1">
+            <span class="bg-white/15 px-1.5 py-0.2 rounded">3 vụ việc</span> đang thụ lý
+          </div>
+        </div>
+
+        <!-- 2. Cần Làm (Solid Dark Slate) -->
+        <div class="rounded-2xl p-4 bg-[#334155] text-white shadow-lg shadow-slate-950/25 transition-all hover:-translate-y-1">
+          <div class="text-[11px] font-bold text-slate-200 uppercase tracking-wider">Cần Làm (TODO)</div>
+          <div class="text-2xl font-extrabold text-white mt-1">2 <span class="text-xs font-normal text-slate-300">task</span></div>
+          <div class="text-[10px] text-amber-200 mt-1 font-semibold flex items-center gap-1">
+            <span class="bg-white/15 px-1.5 py-0.2 rounded">1 khóa</span> phụ thuộc
+          </div>
+        </div>
+
+        <!-- 3. Đang Thực Hiện (Solid ASL Cerulean) -->
+        <div class="rounded-2xl p-4 bg-[#0082B4] text-white shadow-lg shadow-cyan-950/25 transition-all hover:-translate-y-1">
+          <div class="text-[11px] font-bold text-cyan-100 uppercase tracking-wider">Đang Thực Hiện</div>
+          <div class="text-2xl font-extrabold text-white mt-1">2 <span class="text-xs font-normal text-cyan-200/80">task</span></div>
+          <div class="text-[10px] text-cyan-100/90 mt-1 flex items-center gap-1">
+            <span class="bg-white/15 px-1.5 py-0.2 rounded">Tiến độ TB</span> 65%
+          </div>
+        </div>
+
+        <!-- 4. Chờ Phê Duyệt (Solid Brand Orange) -->
+        <div class="rounded-2xl p-4 bg-[#FF7A00] text-white shadow-lg shadow-orange-950/25 transition-all hover:-translate-y-1">
+          <div class="text-[11px] font-bold text-orange-100 uppercase tracking-wider">Chờ Phê Duyệt</div>
+          <div class="text-2xl font-extrabold text-white mt-1">2 <span class="text-xs font-normal text-orange-100/80">task</span></div>
+          <div class="text-[10px] text-white mt-1 font-semibold flex items-center gap-1">
+            <span class="bg-white/20 px-1.5 py-0.2 rounded">1 Partner Gate</span>
+          </div>
+        </div>
+
+        <!-- 5. Đã Hoàn Thành (Solid Emerald Green) -->
+        <div class="rounded-2xl p-4 bg-[#047857] text-white shadow-lg shadow-emerald-950/25 transition-all hover:-translate-y-1">
+          <div class="text-[11px] font-bold text-emerald-100 uppercase tracking-wider">Đã Hoàn Thành</div>
+          <div class="text-2xl font-extrabold text-white mt-1">2 <span class="text-xs font-normal text-emerald-200">task</span></div>
+          <div class="text-[10px] text-emerald-100 mt-1 flex items-center gap-1">
+            <span class="bg-white/20 px-1.5 py-0.2 rounded font-bold">✓ 100%</span> nghiệm thu
+          </div>
+        </div>
+
+        <!-- 6. Khẩn Cấp / Quá Hạn (Solid Alert Crimson) -->
+        <div class="rounded-2xl p-4 bg-[#D9381E] text-white shadow-lg shadow-red-950/25 transition-all hover:-translate-y-1">
+          <div class="text-[11px] font-bold text-red-100 uppercase tracking-wider flex items-center gap-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
+            Khẩn Cấp
+          </div>
+          <div class="text-2xl font-extrabold text-white mt-1">2 <span class="text-xs font-normal text-red-100/80">task</span></div>
+          <div class="text-[10px] text-red-100 mt-1 font-semibold flex items-center gap-1">
+            <span class="bg-white/20 px-1.5 py-0.2 rounded">Hạn 24h</span> cần nộp
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive Controls & Drag-and-Drop Guidance Banner -->
+      <section class="glass-card rounded-2xl p-4 flex flex-col xl:flex-row xl:items-center justify-between gap-4">
+        <div class="flex flex-wrap items-center gap-3">
+          <span class="text-xs font-bold text-slate-500">Xem theo vụ việc (Job):</span>
+          <select id="case-filter" onchange="filterByCase(this.value)" class="px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-xs font-bold text-[#002D54] focus:outline-none focus:border-[#0082B4] shadow-sm">
+            <option value="ALL" selected>Tất cả các vụ việc (8 Tác vụ)</option>
+            <option value="IP09">ASL-2026-IP09: Tranh chấp Nhãn hiệu VinFast</option>
+            <option value="MNA01">ASL-2026-MNA01: M&A Thaco Group - HAGL Agrico</option>
+            <option value="LIT03">ASL-2026-LIT03: Tranh chấp Cổ đông BĐS Phúc Khang</option>
+          </select>
+
+          <!-- Expand / Collapse All Task Cards Toggle -->
+          <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200">
+            <button onclick="expandAllTasks()" class="px-2.5 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:text-[#002D54] hover:bg-white transition-all flex items-center gap-1" title="Mở rộng tất cả tác vụ">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+              <span>Mở rộng tất cả</span>
+            </button>
+            <button onclick="collapseAllTasks()" class="px-2.5 py-1.5 rounded-lg text-xs font-bold text-[#002D54] bg-white shadow-sm transition-all flex items-center gap-1" title="Thu nhỏ tất cả tác vụ để dễ nhìn">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/></svg>
+              <span>Thu nhỏ tất cả</span>
+            </button>
+          </div>
+
+          <!-- Personnel Allocation Chip -->
+          <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-blue-50 dark:bg-slate-800 border border-blue-200/80 dark:border-slate-700 text-[#002D54] dark:text-slate-200 text-xs font-bold shadow-sm">
+            <span class="text-[#0082B4] dark:text-sky-400 flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+              Giám sát & Thực hiện:
+            </span>
+            <span class="font-mono text-xs font-extrabold text-[#002D54] dark:text-sky-300">4 Giám sát viên</span>
+            <span class="text-[10px] text-slate-500 dark:text-slate-400 font-normal">• 5 Chuyên viên thực hiện</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4 Columns Kanban Grid (Fullwidth with Solid Deep Headers) -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full">
+
+        <!-- ========================================== -->
+        <!-- Column 1: TODO (CẦN LÀM)                   -->
+        <!-- ========================================== -->
+        <div class="kanban-column bg-slate-100/90 rounded-2xl p-4 border border-slate-300 shadow-sm flex flex-col space-y-3 min-h-[720px] transition-colors" data-status="todo" data-status-name="Cần Làm">
+          
+          <!-- Solid High-Contrast Header -->
+          <div class="p-3.5 rounded-xl bg-slate-800 text-white shadow-md border border-slate-700 flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-slate-300 ring-2 ring-white/30"></span>
+              <h3 class="font-extrabold text-xs uppercase tracking-wider text-white">Cần Làm (TODO)</h3>
+            </div>
+            <span class="column-count px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-slate-900 text-slate-200 border border-slate-700">2</span>
+          </div>
+
+          <!-- Cards Drop Container -->
+          <div class="kanban-cards-container space-y-3 flex-1 min-h-[220px] p-1 rounded-xl transition-all">
+            
+            <!-- Task Card 1 (Blocked by dependency) -->
+            <div id="task-104" data-task-code="TASK-104" data-task-title="Nộp Đơn Khiếu Nại Lên Cục SHTT" data-case="IP09" data-locked="true" draggable="true" class="task-card bg-white dark:bg-slate-800 rounded-xl p-3.5 space-y-2.5 border border-red-200 dark:border-rose-900/50 shadow-sm hover:shadow-md transition-all">
+              
+              <!-- Job Context Header & Collapsible Chevron Toggle -->
+              <div class="flex items-start justify-between gap-2">
+                <div class="flex-1">
+                  <div class="flex items-center gap-1.5 flex-wrap">
+                    <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-blue-50 text-[#002D54] dark:bg-sky-950/40 dark:text-sky-300 border border-blue-200/80 dark:border-sky-800/50 flex items-center gap-1">
+                      <svg class="w-3.5 h-3.5 inline-block text-[#0082B4] dark:text-sky-400 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
+                      <span>Vụ việc: <strong>Đăng ký nhãn hiệu VinFast</strong> <span class="font-normal font-mono opacity-80">(ASL-2026-IP09)</span></span>
+                    </span>
+                    <span class="px-2 py-0.5 rounded text-[9px] font-bold bg-rose-100 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300 border border-rose-200 dark:border-rose-800/60 flex items-center gap-1">
+                      <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>Độ khó: Rất phức tạp
+                    </span>
+                  </div>
+                  <h4 class="task-title font-bold text-xs text-[#002D54] dark:text-slate-100 leading-snug mt-1.5 flex items-center gap-1.5">
+                    <span class="drag-grip text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-grab" title="Kéo thả tác vụ">⋮⋮</span>
+                    <span>TASK-104: Nộp Đơn Khiếu Nại Lên Cục SHTT</span>
+                  </h4>
+                </div>
+
+                <!-- Chevron Collapse / Expand Button -->
+                <button onclick="toggleCard(this)" class="p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-colors flex-shrink-0" title="Mở rộng / Thu nhỏ chi tiết">
+                  <svg class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+                </button>
+              </div>
+
+              <!-- Compact Summary Line (Always visible when collapsed) -->
+              <div class="flex items-center justify-between text-[10px] pt-1.5 border-t border-slate-100 dark:border-slate-700/80">
+                <div class="flex items-center gap-1.5 text-slate-600 dark:text-slate-300 font-semibold">
+                  <span class="text-slate-400 dark:text-slate-500 text-[9px]">Thực hiện:</span>
+                  <span class="w-5 h-5 rounded-full bg-blue-100 text-[#002D54] dark:bg-sky-950 dark:text-sky-300 font-bold flex items-center justify-center text-[9px] border border-blue-200 dark:border-sky-800">PT</span>
+                  <span class="text-[#002D54] dark:text-slate-200 font-bold">Paralegal Trang</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <span id="lock-badge-104" class="text-rose-600 dark:text-rose-400 font-bold flex items-center gap-0.5 bg-rose-50 dark:bg-rose-950/50 px-1.5 py-0.5 rounded border border-rose-200 dark:border-rose-900/60 text-[10px]">
+                    <svg class="w-3.5 h-3.5 inline-block text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg> Bị khóa
+                  </span>
+                  <span class="font-mono text-rose-600 dark:text-rose-400 font-extrabold bg-rose-50 dark:bg-rose-950/50 px-1.5 py-0.5 rounded border border-rose-200 dark:border-rose-900/60 text-[10px]">Hôm nay 16:00</span>
+                </div>
+              </div>
+
+              <!-- Collapsible Detailed Body (Hidden by default) -->
+              <div class="task-detail hidden pt-2 space-y-2 border-t border-slate-100 dark:border-slate-700/80 text-xs">
+                <p id="lock-desc-104" class="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed bg-slate-50 dark:bg-slate-900/70 p-2 rounded-lg border border-slate-200 dark:border-slate-800">
+                  <svg class="w-3.5 h-3.5 inline-block text-amber-500 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg> <strong>Ràng buộc phụ thuộc:</strong> Phải hoàn tất Task Soạn Dự Thảo (TASK-102) mới được nộp hồ sơ chính thức lên Cục SHTT.
+                </p>
+
+                <!-- Danh Sách Nhân Sự Giám Sát & Thực Hiện -->
+                <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800 text-xs space-y-2">
+                  <div class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center justify-between border-b border-slate-200/80 dark:border-slate-800 pb-1.5">
+                    <span class="flex items-center gap-1.5">
+                      <svg class="w-3.5 h-3.5 text-[#0082B4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                      Nhân Sự Phụ Trách
+                    </span>
+                    <span class="text-[9px] px-1.5 py-0.2 rounded bg-blue-100 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 font-bold">2 thành viên</span>
+                  </div>
+
+                  <div class="space-y-1.5 pt-0.5">
+                    <!-- Người Giám Sát -->
+                    <div class="flex items-center justify-between p-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200/70 dark:border-slate-700">
+                      <div class="flex items-center gap-2">
+                        <div class="relative">
+                          <span class="w-6 h-6 rounded-full bg-purple-100 text-purple-700 dark:bg-purple-950 dark:text-purple-300 font-bold flex items-center justify-center text-[10px] border border-purple-200 dark:border-purple-800">NA</span>
+                          <span class="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 ring-1 ring-white dark:ring-slate-900" title="Online"></span>
+                        </div>
+                        <div>
+                          <div class="text-[11px] font-bold text-[#002D54] dark:text-slate-200 flex items-center gap-1.5">
+                            <span>LS. Nguyễn Anh</span>
+                            <span class="text-[9px] px-1.5 py-0.2 rounded bg-purple-50 text-purple-700 dark:bg-purple-950/60 dark:text-purple-300 font-semibold border border-purple-200/60 dark:border-purple-800/40">Giám sát</span>
+                          </div>
+                          <div class="text-[10px] text-slate-500 dark:text-slate-400">Managing Partner • Cố vấn chất lượng</div>
+                        </div>
+                      </div>
+                      <span class="text-[10px] text-purple-700 dark:text-purple-300 font-medium bg-purple-50 dark:bg-purple-950/40 px-1.5 py-0.5 rounded border border-purple-200/50 dark:border-purple-800/40">Phê duyệt</span>
+                    </div>
+
+                    <!-- Người Thực Hiện -->
+                    <div class="flex items-center justify-between p-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200/70 dark:border-slate-700">
+                      <div class="flex items-center gap-2">
+                        <div class="relative">
+                          <span class="w-6 h-6 rounded-full bg-blue-100 text-[#002D54] dark:bg-sky-950 dark:text-sky-300 font-bold flex items-center justify-center text-[10px] border border-blue-200 dark:border-sky-800">PT</span>
+                          <span class="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 ring-1 ring-white dark:ring-slate-900" title="Online"></span>
+                        </div>
+                        <div>
+                          <div class="text-[11px] font-bold text-[#002D54] dark:text-slate-200 flex items-center gap-1.5">
+                            <span>Paralegal Thu Trang</span>
+                            <span class="text-[9px] px-1.5 py-0.2 rounded bg-blue-50 text-[#0082B4] dark:bg-sky-950/60 dark:text-sky-300 font-semibold border border-blue-200/60 dark:border-sky-800/40">Thực hiện chính</span>
+                          </div>
+                          <div class="text-[10px] text-slate-500 dark:text-slate-400">Chuyên viên SHTT • Soạn thảo & Nộp</div>
+                        </div>
+                      </div>
+                      <span class="text-[10px] text-blue-700 dark:text-sky-400 font-medium bg-blue-50 dark:bg-sky-950/40 px-1.5 py-0.5 rounded border border-blue-200/50 dark:border-sky-800/40">Đang xử lý</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="space-y-1 text-[11px] text-slate-500 dark:text-slate-400">
+                  <div class="flex items-center justify-between">
+                    <span>Checklist hồ sơ:</span>
+                    <span class="font-bold text-slate-700 dark:text-slate-200">1/3 hoàn tất</span>
+                  </div>
+                  <div class="w-full bg-slate-100 dark:bg-slate-700 h-1.5 rounded-full overflow-hidden">
+                    <div class="bg-red-500 h-full w-1/3"></div>
+                  </div>
+                </div>
+                <div class="pt-2 flex items-center justify-between border-t border-slate-100 dark:border-slate-700/80">
+                  <a href="detail.html" class="text-xs font-bold text-[#0082B4] dark:text-sky-400 hover:underline flex items-center gap-1">
+                    <span>Xem Chi Tiết Task</span>
+                    <span>→</span>
+                  </a>
+                  <button onclick="testDependencyViolation()" class="px-2 py-1 rounded bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 text-[10px] font-bold">
+                    Thử Kéo Chuyển
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Task Card 2 -->
+            <div id="task-103" data-task-code="TASK-103" data-task-title="Chuẩn Bị Hồ Sơ Nộp Cục Cạnh Tranh" data-case="MNA01" draggable="true" class="task-card bg-white dark:bg-slate-800 rounded-xl p-3.5 space-y-2.5 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-all">
+              <div class="flex items-start justify-between gap-2">
+                <div class="flex-1">
+                  <div class="flex items-center gap-1.5 flex-wrap">
+                    <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-blue-50 text-[#002D54] dark:bg-sky-950/40 dark:text-sky-300 border border-blue-200/80 dark:border-sky-800/50 flex items-center gap-1">
+                      <svg class="w-3.5 h-3.5 inline-block text-[#0082B4] dark:text-sky-400 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
+                      <span>Vụ việc: <strong>Thẩm định pháp lý M&A Thaco - HAGL</strong> <span class="font-normal font-mono opacity-80">(ASL-2026-MNA01)</span></span>
+                    </span>
+                    <span class="px-2 py-0.5 rounded text-[9px] font-bold bg-blue-100 text-blue-800 dark:bg-blue-950/60 dark:text-blue-300 border border-blue-200 dark:border-blue-800/60 flex items-center gap-1">
+                      <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>Độ khó: Trung bình
+                    </span>
+                  </div>
+                  <h4 class="task-title font-bold text-xs text-[#002D54] dark:text-slate-100 leading-snug mt-1.5 flex items-center gap-1.5">
+                    <span class="drag-grip text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-grab" title="Kéo thả tác vụ">⋮⋮</span>
+                    <span>TASK-103: Chuẩn Bị Hồ Sơ Nộp Cục Cạnh Tranh</span>
+                  </h4>
+                </div>
+                <button onclick="toggleCard(this)" class="p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-colors flex-shrink-0" title="Mở rộng / Thu nhỏ chi tiết">
+                  <svg class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+                </button>
+              </div>
+
+              <div class="flex items-center justify-between text-[10px] pt-1.5 border-t border-slate-100 dark:border-slate-700/80">
+                <div class="flex items-center gap-1.5 text-slate-600 dark:text-slate-300 font-semibold">
+                  <span class="text-slate-400 dark:text-slate-500 text-[9px]">Thực hiện:</span>
+                  <span class="w-5 h-5 rounded-full bg-blue-100 text-[#002D54] dark:bg-sky-950 dark:text-sky-300 font-bold flex items-center justify-center text-[9px] border border-blue-200 dark:border-sky-800">VT</span>
+                  <span class="text-[#002D54] dark:text-slate-200 font-bold">Nguyễn Văn Thành</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <span class="font-mono text-slate-600 dark:text-slate-300 font-bold bg-slate-100 dark:bg-slate-700 px-1.5 py-0.5 rounded text-[10px]">Hạn: 05/11/2026</span>
+                </div>
+              </div>
+
+              <div class="task-detail hidden pt-2 space-y-2 border-t border-slate-100 dark:border-slate-700/80 text-xs">
+                <p class="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed bg-slate-50 dark:bg-slate-900/70 p-2 rounded-lg border border-slate-200 dark:border-slate-800">
+                  Rà soát thị phần kết hợp của bên mua và bên bán theo Luật Cạnh tranh 2018. Chuẩn bị thông báo tập trung kinh tế.
+                </p>
+
+                <!-- Danh Sách Nhân Sự Giám Sát & Thực Hiện -->
+                <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800 text-xs space-y-2">
+                  <div class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center justify-between border-b border-slate-200/80 dark:border-slate-800 pb-1.5">
+                    <span class="flex items-center gap-1.5">
+                      <svg class="w-3.5 h-3.5 text-[#0082B4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                      Nhân Sự Phụ Trách
+                    </span>
+                    <span class="text-[9px] px-1.5 py-0.2 rounded bg-blue-100 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 font-bold">2 thành viên</span>
+                  </div>
+
+                  <div class="space-y-1.5 pt-0.5">
+                    <!-- Người Giám Sát -->
+                    <div class="flex items-center justify-between p-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200/70 dark:border-slate-700">
+                      <div class="flex items-center gap-2">
+                        <div class="relative">
+                          <span class="w-6 h-6 rounded-full bg-purple-100 text-purple-700 dark:bg-purple-950 dark:text-purple-300 font-bold flex items-center justify-center text-[10px] border border-purple-200 dark:border-purple-800">TN</span>
+                          <span class="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 ring-1 ring-white dark:ring-slate-900" title="Online"></span>
+                        </div>
+                        <div>
+                          <div class="text-[11px] font-bold text-[#002D54] dark:text-slate-200 flex items-center gap-1.5">
+                            <span>LS. Trần Nam</span>
+                            <span class="text-[9px] px-1.5 py-0.2 rounded bg-purple-50 text-purple-700 dark:bg-purple-950/60 dark:text-purple-300 font-semibold border border-purple-200/60 dark:border-purple-800/40">Giám sát</span>
+                          </div>
+                          <div class="text-[10px] text-slate-500 dark:text-slate-400">Senior Partner • Phụ trách Khối M&A</div>
+                        </div>
+                      </div>
+                      <span class="text-[10px] text-purple-700 dark:text-purple-300 font-medium bg-purple-50 dark:bg-purple-950/40 px-1.5 py-0.5 rounded border border-purple-200/50 dark:border-purple-800/40">Hướng dẫn</span>
+                    </div>
+
+                    <!-- Người Thực Hiện -->
+                    <div class="flex items-center justify-between p-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200/70 dark:border-slate-700">
+                      <div class="flex items-center gap-2">
+                        <div class="relative">
+                          <span class="w-6 h-6 rounded-full bg-blue-100 text-[#002D54] dark:bg-sky-950 dark:text-sky-300 font-bold flex items-center justify-center text-[10px] border border-blue-200 dark:border-sky-800">VT</span>
+                          <span class="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 ring-1 ring-white dark:ring-slate-900" title="Online"></span>
+                        </div>
+                        <div>
+                          <div class="text-[11px] font-bold text-[#002D54] dark:text-slate-200 flex items-center gap-1.5">
+                            <span>Nguyễn Văn Thành</span>
+                            <span class="text-[9px] px-1.5 py-0.2 rounded bg-blue-50 text-[#0082B4] dark:bg-sky-950/60 dark:text-sky-300 font-semibold border border-blue-200/60 dark:border-sky-800/40">Thực hiện chính</span>
+                          </div>
+                          <div class="text-[10px] text-slate-500 dark:text-slate-400">Chuyên viên Pháp chế M&A</div>
+                        </div>
+                      </div>
+                      <span class="text-[10px] text-blue-700 dark:text-sky-400 font-medium bg-blue-50 dark:bg-sky-950/40 px-1.5 py-0.5 rounded border border-blue-200/50 dark:border-sky-800/40">Đang chuẩn bị</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="pt-1 flex items-center justify-between border-t border-slate-100 dark:border-slate-700/80">
+                  <a href="detail.html" class="text-xs font-bold text-[#0082B4] dark:text-sky-400 hover:underline flex items-center gap-1">
+                    <span>Xem Chi Tiết Task</span>
+                    <span>→</span>
+                  </a>
+                  <span class="text-[10px] text-slate-400 dark:text-slate-500">Mục tiêu: Đạt chuẩn Cục Cạnh Tranh</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <a href="create.html" class="w-full py-2.5 rounded-xl border border-dashed border-slate-300 hover:border-slate-500 text-slate-600 hover:text-slate-900 text-xs font-bold text-center block transition-colors bg-white/50 hover:bg-white">
+            Thêm tác vụ vào cột này
+          </a>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- Column 2: IN PROGRESS (ĐANG THỰC HIỆN)    -->
+        <!-- ========================================== -->
+        <div class="kanban-column bg-blue-50/70 rounded-2xl p-4 border border-blue-200/90 shadow-sm flex flex-col space-y-3 min-h-[720px] transition-colors" data-status="in_progress" data-status-name="Đang Thực Hiện">
+          
+          <!-- Solid High-Contrast Cerulean Header -->
+          <div class="p-3.5 rounded-xl bg-gradient-to-r from-[#002D54] to-[#0082B4] text-white shadow-md border border-blue-400/30 flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-cyan-300 animate-pulse ring-2 ring-white/30"></span>
+              <h3 class="font-extrabold text-xs uppercase tracking-wider text-white">Đang Thực Hiện</h3>
+            </div>
+            <span class="column-count px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-white/20 text-white backdrop-blur-sm border border-white/30">2</span>
+          </div>
+
+          <!-- Cards Drop Container -->
+          <div class="kanban-cards-container space-y-3 flex-1 min-h-[220px] p-1 rounded-xl transition-all">
+            
+            <!-- Task Card 3 -->
+            <div id="task-102" data-task-code="TASK-102" data-task-title="Soạn Thảo Đơn Khiếu Nại Từ Chối" data-case="IP09" draggable="true" class="task-card bg-white dark:bg-slate-800 rounded-xl p-3.5 space-y-2.5 border border-blue-200 dark:border-sky-800/60 shadow-sm hover:shadow-md transition-all">
+              <div class="flex items-start justify-between gap-2">
+                <div class="flex-1">
+                  <div class="flex items-center gap-1.5 flex-wrap">
+                    <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-blue-50 text-[#002D54] dark:bg-sky-950/40 dark:text-sky-300 border border-blue-200/80 dark:border-sky-800/50 flex items-center gap-1">
+                      <svg class="w-3.5 h-3.5 inline-block text-[#0082B4] dark:text-sky-400 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
+                      <span>Vụ việc: <strong>Đăng ký nhãn hiệu VinFast</strong> <span class="font-normal font-mono opacity-80">(ASL-2026-IP09)</span></span>
+                    </span>
+                    <span class="px-2 py-0.5 rounded text-[9px] font-bold bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200 dark:border-amber-800/60 flex items-center gap-1">
+                      <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>Độ khó: Tương đối phức tạp
+                    </span>
+                  </div>
+                  <h4 class="task-title font-bold text-xs text-[#002D54] dark:text-slate-100 leading-snug mt-1.5 flex items-center gap-1.5">
+                    <span class="drag-grip text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-grab" title="Kéo thả tác vụ">⋮⋮</span>
+                    <span>TASK-102: Soạn Thảo Đơn Khiếu Nại Từ Chối</span>
+                  </h4>
+                </div>
+                <button onclick="toggleCard(this)" class="p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-colors flex-shrink-0" title="Mở rộng / Thu nhỏ chi tiết">
+                  <svg class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+                </button>
+              </div>
+
+              <div class="flex items-center justify-between text-[10px] pt-1.5 border-t border-slate-100 dark:border-slate-700/80">
+                <div class="flex items-center gap-1.5 text-slate-600 dark:text-slate-300 font-semibold">
+                  <span class="text-slate-400 dark:text-slate-500 text-[9px]">Thực hiện:</span>
+                  <span class="w-5 h-5 rounded-full bg-[#0082B4] text-white font-bold flex items-center justify-center text-[9px]">LM</span>
+                  <span class="text-[#002D54] dark:text-slate-200 font-bold">LS. Lê Hoàng Minh</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <span class="font-mono text-amber-700 dark:text-amber-300 font-extrabold bg-amber-50 dark:bg-amber-950/50 px-1.5 py-0.5 rounded border border-amber-200/80 dark:border-amber-900/60 text-[10px]">Hạn: 29/10/2026</span>
+                </div>
+              </div>
+
+              <div class="task-detail hidden pt-2 space-y-2 border-t border-slate-100 dark:border-slate-700/80 text-xs">
+                <p class="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed bg-slate-50 dark:bg-slate-900/70 p-2 rounded-lg border border-slate-200 dark:border-slate-800">
+                  Đang soạn dự thảo phản hồi công văn từ chối của Cục SHTT liên quan đến dấu hiệu tương tự gây nhầm lẫn nhóm 12.
+                </p>
+
+                <!-- Danh Sách Nhân Sự Giám Sát & Thực Hiện -->
+                <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800 text-xs space-y-2">
+                  <div class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center justify-between border-b border-slate-200/80 dark:border-slate-800 pb-1.5">
+                    <span class="flex items-center gap-1.5">
+                      <svg class="w-3.5 h-3.5 text-[#0082B4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                      Nhân Sự Phụ Trách
+                    </span>
+                    <span class="text-[9px] px-1.5 py-0.2 rounded bg-blue-100 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 font-bold">2 luật sư</span>
+                  </div>
+
+                  <div class="space-y-1.5 pt-0.5">
+                    <!-- Người Giám Sát -->
+                    <div class="flex items-center justify-between p-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200/70 dark:border-slate-700">
+                      <div class="flex items-center gap-2">
+                        <div class="relative">
+                          <span class="w-6 h-6 rounded-full bg-purple-100 text-purple-700 dark:bg-purple-950 dark:text-purple-300 font-bold flex items-center justify-center text-[10px] border border-purple-200 dark:border-purple-800">NA</span>
+                          <span class="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 ring-1 ring-white dark:ring-slate-900" title="Online"></span>
+                        </div>
+                        <div>
+                          <div class="text-[11px] font-bold text-[#002D54] dark:text-slate-200 flex items-center gap-1.5">
+                            <span>LS. Nguyễn Anh</span>
+                            <span class="text-[9px] px-1.5 py-0.2 rounded bg-purple-50 text-purple-700 dark:bg-purple-950/60 dark:text-purple-300 font-semibold border border-purple-200/60 dark:border-purple-800/40">Giám sát</span>
+                          </div>
+                          <div class="text-[10px] text-slate-500 dark:text-slate-400">Managing Partner • Cố vấn chiến lược</div>
+                        </div>
+                      </div>
+                      <span class="text-[10px] text-purple-700 dark:text-purple-300 font-medium bg-purple-50 dark:bg-purple-950/40 px-1.5 py-0.5 rounded border border-purple-200/50 dark:border-purple-800/40">Đang theo dõi</span>
+                    </div>
+
+                    <!-- Người Thực Hiện -->
+                    <div class="flex items-center justify-between p-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200/70 dark:border-slate-700">
+                      <div class="flex items-center gap-2">
+                        <div class="relative">
+                          <span class="w-6 h-6 rounded-full bg-[#0082B4] text-white font-bold flex items-center justify-center text-[10px] border border-blue-200 dark:border-sky-800">LM</span>
+                          <span class="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 ring-1 ring-white dark:ring-slate-900" title="Online"></span>
+                        </div>
+                        <div>
+                          <div class="text-[11px] font-bold text-[#002D54] dark:text-slate-200 flex items-center gap-1.5">
+                            <span>LS. Lê Hoàng Minh</span>
+                            <span class="text-[9px] px-1.5 py-0.2 rounded bg-blue-50 text-[#0082B4] dark:bg-sky-950/60 dark:text-sky-300 font-semibold border border-blue-200/60 dark:border-sky-800/40">Thực hiện chính</span>
+                          </div>
+                          <div class="text-[10px] text-slate-500 dark:text-slate-400">Luật sư Thành viên • Soạn thảo khiếu nại</div>
+                        </div>
+                      </div>
+                      <span class="text-[10px] text-blue-700 dark:text-sky-400 font-medium bg-blue-50 dark:bg-sky-950/40 px-1.5 py-0.5 rounded border border-blue-200/50 dark:border-sky-800/40">Tiến độ 70%</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="space-y-1 text-[11px] text-slate-500 dark:text-slate-400">
+                  <div class="flex items-center justify-between">
+                    <span>Tiến độ soạn thảo:</span>
+                    <span class="font-bold text-[#0082B4] dark:text-sky-400">70%</span>
+                  </div>
+                  <div class="w-full bg-slate-100 dark:bg-slate-700 h-1.5 rounded-full overflow-hidden">
+                    <div class="bg-[#0082B4] h-full w-[70%]"></div>
+                  </div>
+                </div>
+                <div class="pt-1 flex items-center justify-between border-t border-slate-100 dark:border-slate-700/80">
+                  <a href="detail.html" class="text-xs font-bold text-[#0082B4] dark:text-sky-400 hover:underline flex items-center gap-1">
+                    <span>Xem Chi Tiết Task</span>
+                    <span>→</span>
+                  </a>
+                  <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold">Billable: 100%</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Task Card 4 -->
+            <div id="task-105" data-task-code="TASK-105" data-task-title="Rà Soát Báo Cáo Thẩm Định Due Diligence" data-case="MNA01" draggable="true" class="task-card bg-white dark:bg-slate-800 rounded-xl p-3.5 space-y-2.5 border border-blue-200 dark:border-sky-800/60 shadow-sm hover:shadow-md transition-all">
+              <div class="flex items-start justify-between gap-2">
+                <div class="flex-1">
+                  <div class="flex items-center gap-1.5 flex-wrap">
+                    <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-blue-50 text-[#002D54] dark:bg-sky-950/40 dark:text-sky-300 border border-blue-200/80 dark:border-sky-800/50 flex items-center gap-1">
+                      <svg class="w-3.5 h-3.5 inline-block text-[#0082B4] dark:text-sky-400 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
+                      <span>Vụ việc: <strong>Thẩm định pháp lý M&A Thaco - HAGL</strong> <span class="font-normal font-mono opacity-80">(ASL-2026-MNA01)</span></span>
+                    </span>
+                    <span class="px-2 py-0.5 rounded text-[9px] font-bold bg-rose-100 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300 border border-rose-200 dark:border-rose-800/60 flex items-center gap-1">
+                      <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>Độ khó: Rất phức tạp
+                    </span>
+                  </div>
+                  <h4 class="task-title font-bold text-xs text-[#002D54] dark:text-slate-100 leading-snug mt-1.5 flex items-center gap-1.5">
+                    <span class="drag-grip text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-grab" title="Kéo thả tác vụ">⋮⋮</span>
+                    <span>TASK-105: Rà Soát Báo Cáo Thẩm Định Due Diligence</span>
+                  </h4>
+                </div>
+                <button onclick="toggleCard(this)" class="p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-colors flex-shrink-0" title="Mở rộng / Thu nhỏ chi tiết">
+                  <svg class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+                </button>
+              </div>
+
+              <div class="flex items-center justify-between text-[10px] pt-1.5 border-t border-slate-100 dark:border-slate-700/80">
+                <div class="flex items-center gap-1.5 text-slate-600 dark:text-slate-300 font-semibold">
+                  <span class="text-slate-400 dark:text-slate-500 text-[9px]">Thực hiện:</span>
+                  <span class="w-5 h-5 rounded-full bg-[#002D54] text-white font-bold flex items-center justify-center text-[9px]">NT</span>
+                  <span class="text-[#002D54] dark:text-slate-200 font-bold">LS. Trần Nam (Lead)</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <span class="font-mono text-rose-600 dark:text-rose-400 font-extrabold bg-rose-50 dark:bg-rose-950/50 px-1.5 py-0.5 rounded border border-rose-200 dark:border-rose-900/60 text-[10px]">Hạn: 30/10/2026</span>
+                </div>
+              </div>
+
+              <div class="task-detail hidden pt-2 space-y-2 border-t border-slate-100 dark:border-slate-700/80 text-xs">
+                <p class="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed bg-slate-50 dark:bg-slate-900/70 p-2 rounded-lg border border-slate-200 dark:border-slate-800">
+                  Rà soát tổng thể 120 trang báo cáo thẩm định pháp lý công ty mục tiêu HAGL Agrico, đánh giá rủi ro tài sản đảm bảo ngân hàng.
+                </p>
+
+                <!-- Danh Sách Nhân Sự Giám Sát & Thực Hiện -->
+                <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800 text-xs space-y-2">
+                  <div class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center justify-between border-b border-slate-200/80 dark:border-slate-800 pb-1.5">
+                    <span class="flex items-center gap-1.5">
+                      <svg class="w-3.5 h-3.5 text-[#0082B4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                      Nhân Sự Phụ Trách
+                    </span>
+                    <span class="text-[9px] px-1.5 py-0.2 rounded bg-blue-100 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 font-bold">2 luật sư cấp cao</span>
+                  </div>
+
+                  <div class="space-y-1.5 pt-0.5">
+                    <!-- Người Giám Sát -->
+                    <div class="flex items-center justify-between p-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200/70 dark:border-slate-700">
+                      <div class="flex items-center gap-2">
+                        <div class="relative">
+                          <span class="w-6 h-6 rounded-full bg-purple-100 text-purple-700 dark:bg-purple-950 dark:text-purple-300 font-bold flex items-center justify-center text-[10px] border border-purple-200 dark:border-purple-800">LM</span>
+                          <span class="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 ring-1 ring-white dark:ring-slate-900" title="Online"></span>
+                        </div>
+                        <div>
+                          <div class="text-[11px] font-bold text-[#002D54] dark:text-slate-200 flex items-center gap-1.5">
+                            <span>LS. Lê Hoàng Minh</span>
+                            <span class="text-[9px] px-1.5 py-0.2 rounded bg-purple-50 text-purple-700 dark:bg-purple-950/60 dark:text-purple-300 font-semibold border border-purple-200/60 dark:border-purple-800/40">Giám sát</span>
+                          </div>
+                          <div class="text-[10px] text-slate-500 dark:text-slate-400">Senior Partner • Trưởng ban Thẩm định DD</div>
+                        </div>
+                      </div>
+                      <span class="text-[10px] text-purple-700 dark:text-purple-300 font-medium bg-purple-50 dark:bg-purple-950/40 px-1.5 py-0.5 rounded border border-purple-200/50 dark:border-purple-800/40">Phê duyệt rủi ro</span>
+                    </div>
+
+                    <!-- Người Thực Hiện -->
+                    <div class="flex items-center justify-between p-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200/70 dark:border-slate-700">
+                      <div class="flex items-center gap-2">
+                        <div class="relative">
+                          <span class="w-6 h-6 rounded-full bg-[#002D54] text-white font-bold flex items-center justify-center text-[10px] border border-blue-200 dark:border-sky-800">NT</span>
+                          <span class="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 ring-1 ring-white dark:ring-slate-900" title="Online"></span>
+                        </div>
+                        <div>
+                          <div class="text-[11px] font-bold text-[#002D54] dark:text-slate-200 flex items-center gap-1.5">
+                            <span>LS. Trần Nam</span>
+                            <span class="text-[9px] px-1.5 py-0.2 rounded bg-blue-50 text-[#0082B4] dark:bg-sky-950/60 dark:text-sky-300 font-semibold border border-blue-200/60 dark:border-sky-800/40">Thực hiện chính</span>
+                          </div>
+                          <div class="text-[10px] text-slate-500 dark:text-slate-400">Lead Attorney • Thẩm định tài sản bảo đảm</div>
+                        </div>
+                      </div>
+                      <span class="text-[10px] text-blue-700 dark:text-sky-400 font-medium bg-blue-50 dark:bg-sky-950/40 px-1.5 py-0.5 rounded border border-blue-200/50 dark:border-sky-800/40">Đang rà soát</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="pt-1 flex items-center justify-between border-t border-slate-100 dark:border-slate-700/80">
+                  <a href="detail.html" class="text-xs font-bold text-[#0082B4] dark:text-sky-400 hover:underline flex items-center gap-1">
+                    <span>Xem Chi Tiết Task</span>
+                    <span>→</span>
+                  </a>
+                  <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold">Billable: 100%</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <a href="create.html" class="w-full py-2.5 rounded-xl border border-dashed border-blue-300 hover:border-blue-500 text-blue-700 hover:text-blue-900 text-xs font-bold text-center block transition-colors bg-white/50 hover:bg-white">
+            Thêm tác vụ vào cột này
+          </a>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- Column 3: WAITING APPROVAL (CHỜ PHÊ DUYỆT) -->
+        <!-- ========================================== -->
+        <div class="kanban-column bg-amber-50/70 rounded-2xl p-4 border border-amber-200/90 shadow-sm flex flex-col space-y-3 min-h-[720px] transition-colors" data-status="waiting_approval" data-status-name="Chờ Phê Duyệt">
+          
+          <!-- Solid High-Contrast Amber / Orange Header -->
+          <div class="p-3.5 rounded-xl bg-gradient-to-r from-[#D95300] to-[#FF7A00] text-white shadow-md border border-orange-400/30 flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-amber-200 ring-2 ring-white/30"></span>
+              <h3 class="font-extrabold text-xs uppercase tracking-wider text-white">Chờ Phê Duyệt</h3>
+            </div>
+            <span class="column-count px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-white/20 text-white backdrop-blur-sm border border-white/30">2</span>
+          </div>
+
+          <!-- Cards Drop Container -->
+          <div class="kanban-cards-container space-y-3 flex-1 min-h-[220px] p-1 rounded-xl transition-all">
+            
+            <!-- Task Card 5 -->
+            <div id="task-101" data-task-code="TASK-101" data-task-title="Thẩm Tra Hồ Sơ Chuyển Nhượng Cổ Phần" data-case="MNA01" draggable="true" class="task-card bg-white dark:bg-slate-800 rounded-xl p-3.5 space-y-2.5 border border-amber-200 dark:border-amber-800/60 shadow-sm hover:shadow-md transition-all">
+              <div class="flex items-start justify-between gap-2">
+                <div class="flex-1">
+                  <div class="flex items-center gap-1.5 flex-wrap">
+                    <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-blue-50 text-[#002D54] dark:bg-sky-950/40 dark:text-sky-300 border border-blue-200/80 dark:border-sky-800/50 flex items-center gap-1">
+                      <svg class="w-3.5 h-3.5 inline-block text-[#0082B4] dark:text-sky-400 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
+                      <span>Vụ việc: <strong>Thẩm định pháp lý M&A Thaco - HAGL</strong> <span class="font-normal font-mono opacity-80">(ASL-2026-MNA01)</span></span>
+                    </span>
+                    <span class="px-2 py-0.5 rounded text-[9px] font-bold bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200 dark:border-amber-800/60 flex items-center gap-1">
+                      <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>Độ khó: Tương đối phức tạp
+                    </span>
+                  </div>
+                  <h4 class="task-title font-bold text-xs text-[#002D54] dark:text-slate-100 leading-snug mt-1.5 flex items-center gap-1.5">
+                    <span class="drag-grip text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-grab" title="Kéo thả tác vụ">⋮⋮</span>
+                    <span>TASK-101: Thẩm Tra Hồ Sơ Chuyển Nhượng Cổ Phần</span>
+                  </h4>
+                </div>
+                <button onclick="toggleCard(this)" class="p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-colors flex-shrink-0" title="Mở rộng / Thu nhỏ chi tiết">
+                  <svg class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+                </button>
+              </div>
+
+              <div class="flex items-center justify-between text-[10px] pt-1.5 border-t border-slate-100 dark:border-slate-700/80">
+                <div class="flex items-center gap-1.5 text-slate-600 dark:text-slate-300 font-semibold">
+                  <span class="text-slate-400 dark:text-slate-500 text-[9px]">Ký duyệt:</span>
+                  <span class="w-5 h-5 rounded-full bg-purple-100 text-purple-800 dark:bg-purple-950 dark:text-purple-300 font-bold flex items-center justify-center text-[9px]">NA</span>
+                  <span class="text-[#002D54] dark:text-slate-200 font-bold">LS. Nguyễn Anh</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="text-[10px] text-amber-700 dark:text-amber-400 font-bold">Hạn: 31/10</span>
+                  <a href="../cases/detail.html" class="font-extrabold text-[#0082B4] dark:text-sky-400 hover:underline flex items-center gap-0.5 bg-blue-50 dark:bg-sky-950/50 px-2 py-0.5 rounded border border-blue-200/60 dark:border-sky-800/60">
+                    <span>Ký Duyệt</span>
+                    <span>→</span>
+                  </a>
+                </div>
+              </div>
+
+              <div class="task-detail hidden pt-2 space-y-2 border-t border-slate-100 dark:border-slate-700/80 text-xs">
+                <p class="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed bg-amber-50 dark:bg-amber-950/30 p-2 rounded-lg border border-amber-200/80 dark:border-amber-800/50">
+                  Đã hoàn thiện báo cáo giám định, chờ Partner ký số điện tử phê duyệt để chuyển sang giai đoạn ký kết chính thức.
+                </p>
+
+                <!-- Danh Sách Nhân Sự Giám Sát & Thực Hiện -->
+                <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800 text-xs space-y-2">
+                  <div class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center justify-between border-b border-slate-200/80 dark:border-slate-800 pb-1.5">
+                    <span class="flex items-center gap-1.5">
+                      <svg class="w-3.5 h-3.5 text-[#0082B4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                      Nhân Sự Phụ Trách
+                    </span>
+                    <span class="text-[9px] px-1.5 py-0.2 rounded bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 font-bold">2 luật sư cấp cao</span>
+                  </div>
+
+                  <div class="space-y-1.5 pt-0.5">
+                    <!-- Người Giám Sát -->
+                    <div class="flex items-center justify-between p-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200/70 dark:border-slate-700">
+                      <div class="flex items-center gap-2">
+                        <div class="relative">
+                          <span class="w-6 h-6 rounded-full bg-purple-100 text-purple-700 dark:bg-purple-950 dark:text-purple-300 font-bold flex items-center justify-center text-[10px] border border-purple-200 dark:border-purple-800">TN</span>
+                          <span class="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 ring-1 ring-white dark:ring-slate-900" title="Online"></span>
+                        </div>
+                        <div>
+                          <div class="text-[11px] font-bold text-[#002D54] dark:text-slate-200 flex items-center gap-1.5">
+                            <span>LS. Trần Nam</span>
+                            <span class="text-[9px] px-1.5 py-0.2 rounded bg-purple-50 text-purple-700 dark:bg-purple-950/60 dark:text-purple-300 font-semibold border border-purple-200/60 dark:border-purple-800/40">Giám sát</span>
+                          </div>
+                          <div class="text-[10px] text-slate-500 dark:text-slate-400">Senior Partner • Phụ trách M&A Thaco</div>
+                        </div>
+                      </div>
+                      <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold">✓ Đã duyệt nội bộ</span>
+                    </div>
+
+                    <!-- Người Thực Hiện / Ký Duyệt -->
+                    <div class="flex items-center justify-between p-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200/70 dark:border-slate-700">
+                      <div class="flex items-center gap-2">
+                        <div class="relative">
+                          <span class="w-6 h-6 rounded-full bg-purple-100 text-purple-800 dark:bg-purple-950 dark:text-purple-300 font-bold flex items-center justify-center text-[10px] border border-purple-200 dark:border-purple-800">NA</span>
+                          <span class="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 ring-1 ring-white dark:ring-slate-900" title="Online"></span>
+                        </div>
+                        <div>
+                          <div class="text-[11px] font-bold text-[#002D54] dark:text-slate-200 flex items-center gap-1.5">
+                            <span>LS. Nguyễn Anh</span>
+                            <span class="text-[9px] px-1.5 py-0.2 rounded bg-blue-50 text-[#0082B4] dark:bg-sky-950/60 dark:text-sky-300 font-semibold border border-blue-200/60 dark:border-sky-800/40">Ký duyệt cuối</span>
+                          </div>
+                          <div class="text-[10px] text-slate-500 dark:text-slate-400">Managing Partner • Ký thẩm tra hợp đồng</div>
+                        </div>
+                      </div>
+                      <span class="text-[10px] text-amber-700 dark:text-amber-400 font-medium bg-amber-50 dark:bg-amber-950/40 px-1.5 py-0.5 rounded border border-amber-200/50 dark:border-amber-800/40">Chờ chữ ký số</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="pt-1 flex items-center justify-between border-t border-slate-100 dark:border-slate-700/80">
+                  <a href="detail.html" class="text-xs font-bold text-[#0082B4] dark:text-sky-400 hover:underline">Xem Chi Tiết Task</a>
+                  <span class="text-[10px] text-amber-700 dark:text-amber-400 font-bold">Hạn ký duyệt: 31/10</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Task Card 6 -->
+            <div id="task-108" data-task-code="TASK-108" data-task-title="Dự Thảo Bản Tự Khai Bổ Sung Tranh Chấp" data-case="LIT03" draggable="true" class="task-card bg-white dark:bg-slate-800 rounded-xl p-3.5 space-y-2.5 border border-amber-200 dark:border-amber-800/60 shadow-sm hover:shadow-md transition-all">
+              <div class="flex items-start justify-between gap-2">
+                <div class="flex-1">
+                  <div class="flex items-center gap-1.5 flex-wrap">
+                    <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-blue-50 text-[#002D54] dark:bg-sky-950/40 dark:text-sky-300 border border-blue-200/80 dark:border-sky-800/50 flex items-center gap-1">
+                      <svg class="w-3.5 h-3.5 inline-block text-[#0082B4] dark:text-sky-400 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
+                      <span>Vụ việc: <strong>Tranh chấp Cổ đông BĐS Phúc Khang</strong> <span class="font-normal font-mono opacity-80">(ASL-2026-LIT03)</span></span>
+                    </span>
+                    <span class="px-2 py-0.5 rounded text-[9px] font-bold bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200 dark:border-amber-800/60 flex items-center gap-1">
+                      <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>Độ khó: Tương đối phức tạp
+                    </span>
+                  </div>
+                  <h4 class="task-title font-bold text-xs text-[#002D54] dark:text-slate-100 leading-snug mt-1.5 flex items-center gap-1.5">
+                    <span class="drag-grip text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-grab" title="Kéo thả tác vụ">⋮⋮</span>
+                    <span>TASK-108: Dự Thảo Bản Tự Khai Bổ Sung Tranh Chấp</span>
+                  </h4>
+                </div>
+                <button onclick="toggleCard(this)" class="p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-colors flex-shrink-0" title="Mở rộng / Thu nhỏ chi tiết">
+                  <svg class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+                </button>
+              </div>
+
+              <div class="flex items-center justify-between text-[10px] pt-1.5 border-t border-slate-100 dark:border-slate-700/80">
+                <div class="flex items-center gap-1.5 text-slate-600 dark:text-slate-300 font-semibold">
+                  <span class="text-slate-400 dark:text-slate-500 text-[9px]">Thực hiện:</span>
+                  <span class="w-5 h-5 rounded-full bg-pink-100 text-pink-700 dark:bg-pink-950 dark:text-pink-300 font-bold flex items-center justify-center text-[9px] border border-pink-200 dark:border-pink-800">TH</span>
+                  <span class="text-[#002D54] dark:text-slate-200 font-bold">LS. Phạm Thu Hương</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <span class="font-mono text-amber-700 dark:text-amber-300 font-bold bg-amber-50 dark:bg-amber-950/50 px-1.5 py-0.5 rounded border border-amber-200/80 dark:border-amber-900/60 text-[10px]">Hạn: 01/11/2026</span>
+                </div>
+              </div>
+
+              <div class="task-detail hidden pt-2 space-y-2 border-t border-slate-100 dark:border-slate-700/80 text-xs">
+                <p class="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed bg-slate-50 dark:bg-slate-900/70 p-2 rounded-lg border border-slate-200 dark:border-slate-800">
+                  Dự thảo lời khai của thân chủ gửi TAND TP.HCM về hành vi vi phạm thỏa thuận góp vốn giữa các cổ đông sáng lập.
+                </p>
+
+                <!-- Danh Sách Nhân Sự Giám Sát & Thực Hiện -->
+                <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800 text-xs space-y-2">
+                  <div class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center justify-between border-b border-slate-200/80 dark:border-slate-800 pb-1.5">
+                    <span class="flex items-center gap-1.5">
+                      <svg class="w-3.5 h-3.5 text-[#0082B4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                      Nhân Sự Phụ Trách
+                    </span>
+                    <span class="text-[9px] px-1.5 py-0.2 rounded bg-blue-100 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 font-bold">2 luật sư</span>
+                  </div>
+
+                  <div class="space-y-1.5 pt-0.5">
+                    <!-- Người Giám Sát -->
+                    <div class="flex items-center justify-between p-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200/70 dark:border-slate-700">
+                      <div class="flex items-center gap-2">
+                        <div class="relative">
+                          <span class="w-6 h-6 rounded-full bg-purple-100 text-purple-700 dark:bg-purple-950 dark:text-purple-300 font-bold flex items-center justify-center text-[10px] border border-purple-200 dark:border-purple-800">TN</span>
+                          <span class="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 ring-1 ring-white dark:ring-slate-900" title="Online"></span>
+                        </div>
+                        <div>
+                          <div class="text-[11px] font-bold text-[#002D54] dark:text-slate-200 flex items-center gap-1.5">
+                            <span>LS. Trần Nam</span>
+                            <span class="text-[9px] px-1.5 py-0.2 rounded bg-purple-50 text-purple-700 dark:bg-purple-950/60 dark:text-purple-300 font-semibold border border-purple-200/60 dark:border-purple-800/40">Giám sát</span>
+                          </div>
+                          <div class="text-[10px] text-slate-500 dark:text-slate-400">Senior Partner • Phụ trách Tố tụng & Tranh chấp</div>
+                        </div>
+                      </div>
+                      <span class="text-[10px] text-purple-700 dark:text-purple-300 font-medium bg-purple-50 dark:bg-purple-950/40 px-1.5 py-0.5 rounded border border-purple-200/50 dark:border-purple-800/40">Duyệt lời khai</span>
+                    </div>
+
+                    <!-- Người Thực Hiện -->
+                    <div class="flex items-center justify-between p-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200/70 dark:border-slate-700">
+                      <div class="flex items-center gap-2">
+                        <div class="relative">
+                          <span class="w-6 h-6 rounded-full bg-pink-100 text-pink-700 dark:bg-pink-950 dark:text-pink-300 font-bold flex items-center justify-center text-[10px] border border-pink-200 dark:border-pink-800">TH</span>
+                          <span class="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 ring-1 ring-white dark:ring-slate-900" title="Online"></span>
+                        </div>
+                        <div>
+                          <div class="text-[11px] font-bold text-[#002D54] dark:text-slate-200 flex items-center gap-1.5">
+                            <span>LS. Phạm Thu Hương</span>
+                            <span class="text-[9px] px-1.5 py-0.2 rounded bg-blue-50 text-[#0082B4] dark:bg-sky-950/60 dark:text-sky-300 font-semibold border border-blue-200/60 dark:border-sky-800/40">Thực hiện chính</span>
+                          </div>
+                          <div class="text-[10px] text-slate-500 dark:text-slate-400">Luật sư Tố tụng • Soạn thảo bản tự khai</div>
+                        </div>
+                      </div>
+                      <span class="text-[10px] text-blue-700 dark:text-sky-400 font-medium bg-blue-50 dark:bg-sky-950/40 px-1.5 py-0.5 rounded border border-blue-200/50 dark:border-sky-800/40">Chờ duyệt</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="pt-1 flex items-center justify-between border-t border-slate-100 dark:border-slate-700/80">
+                  <a href="detail.html" class="text-xs font-bold text-[#0082B4] dark:text-sky-400 hover:underline">Xem Chi Tiết Task</a>
+                  <span class="text-[10px] text-slate-400 dark:text-slate-500">2 phụ lục đính kèm</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <a href="create.html" class="w-full py-2.5 rounded-xl border border-dashed border-amber-300 hover:border-amber-500 text-amber-800 hover:text-amber-900 text-xs font-bold text-center block transition-colors bg-white/50 hover:bg-white">
+            Thêm tác vụ vào cột này
+          </a>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- Column 4: COMPLETED (HOÀN TẤT)             -->
+        <!-- ========================================== -->
+        <div class="kanban-column bg-emerald-50/70 rounded-2xl p-4 border border-emerald-200/90 shadow-sm flex flex-col space-y-3 min-h-[720px] transition-colors" data-status="completed" data-status-name="Đã Hoàn Thành">
+          
+          <!-- Solid High-Contrast Emerald Green Header -->
+          <div class="p-3.5 rounded-xl bg-gradient-to-r from-emerald-800 to-emerald-600 text-white shadow-md border border-emerald-400/30 flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-200 ring-2 ring-white/30"></span>
+              <h3 class="font-extrabold text-xs uppercase tracking-wider text-white">Đã Hoàn Thành</h3>
+            </div>
+            <span class="column-count px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-white/20 text-white backdrop-blur-sm border border-white/30">2</span>
+          </div>
+
+          <!-- Cards Drop Container -->
+          <div class="kanban-cards-container space-y-3 flex-1 min-h-[220px] p-1 rounded-xl transition-all">
+            
+            <!-- Task Card 7 -->
+            <div id="task-100" data-task-code="TASK-100" data-task-title="Ký HĐ Dịch Vụ & Nhận Tạm Ứng" data-case="IP09" draggable="true" class="task-card bg-white/90 dark:bg-slate-800 rounded-xl p-3.5 space-y-2.5 border border-emerald-200 dark:border-emerald-800/60 shadow-sm hover:shadow-md transition-all">
+              <div class="flex items-start justify-between gap-2">
+                <div class="flex-1">
+                  <div class="flex items-center gap-1.5 flex-wrap">
+                    <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-blue-50 text-[#002D54] dark:bg-sky-950/40 dark:text-sky-300 border border-blue-200/80 dark:border-sky-800/50 flex items-center gap-1">
+                      <svg class="w-3.5 h-3.5 inline-block text-[#0082B4] dark:text-sky-400 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
+                      <span>Vụ việc: <strong>Đăng ký nhãn hiệu VinFast</strong> <span class="font-normal font-mono opacity-80">(ASL-2026-IP09)</span></span>
+                    </span>
+                    <span class="px-2 py-0.5 rounded text-[9px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60 flex items-center gap-1">
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Độ khó: Cơ bản
+                    </span>
+                    <span class="status-badge px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400 border border-emerald-200/60 dark:border-emerald-800/40">✓ Hoàn Tất 100%</span>
+                  </div>
+                  <h4 class="task-title font-bold text-xs text-slate-500 dark:text-slate-400 line-through leading-snug mt-1.5 flex items-center gap-1.5">
+                    <span class="drag-grip text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-grab" title="Kéo thả tác vụ">⋮⋮</span>
+                    <span>TASK-100: Ký HĐ Dịch Vụ & Nhận Tạm Ứng</span>
+                  </h4>
+                </div>
+                <button onclick="toggleCard(this)" class="p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-colors flex-shrink-0" title="Mở rộng / Thu nhỏ chi tiết">
+                  <svg class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+                </button>
+              </div>
+
+              <div class="flex items-center justify-between text-[10px] pt-1.5 border-t border-slate-100 dark:border-slate-700/80">
+                <div class="flex items-center gap-1.5 text-slate-600 dark:text-slate-300 font-semibold">
+                  <span class="text-slate-400 dark:text-slate-500 text-[9px]">Thực hiện:</span>
+                  <span class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 font-bold flex items-center justify-center text-[9px]">TH</span>
+                  <span class="text-[#002D54] dark:text-slate-200 font-bold">Trần Thu Hà</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="text-slate-400 dark:text-slate-500">12/10/2026</span>
+                  <span class="font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1 bg-emerald-50 dark:bg-emerald-950/40 px-1.5 py-0.5 rounded border border-emerald-200/50 dark:border-emerald-800/40">
+                    ✓ Đã đối soát MISA
+                  </span>
+                </div>
+              </div>
+
+              <div class="task-detail hidden pt-2 space-y-2 border-t border-slate-100 dark:border-slate-700/80 text-xs">
+                <p class="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed bg-emerald-50/50 dark:bg-emerald-950/20 p-2 rounded-lg border border-emerald-100 dark:border-emerald-800/40">
+                  Khách hàng đã ký hợp đồng điện tử và thanh toán tạm ứng 40% giá trị hợp đồng dịch vụ pháp lý qua ngân hàng Vietcombank.
+                </p>
+
+                <!-- Danh Sách Nhân Sự Giám Sát & Thực Hiện -->
+                <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800 text-xs space-y-2">
+                  <div class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center justify-between border-b border-slate-200/80 dark:border-slate-800 pb-1.5">
+                    <span class="flex items-center gap-1.5">
+                      <svg class="w-3.5 h-3.5 text-[#0082B4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                      Nhân Sự Phụ Trách
+                    </span>
+                    <span class="text-[9px] px-1.5 py-0.2 rounded bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 font-bold">Hoàn tất</span>
+                  </div>
+
+                  <div class="space-y-1.5 pt-0.5">
+                    <!-- Người Giám Sát -->
+                    <div class="flex items-center justify-between p-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200/70 dark:border-slate-700">
+                      <div class="flex items-center gap-2">
+                        <div class="relative">
+                          <span class="w-6 h-6 rounded-full bg-purple-100 text-purple-700 dark:bg-purple-950 dark:text-purple-300 font-bold flex items-center justify-center text-[10px] border border-purple-200 dark:border-purple-800">NA</span>
+                          <span class="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 ring-1 ring-white dark:ring-slate-900" title="Online"></span>
+                        </div>
+                        <div>
+                          <div class="text-[11px] font-bold text-[#002D54] dark:text-slate-200 flex items-center gap-1.5">
+                            <span>LS. Nguyễn Anh</span>
+                            <span class="text-[9px] px-1.5 py-0.2 rounded bg-purple-50 text-purple-700 dark:bg-purple-950/60 dark:text-purple-300 font-semibold border border-purple-200/60 dark:border-purple-800/40">Giám sát</span>
+                          </div>
+                          <div class="text-[10px] text-slate-500 dark:text-slate-400">Managing Partner • Đại diện ký kết HĐ</div>
+                        </div>
+                      </div>
+                      <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold">✓ Đã ký duyệt</span>
+                    </div>
+
+                    <!-- Người Thực Hiện -->
+                    <div class="flex items-center justify-between p-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200/70 dark:border-slate-700">
+                      <div class="flex items-center gap-2">
+                        <div class="relative">
+                          <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 font-bold flex items-center justify-center text-[10px] border border-emerald-200 dark:border-emerald-800">TH</span>
+                          <span class="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 ring-1 ring-white dark:ring-slate-900" title="Online"></span>
+                        </div>
+                        <div>
+                          <div class="text-[11px] font-bold text-[#002D54] dark:text-slate-200 flex items-center gap-1.5">
+                            <span>Trần Thu Hà</span>
+                            <span class="text-[9px] px-1.5 py-0.2 rounded bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 font-semibold border border-emerald-200/60 dark:border-emerald-800/40">Kế toán & Hợp đồng</span>
+                          </div>
+                          <div class="text-[10px] text-slate-500 dark:text-slate-400">Kế toán trưởng • Thu tiền tạm ứng & Hóa đơn</div>
+                        </div>
+                      </div>
+                      <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold">✓ Thu 120 tr ₫</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="pt-1 flex items-center justify-between border-t border-slate-100 dark:border-slate-700/80">
+                  <a href="detail.html" class="text-xs font-bold text-[#0082B4] dark:text-sky-400 hover:underline">Xem Chi Tiết Task</a>
+                  <span class="text-[10px] text-emerald-700 dark:text-emerald-400 font-bold">Số tiền: 120.000.000 ₫</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Task Card 8 -->
+            <div id="task-107" data-task-code="TASK-107" data-task-title="Thu Thập Trích Lục Tại Sở KH&ĐT" data-case="LIT03" draggable="true" class="task-card bg-white/90 dark:bg-slate-800 rounded-xl p-3.5 space-y-2.5 border border-emerald-200 dark:border-emerald-800/60 shadow-sm hover:shadow-md transition-all">
+              <div class="flex items-start justify-between gap-2">
+                <div class="flex-1">
+                  <div class="flex items-center gap-1.5 flex-wrap">
+                    <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-blue-50 text-[#002D54] dark:bg-sky-950/40 dark:text-sky-300 border border-blue-200/80 dark:border-sky-800/50 flex items-center gap-1">
+                      <svg class="w-3.5 h-3.5 inline-block text-[#0082B4] dark:text-sky-400 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
+                      <span>Vụ việc: <strong>Tranh chấp Cổ đông BĐS Phúc Khang</strong> <span class="font-normal font-mono opacity-80">(ASL-2026-LIT03)</span></span>
+                    </span>
+                    <span class="px-2 py-0.5 rounded text-[9px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60 flex items-center gap-1">
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Độ khó: Cơ bản
+                    </span>
+                    <span class="status-badge px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400 border border-emerald-200/60 dark:border-emerald-800/40">✓ Hoàn Tất 100%</span>
+                  </div>
+                  <h4 class="task-title font-bold text-xs text-slate-500 dark:text-slate-400 line-through leading-snug mt-1.5 flex items-center gap-1.5">
+                    <span class="drag-grip text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-grab" title="Kéo thả tác vụ">⋮⋮</span>
+                    <span>TASK-107: Thu Thập Trích Lục Tại Sở KH&ĐT</span>
+                  </h4>
+                </div>
+                <button onclick="toggleCard(this)" class="p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-colors flex-shrink-0" title="Mở rộng / Thu nhỏ chi tiết">
+                  <svg class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+                </button>
+              </div>
+
+              <div class="flex items-center justify-between text-[10px] pt-1.5 border-t border-slate-100 dark:border-slate-700/80">
+                <div class="flex items-center gap-1.5 text-slate-600 dark:text-slate-300 font-semibold">
+                  <span class="text-slate-400 dark:text-slate-500 text-[9px]">Thực hiện:</span>
+                  <span class="w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold flex items-center justify-center text-[9px]">PT</span>
+                  <span class="text-[#002D54] dark:text-slate-200 font-bold">Paralegal Tuấn</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="text-slate-400 dark:text-slate-500">27/10/2026</span>
+                  <span class="font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1 bg-emerald-50 dark:bg-emerald-950/40 px-1.5 py-0.5 rounded border border-emerald-200/50 dark:border-emerald-800/40">
+                    ✓ Đã nhận trích lục
+                  </span>
+                </div>
+              </div>
+
+              <div class="task-detail hidden pt-2 space-y-2 border-t border-slate-100 dark:border-slate-700/80 text-xs">
+                <p class="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed bg-emerald-50/50 dark:bg-emerald-950/20 p-2 rounded-lg border border-emerald-100 dark:border-emerald-800/40">
+                  Đã nhận trích lục đăng ký kinh doanh và hồ sơ thay đổi vốn điều lệ qua các thời kỳ có dấu xác nhận của Sở KH&ĐT TP.HCM.
+                </p>
+
+                <!-- Danh Sách Nhân Sự Giám Sát & Thực Hiện -->
+                <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800 text-xs space-y-2">
+                  <div class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center justify-between border-b border-slate-200/80 dark:border-slate-800 pb-1.5">
+                    <span class="flex items-center gap-1.5">
+                      <svg class="w-3.5 h-3.5 text-[#0082B4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                      Nhân Sự Phụ Trách
+                    </span>
+                    <span class="text-[9px] px-1.5 py-0.2 rounded bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 font-bold">Hoàn tất</span>
+                  </div>
+
+                  <div class="space-y-1.5 pt-0.5">
+                    <!-- Người Giám Sát -->
+                    <div class="flex items-center justify-between p-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200/70 dark:border-slate-700">
+                      <div class="flex items-center gap-2">
+                        <div class="relative">
+                          <span class="w-6 h-6 rounded-full bg-purple-100 text-purple-700 dark:bg-purple-950 dark:text-purple-300 font-bold flex items-center justify-center text-[10px] border border-purple-200 dark:border-purple-800">TH</span>
+                          <span class="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 ring-1 ring-white dark:ring-slate-900" title="Online"></span>
+                        </div>
+                        <div>
+                          <div class="text-[11px] font-bold text-[#002D54] dark:text-slate-200 flex items-center gap-1.5">
+                            <span>LS. Phạm Thu Hương</span>
+                            <span class="text-[9px] px-1.5 py-0.2 rounded bg-purple-50 text-purple-700 dark:bg-purple-950/60 dark:text-purple-300 font-semibold border border-purple-200/60 dark:border-purple-800/40">Giám sát</span>
+                          </div>
+                          <div class="text-[10px] text-slate-500 dark:text-slate-400">Luật sư Tố tụng • Chỉ đạo thu thập tài liệu</div>
+                        </div>
+                      </div>
+                      <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold">✓ Đã nghiệm thu</span>
+                    </div>
+
+                    <!-- Người Thực Hiện -->
+                    <div class="flex items-center justify-between p-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200/70 dark:border-slate-700">
+                      <div class="flex items-center gap-2">
+                        <div class="relative">
+                          <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-200 font-bold flex items-center justify-center text-[10px] border border-slate-300 dark:border-slate-600">PT</span>
+                          <span class="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 ring-1 ring-white dark:ring-slate-900" title="Online"></span>
+                        </div>
+                        <div>
+                          <div class="text-[11px] font-bold text-[#002D54] dark:text-slate-200 flex items-center gap-1.5">
+                            <span>Paralegal Tuấn</span>
+                            <span class="text-[9px] px-1.5 py-0.2 rounded bg-blue-50 text-[#0082B4] dark:bg-sky-950/60 dark:text-sky-300 font-semibold border border-blue-200/60 dark:border-sky-800/40">Thực hiện chính</span>
+                          </div>
+                          <div class="text-[10px] text-slate-500 dark:text-slate-400">Trợ lý Pháp lý • Liên hệ Sở KH&ĐT TP.HCM</div>
+                        </div>
+                      </div>
+                      <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold">✓ 5 Tài liệu gốc</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="pt-1 flex items-center justify-between border-t border-slate-100 dark:border-slate-700/80">
+                  <a href="detail.html" class="text-xs font-bold text-[#0082B4] dark:text-sky-400 hover:underline">Xem Chi Tiết Task</a>
+                  <span class="text-[10px] text-emerald-700 dark:text-emerald-400 font-bold">5 Tài liệu gốc</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="py-2.5 text-center text-[11px] text-emerald-800 font-bold bg-emerald-100/60 rounded-xl border border-emerald-200">
+            ✓ Tất cả tác vụ hoàn thành đều được lưu vết Audit Log
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- Modern Floating Toast Notification Container -->
+  <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2.5 max-w-md pointer-events-none"></div>
+
+  <script>
+    // ==========================================
+    // TOAST NOTIFICATION ENGINE
+    // ==========================================
+    function showToast(type, title, message) {
+      const container = document.getElementById('toast-container');
+      if (!container) return;
+
+      const toast = document.createElement('div');
+      toast.className = `pointer-events-auto flex items-start gap-3 p-4 rounded-2xl shadow-2xl border backdrop-blur-xl transition-all duration-300 transform translate-y-4 opacity-0 ${
+        type === 'error'
+          ? 'bg-red-900/95 border-red-500/50 text-white shadow-red-950/40'
+          : type === 'warning'
+          ? 'bg-amber-900/95 border-amber-500/50 text-white shadow-amber-950/40'
+          : 'bg-[#002D54]/95 border-cyan-400/40 text-white shadow-slate-950/40'
+      }`;
+
+      const icon = type === 'error'
+        ? `<svg class="w-5 h-5 text-red-300 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>`
+        : type === 'warning'
+        ? `<svg class="w-5 h-5 text-amber-300 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`
+        : `<svg class="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`;
+
+      toast.innerHTML = `
+        ${icon}
+        <div class="flex-1">
+          <h5 class="text-xs font-bold leading-tight ${type === 'error' ? 'text-red-200' : type === 'warning' ? 'text-amber-200' : 'text-cyan-200'}">${title}</h5>
+          <p class="text-[11px] text-white/90 mt-1 leading-snug">${message}</p>
+        </div>
+        <button onclick="this.parentElement.remove()" class="text-white/60 hover:text-white text-xs p-1">&times;</button>
+      `;
+
+      container.appendChild(toast);
+
+      // Trigger animation
+      requestAnimationFrame(() => {
+        toast.classList.remove('translate-y-4', 'opacity-0');
+        toast.classList.add('translate-y-0', 'opacity-100');
+      });
+
+      // Auto dismiss after 4s
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-2');
+        setTimeout(() => toast.remove(), 300);
+      }, 4000);
+    }
+
+    // ==========================================
+    // CARD COLLAPSE / EXPAND CONTROLS
+    // ==========================================
+    function toggleCard(button) {
+      const card = button.closest('.task-card');
+      const detail = card.querySelector('.task-detail');
+      const svg = button.querySelector('svg');
+
+      if (detail.classList.contains('hidden')) {
+        detail.classList.remove('hidden');
+        svg.classList.add('rotate-180');
+        button.title = "Thu nhỏ chi tiết";
+      } else {
+        detail.classList.add('hidden');
+        svg.classList.remove('rotate-180');
+        button.title = "Mở rộng chi tiết";
+      }
+    }
+
+    function expandAllTasks() {
+      document.querySelectorAll('.task-detail').forEach(el => el.classList.remove('hidden'));
+      document.querySelectorAll('.task-card button svg').forEach(svg => svg.classList.add('rotate-180'));
+    }
+
+    function collapseAllTasks() {
+      document.querySelectorAll('.task-detail').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.task-card button svg').forEach(svg => svg.classList.remove('rotate-180'));
+    }
+
+    // Filter by case / job
+    function filterByCase(caseCode) {
+      const cards = document.querySelectorAll('.task-card');
+      cards.forEach(card => {
+        if (caseCode === 'ALL' || card.getAttribute('data-case') === caseCode) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+      updateColumnCounters();
+    }
+
+    // ==========================================
+    // RE-CALCULATE COLUMN TASK COUNTERS
+    // ==========================================
+    function updateColumnCounters() {
+      document.querySelectorAll('.kanban-column').forEach(column => {
+        const container = column.querySelector('.kanban-cards-container');
+        const badge = column.querySelector('.column-count');
+        if (container && badge) {
+          const visibleCards = container.querySelectorAll('.task-card:not(.hidden)');
+          badge.textContent = visibleCards.length;
+        }
+      });
+    }
+
+    // ==========================================
+    // DEPENDENCY VIOLATION TEST MODAL/TOAST
+    // ==========================================
+    function testDependencyViolation() {
+      const task104 = document.getElementById('task-104');
+      if (task104.getAttribute('data-locked') === 'true') {
+        task104.classList.add('shake-anim');
+        setTimeout(() => task104.classList.remove('shake-anim'), 450);
+        showToast(
+          'error',
+          '<svg class="w-3.5 h-3.5 inline-block text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg> Ràng Buộc Phụ Thuộc (Task Dependency)',
+          'Tác vụ <strong>TASK-104</strong> đang bị khóa vì phụ thuộc vào <strong>TASK-102: Soạn Dự Thảo</strong>. Bạn phải hoàn thành TASK-102 trước!'
+        );
+      } else {
+        showToast('success', 'Đã Mở Khóa', 'Tác vụ TASK-104 đã được giải phóng ràng buộc và có thể kéo chuyển bình thường!');
+      }
+    }
+
+    // ==========================================
+    // NATIVE HTML5 DRAG & DROP ENGINE
+    // ==========================================
+    let draggedCard = null;
+    let sourceColumn = null;
+    let dropIndicator = null;
+
+    function initKanbanDragAndDrop() {
+      const cards = document.querySelectorAll('.task-card');
+      const containers = document.querySelectorAll('.kanban-cards-container');
+
+      // Create reusable drop indicator line
+      dropIndicator = document.createElement('div');
+      dropIndicator.className = 'drop-indicator';
+
+      cards.forEach(card => {
+        // Drag Start
+        card.addEventListener('dragstart', (e) => {
+          draggedCard = card;
+          sourceColumn = card.closest('.kanban-column');
+          e.dataTransfer.effectAllowed = 'move';
+          e.dataTransfer.setData('text/plain', card.id);
+
+          setTimeout(() => {
+            card.classList.add('is-dragging');
+          }, 0);
+        });
+
+        // Drag End
+        card.addEventListener('dragend', () => {
+          if (draggedCard) {
+            draggedCard.classList.remove('is-dragging');
+          }
+          if (dropIndicator && dropIndicator.parentElement) {
+            dropIndicator.remove();
+          }
+          document.querySelectorAll('.kanban-cards-container').forEach(c => {
+            c.classList.remove('column-drag-over');
+          });
+          draggedCard = null;
+          sourceColumn = null;
+        });
+      });
+
+      // Drop zones setup
+      containers.forEach(container => {
+        container.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          e.dataTransfer.dropEffect = 'move';
+          container.classList.add('column-drag-over');
+
+          const afterElement = getDragAfterElement(container, e.clientY);
+          if (afterElement == null) {
+            container.appendChild(dropIndicator);
+          } else {
+            container.insertBefore(dropIndicator, afterElement);
+          }
+        });
+
+        container.addEventListener('dragleave', (e) => {
+          // Only remove if leaving the container itself
+          if (!container.contains(e.relatedTarget)) {
+            container.classList.remove('column-drag-over');
+            if (dropIndicator && dropIndicator.parentElement === container) {
+              dropIndicator.remove();
+            }
+          }
+        });
+
+        container.addEventListener('drop', (e) => {
+          e.preventDefault();
+          container.classList.remove('column-drag-over');
+
+          if (!draggedCard) return;
+
+          const targetColumn = container.closest('.kanban-column');
+          const targetStatus = targetColumn.getAttribute('data-status');
+          const targetStatusName = targetColumn.getAttribute('data-status-name');
+          const sourceStatus = sourceColumn ? sourceColumn.getAttribute('data-status') : null;
+
+          // ==========================================
+          // RULE 1: DEPENDENCY CONSTRAINT VALIDATION
+          // ==========================================
+          const isLocked = draggedCard.getAttribute('data-locked') === 'true';
+          if (isLocked && targetStatus !== sourceStatus) {
+            if (dropIndicator && dropIndicator.parentElement) {
+              dropIndicator.remove();
+            }
+            draggedCard.classList.remove('is-dragging');
+            draggedCard.classList.add('shake-anim');
+            setTimeout(() => draggedCard.classList.remove('shake-anim'), 450);
+
+            showToast(
+              'error',
+              '<svg class="w-3.5 h-3.5 inline-block text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg> KHÔNG THỂ CHUYỂN TRẠNG THÁI',
+              `Tác vụ <strong>${draggedCard.getAttribute('data-task-code')}</strong> bị khóa bởi ràng buộc phụ thuộc (Task Dependency). Hoàn tất tác vụ tiên quyết trước!`
+            );
+            return;
+          }
+
+          // Insert Card into target position
+          if (dropIndicator && dropIndicator.parentElement === container) {
+            container.insertBefore(draggedCard, dropIndicator);
+            dropIndicator.remove();
+          } else {
+            container.appendChild(draggedCard);
+          }
+
+          draggedCard.classList.remove('is-dragging');
+
+          // ==========================================
+          // RULE 2: CARD STYLING ACCORDING TO COLUMN
+          // ==========================================
+          const titleEl = draggedCard.querySelector('.task-title span:last-child') || draggedCard.querySelector('.task-title');
+          const statusBadge = draggedCard.querySelector('.status-badge');
+
+          if (targetStatus === 'completed') {
+            titleEl.classList.add('line-through', 'text-slate-500');
+            draggedCard.classList.add('bg-white/90');
+            if (statusBadge) {
+              statusBadge.className = 'status-badge px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-100 text-emerald-800';
+              statusBadge.textContent = '✓ Hoàn Tất 100%';
+            }
+          } else {
+            titleEl.classList.remove('line-through', 'text-slate-500');
+            draggedCard.classList.remove('bg-white/90');
+            if (statusBadge && statusBadge.textContent.includes('✓ Hoàn Tất 100%')) {
+              statusBadge.className = 'status-badge px-1.5 py-0.5 rounded text-[9px] font-bold bg-blue-100 text-blue-800';
+              statusBadge.textContent = targetStatusName;
+            }
+          }
+
+          // ==========================================
+          // RULE 3: DEPENDENCY UNLOCK AUTOMATION
+          // If TASK-102 is moved to 'completed', auto-unlock TASK-104!
+          // ==========================================
+          if (draggedCard.id === 'task-102') {
+            const task104 = document.getElementById('task-104');
+            const lockBadge104 = document.getElementById('lock-badge-104');
+            const lockDesc104 = document.getElementById('lock-desc-104');
+
+            if (targetStatus === 'completed') {
+              // Unlock TASK-104
+              task104.setAttribute('data-locked', 'false');
+              task104.classList.remove('border-red-200');
+              task104.classList.add('border-emerald-300', 'unlock-anim');
+
+              if (lockBadge104) {
+                lockBadge104.className = 'text-emerald-700 font-bold flex items-center gap-0.5 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200';
+                lockBadge104.innerHTML = '<svg class="w-3.5 h-3.5 inline-block text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"/></svg> Đã mở khóa';
+              }
+              if (lockDesc104) {
+                lockDesc104.className = 'text-[11px] text-emerald-800 leading-relaxed bg-emerald-50 p-2 rounded-lg border border-emerald-200';
+                lockDesc104.innerHTML = '<span class="inline-flex items-center gap-1 text-emerald-600"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><strong>Ràng buộc hoàn tất:</strong></span> Tác vụ tiên quyết (TASK-102) đã hoàn thành. TASK-104 sẵn sàng nộp đơn lên Cục SHTT!';
+              }
+
+              showToast(
+                'success',
+                'Giải Phóng Khóa Phụ Thuộc!',
+                'Do <strong>TASK-102</strong> đã hoàn tất, tác vụ <strong>TASK-104 (Nộp Đơn SHTT)</strong> đã được TỰ ĐỘNG MỞ KHÓA!'
+              );
+            } else if (sourceStatus === 'completed' && targetStatus !== 'completed') {
+              // Re-lock TASK-104 if TASK-102 is dragged back out of completed
+              task104.setAttribute('data-locked', 'true');
+              task104.classList.add('border-red-200');
+              task104.classList.remove('border-emerald-300', 'unlock-anim');
+
+              if (lockBadge104) {
+                lockBadge104.className = 'text-red-600 font-bold flex items-center gap-0.5 bg-red-50 px-1.5 py-0.5 rounded border border-red-200';
+                lockBadge104.innerHTML = '<svg class="w-3.5 h-3.5 inline-block text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg> Bị khóa';
+              }
+              if (lockDesc104) {
+                lockDesc104.className = 'text-[11px] text-slate-600 leading-relaxed bg-slate-50 p-2 rounded-lg border border-slate-100';
+                lockDesc104.innerHTML = '<svg class="w-3.5 h-3.5 inline-block text-amber-500 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg> <strong>Ràng buộc phụ thuộc:</strong> Phải hoàn tất Task Soạn Dự Thảo (TASK-102) mới được nộp hồ sơ chính thức lên Cục SHTT.';
+              }
+
+              showToast(
+                'warning',
+                '<svg class="w-3.5 h-3.5 inline-block text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg> Khóa Lại Tác Vụ Phụ Thuộc',
+                '<strong>TASK-102</strong> chưa hoàn tất, <strong>TASK-104</strong> đã được kích hoạt khóa an toàn trở lại!'
+              );
+            }
+          }
+
+          // Update column counts
+          updateColumnCounters();
+
+          // Success notification
+          const taskCode = draggedCard.getAttribute('data-task-code') || 'Tác vụ';
+          showToast(
+            'success',
+            'Cập Nhật Trạng Thái Thành Công',
+            `Đã chuyển <strong>${taskCode}</strong> sang cột <strong>"${targetStatusName}"</strong>.`
+          );
+        });
+      });
+    }
+
+    // Helper: Determine insertion position based on mouse Y coordinate
+    function getDragAfterElement(container, y) {
+      const draggableElements = [...container.querySelectorAll('.task-card:not(.is-dragging)')];
+
+      return draggableElements.reduce((closest, child) => {
+        const box = child.getBoundingClientRect();
+        const offset = y - box.top - box.height / 2;
+        if (offset < 0 && offset > closest.offset) {
+          return { offset: offset, element: child };
+        } else {
+          return closest;
+        }
+      }, { offset: Number.NEGATIVE_INFINITY }).element;
+    }
+
+    // ==========================================
+    // LOG TIME DIRECTLY INTO TASK (TIMESHEET INTEGRATION)
+    // ==========================================
+    let currentModalTask = null;
+
+    function openLogTimeModal(taskCode, taskTitle, currentHours, estHours) {
+      currentModalTask = { 
+        taskCode: taskCode, 
+        taskTitle: taskTitle, 
+        currentHours: parseFloat(currentHours) || 0, 
+        estHours: parseFloat(estHours) || 4 
+      };
+      
+      const modal = document.getElementById('log-time-modal');
+      document.getElementById('modal-task-code').value = taskCode;
+      document.getElementById('modal-task-display').textContent = `${taskCode}: ${taskTitle}`;
+      document.getElementById('modal-current-hours').textContent = `${currentModalTask.currentHours.toFixed(1)}h`;
+      
+      const hoursInput = document.getElementById('modal-hours-input');
+      hoursInput.value = '1.0';
+      updateModalNewTotal();
+
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('modal-date-input').value = today;
+      document.getElementById('modal-desc-input').value = '';
+
+      modal.classList.remove('hidden');
+    }
+
+    function closeLogTimeModal() {
+      const modal = document.getElementById('log-time-modal');
+      if (modal) modal.classList.add('hidden');
+      currentModalTask = null;
+    }
+
+    function updateModalNewTotal() {
+      if (!currentModalTask) return;
+      const addHours = parseFloat(document.getElementById('modal-hours-input').value) || 0;
+      const newTotal = currentModalTask.currentHours + addHours;
+      document.getElementById('modal-new-total').textContent = `${newTotal.toFixed(1)}h`;
+    }
+
+    function submitLogTime(e) {
+      e.preventDefault();
+      if (!currentModalTask) return;
+
+      const addHours = parseFloat(document.getElementById('modal-hours-input').value) || 0;
+      if (addHours <= 0) {
+        alert('Vui lòng nhập số giờ lớn hơn 0');
+        return;
+      }
+
+      const taskEl = document.getElementById(currentModalTask.taskCode.toLowerCase());
+      if (taskEl) {
+        const prevLogged = parseFloat(taskEl.getAttribute('data-logged-hours') || '0');
+        const est = parseFloat(taskEl.getAttribute('data-est-hours') || '4');
+        const newLogged = prevLogged + addHours;
+        
+        taskEl.setAttribute('data-logged-hours', newLogged.toFixed(1));
+
+        // Update badge in collapsed row
+        const badgeText = taskEl.querySelector('.logged-hours-text');
+        if (badgeText) badgeText.textContent = newLogged.toFixed(1);
+
+        // Update detail body
+        const detailText = taskEl.querySelector('.detail-logged-hours');
+        if (detailText) detailText.textContent = newLogged.toFixed(1);
+
+        const progressBar = taskEl.querySelector('.hours-progress-bar');
+        if (progressBar) {
+          const pct = Math.min(100, Math.round((newLogged / est) * 100));
+          progressBar.style.width = `${pct}%`;
+        }
+
+        // Update button onclick param
+        const btn = taskEl.querySelector('button[onclick^="openLogTimeModal"]');
+        if (btn) {
+          const safeTitle = currentModalTask.taskTitle.replace(/'/g, "\\'");
+          btn.setAttribute('onclick', `openLogTimeModal('${currentModalTask.taskCode}', '${safeTitle}', ${newLogged.toFixed(1)}, ${est})`);
+        }
+      }
+
+      recalculateFirmTotalHours();
+
+      showToast(
+        'success',
+        '<svg class="w-3.5 h-3.5 inline-block text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Ghi Nhận Giờ Công Thành Công!',
+        `Đã lưu <strong>${addHours} giờ làm việc</strong> trực tiếp vào <strong>${currentModalTask.taskCode}</strong>. Chi phí giờ công đã được cập nhật!`
+      );
+
+      closeLogTimeModal();
+    }
+
+    function recalculateFirmTotalHours() {
+      let total = 0;
+      document.querySelectorAll('.task-card').forEach(c => {
+        total += parseFloat(c.getAttribute('data-logged-hours') || '0');
+      });
+      const el = document.getElementById('firm-total-hours');
+      if (el) el.textContent = `${total.toFixed(1)}h`;
+    }
+
+    // Initialize on DOM load
+    document.addEventListener('DOMContentLoaded', () => {
+      initKanbanDragAndDrop();
+      updateColumnCounters();
+      recalculateFirmTotalHours();
+
+      const hoursInput = document.getElementById('modal-hours-input');
+      if (hoursInput) {
+        hoursInput.addEventListener('input', updateModalNewTotal);
+      }
+    });
+  </script>
+
+  <!-- Log Time Interactive Modal (Consolidated into Task Flow) -->
+  <div id="log-time-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl max-w-lg w-full shadow-2xl border border-slate-200 overflow-hidden">
+      <div class="p-5 bg-gradient-to-r from-[#002D54] to-[#0082B4] text-white flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center text-lg">
+            <svg class="w-3.5 h-3.5 inline-block text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <div>
+            <h3 class="font-extrabold text-base text-white">Ghi Nhận Giờ Làm Việc (Giờ Công)</h3>
+            <p class="text-xs text-cyan-200">Ghi nhận giờ trực tiếp trên tác vụ, không cần qua timesheet riêng</p>
+          </div>
+        </div>
+        <button onclick="closeLogTimeModal()" class="text-white/70 hover:text-white p-1 rounded-lg hover:bg-white/10 transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <form id="log-time-form" onsubmit="submitLogTime(event)" class="p-6 space-y-4 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Tác vụ đang thực hiện</label>
+          <div id="modal-task-display" class="p-3 bg-slate-50 rounded-xl border border-slate-200 font-bold text-[#002D54]">
+            TASK-104: Nộp Đơn Khiếu Nại Lên Cục SHTT
+          </div>
+          <input type="hidden" id="modal-task-code" value="">
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Số giờ làm việc thêm <span class="text-red-500">*</span></label>
+            <div class="relative">
+              <input type="number" id="modal-hours-input" step="0.25" min="0.25" max="24" value="1.0" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 font-mono text-sm font-bold text-[#002D54] focus:outline-none focus:ring-2 focus:ring-[#0082B4]">
+              <span class="absolute right-3.5 top-2.5 font-bold text-slate-400">giờ</span>
+            </div>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Ngày thực hiện <span class="text-red-500">*</span></label>
+            <input type="date" id="modal-date-input" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0082B4]">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Nhân sự thực hiện</label>
+            <select id="modal-assignee-input" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0082B4]">
+              <option value="PT">Paralegal Trang</option>
+              <option value="ML">LS. Trần Mai Linh</option>
+              <option value="NA">LS. Nguyễn Anh</option>
+              <option value="VT">Nguyễn Văn Thành</option>
+              <option value="NT">LS. Trần Nam</option>
+              <option value="TH">LS. Phạm Thu Hương</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Loại giờ làm</label>
+            <select id="modal-type-input" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0082B4]">
+              <option value="billable"><svg class="w-3.5 h-3.5 inline-block text-slate-400 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg> Tính phí thân chủ (Billable)</option>
+              <option value="non-billable"><svg class="w-3.5 h-3.5 inline-block text-slate-400 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg> Nội bộ văn phòng (Non-billable)</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Mô tả công việc đã thực hiện <span class="text-red-500">*</span></label>
+          <textarea id="modal-desc-input" required rows="3" placeholder="Ví dụ: Rà soát tài liệu đối chứng, soạn văn bản ý kiến pháp lý..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-normal focus:outline-none focus:ring-2 focus:ring-[#0082B4]"></textarea>
+        </div>
+
+        <div class="p-3 bg-amber-50 rounded-xl border border-amber-200 text-amber-900 flex items-center justify-between">
+          <span class="text-[11px]">Hiện tại đã ghi: <strong id="modal-current-hours">1.5h</strong></span>
+          <span class="text-[11px]">Sau khi thêm: <strong id="modal-new-total" class="text-emerald-700">2.5h</strong></span>
+        </div>
+
+        <div class="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+          <button type="button" onclick="closeLogTimeModal()" class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold transition-colors">
+            Hủy
+          </button>
+          <button type="submit" class="px-5 py-2.5 rounded-xl bg-[#002D54] hover:bg-[#0082B4] text-white font-bold shadow-md shadow-cyan-950/20 transition-all flex items-center gap-1.5">
+            <span><svg class="w-3.5 h-3.5 inline-block text-[#0082B4] mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg> Lưu Giờ Công Vào Tác Vụ</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</body>
+</html>

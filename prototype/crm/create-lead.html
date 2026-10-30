@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <script>(function(){if(localStorage.getItem('asl_theme')==='dark'){document.documentElement.classList.add('dark');}else{document.documentElement.classList.remove('dark');}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASL LAW - Thêm Mới Cơ Hội Kinh Doanh (Create Opportunity)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/layout.css?v=3.1">
+  <script src="../assets/layout.js?v=3.1" defer></script>
+</head>
+<body class="min-h-screen bg-[#F4F8FA] text-slate-800 flex">
+
+  <!-- Modular Shared Sidebar (Auto-mounted by layout.js) -->
+  <aside id="sidebar" class="fixed top-0 left-0 bottom-0 w-72 bg-white/95 backdrop-blur-xl z-40 transition-all duration-300 ease-in-out flex flex-col justify-between shadow-xl shadow-slate-900/5"></aside>
+
+  <!-- Main Container -->
+  <div id="main-container" class="flex-1 md:ml-72 flex flex-col min-h-screen transition-all duration-300 ease-in-out">
+
+    <!-- Top Bar with Rich Brand Gradient -->
+    <header class="header-gradient text-white h-20 px-6 flex items-center justify-between sticky top-0 z-30 shadow-md">
+      <div class="flex items-center gap-4">
+        <button onclick="toggleSidebar()" class="md:hidden p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white" title="Mở menu">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <div>
+          <div class="text-xs text-cyan-200/90 font-medium flex items-center gap-1.5">
+            <a href="../index.html" class="hover:underline">ASL LAW</a>
+            <span>/</span>
+            <a href="index.html" class="hover:underline text-cyan-200">CRM</a>
+            <span>/</span>
+            <a href="index.html" class="hover:underline text-cyan-200">Phễu Cơ Hội</a>
+            <span>/</span>
+            <span class="text-white font-semibold">Thêm Mới</span>
+          </div>
+          <h1 class="text-lg font-bold text-white tracking-tight">Thêm Mới Cơ Hội Kinh Doanh (Create Opportunity)</h1>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition-colors flex items-center gap-1.5">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+          <span>Quay lại Phễu Cơ Hội</span>
+        </a>
+
+        <!-- User profile -->
+        <div class="flex items-center gap-2 pl-2 border-l border-white/20">
+          <div class="w-8 h-8 rounded-full bg-[#FF7A00] text-white font-extrabold text-xs flex items-center justify-center ring-2 ring-white/50">
+            NA
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Area: Standard ERP Layout -->
+    <main class="flex-1 p-6 md:p-8 w-full max-w-none space-y-6">
+
+      <!-- Headline matching CRM Pipeline -->
+      <div>
+        <span class="text-xs font-extrabold uppercase tracking-wider text-[#0082B4] px-2.5 py-0.5 rounded-full bg-cyan-50 border border-cyan-200/80 inline-block">CRM</span>
+        <h2 class="text-2xl md:text-3xl font-extrabold text-[#002D54] tracking-tight mt-1.5">Thêm cơ hội kinh doanh mới</h2>
+        <p class="text-xs md:text-sm text-slate-500 mt-1">Ghi nhận nguồn tiếp cận, ước lượng giá trị hợp đồng và đưa cơ hội vào các giai đoạn xử lý trên phễu bán hàng.</p>
+      </div>
+
+      <form onsubmit="handleCreateLead(event)" class="space-y-6">
+
+        <!-- Card 1: Thông tin cơ hội pháp lý & phễu bán hàng -->
+        <div class="glass-card rounded-2xl p-6 md:p-8 space-y-5">
+          <div class="border-b border-slate-100 pb-3 flex items-center justify-between">
+            <h3 class="text-base font-bold text-[#002D54]">1. Thông Tin Cơ Hội & Định Giá Hợp Đồng</h3>
+            <span class="text-xs font-medium text-slate-400">Các trường đánh dấu <span class="text-red-500">*</span> là bắt buộc</span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-xs">
+            <div class="md:col-span-2">
+              <label class="block font-bold text-slate-700 mb-1">Tiêu Đề Cơ Hội / Vụ Việc Dự Kiến <span class="text-red-500">*</span></label>
+              <input type="text" id="leadTitle" required placeholder="Ví dụ: Đăng ký nhãn hiệu 'SaoFood', Tranh chấp đất đai Thủ Đức..." class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-sm font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0082B4]/50 focus:border-[#0082B4] transition-all">
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Nguồn Tiếp Cận (Lead Source) <span class="text-red-500">*</span></label>
+              <select id="leadSource" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0082B4]/50 focus:border-[#0082B4]">
+                <option value="Website" selected>Website (Biểu mẫu liên hệ / Chat)</option>
+                <option value="Facebook">Facebook (Fanpage / Messenger)</option>
+                <option value="Hotline">Hotline (Gọi trực tiếp tổng đài)</option>
+                <option value="Đối tác">Đối tác (Giới thiệu từ đối tác chiến lược)</option>
+                <option value="Khách cũ">Khách cũ (Thân chủ tái hợp tác)</option>
+                <option value="Khác">Khác (Sự kiện / Hội thảo pháp lý)</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Lĩnh Vực Chuyên Môn</label>
+              <select id="leadPractice" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0082B4]/50 focus:border-[#0082B4]">
+                <option selected>Sở Hữu Trí Tuệ (Nhãn hiệu, Sáng chế, Kiểu dáng)</option>
+                <option>Doanh Nghiệp & Đầu Tư Nước Ngoài (FDI)</option>
+                <option>Mua Bán & Sáp Nhập (M&A)</option>
+                <option>Tranh Chấp Hợp Đồng & Đại Diện Tố Tụng</option>
+                <option>Tư Vấn Thường Xuyên (Retainer Legal)</option>
+                <option>Hôn Nhân & Gia Đình / Thừa Kế Dân Sự</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Ước Lượng Giá Trị Hợp Đồng (VND) <span class="text-red-500">*</span></label>
+              <div class="relative">
+                <input type="number" id="leadValue" required step="1000000" min="1000000" placeholder="45000000" value="45000000" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 font-mono text-sm font-bold text-[#002D54] focus:outline-none focus:ring-2 focus:ring-[#0082B4]/50 focus:border-[#0082B4] transition-all">
+                <span class="absolute right-3.5 top-2.5 font-bold text-slate-400">₫</span>
+              </div>
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Giai Đoạn Phễu Ban Đầu</label>
+              <select id="leadStage" onchange="updateProbByStage(this.value)" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0082B4]/50 focus:border-[#0082B4]">
+                <option value="moi-tiep-nhan" selected>1. Mới tiếp nhận (Xác suất 25% - 30%)</option>
+                <option value="dang-tu-van">2. Đang tư vấn (Xác suất 50% - 60%)</option>
+                <option value="da-gui-bao-gia">3. Đã gửi báo giá (Xác suất 70% - 75%)</option>
+                <option value="da-chot">4. Đã chốt / Ký HĐ (100% - Kèm nút Tạo Vụ Việc)</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Xác Suất Thành Công Dự Kiến (%)</label>
+              <div class="relative">
+                <input type="number" id="leadProb" min="10" max="100" value="30" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 font-mono text-sm font-bold text-[#0082B4] focus:outline-none focus:ring-2 focus:ring-[#0082B4]/50 focus:border-[#0082B4]">
+                <span class="absolute right-3.5 top-2.5 font-bold text-slate-400">%</span>
+              </div>
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Nhân Sự Phụ Trách Theo Dõi</label>
+              <select id="leadAssignee" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0082B4]/50 focus:border-[#0082B4]">
+                <option selected>Lê Mai Anh (Chuyên viên SHTT)</option>
+                <option>Nguyễn Văn An (Tư vấn viên)</option>
+                <option>Trần Minh Đức (Luật sư thương mại)</option>
+                <option>Phạm Thanh Hà (Chuyên gia sáng chế)</option>
+                <option>LS. Nguyễn Anh (Managing Partner)</option>
+                <option>LS. Trần Nam (Lead)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2: Thông tin thân chủ / doanh nghiệp -->
+        <div class="glass-card rounded-2xl p-6 md:p-8 space-y-5">
+          <div class="border-b border-slate-100 pb-3 flex items-center justify-between">
+            <h3 class="text-base font-bold text-[#002D54]">2. Thông Tin Thân Chủ / Doanh Nghiệp</h3>
+            <span class="text-xs font-medium text-slate-400">Được đồng bộ sang danh bạ khách hàng</span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-xs">
+            <div class="md:col-span-2">
+              <label class="block font-bold text-slate-700 mb-1">Tên Thân Chủ / Công Ty <span class="text-red-500">*</span></label>
+              <input type="text" id="clientName" required placeholder="Ví dụ: Sao Việt, Minh Phát Tech, Đỗ Mai Phương..." class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-sm font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0082B4]/50 focus:border-[#0082B4] transition-all">
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Mã Số Thuế (MST / ĐKKD)</label>
+              <input type="text" placeholder="0315891234..." class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 font-mono focus:outline-none focus:ring-2 focus:ring-[#0082B4]/50 focus:border-[#0082B4]">
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Người Đại Diện / Người Liên Hệ</label>
+              <input type="text" placeholder="Họ và tên người liên lạc chính..." class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#0082B4]/50 focus:border-[#0082B4]">
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Số Điện Thoại</label>
+              <input type="tel" placeholder="0908 xxx xxx" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#0082B4]/50 focus:border-[#0082B4]">
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Email Nhận Báo Giá & Hợp Đồng</label>
+              <input type="email" placeholder="contact@company.com" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#0082B4]/50 focus:border-[#0082B4]">
+            </div>
+
+            <div class="md:col-span-2">
+              <label class="block font-bold text-slate-700 mb-1">Ghi Chú Nhu Cầu & Bối Cảnh Vụ Việc</label>
+              <textarea rows="3" placeholder="Ghi nhận tóm tắt yêu cầu của thân chủ, thời hạn mong muốn, tiền lệ liên quan..." class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#0082B4]/50 focus:border-[#0082B4]"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Footer -->
+        <div class="flex items-center justify-between pt-2">
+          <a href="index.html" class="px-5 py-2.5 rounded-xl border border-slate-300 bg-white text-slate-600 font-bold text-xs hover:bg-slate-100 transition-colors">
+            Hủy Bỏ
+          </a>
+          <button type="submit" class="px-6 py-2.5 rounded-xl bg-[#FF7A00] hover:bg-[#E66E00] text-white font-bold text-xs shadow-md shadow-orange-950/20 transition-all flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            <span>Lưu Cơ Hội Vào Phễu</span>
+          </button>
+        </div>
+
+      </form>
+
+    </main>
+
+  </div>
+
+  <script>
+    function updateProbByStage(stage) {
+      const probInput = document.getElementById('leadProb');
+      if (stage === 'moi-tiep-nhan') probInput.value = 30;
+      else if (stage === 'dang-tu-van') probInput.value = 55;
+      else if (stage === 'da-gui-bao-gia') probInput.value = 75;
+      else if (stage === 'da-chot') probInput.value = 100;
+    }
+
+    function handleCreateLead(e) {
+      e.preventDefault();
+      const title = document.getElementById('leadTitle').value;
+      const client = document.getElementById('clientName').value;
+      const val = document.getElementById('leadValue').value;
+      const stage = document.getElementById('leadStage').value;
+
+      alert(`✓ Đã thêm thành công cơ hội: "${title}" (${client}) vào phễu kinh doanh!`);
+      window.location.href = 'index.html';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <script>(function(){if(localStorage.getItem('asl_theme')==='dark'){document.documentElement.classList.add('dark');}else{document.documentElement.classList.remove('dark');}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASL LAW - Đăng Nhập Hệ Thống ERP & Xác Thực 2FA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/layout.css?v=3.1">
+</head>
+<body class="min-h-screen bg-gradient-to-br from-[#001D38] via-[#002D54] to-[#004D7A] flex items-center justify-center p-6 relative overflow-hidden">
+
+  <!-- Background decorative geometric 3D rings -->
+  <div class="absolute -top-40 -right-40 w-96 h-96 rounded-full bg-cyan-500/10 blur-3xl pointer-events-none"></div>
+  <div class="absolute -bottom-40 -left-40 w-96 h-96 rounded-full bg-[#FF7A00]/10 blur-3xl pointer-events-none"></div>
+
+  <!-- Login Card Container -->
+  <div class="w-full max-w-md bg-white/95 backdrop-blur-2xl rounded-3xl p-8 border border-white/20 shadow-2xl space-y-6 relative z-10">
+    
+    <!-- Header with Firm Logo -->
+    <div class="text-center space-y-2">
+      <div class="flex justify-center mb-2">
+        <img src="../assets/logo-asl.png" alt="ASL LAW Logo" class="h-14 object-contain">
+      </div>
+      <h1 class="text-xl font-black text-[#002D54] tracking-tight">HỆ THỐNG ERP PHÁP LÝ ASL LAW</h1>
+      <p class="text-xs text-slate-500">Cổng thông tin bảo mật dành riêng cho Luật sư & Nhân sự hãng luật</p>
+    </div>
+
+    <!-- Login Form -->
+    <form action="../dashboard/index.html" method="get" class="space-y-4">
+
+      <div>
+        <label class="block text-xs font-bold text-slate-700 mb-1">Email công vụ (@aslgate.com)</label>
+        <div class="relative">
+          <input type="email" value="nam.h@aslgate.com" required class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 text-xs font-medium text-slate-800 focus:outline-none focus:border-[#0082B4] focus:bg-white transition-all">
+          <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"/></svg>
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold text-slate-700 mb-1">Mật khẩu</label>
+        <div class="relative">
+          <input type="password" value="••••••••••••" required class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 text-xs font-medium text-slate-800 focus:outline-none focus:border-[#0082B4] focus:bg-white transition-all">
+          <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+        </div>
+      </div>
+
+      <!-- 2FA TOTP Authenticator Code Input -->
+      <div class="p-3.5 rounded-xl bg-blue-50/60 border border-blue-200/60 space-y-2">
+        <div class="flex items-center justify-between text-xs">
+          <span class="font-extrabold text-[#002D54] flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+            Mã xác thực 2FA (TOTP)
+          </span>
+          <span class="text-[10px] text-slate-400 font-mono">Google Authenticator</span>
+        </div>
+        <input type="text" maxlength="6" value="842 190" required class="w-full px-3 py-2 rounded-lg border border-blue-300 text-center font-mono font-black text-base text-[#002D54] tracking-widest focus:outline-none focus:border-[#0082B4] bg-white">
+      </div>
+
+      <div class="flex items-center justify-between text-xs text-slate-500">
+        <label class="flex items-center gap-2 cursor-pointer">
+          <input type="checkbox" checked class="w-3.5 h-3.5 rounded text-[#0082B4]">
+          <span>Ghi nhớ phiên đăng nhập (30 ngày)</span>
+        </label>
+        <a href="#" class="font-bold text-[#0082B4] hover:underline">Quên mật khẩu?</a>
+      </div>
+
+      <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-[#002D54] to-[#0082B4] hover:from-[#002444] hover:to-[#00709c] text-white text-xs font-extrabold shadow-lg shadow-cyan-950/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+        <span>Xác Thực & Vào Bàn Làm Việc</span>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+      </button>
+
+    </form>
+
+    <!-- SSO Single Sign-On Divider -->
+    <div class="relative flex py-1 items-center">
+      <div class="flex-grow border-t border-slate-200"></div>
+      <span class="flex-shrink mx-3 text-slate-400 text-[10px] uppercase font-bold tracking-wider">Hoặc đăng nhập nhanh</span>
+      <div class="flex-grow border-t border-slate-200"></div>
+    </div>
+
+    <!-- SSO Buttons -->
+    <div class="grid grid-cols-2 gap-3 text-xs">
+      <a href="../dashboard/index.html" class="flex items-center justify-center gap-2 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold transition-colors">
+        <svg class="w-4 h-4" viewBox="0 0 24 24"><path fill="#EA4335" d="M12 5c1.56 0 2.97.55 4.09 1.45l3.07-3.07C17.3 1.62 14.83 1 12 1 7.42 1 3.56 3.63 1.71 7.43l3.66 2.84C6.26 7.48 8.87 5 12 5z"/><path fill="#4285F4" d="M23.49 12.27c0-.79-.07-1.54-.19-2.27H12v4.51h6.47c-.29 1.48-1.14 2.73-2.4 3.58l3.66 2.84c2.14-1.98 3.76-4.9 3.76-8.66z"/><path fill="#FBBC05" d="M5.37 14.73c-.24-.71-.37-1.47-.37-2.26s.13-1.55.37-2.26L1.71 7.37C.62 9.53 0 11.96 0 14.53s.62 5 1.71 7.16l3.66-2.84z"/><path fill="#34A853" d="M12 23c3.24 0 5.95-1.08 7.93-2.91l-3.66-2.84c-1.08.73-2.46 1.16-4.27 1.16-3.13 0-5.74-2.48-6.63-5.27L1.71 16c1.85 3.8 5.71 7 10.29 7z"/></svg>
+        <span>Google SSO</span>
+      </a>
+
+      <a href="../dashboard/index.html" class="flex items-center justify-center gap-2 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold transition-colors">
+        <svg class="w-4 h-4" viewBox="0 0 24 24"><path fill="#F25022" d="M1 1h10v10H1z"/><path fill="#7FBA00" d="M13 1h10v10H13z"/><path fill="#00A4EF" d="M1 13h10v10H1z"/><path fill="#FFB900" d="M13 13h10v10H13z"/></svg>
+        <span>Microsoft 365</span>
+      </a>
+    </div>
+
+    <!-- Security Footer -->
+    <div class="text-center pt-2">
+      <a href="../index.html" class="text-xs font-bold text-[#0082B4] hover:underline">
+        ← Quay lại Danh Mục Master Prototype
+      </a>
+    </div>
+
+  </div>
+
+</body>
+</html>

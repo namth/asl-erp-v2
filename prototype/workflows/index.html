@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <script>(function(){if(localStorage.getItem('asl_theme')==='dark'){document.documentElement.classList.add('dark');}else{document.documentElement.classList.remove('dark');}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASL LAW - Trình Thiết Kế Quy Trình Động (Workflow Builder)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/layout.css?v=3.1">
+  <script src="../assets/layout.js?v=3.1" defer></script>
+  <style>
+    .font-serif-title {
+      font-family: 'Playfair Display', Georgia, serif;
+    }
+    .drag-over {
+      border: 2px dashed #C59B27 !important;
+      background-color: #FFFDF9 !important;
+    }
+    .stage-item {
+      transition: all 0.2s ease;
+    }
+    .stage-item.dragging {
+      opacity: 0.4;
+      transform: scale(0.98);
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-[#FAF7F2] dark:bg-[#0B0F19] text-slate-800 dark:text-slate-100 flex">
+
+  <!-- Modular Shared Sidebar (Auto-mounted by layout.js) -->
+  <aside id="sidebar" class="fixed top-0 left-0 bottom-0 w-72 bg-white/95 backdrop-blur-xl z-40 transition-all duration-300 ease-in-out flex flex-col justify-between shadow-xl shadow-slate-900/5"></aside>
+
+  <!-- Main Container -->
+  <div id="main-container" class="flex-1 md:ml-72 flex flex-col min-h-screen transition-all duration-300 ease-in-out">
+
+    <!-- Top Bar with Rich Brand Gradient -->
+    <header class="header-gradient text-white h-20 px-6 flex items-center justify-between sticky top-0 z-30 shadow-md">
+      <div class="flex items-center gap-4">
+        <button onclick="toggleSidebar()" class="md:hidden p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white" title="Mở menu">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <div>
+          <div class="text-xs text-cyan-200/90 font-medium flex items-center gap-1.5">
+            <a href="../index.html" class="hover:underline">ASL LAW</a>
+            <span>/</span>
+            <span class="text-white font-semibold">Quản Trị Quy Trình</span>
+            <span>/</span>
+            <span class="text-amber-200 font-semibold">Trình Thiết Kế Động</span>
+          </div>
+          <h1 class="text-lg font-bold text-white tracking-tight">Trình Thiết Kế Quy Trình Động (Dynamic Workflow Builder)</h1>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <a href="detail.html" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs flex items-center gap-1.5 transition-all">
+          <svg class="w-4 h-4 text-cyan-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+          <span>Báo Cáo SLA</span>
+        </a>
+
+        <!-- User profile avatar -->
+        <div class="flex items-center gap-2 pl-2 border-l border-white/20">
+          <div class="w-8 h-8 rounded-full bg-[#FF7A00] text-white font-extrabold text-xs flex items-center justify-center ring-2 ring-white/50">
+            NA
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Area: 3-Column Dynamic Process Designer matching the reference design -->
+    <main class="flex-1 p-6 md:p-8 max-w-none mx-auto w-full space-y-6">
+
+      <!-- Page Header matching user's design -->
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-stone-200/80 dark:border-slate-800 pb-5">
+        <div>
+          <span class="text-[11px] font-extrabold tracking-widest uppercase text-[#C59B27] block mb-1">QUY TRÌNH ĐỘNG</span>
+          <h2 class="text-2xl md:text-3xl font-serif-title font-bold text-[#1E293B] dark:text-slate-100 tracking-tight">Trình thiết kế quy trình</h2>
+          <p class="text-xs md:text-sm text-slate-500 dark:text-slate-400 mt-1">Kéo thả giai đoạn, định nghĩa tác vụ mặc định, rẽ nhánh và cổng phê duyệt — không cần lập trình.</p>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <button onclick="previewWorkflowModal()" class="px-5 py-2.5 rounded-lg bg-white dark:bg-slate-800 border border-stone-300 dark:border-slate-700 hover:bg-stone-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold text-xs shadow-xs transition-all">
+            Xem trước
+          </button>
+
+          <button onclick="saveWorkflowTemplate()" class="px-5 py-2.5 rounded-lg bg-[#C59B27] hover:bg-[#B3891E] text-white font-semibold text-xs shadow-md shadow-amber-950/20 transition-all">
+            Lưu mẫu quy trình
+          </button>
+        </div>
+      </div>
+
+      <!-- 3-Column Layout Canvas Grid matching reference design -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+        <!-- ============================================================== -->
+        <!-- COLUMN 1: DANH MỤC NGHIỆP VỤ (Left Column)                    -->
+        <!-- ============================================================== -->
+        <div class="lg:col-span-3 bg-white dark:bg-[#1E293B] rounded-2xl p-6 border border-stone-200/90 dark:border-slate-800 shadow-xs space-y-5">
+          <div class="border-b border-stone-100 dark:border-slate-800 pb-3">
+            <h3 class="font-serif-title font-bold text-base text-[#1E293B] dark:text-slate-100">Danh mục nghiệp vụ</h3>
+          </div>
+
+          <!-- Tree Category Groups -->
+          <div class="space-y-3 text-xs font-semibold">
+            
+            <!-- Group 1: Sở Hữu Trí Tuệ -->
+            <div class="space-y-1">
+              <div onclick="toggleCategoryGroup('cat-ip')" class="flex items-center justify-between p-2 rounded-xl text-slate-800 dark:text-slate-200 font-bold hover:bg-stone-50 dark:hover:bg-slate-800 cursor-pointer transition-colors">
+                <span class="flex items-center gap-2">
+                  <svg id="cat-ip-arrow" class="w-3.5 h-3.5 text-slate-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+                  <span>Sở hữu Trí tuệ</span>
+                </span>
+              </div>
+              
+              <div id="cat-ip-items" class="pl-5 space-y-1 pt-0.5">
+                <button onclick="selectWorkflow('trademark')" id="wf-btn-trademark" class="w-full text-left px-3.5 py-2.5 rounded-xl bg-[#F7F2E7] dark:bg-amber-950/40 text-[#1E293B] dark:text-amber-200 font-bold border border-[#E9DFCE] dark:border-amber-800/60 transition-all flex items-center justify-between">
+                  <span>Đăng ký nhãn hiệu</span>
+                </button>
+                <button onclick="selectWorkflow('patent')" id="wf-btn-patent" class="w-full text-left px-3.5 py-2 rounded-xl text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-stone-50 dark:hover:bg-slate-800 transition-all flex items-center justify-between font-medium">
+                  <span>Sáng chế</span>
+                </button>
+                <button onclick="selectWorkflow('design')" id="wf-btn-design" class="w-full text-left px-3.5 py-2 rounded-xl text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-stone-50 dark:hover:bg-slate-800 transition-all flex items-center justify-between font-medium">
+                  <span>Kiểu dáng công nghiệp</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Group 2: Luật Dân Sự -->
+            <div class="space-y-1">
+              <div onclick="toggleCategoryGroup('cat-civil')" class="flex items-center justify-between p-2 rounded-xl text-slate-800 dark:text-slate-200 font-bold hover:bg-stone-50 dark:hover:bg-slate-800 cursor-pointer transition-colors">
+                <span class="flex items-center gap-2">
+                  <svg id="cat-civil-arrow" class="w-3.5 h-3.5 text-slate-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+                  <span>Luật Dân sự</span>
+                </span>
+              </div>
+              
+              <div id="cat-civil-items" class="pl-5 space-y-1 pt-0.5">
+                <button onclick="selectWorkflow('divorce')" id="wf-btn-divorce" class="w-full text-left px-3.5 py-2 rounded-xl text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-stone-50 dark:hover:bg-slate-800 transition-all flex items-center justify-between font-medium">
+                  <span>Ly hôn</span>
+                </button>
+                <button onclick="selectWorkflow('land-dispute')" id="wf-btn-land-dispute" class="w-full text-left px-3.5 py-2 rounded-xl text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-stone-50 dark:hover:bg-slate-800 transition-all flex items-center justify-between font-medium">
+                  <span>Tranh chấp đất đai</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Group 3: Doanh Nghiệp & M&A (Collapsed by default in reference mockup) -->
+            <div class="space-y-1">
+              <div onclick="toggleCategoryGroup('cat-corp')" class="flex items-center justify-between p-2 rounded-xl text-slate-800 dark:text-slate-200 font-bold hover:bg-stone-50 dark:hover:bg-slate-800 cursor-pointer transition-colors">
+                <span class="flex items-center gap-2">
+                  <svg id="cat-corp-arrow" class="w-3.5 h-3.5 text-slate-500 transform -rotate-90 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+                  <span>Doanh nghiệp & M&A</span>
+                </span>
+              </div>
+              
+              <div id="cat-corp-items" class="hidden pl-5 space-y-1 pt-0.5">
+                <button onclick="selectWorkflow('fdi')" id="wf-btn-fdi" class="w-full text-left px-3.5 py-2 rounded-xl text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-stone-50 dark:hover:bg-slate-800 transition-all flex items-center justify-between font-medium">
+                  <span>Thành lập FDI</span>
+                </button>
+                <button onclick="selectWorkflow('mna')" id="wf-btn-mna" class="w-full text-left px-3.5 py-2 rounded-xl text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-stone-50 dark:hover:bg-slate-800 transition-all flex items-center justify-between font-medium">
+                  <span>Thẩm định M&A</span>
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Add Domain / Workflow CTA Button -->
+          <div class="pt-2 border-t border-stone-100 dark:border-slate-800">
+            <button onclick="addNewWorkflowModal()" class="text-xs font-semibold text-[#C59B27] hover:underline flex items-center gap-1.5 transition-colors">
+              <svg class="w-4 h-4 text-[#C59B27]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+              <span>Thêm lĩnh vực</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- ============================================================== -->
+        <!-- COLUMN 2: QUY TRÌNH TRUNG TÂM (Center Column)                  -->
+        <!-- ============================================================== -->
+        <div class="lg:col-span-6 bg-white dark:bg-[#1E293B] rounded-2xl p-6 border border-stone-200/90 dark:border-slate-800 shadow-xs space-y-5">
+          
+          <!-- Template Title Banner -->
+          <div class="border-b border-stone-100 dark:border-slate-800 pb-3">
+            <h3 id="current-workflow-title" class="font-serif-title font-bold text-base text-[#1E293B] dark:text-slate-100">Mẫu: Đăng ký nhãn hiệu</h3>
+          </div>
+
+          <!-- Draggable Stages Container -->
+          <div id="stages-container" class="space-y-4">
+            <!-- Dynamic Stage Cards populated by JS -->
+          </div>
+
+          <!-- Add Stage Dashed Button -->
+          <button onclick="addNewStagePrompt()" class="w-full py-3.5 rounded-2xl border-2 border-dashed border-stone-300 dark:border-slate-700 hover:border-[#C59B27] dark:hover:border-amber-400 hover:bg-[#FFFDF9] dark:hover:bg-slate-800/40 text-slate-500 dark:text-slate-400 hover:text-[#C59B27] dark:hover:text-amber-400 font-semibold text-xs transition-all flex items-center justify-center gap-2 group">
+            <svg class="w-4 h-4 text-slate-400 group-hover:text-[#C59B27] dark:group-hover:text-amber-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            <span>Thêm giai đoạn</span>
+          </button>
+
+        </div>
+
+        <!-- ============================================================== -->
+        <!-- COLUMN 3: TRƯỜNG DỮ LIỆU ĐỘNG (Right Column)                  -->
+        <!-- ============================================================== -->
+        <div class="lg:col-span-3 bg-white dark:bg-[#1E293B] rounded-2xl p-6 border border-stone-200/90 dark:border-slate-800 shadow-xs space-y-5">
+          <div class="border-b border-stone-100 dark:border-slate-800 pb-3">
+            <h3 class="font-serif-title font-bold text-base text-[#1E293B] dark:text-slate-100">Trường dữ liệu động</h3>
+          </div>
+
+          <!-- Dynamic Fields List -->
+          <div id="dynamic-fields-list" class="space-y-2.5 text-xs">
+            <!-- Dynamically populated fields -->
+          </div>
+
+          <!-- Add Dynamic Field Link -->
+          <div class="pt-2 border-t border-stone-100 dark:border-slate-800">
+            <button onclick="openAddFieldModal()" class="text-xs font-semibold text-[#C59B27] hover:underline flex items-center gap-1.5 transition-colors">
+              <svg class="w-4 h-4 text-[#C59B27]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+              <span>Thêm trường</span>
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: CẤU HÌNH ĐIỀU KIỆN CHUYỂN BƯỚC & RẼ NHÁNH (Transition)  -->
+  <!-- ============================================================== -->
+  <div id="modal-stage-config" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-xl w-full p-6 md:p-8 space-y-5 shadow-2xl border border-stone-200">
+      <div class="flex items-center justify-between border-b border-stone-100 pb-3">
+        <div>
+          <span class="text-[10px] font-extrabold uppercase tracking-wide text-[#C59B27]">Cấu Hình Chuyển Bước & Chốt Chặn</span>
+          <h3 id="modal-stage-title" class="text-base font-bold text-[#1E293B]">Cấu hình Giai đoạn</h3>
+        </div>
+        <button onclick="closeConfigModal()" class="text-slate-400 hover:text-slate-700 text-2xl font-bold p-1">&times;</button>
+      </div>
+
+      <div class="space-y-4 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Tên giai đoạn:</label>
+          <input type="text" id="config-stage-name" class="w-full px-3.5 py-2 rounded-xl bg-white border border-stone-200 text-xs font-semibold focus:border-[#C59B27] focus:outline-none">
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Cổng phê duyệt (Approval Gate):</label>
+          <select id="config-approval-gate" class="w-full px-3.5 py-2 rounded-xl bg-white border border-stone-200 text-xs font-semibold focus:border-[#C59B27] focus:outline-none">
+            <option value="none">Không có cổng duyệt (Tự động chuyển)</option>
+            <option value="partner">Cổng phê duyệt Giám đốc / Partner</option>
+            <option value="accountant">Kế toán đối soát & xác nhận thu phí</option>
+          </select>
+        </div>
+
+        <!-- Mandatory Data Fields Checkboxes -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1.5">Trường dữ liệu bắt buộc phải điền để mở khóa bước tiếp theo:</label>
+          <div class="p-3 bg-stone-50 rounded-xl border border-stone-200 space-y-2">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" id="chk-require-filing-date" class="w-4 h-4 text-[#C59B27] rounded">
+              <span class="font-medium text-slate-700">Ngày nộp đơn (Bắt buộc)</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" id="chk-require-app-number" class="w-4 h-4 text-[#C59B27] rounded">
+              <span class="font-medium text-slate-700">Số đơn Cục SHTT (Bắt buộc)</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" id="chk-require-payment" class="w-4 h-4 text-[#C59B27] rounded">
+              <span class="font-medium text-slate-700">Kế toán xác nhận hoàn tất thu phí đợt</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Branching Options -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1.5">Cấu hình rẽ nhánh (Phân nhánh điều kiện):</label>
+          <div class="space-y-2">
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-1 rounded bg-emerald-100 text-emerald-800 font-bold text-[10px] w-28 text-center">Nếu Thành Công</span>
+              <span class="text-slate-400">&rarr;</span>
+              <input type="text" id="config-branch-success" value="Chờ cấp bằng" class="flex-1 px-3 py-1.5 rounded-lg border border-stone-200 text-xs">
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-1 rounded bg-rose-100 text-rose-800 font-bold text-[10px] w-28 text-center">Nếu Bị Phản Đối</span>
+              <span class="text-slate-400">&rarr;</span>
+              <input type="text" id="config-branch-fail" value="Soạn văn bản phản biện" class="flex-1 px-3 py-1.5 rounded-lg border border-stone-200 text-xs">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-2 pt-2 border-t border-stone-100">
+        <button onclick="closeConfigModal()" class="px-4 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-slate-700 text-xs font-bold">
+          Hủy
+        </button>
+        <button onclick="saveStageConfig()" class="px-5 py-2 rounded-xl bg-[#C59B27] hover:bg-[#B3891E] text-white text-xs font-bold shadow-sm">
+          Lưu Cấu Hình
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: THÊM TRƯỜNG DỮ LIỆU ĐỘNG MỚI (Dynamic Field)             -->
+  <!-- ============================================================== -->
+  <div id="modal-add-field" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl border border-stone-200 text-xs">
+      <div class="flex items-center justify-between border-b border-stone-100 pb-3">
+        <h3 class="font-bold text-sm text-[#1E293B]">Thêm Trường Dữ Liệu Động</h3>
+        <button onclick="closeAddFieldModal()" class="text-slate-400 hover:text-slate-700 text-2xl font-bold p-1">&times;</button>
+      </div>
+
+      <div class="space-y-3">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Tên trường (Nhãn hiển thị) <span class="text-red-500">*</span></label>
+          <input type="text" id="new-field-label" placeholder="Ví dụ: Ngày nộp đơn, Số hợp đồng..." class="w-full px-3 py-2 rounded-xl border border-stone-200 text-xs focus:border-[#C59B27] focus:outline-none">
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Kiểu dữ liệu <span class="text-red-500">*</span></label>
+          <select id="new-field-type" class="w-full px-3 py-2 rounded-xl border border-stone-200 text-xs focus:border-[#C59B27] focus:outline-none">
+            <option value="Văn bản">Văn bản (Text)</option>
+            <option value="Ngày" selected>Ngày (Date)</option>
+            <option value="Số tiền">Số tiền (Currency VND/USD)</option>
+            <option value="Tệp tin">Tệp đính kèm (PDF/Doc)</option>
+            <option value="Danh sách">Lựa chọn (Select)</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="flex items-center gap-2 cursor-pointer pt-1">
+            <input type="checkbox" id="new-field-required" checked class="w-4 h-4 text-[#C59B27] rounded">
+            <span class="font-bold text-slate-700">Trường bắt buộc nhập (*)</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-2 pt-2 border-t border-stone-100">
+        <button onclick="closeAddFieldModal()" class="px-4 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-slate-700 font-bold">
+          Hủy
+        </button>
+        <button onclick="confirmAddDynamicField()" class="px-5 py-2 rounded-xl bg-[#C59B27] hover:bg-[#B3891E] text-white font-bold shadow-sm">
+          Thêm Trường
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: XEM TRƯỚC QUY TRÌNH (Workflow Preview)                  -->
+  <!-- ============================================================== -->
+  <div id="modal-preview-workflow" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-3xl w-full p-6 md:p-8 space-y-6 shadow-2xl border border-stone-200 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-stone-100 pb-3">
+        <div>
+          <span class="text-[10px] font-extrabold uppercase tracking-wide text-[#C59B27]">Mô Phỏng Trực Quan Vận Hành Thực Tế</span>
+          <h3 id="preview-title" class="text-base font-bold text-[#1E293B]">Xem trước Quy trình</h3>
+        </div>
+        <button onclick="closePreviewModal()" class="text-slate-400 hover:text-slate-700 text-2xl font-bold p-1">&times;</button>
+      </div>
+
+      <!-- Stepline Stepper preview -->
+      <div id="preview-stepper-container" class="p-6 rounded-2xl bg-[#FFFDF9] border border-[#E9DFCE] space-y-6">
+        <!-- Rendered stepper flow -->
+      </div>
+
+      <div class="flex items-center justify-end pt-2 border-t border-stone-100">
+        <button onclick="closePreviewModal()" class="px-5 py-2.5 rounded-xl bg-[#1E293B] hover:bg-slate-700 text-white text-xs font-bold shadow-sm">
+          Đóng Xem Trước
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- WORKFLOW BUILDER JAVASCRIPT ENGINE                             -->
+  <!-- ============================================================== -->
+  <script>
+    // 1. Database of Workflows matching law firm practice areas
+    const WORKFLOW_DATABASE = {
+      'trademark': {
+        title: 'Mẫu: Đăng ký nhãn hiệu',
+        domain: 'Sở hữu Trí tuệ',
+        stages: [
+          {
+            id: 'stg-1',
+            number: 1,
+            title: 'Tra cứu & tư vấn',
+            approvalGate: null,
+            tasks: [
+              'Tra cứu nhãn hiệu tương tự',
+              'Gửi kết quả cho khách'
+            ],
+            condition: null,
+            branches: []
+          },
+          {
+            id: 'stg-2',
+            number: 2,
+            title: 'Nộp đơn',
+            approvalGate: 'Cổng phê duyệt',
+            tasks: [
+              'Chuẩn bị bộ hồ sơ',
+              'Nộp đơn lên Cục SHTT'
+            ],
+            condition: 'Kế toán xác nhận thu đợt 1',
+            branches: []
+          },
+          {
+            id: 'stg-3',
+            number: 3,
+            title: 'Thẩm định nội dung',
+            approvalGate: null,
+            tasks: [
+              'Theo dõi thẩm định'
+            ],
+            condition: null,
+            branches: [
+              { type: 'success', text: 'Thành công → Chờ cấp bằng' },
+              { type: 'fail', text: 'Bị phản đối → Soạn văn bản phản biện' }
+            ]
+          },
+          {
+            id: 'stg-4',
+            number: 4,
+            title: 'Chờ cấp bằng',
+            approvalGate: null,
+            tasks: [
+              'Nộp lệ phí cấp bằng',
+              'Bàn giao văn bằng'
+            ],
+            condition: null,
+            branches: []
+          }
+        ],
+        dynamicFields: [
+          { label: 'Số đơn', required: true, type: 'Văn bản' },
+          { label: 'Ngày nộp đơn', required: true, type: 'Ngày' },
+          { label: 'Ngày ưu tiên', required: false, type: 'Ngày' },
+          { label: 'Ngày công bố', required: false, type: 'Ngày' },
+          { label: 'Số bằng', required: false, type: 'Văn bản' },
+          { label: 'Ngày cấp bằng', required: false, type: 'Ngày' }
+        ],
+        gateRulesSummary: [
+          '• Bước 2 → 3: Bắt buộc điền Ngày nộp đơn * & Kế toán xác nhận thu phí đợt 1.',
+          '• Bước 3 → 4: Bắt buộc hoàn tất kết quả phân nhánh thành công.'
+        ]
+      },
+      'patent': {
+        title: 'Mẫu: Sáng chế (PCT & Quốc gia)',
+        domain: 'Sở hữu Trí tuệ',
+        stages: [
+          {
+            id: 'stg-p1',
+            number: 1,
+            title: 'Tra cứu sáng chế quốc tế WIPO',
+            approvalGate: null,
+            tasks: ['Tra cứu PatentScope', 'Thẩm định tính mới & khả năng áp dụng CN'],
+            condition: null,
+            branches: []
+          },
+          {
+            id: 'stg-p2',
+            number: 2,
+            title: 'Soạn bản mô tả & Yêu cầu bảo hộ',
+            approvalGate: 'Cổng phê duyệt Giám đốc',
+            tasks: ['Dịch thuật song ngữ Anh - Việt', 'Ký hợp đồng đại diện SHTT'],
+            condition: 'Thu phí dịch vụ đợt 1',
+            branches: []
+          },
+          {
+            id: 'stg-p3',
+            number: 3,
+            title: 'Nộp đơn vào Cục SHTT',
+            approvalGate: null,
+            tasks: ['Nộp phí thẩm định nội dung', 'Nhận chấp nhận đơn hợp lệ'],
+            condition: 'Bắt buộc điền Số đơn PCT & Ngày nộp đơn',
+            branches: [
+              { type: 'success', text: 'Đơn hợp lệ → Thẩm định nội dung' },
+              { type: 'fail', text: 'Có thông báo từ chối → Phúc đáp Cục' }
+            ]
+          },
+          {
+            id: 'stg-p4',
+            number: 4,
+            title: 'Cấp bằng độc quyền sáng chế',
+            approvalGate: null,
+            tasks: ['Bàn giao bằng gốc cho khách hàng', 'Thanh lý quyết toán'],
+            condition: null,
+            branches: []
+          }
+        ],
+        dynamicFields: [
+          { label: 'Số đơn PCT', required: true, type: 'Văn bản' },
+          { label: 'Ngày nộp đơn PCT', required: true, type: 'Ngày' },
+          { label: 'Phân loại sáng chế (IPC)', required: true, type: 'Văn bản' },
+          { label: 'Ngày công bố đơn', required: false, type: 'Ngày' },
+          { label: 'Số bằng sáng chế', required: false, type: 'Văn bản' }
+        ],
+        gateRulesSummary: [
+          '• Bước 2 → 3: Partner phê duyệt bản dịch song ngữ & Kế toán thu phí.',
+          '• Bước 3 → 4: Điền số bằng và ngày cấp bằng.'
+        ]
+      },
+      'design': {
+        title: 'Mẫu: Kiểu dáng công nghiệp',
+        domain: 'Sở hữu Trí tuệ',
+        stages: [
+          {
+            id: 'stg-d1',
+            number: 1,
+            title: 'Chụp ảnh & Dựng hình chiếu kiểu dáng',
+            approvalGate: null,
+            tasks: ['Chuẩn bị bộ ảnh 7 hình chiếu', 'Tra cứu kiểu dáng tương tự Locarno'],
+            condition: null,
+            branches: []
+          },
+          {
+            id: 'stg-d2',
+            number: 2,
+            title: 'Nộp đơn Cục SHTT',
+            approvalGate: 'Cổng phê duyệt',
+            tasks: ['Nộp đơn trực tiếp Cục SHTT', 'Lấy số đơn tiếp nhận'],
+            condition: 'Kế toán thu phí đợt 1',
+            branches: []
+          },
+          {
+            id: 'stg-d3',
+            number: 3,
+            title: 'Thẩm định hình thức & nội dung',
+            approvalGate: null,
+            tasks: ['Theo dõi công báo', 'Phản hồi ý kiến thẩm định'],
+            condition: null,
+            branches: [
+              { type: 'success', text: 'Hợp lệ → Báo khách nộp phí cấp bằng' },
+              { type: 'fail', text: 'Bị trùng lặp → Sửa đổi phân loại hình chiếu' }
+            ]
+          },
+          {
+            id: 'stg-d4',
+            number: 4,
+            title: 'Cấp văn bằng bảo hộ',
+            approvalGate: null,
+            tasks: ['Nhận văn bằng', 'Bàn giao và đóng hồ sơ'],
+            condition: null,
+            branches: []
+          }
+        ],
+        dynamicFields: [
+          { label: 'Số đơn kiểu dáng', required: true, type: 'Văn bản' },
+          { label: 'Ngày nộp đơn', required: true, type: 'Ngày' },
+          { label: 'Phân loại Locarno', required: true, type: 'Văn bản' },
+          { label: 'Số bằng bảo hộ', required: false, type: 'Văn bản' }
+        ],
+        gateRulesSummary: [
+          '• Bước 2 → 3: Bắt buộc điền Ngày nộp đơn và Số đơn.',
+          '• Bước 3 → 4: Xác nhận nộp đủ lệ phí cấp văn bằng.'
+        ]
+      },
+      'divorce': {
+        title: 'Mẫu: Ly hôn & Phân chia tài sản',
+        domain: 'Luật Dân sự',
+        stages: [
+          {
+            id: 'stg-dv1',
+            number: 1,
+            title: 'Tiếp nhận & Hòa giải nội bộ',
+            approvalGate: null,
+            tasks: ['Khảo sát tài sản chung', 'Soạn thảo đơn thuận tình/đơn phương ly hôn'],
+            condition: null,
+            branches: []
+          },
+          {
+            id: 'stg-dv2',
+            number: 2,
+            title: 'Nộp đơn Tòa án & Nộp tạm ứng án phí',
+            approvalGate: 'Cổng phê duyệt Giám đốc',
+            tasks: ['Nộp hồ sơ Tòa án có thẩm quyền', 'Kế toán chi tiền tạm ứng án phí'],
+            condition: 'Kế toán xác nhận Đã Chi tiền tạm ứng án phí',
+            branches: [
+              { type: 'success', text: 'Hòa giải thành → Quyết định công nhận ly hôn' },
+              { type: 'fail', text: 'Tranh chấp gay gắt → Chuyển sang xét xử sơ thẩm' }
+            ]
+          },
+          {
+            id: 'stg-dv3',
+            number: 3,
+            title: 'Phiên tòa xét xử & Phân chia tài sản',
+            approvalGate: null,
+            tasks: ['Luật sư tham gia phiên tòa bảo vệ thân chủ', 'Nhận bản án & thanh lý'],
+            condition: null,
+            branches: []
+          }
+        ],
+        dynamicFields: [
+          { label: 'Tòa án thụ lý', required: true, type: 'Văn bản' },
+          { label: 'Số thông báo thụ lý', required: true, type: 'Văn bản' },
+          { label: 'Ngày thụ lý', required: true, type: 'Ngày' },
+          { label: 'Số tiền tạm ứng án phí', required: true, type: 'Số tiền' }
+        ],
+        gateRulesSummary: [
+          '• Bước 2: Bắt buộc Kế toán bấm Đã Chi tạm ứng án phí trước khi thụ lý.'
+        ]
+      },
+      'land-dispute': {
+        title: 'Mẫu: Tranh chấp đất đai',
+        domain: 'Luật Dân sự',
+        stages: [
+          {
+            id: 'stg-l1',
+            number: 1,
+            title: 'Thu thập hồ sơ địa chính & Đo vẽ hiện trạng',
+            approvalGate: null,
+            tasks: ['Trích lục bản đồ địa chính', 'Thuê Thừa phát lại lập vi bằng'],
+            condition: null,
+            branches: []
+          },
+          {
+            id: 'stg-l2',
+            number: 2,
+            title: 'Hòa giải tại UBND cấp xã/phường',
+            approvalGate: null,
+            tasks: ['Tham gia phiên hòa giải UBND', 'Lấy biên bản hòa giải không thành'],
+            condition: 'Bắt buộc có Biên bản hòa giải UBND trước khi khởi kiện',
+            branches: [
+              { type: 'success', text: 'Hòa giải thành → Đăng ký biến động đất đai' },
+              { type: 'fail', text: 'Hòa giải không thành → Nộp đơn khởi kiện TAND' }
+            ]
+          },
+          {
+            id: 'stg-l3',
+            number: 3,
+            title: 'Khởi kiện Tòa án & Định giá tài sản',
+            approvalGate: 'Cổng phê duyệt Giám đốc',
+            tasks: ['Soạn đơn khởi kiện', 'Đề nghị áp dụng BPKCTT phong tỏa đất'],
+            condition: 'Giám đốc duyệt đơn BPKCTT',
+            branches: []
+          },
+          {
+            id: 'stg-l4',
+            number: 4,
+            title: 'Thi hành án & Bàn giao đất',
+            approvalGate: null,
+            tasks: ['Yêu cầu Chi cục THADS thi hành', 'Đo đạc cắm mốc ranh giới'],
+            condition: null,
+            branches: []
+          }
+        ],
+        dynamicFields: [
+          { label: 'Thửa đất số', required: true, type: 'Văn bản' },
+          { label: 'Tờ bản đồ số', required: true, type: 'Văn bản' },
+          { label: 'Số giấy chứng nhận (Sổ đỏ)', required: true, type: 'Văn bản' },
+          { label: 'Ngày lập biên bản hòa giải UBND', required: true, type: 'Ngày' }
+        ],
+        gateRulesSummary: [
+          '• Bắt buộc có Biên bản hòa giải UBND cấp xã mới được mở khóa bước Khởi kiện Tòa án.'
+        ]
+      },
+      'fdi': {
+        title: 'Mẫu: Thành lập Doanh nghiệp 100% FDI',
+        domain: 'Doanh nghiệp & M&A',
+        stages: [
+          {
+            id: 'stg-f1',
+            number: 1,
+            title: 'Hợp pháp hóa lãnh sự hồ sơ nhà đầu tư',
+            approvalGate: null,
+            tasks: ['Dịch thuật công chứng hộ chiếu/ĐKKD nhà đầu tư', 'Kiểm tra địa điểm dự án'],
+            condition: null,
+            branches: []
+          },
+          {
+            id: 'stg-f2',
+            number: 2,
+            title: 'Xin cấp Giấy chứng nhận Đăng ký đầu tư (IRC)',
+            approvalGate: 'Cổng phê duyệt',
+            tasks: ['Nộp Sở Kế hoạch & Đầu tư', 'Giải trình năng lực tài chính'],
+            condition: 'Kế toán xác nhận thu đợt 2 & Điền Ngày nộp IRC',
+            branches: []
+          },
+          {
+            id: 'stg-f3',
+            number: 3,
+            title: 'Xin cấp Giấy chứng nhận Đăng ký doanh nghiệp (ERC)',
+            approvalGate: null,
+            tasks: ['Đăng ký thành lập công ty', 'Công bố thông tin cổng quốc gia'],
+            condition: null,
+            branches: []
+          },
+          {
+            id: 'stg-f4',
+            number: 4,
+            title: 'Mở tài khoản vốn đầu tư DICA & Con dấu',
+            approvalGate: null,
+            tasks: ['Mở TK vốn tại Vietcombank', 'Hướng dẫn chuyển tiền vốn góp 90 ngày'],
+            condition: null,
+            branches: []
+          }
+        ],
+        dynamicFields: [
+          { label: 'Mã dự án IRC', required: true, type: 'Văn bản' },
+          { label: 'Ngày cấp IRC', required: true, type: 'Ngày' },
+          { label: 'Mã số thuế doanh nghiệp (ERC)', required: true, type: 'Văn bản' },
+          { label: 'Vốn điều lệ đăng ký', required: true, type: 'Số tiền' }
+        ],
+        gateRulesSummary: [
+          '• Bước 2 → 3: Bắt buộc có Giấy chứng nhận IRC hợp lệ và Kế toán thu đợt 2.'
+        ]
+      },
+      'mna': {
+        title: 'Mẫu: Thẩm định M&A (LDD)',
+        domain: 'Doanh nghiệp & M&A',
+        stages: [
+          {
+            id: 'stg-m1',
+            number: 1,
+            title: 'Ký thỏa thuận bảo mật NDA & Tiếp nhận Data Room',
+            approvalGate: null,
+            tasks: ['Thẩm tra tư cách pháp nhân Target Company', 'Lập Checklist thẩm định'],
+            condition: null,
+            branches: []
+          },
+          {
+            id: 'stg-m2',
+            number: 2,
+            title: 'Thẩm định hồ sơ thực tế (Legal Due Diligence)',
+            approvalGate: 'Cổng phê duyệt Giám đốc',
+            tasks: ['Thẩm định tài sản, đất đai, lao động, hợp đồng', 'Phát hiện Red Flags rủi ro'],
+            condition: 'Thu phí dịch vụ giai đoạn LDD',
+            branches: []
+          },
+          {
+            id: 'stg-m3',
+            number: 3,
+            title: 'Phát hành Báo cáo LDD & Đàm phán Hợp đồng SPA',
+            approvalGate: 'Cổng phê duyệt Giám đốc',
+            tasks: ['Trình Giám đốc ký báo cáo 120 trang', 'Soạn thảo điều khoản bảo đảm SPA'],
+            condition: null,
+            branches: [
+              { type: 'success', text: 'Các bên đồng thuận SPA → Ký kết chuyển nhượng' },
+              { type: 'fail', text: 'Red Flag nghiêm trọng → Tạm dừng giao dịch' }
+            ]
+          },
+          {
+            id: 'stg-m4',
+            number: 4,
+            title: 'Đóng giao dịch (Closing) & Quyết toán',
+            approvalGate: null,
+            tasks: ['Thanh toán giá trị cổ phần', 'Bàn giao sổ cổ đông & hoàn tất vụ'],
+            condition: null,
+            branches: []
+          }
+        ],
+        dynamicFields: [
+          { label: 'Giá trị thương vụ dự kiến', required: true, type: 'Số tiền' },
+          { label: 'Tỷ lệ cổ phần thâu tóm', required: true, type: 'Văn bản' },
+          { label: 'Ngày phát hành Báo cáo LDD', required: true, type: 'Ngày' },
+          { label: 'Ngày ký Hợp đồng SPA', required: true, type: 'Ngày' }
+        ],
+        gateRulesSummary: [
+          '• Bước 3: Bắt buộc Giám đốc / Managing Partner ký duyệt báo cáo LDD trước khi gửi bên mua.'
+        ]
+      }
+    };
+
+    let currentWorkflowKey = 'trademark';
+    let currentEditingStageId = null;
+
+    // 2. Select and switch workflow
+    function selectWorkflow(key) {
+      if (!WORKFLOW_DATABASE[key]) return;
+      currentWorkflowKey = key;
+
+      // Update sidebar active buttons
+      document.querySelectorAll('#cat-ip-items button, #cat-civil-items button, #cat-corp-items button').forEach(btn => {
+        btn.className = 'w-full text-left px-3.5 py-2 rounded-xl text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-stone-50 dark:hover:bg-slate-800 transition-all flex items-center justify-between font-medium';
+      });
+
+      const activeBtn = document.getElementById(`wf-btn-${key}`);
+      if (activeBtn) {
+        activeBtn.className = 'w-full text-left px-3.5 py-2.5 rounded-xl bg-[#F7F2E7] dark:bg-amber-950/40 text-[#1E293B] dark:text-amber-200 font-bold border border-[#E9DFCE] dark:border-amber-800/60 transition-all flex items-center justify-between';
+      }
+
+      renderCurrentWorkflow();
+    }
+
+    // Toggle category group accordion
+    function toggleCategoryGroup(groupId) {
+      const items = document.getElementById(`${groupId}-items`);
+      const arrow = document.getElementById(`${groupId}-arrow`);
+      if (items.classList.contains('hidden')) {
+        items.classList.remove('hidden');
+        arrow.classList.remove('-rotate-90');
+      } else {
+        items.classList.add('hidden');
+        arrow.classList.add('-rotate-90');
+      }
+    }
+
+    // 3. Render the middle & right columns for active workflow
+    function renderCurrentWorkflow() {
+      const wf = WORKFLOW_DATABASE[currentWorkflowKey];
+      if (!wf) return;
+
+      // Update Header & Summary
+      const titleEl = document.getElementById('current-workflow-title');
+      if (titleEl) titleEl.textContent = wf.title;
+
+      const stageCountEl = document.getElementById('current-workflow-stage-count');
+      if (stageCountEl) stageCountEl.textContent = `${wf.stages.length} Giai đoạn`;
+
+      const fieldCountEl = document.getElementById('dynamic-fields-count');
+      if (fieldCountEl) fieldCountEl.textContent = `${wf.dynamicFields.length} Trường`;
+
+      // Render Stages in Middle Column
+      const stagesContainer = document.getElementById('stages-container');
+      stagesContainer.innerHTML = '';
+
+      wf.stages.forEach((stage, idx) => {
+        stage.number = idx + 1; // Sync 1-based indexing
+
+        const card = document.createElement('div');
+        card.className = 'stage-item p-5 md:p-6 rounded-2xl bg-white dark:bg-[#0F172A] border border-stone-200/90 dark:border-slate-800 shadow-xs hover:border-[#C59B27]/80 hover:shadow-sm space-y-3 cursor-default relative group';
+        card.setAttribute('draggable', 'true');
+        card.setAttribute('data-id', stage.id);
+        card.setAttribute('data-index', idx);
+
+        // Header of Stage card: Drag Handle + Number + Title + Approval Gate Badge
+        let gateBadgeHtml = '';
+        if (stage.approvalGate) {
+          gateBadgeHtml = `
+            <span class="px-2.5 py-0.5 rounded-full text-[10px] md:text-[11px] font-semibold bg-[#FDF6E2] dark:bg-amber-950/40 text-[#976D00] dark:text-amber-300 border border-[#F1E3B8] dark:border-amber-800/60 inline-flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5 text-[#976D00] dark:text-amber-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+              <span>${stage.approvalGate}</span>
+            </span>`;
+        }
+
+        // Bullets Tasks
+        let tasksHtml = '';
+        if (stage.tasks && stage.tasks.length > 0) {
+          tasksHtml = `
+            <div class="space-y-1.5 pl-8 md:pl-9 text-xs text-slate-600 dark:text-slate-300 font-normal">
+              ${stage.tasks.map((t, tIdx) => `
+                <div class="flex items-center justify-between group/task py-0.5">
+                  <div class="flex items-center gap-2">
+                    <span class="text-slate-400">•</span>
+                    <span>${t}</span>
+                  </div>
+                  <button onclick="removeTaskFromStage('${stage.id}', ${tIdx})" class="opacity-0 group-hover/task:opacity-100 text-slate-400 hover:text-red-500 p-0.5 transition-opacity" title="Xóa task này"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"></path></svg></button>
+                </div>
+              `).join('')}
+            </div>`;
+        }
+
+        // Lock / Hard Gate Condition (e.g. Kế toán xác nhận thu)
+        let conditionHtml = '';
+        if (stage.condition) {
+          conditionHtml = `
+            <div class="pl-8 md:pl-9 pt-1 text-xs">
+              <span class="text-[#B45309] dark:text-amber-400 font-medium flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5 text-[#B45309] dark:text-amber-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                <span>${stage.condition.trim()}</span>
+              </span>
+            </div>`;
+        }
+
+        // Branching Pills (e.g. Thành công -> Chờ cấp bằng / Bị phản đối)
+        let branchesHtml = '';
+        if (stage.branches && stage.branches.length > 0) {
+          branchesHtml = `
+            <div class="pl-8 md:pl-9 pt-2 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+              ${stage.branches.map(b => {
+                const isSuccess = b.type === 'success';
+                const bgClass = isSuccess 
+                  ? 'bg-[#EAF5EC] dark:bg-emerald-950/40 border-[#C2E4CA] dark:border-emerald-800/60 text-[#1E7E34] dark:text-emerald-300' 
+                  : 'bg-[#FDF0ED] dark:bg-rose-950/40 border-[#F9CBC1] dark:border-rose-800/60 text-[#C93B2B] dark:text-rose-300';
+                const iconColor = isSuccess ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400';
+                
+                let textHtml = b.text;
+                if (b.text.includes(' → ')) {
+                  const parts = b.text.split(' → ');
+                  textHtml = `${parts[0]} → <strong class="font-bold">${parts[1]}</strong>`;
+                }
+                return `
+                  <div class="p-2.5 rounded-xl border ${bgClass} flex items-center gap-2 shadow-2xs">
+                    <svg class="w-3.5 h-3.5 flex-shrink-0 ${iconColor}" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="6" y1="3" x2="6" y2="15"></line>
+                      <circle cx="18" cy="6" r="3"></circle>
+                      <circle cx="6" cy="18" r="3"></circle>
+                      <path d="M18 9a9 9 0 0 1-9 9"></path>
+                    </svg>
+                    <span class="leading-tight">${textHtml}</span>
+                  </div>`;
+              }).join('')}
+            </div>`;
+        }
+
+        card.innerHTML = `
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <!-- Drag Handle -->
+              <span class="cursor-grab text-slate-300 dark:text-slate-600 hover:text-slate-600 dark:hover:text-slate-300 text-sm font-black select-none" title="Kéo để đổi thứ tự bước">⋮⋮</span>
+              
+              <!-- Number badge in dark circle -->
+              <div class="w-6 h-6 rounded-full bg-[#1E293B] dark:bg-slate-700 text-white font-bold text-xs flex items-center justify-center flex-shrink-0 shadow-xs">
+                ${stage.number}
+              </div>
+
+              <!-- Title -->
+              <h4 class="font-bold text-sm md:text-base text-[#1E293B] dark:text-slate-100">${stage.title}</h4>
+
+              ${gateBadgeHtml}
+            </div>
+
+            <div class="flex items-center gap-1.5 opacity-60 group-hover:opacity-100 transition-opacity">
+              <button onclick="openConfigModal('${stage.id}')" class="p-1.5 rounded-lg text-slate-400 hover:text-[#C59B27] hover:bg-stone-100 dark:hover:bg-slate-800 transition-colors" title="Cấu hình điều kiện chuyển bước & rẽ nhánh">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              </button>
+              <button onclick="addTaskPrompt('${stage.id}')" class="p-1.5 rounded-lg text-slate-400 hover:text-emerald-600 hover:bg-stone-100 dark:hover:bg-slate-800 transition-colors" title="Thêm task con vào bước này">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+              </button>
+              <button onclick="removeStage('${stage.id}')" class="p-1.5 rounded-lg text-slate-400 hover:text-red-500 hover:bg-stone-100 dark:hover:bg-slate-800 transition-colors" title="Xóa giai đoạn này">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+              </button>
+            </div>
+          </div>
+
+          ${tasksHtml}
+          ${conditionHtml}
+          ${branchesHtml}
+        `;
+
+        // Attach Drag & Drop Event Listeners
+        addDragDropHandlers(card);
+
+        stagesContainer.appendChild(card);
+      });
+
+      // Render Dynamic Fields in Right Column
+      const fieldsContainer = document.getElementById('dynamic-fields-list');
+      fieldsContainer.innerHTML = '';
+
+      wf.dynamicFields.forEach((field, fIdx) => {
+        const item = document.createElement('div');
+        item.className = 'p-3.5 rounded-xl border border-stone-200/90 dark:border-slate-700/80 bg-white dark:bg-[#0F172A] hover:border-stone-300 dark:hover:border-slate-600 transition-all flex items-center justify-between group';
+        item.innerHTML = `
+          <div class="flex items-center gap-1">
+            <span class="font-medium text-slate-800 dark:text-slate-200 text-xs">${field.label}</span>
+            ${field.required ? '<span class="text-red-500 font-bold">*</span>' : ''}
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 rounded-md text-[11px] font-medium bg-stone-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-stone-200/60 dark:border-slate-700">${field.type}</span>
+            <button onclick="removeDynamicField(${fIdx})" class="opacity-0 group-hover:opacity-100 text-slate-400 hover:text-red-500 p-0.5 transition-opacity" title="Xóa trường"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"></path></svg></button>
+          </div>
+        `;
+        fieldsContainer.appendChild(item);
+      });
+
+      // Render Gate Rules Summary (if container exists)
+      const summaryBox = document.getElementById('gate-summary-text');
+      if (summaryBox) {
+        if (wf.gateRulesSummary && wf.gateRulesSummary.length > 0) {
+          summaryBox.innerHTML = wf.gateRulesSummary.map(r => `<div>${r}</div>`).join('');
+        } else {
+          summaryBox.innerHTML = '<div class="text-slate-400 italic">Chưa thiết lập chốt chặn bắt buộc nào.</div>';
+        }
+      }
+    }
+
+    // 4. Drag & Drop Engine for rearranging Stages
+    let draggedItem = null;
+
+    function addDragDropHandlers(item) {
+      item.addEventListener('dragstart', function(e) {
+        draggedItem = this;
+        this.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+      });
+
+      item.addEventListener('dragend', function() {
+        this.classList.remove('dragging');
+        document.querySelectorAll('.stage-item').forEach(el => el.classList.remove('drag-over'));
+      });
+
+      item.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        if (this !== draggedItem) {
+          this.classList.add('drag-over');
+        }
+      });
+
+      item.addEventListener('dragleave', function() {
+        this.classList.remove('drag-over');
+      });
+
+      item.addEventListener('drop', function(e) {
+        e.preventDefault();
+        this.classList.remove('drag-over');
+        if (this !== draggedItem) {
+          const fromIdx = parseInt(draggedItem.getAttribute('data-index'), 10);
+          const toIdx = parseInt(this.getAttribute('data-index'), 10);
+          
+          const wf = WORKFLOW_DATABASE[currentWorkflowKey];
+          // Swap or move elements in array
+          const movedItem = wf.stages.splice(fromIdx, 1)[0];
+          wf.stages.splice(toIdx, 0, movedItem);
+
+          renderCurrentWorkflow();
+        }
+      });
+    }
+
+    // 5. Add / Edit Tasks in Stage
+    function addTaskPrompt(stageId) {
+      const taskName = prompt("Nhập tên tác vụ mặc định muốn thêm vào giai đoạn này:");
+      if (!taskName || !taskName.trim()) return;
+
+      const wf = WORKFLOW_DATABASE[currentWorkflowKey];
+      const stg = wf.stages.find(s => s.id === stageId);
+      if (stg) {
+        stg.tasks.push(taskName.trim());
+        renderCurrentWorkflow();
+      }
+    }
+
+    function removeTaskFromStage(stageId, taskIndex) {
+      const wf = WORKFLOW_DATABASE[currentWorkflowKey];
+      const stg = wf.stages.find(s => s.id === stageId);
+      if (stg && stg.tasks[taskIndex]) {
+        stg.tasks.splice(taskIndex, 1);
+        renderCurrentWorkflow();
+      }
+    }
+
+    // 6. Add new stage
+    function addNewStagePrompt() {
+      const stageName = prompt("Nhập tên giai đoạn mới muốn thêm vào quy trình:");
+      if (!stageName || !stageName.trim()) return;
+
+      const wf = WORKFLOW_DATABASE[currentWorkflowKey];
+      const newStage = {
+        id: 'stg-' + Date.now(),
+        number: wf.stages.length + 1,
+        title: stageName.trim(),
+        approvalGate: null,
+        tasks: ['Tác vụ mở đầu giai đoạn'],
+        condition: null,
+        branches: []
+      };
+
+      wf.stages.push(newStage);
+      renderCurrentWorkflow();
+    }
+
+    function removeStage(stageId) {
+      const wf = WORKFLOW_DATABASE[currentWorkflowKey];
+      if (wf.stages.length <= 1) {
+        alert("Quy trình cần có ít nhất 1 giai đoạn!");
+        return;
+      }
+      if (confirm("Bạn có chắc chắn muốn xóa giai đoạn này?")) {
+        wf.stages = wf.stages.filter(s => s.id !== stageId);
+        renderCurrentWorkflow();
+      }
+    }
+
+    // 7. Modal Configuration for Stage
+    function openConfigModal(stageId) {
+      currentEditingStageId = stageId;
+      const wf = WORKFLOW_DATABASE[currentWorkflowKey];
+      const stg = wf.stages.find(s => s.id === stageId);
+      if (!stg) return;
+
+      document.getElementById('modal-stage-title').textContent = `Cấu hình: Bước ${stg.number} - ${stg.title}`;
+      document.getElementById('config-stage-name').value = stg.title;
+      
+      const gateSelect = document.getElementById('config-approval-gate');
+      if (stg.approvalGate && stg.approvalGate.includes('Kế toán')) {
+        gateSelect.value = 'accountant';
+      } else if (stg.approvalGate) {
+        gateSelect.value = 'partner';
+      } else {
+        gateSelect.value = 'none';
+      }
+
+      document.getElementById('chk-require-filing-date').checked = (stg.condition && stg.condition.includes('Ngày nộp đơn'));
+      document.getElementById('chk-require-payment').checked = (stg.condition && stg.condition.includes('thu'));
+
+      if (stg.branches && stg.branches.length >= 2) {
+        document.getElementById('config-branch-success').value = stg.branches[0].text.replace('Thành công → ', '');
+        document.getElementById('config-branch-fail').value = stg.branches[1].text.replace('Bị phản đối → ', '');
+      } else {
+        document.getElementById('config-branch-success').value = 'Chờ cấp bằng';
+        document.getElementById('config-branch-fail').value = 'Soạn văn bản phản biện';
+      }
+
+      document.getElementById('modal-stage-config').classList.remove('hidden');
+    }
+
+    function closeConfigModal() {
+      document.getElementById('modal-stage-config').classList.add('hidden');
+    }
+
+    function saveStageConfig() {
+      const wf = WORKFLOW_DATABASE[currentWorkflowKey];
+      const stg = wf.stages.find(s => s.id === currentEditingStageId);
+      if (!stg) return;
+
+      stg.title = document.getElementById('config-stage-name').value.trim() || stg.title;
+
+      const gateVal = document.getElementById('config-approval-gate').value;
+      if (gateVal === 'partner') {
+        stg.approvalGate = 'Cổng phê duyệt Giám đốc';
+      } else if (gateVal === 'accountant') {
+        stg.approvalGate = 'Kế toán đối soát & thu phí';
+      } else {
+        stg.approvalGate = null;
+      }
+
+      const reqDate = document.getElementById('chk-require-filing-date').checked;
+      const reqPay = document.getElementById('chk-require-payment').checked;
+      let condList = [];
+      if (reqPay) condList.push('Kế toán xác nhận thu đợt 1');
+      if (reqDate) condList.push('Bắt buộc điền Ngày nộp đơn *');
+      stg.condition = condList.length > 0 ? condList.join(' & ') : null;
+
+      const successBranch = document.getElementById('config-branch-success').value.trim();
+      const failBranch = document.getElementById('config-branch-fail').value.trim();
+      if (successBranch && failBranch) {
+        stg.branches = [
+          { type: 'success', text: `Thành công → ${successBranch}` },
+          { type: 'fail', text: `Bị phản đối → ${failBranch}` }
+        ];
+      }
+
+      closeConfigModal();
+      renderCurrentWorkflow();
+    }
+
+    // 8. Dynamic Fields Management
+    function openAddFieldModal() {
+      document.getElementById('new-field-label').value = '';
+      document.getElementById('modal-add-field').classList.remove('hidden');
+    }
+
+    function closeAddFieldModal() {
+      document.getElementById('modal-add-field').classList.add('hidden');
+    }
+
+    function confirmAddDynamicField() {
+      const label = document.getElementById('new-field-label').value.trim();
+      const type = document.getElementById('new-field-type').value;
+      const req = document.getElementById('new-field-required').checked;
+
+      if (!label) {
+        alert('Vui lòng nhập tên trường dữ liệu!');
+        return;
+      }
+
+      const wf = WORKFLOW_DATABASE[currentWorkflowKey];
+      wf.dynamicFields.push({ label, type, required: req });
+
+      closeAddFieldModal();
+      renderCurrentWorkflow();
+    }
+
+    function removeDynamicField(idx) {
+      const wf = WORKFLOW_DATABASE[currentWorkflowKey];
+      if (wf.dynamicFields[idx]) {
+        wf.dynamicFields.splice(idx, 1);
+        renderCurrentWorkflow();
+      }
+    }
+
+    // 9. Preview Workflow Simulation Modal
+    function previewWorkflowModal() {
+      const wf = WORKFLOW_DATABASE[currentWorkflowKey];
+      if (!wf) return;
+
+      document.getElementById('preview-title').textContent = `Mô Phỏng Vận Hành: ${wf.title}`;
+      const container = document.getElementById('preview-stepper-container');
+      container.innerHTML = '';
+
+      let stepperHtml = `
+        <div class="text-xs font-bold text-slate-500 uppercase tracking-wide">Quy trình hiển thị trên hồ sơ vụ việc của khách hàng:</div>
+        <div class="flex items-center justify-between relative pt-6 pb-4">
+          <div class="absolute left-6 right-6 top-10 h-0.5 bg-[#C59B27]/40 -z-0"></div>
+          ${wf.stages.map(stg => `
+            <div class="flex flex-col items-center text-center relative z-10 space-y-2 max-w-[120px]">
+              <div class="w-8 h-8 rounded-full bg-[#1E293B] text-white font-bold text-xs flex items-center justify-center ring-4 ring-white shadow-md">
+                ${stg.number}
+              </div>
+              <div class="font-bold text-xs text-[#1E293B] leading-tight">${stg.title}</div>
+              ${stg.approvalGate ? '<span class="text-[9px] px-1.5 py-0.2 rounded bg-amber-100 text-amber-900 font-bold">Gate</span>' : ''}
+            </div>
+          `).join('')}
+        </div>
+
+        <div class="space-y-3 pt-4 border-t border-stone-200">
+          <div class="text-xs font-bold text-slate-700">Các chốt chặn kiểm soát tự động:</div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+            <div class="p-3 bg-white rounded-xl border border-stone-200">
+              <span class="font-bold text-[#002D54]">Chốt chặn tài chính:</span>
+              <p class="text-slate-500 mt-0.5">Bắt buộc Kế toán xác nhận hoàn tất thu phí đợt mới mở khóa bước Nộp đơn.</p>
+            </div>
+            <div class="p-3 bg-white rounded-xl border border-stone-200">
+              <span class="font-bold text-[#002D54]">Chốt chặn dữ liệu:</span>
+              <p class="text-slate-500 mt-0.5">Luật sư phải điền trường "Ngày nộp đơn" và "Số đơn" mới được bấm chuyển thẩm định.</p>
+            </div>
+          </div>
+        </div>
+      `;
+
+      container.innerHTML = stepperHtml;
+      document.getElementById('modal-preview-workflow').classList.remove('hidden');
+    }
+
+    function closePreviewModal() {
+      document.getElementById('modal-preview-workflow').classList.add('hidden');
+    }
+
+    // 10. Save Template Notification
+    function saveWorkflowTemplate() {
+      const wf = WORKFLOW_DATABASE[currentWorkflowKey];
+      alert(`ĐÃ LƯU MẪU QUY TRÌNH THÀNH CÔNG!\n\n• Mẫu: ${wf.title}\n• Số giai đoạn: ${wf.stages.length}\n• Số trường dữ liệu: ${wf.dynamicFields.length}\n\nHệ thống đã lưu cấu hình luồng động và áp dụng cho tất cả hồ sơ mới thuộc nghiệp vụ ${wf.domain}.`);
+    }
+
+    function addNewWorkflowModal() {
+      const name = prompt("Nhập tên mẫu quy trình nghiệp vụ mới (Ví dụ: Thẩm định Hợp đồng Mua bán Quốc tế):");
+      if (!name || !name.trim()) return;
+
+      const newKey = 'custom_' + Date.now();
+      WORKFLOW_DATABASE[newKey] = {
+        title: `Mẫu: ${name.trim()}`,
+        domain: 'Doanh nghiệp & M&A',
+        stages: [
+          {
+            id: 'stg-c1',
+            number: 1,
+            title: 'Tiếp nhận hồ sơ & Ký HĐ',
+            approvalGate: null,
+            tasks: ['Rà soát tư cách pháp nhân', 'Ký kết thỏa thuận dịch vụ'],
+            condition: null,
+            branches: []
+          },
+          {
+            id: 'stg-c2',
+            number: 2,
+            title: 'Thực thi nghiệp vụ & Thẩm định',
+            approvalGate: 'Cổng phê duyệt Giám đốc',
+            tasks: ['Soạn thảo văn bản pháp lý', 'Trình phê duyệt nội bộ'],
+            condition: 'Kế toán xác nhận thu đợt 1',
+            branches: []
+          },
+          {
+            id: 'stg-c3',
+            number: 3,
+            title: 'Bàn giao kết quả & Quyết toán',
+            approvalGate: null,
+            tasks: ['Bàn giao hồ sơ cho khách hàng', 'Thanh lý hợp đồng'],
+            condition: null,
+            branches: []
+          }
+        ],
+        dynamicFields: [
+          { label: 'Số hợp đồng', required: true, type: 'Văn bản' },
+          { label: 'Ngày thực hiện', required: true, type: 'Ngày' },
+          { label: 'Giá trị hợp đồng', required: true, type: 'Số tiền' }
+        ],
+        gateRulesSummary: [
+          '• Bước 2: Giám đốc duyệt và Kế toán xác nhận thu phí.'
+        ]
+      };
+
+      // Add to sidebar under group 3
+      const corpItems = document.getElementById('cat-corp-items');
+      const newBtn = document.createElement('button');
+      newBtn.id = `wf-btn-${newKey}`;
+      newBtn.onclick = () => selectWorkflow(newKey);
+      newBtn.className = 'w-full text-left px-3 py-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-stone-50 transition-all flex items-center justify-between font-semibold';
+      newBtn.innerHTML = `<span>${name.trim()}</span>`;
+      corpItems.appendChild(newBtn);
+
+      selectWorkflow(newKey);
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      renderCurrentWorkflow();
+    });
+  </script>
+
+</body>
+</html>

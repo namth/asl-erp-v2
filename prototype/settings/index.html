@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <script>(function(){if(localStorage.getItem('asl_theme')==='dark'){document.documentElement.classList.add('dark');}else{document.documentElement.classList.remove('dark');}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASL LAW - Cài Đặt Hệ Thống & Tích Hợp Kế Toán / Ngân Hàng</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/layout.css?v=3.1">
+  <script src="../assets/layout.js?v=3.1" defer></script>
+</head>
+<body class="min-h-screen bg-[#F4F8FA] text-slate-800 flex">  <!-- Modular Shared Sidebar (Auto-mounted by layout.js) -->
+  <aside id="sidebar" class="fixed top-0 left-0 bottom-0 w-72 bg-white/95 backdrop-blur-xl z-40 transition-all duration-300 ease-in-out flex flex-col justify-between shadow-xl shadow-slate-900/5"></aside>
+
+  <!-- Main Content Layout -->
+  <div id="main-content" class="ml-72 flex-1 flex flex-col min-h-screen transition-all duration-300 ease-in-out">
+    
+    <!-- Top Deep Brand Gradient Header -->
+    <header class="header-gradient text-white sticky top-0 z-30 shadow-md">
+      <div class="h-20 px-8 flex items-center justify-between">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded text-[10px] bg-emerald-500/30 text-emerald-300 font-bold border border-emerald-400/40">ENTERPRISE CONFIGURATION</span>
+            <span class="text-xs text-cyan-200/80">API Version v2.6.4</span>
+          </div>
+          <h1 class="text-xl font-extrabold tracking-tight text-white flex items-center gap-2">
+            Cài Đặt Hệ Thống, Khóa API MISA & Ngân Hàng
+          </h1>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <button onclick="saveSettings()" class="px-5 py-2 rounded-xl bg-gradient-to-r from-[#FF7A00] to-[#E66E00] text-white text-xs font-bold shadow-md shadow-orange-900/30 hover:scale-105 transition-all">
+            Lưu Toàn Bộ Cấu Hình
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="p-8 max-w-none mx-auto w-full space-y-6">
+
+      <!-- MISA SME / AMIS Integration -->
+      <div class="glass-card rounded-2xl p-6 border border-slate-200/80 bg-white space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-blue-100 text-[#002D54] flex items-center justify-center font-black text-sm">
+              MISA
+            </div>
+            <div>
+              <h3 class="text-xs font-extrabold text-[#002D54] uppercase tracking-wider">Tích Hợp Kế Toán MISA SME / AMIS</h3>
+              <p class="text-xs text-slate-400">Tự động đồng bộ hóa đơn và phiếu thu khi đối soát</p>
+            </div>
+          </div>
+          <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">Đã kết nối</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">MISA AppID</label>
+            <input type="text" value="ASL-LAW-MISA-SME-2026-PROD" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-slate-800 font-mono">
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Secret Access Token</label>
+            <input type="password" value="misa_sec_98412894120938401928" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-slate-800 font-mono">
+          </div>
+        </div>
+      </div>
+
+      <!-- Vietcombank Open Banking Webhook -->
+      <div class="glass-card rounded-2xl p-6 border border-slate-200/80 bg-white space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-black text-sm">
+              VCB
+            </div>
+            <div>
+              <h3 class="text-xs font-extrabold text-[#002D54] uppercase tracking-wider">Vietcombank Open Banking Webhook</h3>
+              <p class="text-xs text-slate-400">Nhận biến động số dư tài khoản ngân hàng ASL LAW tự động</p>
+            </div>
+          </div>
+          <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">Webhook Live</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Số tài khoản nhận tiền thụ hưởng</label>
+            <input type="text" value="0011004829102 (VND)" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-slate-800 font-mono">
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Webhook Endpoint URL</label>
+            <input type="text" value="https://erp.aslgate.com/api/v1/webhooks/vietcombank" readonly class="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-slate-500 bg-slate-50 font-mono">
+          </div>
+        </div>
+      </div>
+
+      <!-- Zalo ZNS & SMS Notification -->
+      <div class="glass-card rounded-2xl p-6 border border-slate-200/80 bg-white space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-800 flex items-center justify-center font-black text-sm">
+              ZNS
+            </div>
+            <div>
+              <h3 class="text-xs font-extrabold text-[#002D54] uppercase tracking-wider">Thông Báo Zalo ZNS & Email Thân Chủ</h3>
+              <p class="text-xs text-slate-400">Gửi thông báo tiến độ vụ việc tự động qua Zalo OA ASL LAW</p>
+            </div>
+          </div>
+          <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-blue-100 text-[#002D54]">Zalo OA Verified</span>
+        </div>
+
+        <div class="space-y-3 text-xs">
+          <label class="flex items-center gap-3 p-3 rounded-xl bg-slate-50 cursor-pointer">
+            <input type="checkbox" checked class="w-4 h-4 rounded text-[#0082B4]">
+            <div>
+              <div class="font-bold text-slate-800">Tự động gửi thông báo khi hồ sơ có kết quả từ Cơ quan Nhà nước</div>
+              <div class="text-[11px] text-slate-400">Sở KH&ĐT, Cục Sở Hữu Trí Tuệ, Tòa án</div>
+            </div>
+          </label>
+
+          <label class="flex items-center gap-3 p-3 rounded-xl bg-slate-50 cursor-pointer">
+            <input type="checkbox" checked class="w-4 h-4 rounded text-[#0082B4]">
+            <div>
+              <div class="font-bold text-slate-800">Tự động gửi xác nhận thanh toán & Hóa đơn VAT sau khi Kế toán đối soát</div>
+              <div class="text-[11px] text-slate-400">Đính kèm hóa đơn điện tử PDF có mã của Cơ quan thuế</div>
+            </div>
+          </label>
+        </div>
+      </div>
+
+    </main>
+
+  </div>
+
+  <script>
+    function saveSettings() {
+      alert('Đã lưu thành công toàn bộ cài đặt hệ thống, kết nối MISA SME và webhook Vietcombank!');
+    }
+  </script>
+
+</body>
+</html>

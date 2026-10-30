@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <script>(function(){if(localStorage.getItem('asl_theme')==='dark'){document.documentElement.classList.add('dark');}else{document.documentElement.classList.remove('dark');}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASL LAW - Danh Sách Nhân Sự & Phân Quyền Vai Trò</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/layout.css?v=3.1">
+  <script src="../assets/layout.js?v=3.1" defer></script>
+</head>
+<body class="min-h-screen bg-[#F4F8FA] text-slate-800 flex">  <!-- Modular Shared Sidebar (Auto-mounted by layout.js) -->
+  <aside id="sidebar" class="fixed top-0 left-0 bottom-0 w-72 bg-white/95 backdrop-blur-xl z-40 transition-all duration-300 ease-in-out flex flex-col justify-between shadow-xl shadow-slate-900/5"></aside>
+
+  <!-- Main Content Layout -->
+  <div id="main-content" class="ml-72 flex-1 flex flex-col min-h-screen transition-all duration-300 ease-in-out">
+    
+    <!-- Top Deep Brand Gradient Header -->
+    <header class="header-gradient text-white sticky top-0 z-30 shadow-md">
+      <div class="h-20 px-8 flex items-center justify-between">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded text-[10px] bg-cyan-500/30 text-cyan-300 font-bold border border-cyan-400/40">RBAC & PRACTICE GROUP</span>
+            <span class="text-xs text-cyan-200/80">3 Văn phòng: Hà Nội • TP.HCM • Singapore</span>
+          </div>
+          <h1 class="text-xl font-extrabold tracking-tight text-white flex items-center gap-2">
+            Danh Sách Nhân Sự & Phân Quyền Hãng Luật ASL
+          </h1>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <a href="create.html" class="px-4 py-2 rounded-xl bg-gradient-to-r from-[#FF7A00] to-[#E66E00] text-white text-xs font-bold shadow-md shadow-orange-900/30 hover:scale-105 transition-all flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
+            <span>Thêm Luật Sư / Nhân Sự</span>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="p-8 max-w-none mx-auto w-full space-y-6">
+
+      <!-- Branch & Role Filters -->
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-2">
+          <button class="px-3.5 py-1.5 rounded-xl bg-[#002D54] text-white text-xs font-bold shadow-sm">
+            Tất cả (24)
+          </button>
+          <button class="px-3.5 py-1.5 rounded-xl bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 text-xs font-semibold transition-colors">
+            Hà Nội HQ (14)
+          </button>
+          <button class="px-3.5 py-1.5 rounded-xl bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 text-xs font-semibold transition-colors">
+            TP.HCM Branch (8)
+          </button>
+          <button class="px-3.5 py-1.5 rounded-xl bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 text-xs font-semibold transition-colors">
+            Singapore Desk (2)
+          </button>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <input type="text" placeholder="Tìm theo tên, email, số thẻ luật sư..." class="w-64 pl-3.5 pr-4 py-1.5 rounded-xl border border-slate-200 bg-white text-xs text-slate-700 focus:outline-none focus:border-[#0082B4]">
+        </div>
+      </div>
+
+      <!-- Users Grid / Table -->
+      <div class="glass-card rounded-2xl border border-slate-200/80 overflow-hidden shadow-sm">
+        <table class="w-full text-xs text-left">
+          <thead class="bg-slate-50 text-slate-500 font-bold uppercase text-[10px] tracking-wider border-b border-slate-200">
+            <tr>
+              <th class="p-4">Nhân Sự & Email</th>
+              <th class="p-4">Vai Trò Hệ Thống</th>
+              <th class="p-4">Văn Phòng</th>
+              <th class="p-4">Thẻ Luật Sư / Căn Cước</th>
+              <th class="p-4">Tải Vụ Việc (Caseload)</th>
+              <th class="p-4 text-center">Trạng Thái</th>
+              <th class="p-4 text-right">Thao Tác</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 font-medium">
+            <!-- User 1 -->
+            <tr class="hover:bg-blue-50/40 transition-colors bg-white">
+              <td class="p-4">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#002D54] to-[#0082B4] text-white flex items-center justify-center font-bold text-xs shadow-md">
+                    TV
+                  </div>
+                  <div>
+                    <a href="detail.html" class="font-bold text-[#002D54] hover:text-[#0082B4] block text-sm">
+                      LS. Trần Vũ (Managing Partner)
+                    </a>
+                    <div class="text-[11px] text-slate-400 font-mono">tranvu@aslgate.com</div>
+                  </div>
+                </div>
+              </td>
+              <td class="p-4">
+                <span class="px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-indigo-100 text-indigo-900 border border-indigo-200">
+                  Managing Partner (Toàn quyền)
+                </span>
+              </td>
+              <td class="p-4 font-bold text-slate-700">Hà Nội HQ</td>
+              <td class="p-4 font-mono text-slate-600">Thẻ LS: 1042/HN-LS</td>
+              <td class="p-4">
+                <div class="flex items-center justify-between text-[11px] font-bold text-slate-600 mb-1">
+                  <span>Giám sát 12 Case</span>
+                  <span>75%</span>
+                </div>
+                <div class="w-28 bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                  <div class="bg-emerald-500 h-full w-3/4 rounded-full"></div>
+                </div>
+              </td>
+              <td class="p-4 text-center">
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">Hoạt động</span>
+              </td>
+              <td class="p-4 text-right">
+                <div class="flex items-center justify-end gap-2">
+                  <a href="detail.html" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold transition-all">Chi Tiết</a>
+                  <a href="edit.html" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold transition-all">Sửa</a>
+                </div>
+              </td>
+            </tr>
+
+            <!-- User 2 -->
+            <tr class="hover:bg-blue-50/40 transition-colors bg-white">
+              <td class="p-4">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-blue-600 to-cyan-600 text-white flex items-center justify-center font-bold text-xs shadow-md">
+                    PK
+                  </div>
+                  <div>
+                    <a href="detail.html" class="font-bold text-[#002D54] hover:text-[#0082B4] block text-sm">
+                      LS. Phạm Quốc Khánh
+                    </a>
+                    <div class="text-[11px] text-slate-400 font-mono">khanh.pq@aslgate.com</div>
+                  </div>
+                </div>
+              </td>
+              <td class="p-4">
+                <span class="px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-blue-100 text-[#002D54] border border-blue-200">
+                  Case Manager (Quản lý Vụ việc)
+                </span>
+              </td>
+              <td class="p-4 font-bold text-slate-700">Hà Nội HQ</td>
+              <td class="p-4 font-mono text-slate-600">Thẻ LS: 2901/HN-LS</td>
+              <td class="p-4">
+                <div class="flex items-center justify-between text-[11px] font-bold text-slate-600 mb-1">
+                  <span>8 Vụ việc đang chạy</span>
+                  <span class="text-amber-600">90%</span>
+                </div>
+                <div class="w-28 bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                  <div class="bg-amber-500 h-full w-[90%] rounded-full"></div>
+                </div>
+              </td>
+              <td class="p-4 text-center">
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">Hoạt động</span>
+              </td>
+              <td class="p-4 text-right">
+                <div class="flex items-center justify-end gap-2">
+                  <a href="detail.html" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold transition-all">Chi Tiết</a>
+                  <a href="edit.html" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold transition-all">Sửa</a>
+                </div>
+              </td>
+            </tr>
+
+            <!-- User 3 -->
+            <tr class="hover:bg-blue-50/40 transition-colors bg-white">
+              <td class="p-4">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-600 to-teal-600 text-white flex items-center justify-center font-bold text-xs shadow-md">
+                    VA
+                  </div>
+                  <div>
+                    <a href="detail.html" class="font-bold text-[#002D54] hover:text-[#0082B4] block text-sm">
+                      LS. Nguyễn Văn An
+                    </a>
+                    <div class="text-[11px] text-slate-400 font-mono">an.nv@aslgate.com</div>
+                  </div>
+                </div>
+              </td>
+              <td class="p-4">
+                <span class="px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-teal-100 text-teal-900 border border-teal-200">
+                  Senior Associate (Thực thi)
+                </span>
+              </td>
+              <td class="p-4 font-bold text-slate-700">TP. Hồ Chí Minh</td>
+              <td class="p-4 font-mono text-slate-600">Thẻ LS: 4892/HCM-LS</td>
+              <td class="p-4">
+                <div class="flex items-center justify-between text-[11px] font-bold text-slate-600 mb-1">
+                  <span>5 Vụ việc FDI</span>
+                  <span>50%</span>
+                </div>
+                <div class="w-28 bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                  <div class="bg-emerald-500 h-full w-1/2 rounded-full"></div>
+                </div>
+              </td>
+              <td class="p-4 text-center">
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">Hoạt động</span>
+              </td>
+              <td class="p-4 text-right">
+                <div class="flex items-center justify-end gap-2">
+                  <a href="detail.html" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold transition-all">Chi Tiết</a>
+                  <a href="edit.html" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold transition-all">Sửa</a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </main>
+
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <script>(function(){if(localStorage.getItem('asl_theme')==='dark'){document.documentElement.classList.add('dark');}else{document.documentElement.classList.remove('dark');}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASL LAW - Trợ Lý Pháp Lý AI (AI Legal Copilot)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/layout.css?v=3.1">
+  <script src="../assets/layout.js?v=3.1" defer></script>
+  <style>
+    @keyframes fadeInBubble {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .chat-bubble-anim {
+      animation: fadeInBubble 0.25s ease-out forwards;
+    }
+    @keyframes typingPulse {
+      0%, 100% { opacity: 0.3; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1.1); }
+    }
+    .typing-dot {
+      animation: typingPulse 1.2s infinite ease-in-out;
+    }
+    .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+  </style>
+</head>
+<body class="min-h-screen bg-[#F4F8FA] text-slate-800 flex">
+
+  <!-- Modular Shared Sidebar (Auto-mounted by layout.js) -->
+  <aside id="sidebar" class="fixed top-0 left-0 bottom-0 w-72 bg-white/95 backdrop-blur-xl z-40 transition-all duration-300 ease-in-out flex flex-col justify-between shadow-xl shadow-slate-900/5"></aside>
+
+  <!-- Main Container -->
+  <div id="main-container" class="flex-1 md:ml-72 flex flex-col min-h-screen transition-all duration-300 ease-in-out">
+
+    <!-- Top Bar with Rich Brand Gradient -->
+    <header class="header-gradient text-white h-20 px-6 flex items-center justify-between sticky top-0 z-30 shadow-md">
+      <div class="flex items-center gap-4">
+        <button onclick="toggleSidebar()" class="md:hidden p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white" title="Mở menu">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <div>
+          <div class="text-xs text-cyan-200/90 font-medium flex items-center gap-1.5">
+            <a href="../index.html" class="hover:underline">ASL LAW</a>
+            <span>/</span>
+            <span class="text-white font-semibold">Trợ Lý AI</span>
+          </div>
+          <h1 class="text-lg font-bold text-white tracking-tight flex items-center gap-2">
+            <span>Trợ Lý Pháp Lý AI (ASL Copilot)</span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/30 text-emerald-300 border border-emerald-400/40">Sẵn Sàng</span>
+          </h1>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <!-- New Chat Trigger Button -->
+        <button onclick="startNewChat()" class="px-3.5 py-2 rounded-xl bg-[#FF7A00] hover:bg-[#E66E00] text-white font-bold text-xs shadow-md shadow-orange-950/20 flex items-center gap-1.5 transition-all">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+          <span>Cuộc Trò Chuyện Mới</span>
+        </button>
+
+        <!-- View Demo Chat History Toggle -->
+        <button onclick="loadSampleChat()" id="btn-toggle-view" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs flex items-center gap-1.5 transition-colors border border-white/20">
+          <svg class="w-4 h-4 text-cyan-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+          <span>Xem Hội Thoại Mẫu</span>
+        </button>
+
+        <!-- User profile avatar -->
+        <div class="flex items-center gap-2 pl-2 border-l border-white/20">
+          <div class="w-8 h-8 rounded-full bg-[#FF7A00] text-white font-extrabold text-xs flex items-center justify-center ring-2 ring-white/50">
+            NA
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Area: Không Có Khung Bao Ngoài (Hòa Vào Background), Nội Dung Căn Giữa -->
+    <main class="flex-1 flex flex-col justify-between relative">
+
+      <!-- Sub Header Status Indicator (Căn giữa) -->
+      <div class="max-w-3xl mx-auto w-full px-4 pt-6 pb-2 flex items-center justify-between">
+        <div class="flex items-center gap-2 text-xs text-slate-500">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span class="font-bold text-[#002D54]">ASL Legal Copilot Pro</span>
+          <span class="text-slate-300">•</span>
+          <span>Dữ liệu luật & án lệ cập nhật 10/2026</span>
+        </div>
+        <span id="chat-mode-badge" class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-white dark:bg-slate-800 text-[#0082B4] dark:text-cyan-400 border border-slate-200 dark:border-slate-700 shadow-sm">
+          Cuộc Trò Chuyện Mới
+        </span>
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- STATE 1: GIAO DIỆN CUỘC TRÒ CHUYỆN MỚI (NEW CHAT)       -->
+      <!-- ======================================================== -->
+      <div id="view-new-chat" class="flex-1 flex flex-col items-center justify-center p-6 md:p-12 text-center space-y-6 max-w-3xl mx-auto w-full my-auto">
+        <!-- Big Central Robot/AI Icon -->
+        <div class="w-16 h-16 rounded-3xl bg-gradient-to-br from-[#002D54] to-[#0082B4] text-white flex items-center justify-center shadow-lg shadow-cyan-950/20">
+          <svg class="w-8 h-8 text-cyan-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        </div>
+
+        <div class="max-w-md space-y-1.5">
+          <h2 class="text-2xl font-black text-[#002D54] dark:text-white tracking-tight">Xin chào, Luật sư!</h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+            Tôi có thể hỗ trợ luật sư tra cứu quy định pháp lý, soạn thảo điều khoản hợp đồng hoặc đối chiếu án lệ ngay bây giờ.
+          </p>
+        </div>
+
+        <!-- Quick Suggestion Pills (Căn giữa, hòa nền) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 w-full text-left pt-2">
+          <button onclick="sendQuickPrompt('Soạn thảo điều khoản phạt vi phạm và bồi thường thiệt hại theo Luật Thương mại 2005')" class="p-4 rounded-2xl bg-white dark:bg-[#1E293B] hover:bg-cyan-50/80 dark:hover:bg-[#27354A] border border-slate-200/90 dark:border-slate-700 hover:border-cyan-400 dark:hover:border-cyan-500 text-xs font-semibold text-slate-700 dark:text-slate-300 transition-all shadow-sm hover:shadow-md group">
+            <div class="font-bold text-[#002D54] dark:text-cyan-300 group-hover:text-[#0082B4] flex items-center justify-between gap-1.5 mb-1">
+              <span class="flex items-center gap-1.5">
+                <svg class="w-4 h-4 text-[#0082B4] dark:text-cyan-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                <span>Soạn Điều Khoản Phạt</span>
+              </span>
+              <span class="text-slate-400 dark:text-slate-500 group-hover:translate-x-1 transition-transform">&rarr;</span>
+            </div>
+            <div class="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-1">Điều khoản phạt 8% & bồi thường thực tế</div>
+          </button>
+
+          <button onclick="sendQuickPrompt('Kiểm tra thời hạn thẩm định hình thức và công bố đơn nhãn hiệu tại Cục SHTT')" class="p-4 rounded-2xl bg-white dark:bg-[#1E293B] hover:bg-cyan-50/80 dark:hover:bg-[#27354A] border border-slate-200/90 dark:border-slate-700 hover:border-cyan-400 dark:hover:border-cyan-500 text-xs font-semibold text-slate-700 dark:text-slate-300 transition-all shadow-sm hover:shadow-md group">
+            <div class="font-bold text-[#002D54] dark:text-cyan-300 group-hover:text-[#0082B4] flex items-center justify-between gap-1.5 mb-1">
+              <span class="flex items-center gap-1.5">
+                <svg class="w-4 h-4 text-[#0082B4] dark:text-cyan-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+                <span>Thủ Tục Nhãn Hiệu Cục SHTT</span>
+              </span>
+              <span class="text-slate-400 dark:text-slate-500 group-hover:translate-x-1 transition-transform">&rarr;</span>
+            </div>
+            <div class="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-1">Thời hạn 1 tháng xét nghiệm hình thức</div>
+          </button>
+
+          <button onclick="sendQuickPrompt('Tra cứu điều kiện chuyển nhượng vốn góp của nhà đầu tư nước ngoài (FDI)')" class="p-4 rounded-2xl bg-white dark:bg-[#1E293B] hover:bg-cyan-50/80 dark:hover:bg-[#27354A] border border-slate-200/90 dark:border-slate-700 hover:border-cyan-400 dark:hover:border-cyan-500 text-xs font-semibold text-slate-700 dark:text-slate-300 transition-all shadow-sm hover:shadow-md group">
+            <div class="font-bold text-[#002D54] dark:text-cyan-300 group-hover:text-[#0082B4] flex items-center justify-between gap-1.5 mb-1">
+              <span class="flex items-center gap-1.5">
+                <svg class="w-4 h-4 text-[#0082B4] dark:text-cyan-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="9" y1="22" x2="9" y2="22.01"></line><line x1="15" y1="22" x2="15.01" y2="22.01"></line><line x1="9" y1="18" x2="9" y2="18.01"></line><line x1="15" y1="18" x2="15.01" y2="18.01"></line><line x1="9" y1="14" x2="9" y2="14.01"></line><line x1="15" y1="14" x2="15.01" y2="14.01"></line><line x1="9" y1="10" x2="9" y2="10.01"></line><line x1="15" y1="10" x2="15.01" y2="10.01"></line><line x1="9" y1="6" x2="9" y2="6.01"></line><line x1="15" y1="6" x2="15.01" y2="6.01"></line></svg>
+                <span>Chuyển Nhượng Vốn FDI</span>
+              </span>
+              <span class="text-slate-400 dark:text-slate-500 group-hover:translate-x-1 transition-transform">&rarr;</span>
+            </div>
+            <div class="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-1">Thủ tục chấp thuận góp vốn tại Sở KH&ĐT</div>
+          </button>
+
+          <button onclick="sendQuickPrompt('Soạn thư tư vấn pháp lý (Legal Opinion) cho khách hàng nước ngoài')" class="p-4 rounded-2xl bg-white dark:bg-[#1E293B] hover:bg-cyan-50/80 dark:hover:bg-[#27354A] border border-slate-200/90 dark:border-slate-700 hover:border-cyan-400 dark:hover:border-cyan-500 text-xs font-semibold text-slate-700 dark:text-slate-300 transition-all shadow-sm hover:shadow-md group">
+            <div class="font-bold text-[#002D54] dark:text-cyan-300 group-hover:text-[#0082B4] flex items-center justify-between gap-1.5 mb-1">
+              <span class="flex items-center gap-1.5">
+                <svg class="w-4 h-4 text-[#0082B4] dark:text-cyan-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                <span>Thư Tư Vấn Song Ngữ</span>
+              </span>
+              <span class="text-slate-400 dark:text-slate-500 group-hover:translate-x-1 transition-transform">&rarr;</span>
+            </div>
+            <div class="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-1">Khung cấu trúc Legal Opinion chuẩn quốc tế</div>
+          </button>
+        </div>
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- STATE 2: GIAO DIỆN HỘI THOẠI ĐANG DIỄN RA (ACTIVE CHAT)  -->
+      <!-- ======================================================== -->
+      <div id="view-active-chat" class="hidden flex-1 overflow-y-auto px-4 py-6 space-y-6 max-w-3xl mx-auto w-full pb-32">
+
+        <!-- Bot Message 1: Initial Greeting -->
+        <div class="flex items-start gap-3.5 max-w-2xl chat-bubble-anim">
+          <div class="w-8 h-8 rounded-xl bg-[#002D54] text-white flex items-center justify-center font-bold text-xs flex-shrink-0 shadow-sm mt-0.5">
+            AI
+          </div>
+          <div class="space-y-1.5 flex-1">
+            <div class="bg-white border border-slate-200/90 rounded-2xl rounded-tl-none p-4 text-xs text-slate-700 leading-relaxed shadow-sm">
+              <div class="font-bold text-[#002D54] mb-1">ASL Legal Copilot</div>
+              Xin chào Luật sư Nguyễn Anh. Tôi là trợ lý trí tuệ nhân tạo chuyên sâu pháp lý của ASL LAW. Luật sư cần hỗ trợ tra cứu văn bản quy phạm pháp luật, thẩm định hợp đồng hay rà soát thủ tục sở hữu trí tuệ nào hôm nay?
+            </div>
+            <div class="text-[10px] text-slate-400 pl-1">Vừa xong • Sẵn sàng hỗ trợ</div>
+          </div>
+        </div>
+
+        <!-- User Message Sample -->
+        <div class="flex items-start gap-3.5 max-w-2xl ml-auto flex-row-reverse chat-bubble-anim">
+          <div class="w-8 h-8 rounded-xl bg-[#FF7A00] text-white flex items-center justify-center font-bold text-xs flex-shrink-0 shadow-sm mt-0.5">
+            NA
+          </div>
+          <div class="space-y-1 text-right flex-1">
+            <div class="bg-gradient-to-r from-[#002D54] to-[#004D7A] text-white rounded-2xl rounded-tr-none p-4 text-xs shadow-md text-left leading-relaxed">
+              Trong hợp đồng thương mại giữa hai pháp nhân Việt Nam, điều khoản phạt vi phạm thỏa thuận ở mức <strong>15% giá trị phần nghĩa vụ bị vi phạm</strong> có hợp pháp không? Nếu vượt quá thì xử lý thế nào?
+            </div>
+            <div class="text-[10px] text-slate-400 pr-1">14:22 • Gửi bởi LS. Nguyễn Anh</div>
+          </div>
+        </div>
+
+        <!-- Bot Response Sample with Law Citation -->
+        <div class="flex items-start gap-3.5 max-w-2xl chat-bubble-anim">
+          <div class="w-8 h-8 rounded-xl bg-[#002D54] text-white flex items-center justify-center font-bold text-xs flex-shrink-0 shadow-sm mt-0.5">
+            AI
+          </div>
+          <div class="space-y-2.5 flex-1">
+            <div class="bg-white border border-slate-200/90 rounded-2xl rounded-tl-none p-4 text-xs text-slate-700 leading-relaxed shadow-sm space-y-3">
+              <div class="font-bold text-[#002D54] flex items-center justify-between">
+                <span>Căn Cứ Pháp Lý & Giải Đáp</span>
+                <span class="text-[10px] font-mono text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">Độ tin cậy: 99.4%</span>
+              </div>
+
+              <p>
+                Căn cứ theo <strong>Điều 301 Luật Thương mại 2005</strong>, thỏa thuận phạt vi phạm 15% là <strong class="text-red-600">vượt quá mức trần tối đa</strong> mà pháp luật cho phép.
+              </p>
+
+              <!-- Law Citation Box -->
+              <div class="p-3 rounded-xl bg-cyan-50/50 border border-cyan-200 text-[11px] text-slate-700 space-y-1">
+                <div class="font-bold text-[#0082B4] flex items-center gap-1.5">
+                  <svg class="w-3.5 h-3.5 text-[#0082B4] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                  <span>Trích dẫn Điều 301 Luật Thương mại:</span>
+                </div>
+                <p class="italic text-slate-600 pl-2.5 border-l-2 border-[#0082B4]">
+                  "Mức phạt đối với vi phạm nghĩa vụ hợp đồng... nhưng <strong>không quá 8%</strong> giá trị phần nghĩa vụ hợp đồng bị vi phạm..."
+                </p>
+              </div>
+
+              <div class="space-y-1.5">
+                <div class="font-bold text-slate-800">Hướng xử lý theo thực tiễn xét xử Tòa án & Trọng tài:</div>
+                <ul class="list-disc pl-4 space-y-1 text-slate-600 text-[11px]">
+                  <li><strong>Vô hiệu một phần:</strong> Thỏa thuận 15% chỉ bị vô hiệu đối với phần vượt quá (7% vượt mức).</li>
+                  <li><strong>Điều chỉnh về 8%:</strong> Tòa án hoặc Hội đồng Trọng tài sẽ chấp nhận mức phạt tối đa là 8%.</li>
+                  <li><strong>Bồi thường thiệt hại:</strong> Bên bị vi phạm vẫn có quyền yêu cầu bồi thường toàn bộ thiệt hại thực tế phát sinh độc lập với tiền phạt vi phạm (Điều 302).</li>
+                </ul>
+              </div>
+            </div>
+            <div class="text-[10px] text-slate-400 pl-1">Phản hồi tức thì • ASL Legal Engine v2.5</div>
+          </div>
+        </div>
+
+        <!-- Dynamic Container for New Messages -->
+        <div id="dynamic-messages-container" class="space-y-6"></div>
+
+        <!-- Typing Indicator (Hidden by default) -->
+        <div id="typing-indicator" class="hidden flex items-start gap-3.5 max-w-md">
+          <div class="w-8 h-8 rounded-xl bg-[#002D54] text-white flex items-center justify-center font-bold text-xs flex-shrink-0">
+            AI
+          </div>
+          <div class="bg-white border border-slate-200 rounded-2xl rounded-tl-none p-3.5 shadow-sm flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-[#0082B4] typing-dot"></span>
+            <span class="w-2 h-2 rounded-full bg-[#0082B4] typing-dot"></span>
+            <span class="w-2 h-2 rounded-full bg-[#0082B4] typing-dot"></span>
+            <span class="text-[11px] text-slate-400 ml-2 font-medium">Đang tra cứu luật & tổng hợp câu trả lời...</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- CỐ ĐỊNH Ở DƯỚI CHÂN MÀN HÌNH (STICKY/FIXED BOTTOM INPUT) -->
+      <!-- ======================================================== -->
+      <div class="sticky bottom-0 z-30 pb-6 pt-3 bg-gradient-to-t from-[#F4F8FA] via-[#F4F8FA]/95 to-transparent dark:from-[#0B132B] dark:via-[#0B132B]/95">
+        <div class="max-w-3xl mx-auto w-full px-4">
+          <form onsubmit="event.preventDefault(); handleSend();" class="space-y-2">
+            
+            <div class="relative flex items-center gap-2 bg-white/95 dark:bg-[#1E293B] backdrop-blur-xl border border-slate-300 dark:border-slate-700 shadow-xl rounded-2xl p-2 px-3 focus-within:border-[#0082B4] focus-within:ring-2 focus-within:ring-cyan-100 dark:focus-within:ring-cyan-900/50 transition-all">
+              <textarea id="prompt-input" rows="1" placeholder="Nhập câu hỏi pháp lý hoặc yêu cầu trợ lý AI tại đây..." class="w-full bg-transparent border-none outline-none resize-none text-xs text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-400 py-1.5 max-h-24"></textarea>
+              
+              <div class="flex items-center gap-1.5 flex-shrink-0">
+                <button type="button" onclick="alert('Đính kèm tài liệu PDF / DOCX để phân tích')" class="p-2 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" title="Đính kèm tệp">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/></svg>
+                </button>
+
+                <button type="submit" class="px-4 py-2 rounded-xl bg-gradient-to-r from-[#002D54] to-[#0082B4] hover:from-[#001A33] hover:to-[#004D7A] text-white font-bold text-xs shadow-md shadow-cyan-950/20 flex items-center gap-1.5 transition-all">
+                  <span>Gửi</span>
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between text-[11px] text-slate-400 dark:text-slate-500 px-1">
+              <span class="flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5 text-amber-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"/><path d="M9 21h6"/></svg>
+                <span>Nhấn Enter để gửi tin nhắn. Dữ liệu được bảo mật nội bộ tại máy chủ ASL LAW.</span>
+              </span>
+              <span class="mono">ASL AI v2.5</span>
+            </div>
+
+          </form>
+        </div>
+      </div>
+
+    </main>
+
+  </div>
+
+  <script>
+    // Toggle between New Chat and Sample Chat views
+    function startNewChat() {
+      document.getElementById('view-new-chat').classList.remove('hidden');
+      document.getElementById('view-active-chat').classList.add('hidden');
+      document.getElementById('chat-mode-badge').textContent = 'Cuộc Trò Chuyện Mới';
+      document.getElementById('chat-mode-badge').className = 'px-2.5 py-1 rounded-full text-[10px] font-bold bg-white text-[#0082B4] border border-slate-200 shadow-sm';
+      document.getElementById('dynamic-messages-container').innerHTML = '';
+      document.getElementById('prompt-input').value = '';
+      document.getElementById('prompt-input').focus();
+    }
+
+    function loadSampleChat() {
+      document.getElementById('view-new-chat').classList.add('hidden');
+      document.getElementById('view-active-chat').classList.remove('hidden');
+      document.getElementById('chat-mode-badge').textContent = 'Phiên Hỏi Đáp: Phạt Vi Phạm HĐ';
+      document.getElementById('chat-mode-badge').className = 'px-2.5 py-1 rounded-full text-[10px] font-bold bg-blue-50 text-[#002D54] border border-blue-200 shadow-sm';
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    function sendQuickPrompt(promptText) {
+      document.getElementById('prompt-input').value = promptText;
+      handleSend();
+    }
+
+    function handleSend() {
+      const input = document.getElementById('prompt-input');
+      const text = input.value.trim();
+      if (!text) return;
+
+      // Switch to active chat view if currently in new chat view
+      document.getElementById('view-new-chat').classList.add('hidden');
+      document.getElementById('view-active-chat').classList.remove('hidden');
+      document.getElementById('chat-mode-badge').textContent = 'Đang Trò Chuyện';
+
+      const dynamicContainer = document.getElementById('dynamic-messages-container');
+
+      // Append User Message
+      const userBubble = `
+        <div class="flex items-start gap-3.5 max-w-2xl ml-auto flex-row-reverse chat-bubble-anim">
+          <div class="w-8 h-8 rounded-xl bg-[#FF7A00] text-white flex items-center justify-center font-bold text-xs flex-shrink-0 shadow-sm mt-0.5">
+            NA
+          </div>
+          <div class="space-y-1 text-right flex-1">
+            <div class="bg-gradient-to-r from-[#002D54] to-[#004D7A] text-white rounded-2xl rounded-tr-none p-4 text-xs shadow-md text-left leading-relaxed">
+              ${text}
+            </div>
+            <div class="text-[10px] text-slate-400 pr-1">Vừa xong • Gửi bởi LS. Nguyễn Anh</div>
+          </div>
+        </div>
+      `;
+      dynamicContainer.insertAdjacentHTML('beforeend', userBubble);
+      input.value = '';
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+
+      // Show typing indicator
+      const typingEl = document.getElementById('typing-indicator');
+      typingEl.classList.remove('hidden');
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+
+      // Simulate Bot Response after 800ms
+      setTimeout(() => {
+        typingEl.classList.add('hidden');
+
+        const botBubble = `
+          <div class="flex items-start gap-3.5 max-w-2xl chat-bubble-anim">
+            <div class="w-8 h-8 rounded-xl bg-[#002D54] text-white flex items-center justify-center font-bold text-xs flex-shrink-0 shadow-sm mt-0.5">
+              AI
+            </div>
+            <div class="space-y-2 flex-1">
+              <div class="bg-white border border-slate-200/90 rounded-2xl rounded-tl-none p-4 text-xs text-slate-700 leading-relaxed shadow-sm space-y-2">
+                <div class="font-bold text-[#002D54] flex items-center justify-between">
+                  <span>Phản Hồi Từ ASL Legal Copilot</span>
+                  <span class="text-[10px] font-mono text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">Đã Hoàn Tất</span>
+                </div>
+                <p>
+                  Đã tiếp nhận yêu cầu: <strong>"${text}"</strong>. Hệ thống AI ASL LAW đã phân tích và đối chiếu quy định pháp luật hiện hành và các quy trình mẫu nội bộ:
+                </p>
+                <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 text-[11px] text-slate-700">
+                  ✓ Nội dung đã được rà soát an toàn theo quy chuẩn pháp lý ASL LAW. Bạn có thể sử dụng trực tiếp hoặc yêu cầu trợ lý xuất dự thảo thành văn bản Word / PDF.
+                </div>
+              </div>
+              <div class="text-[10px] text-slate-400 pl-1">Vừa xong • Mô hình ASL-LawLM-v2.5</div>
+            </div>
+          </div>
+        `;
+        dynamicContainer.insertAdjacentHTML('beforeend', botBubble);
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+      }, 800);
+    }
+
+    // Auto-expand textarea height on input
+    document.addEventListener('DOMContentLoaded', () => {
+      const textarea = document.getElementById('prompt-input');
+      if (textarea) {
+        textarea.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            handleSend();
+          }
+        });
+      }
+    });
+  </script>
+
+</body>
+</html>

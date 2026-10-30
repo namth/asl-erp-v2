@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <script>(function(){if(localStorage.getItem('asl_theme')==='dark'){document.documentElement.classList.add('dark');}else{document.documentElement.classList.remove('dark');}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASL LAW - Quản Lý Tác Vụ Dạng Danh Sách</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/layout.css?v=3.1">
+  <script src="../assets/layout.js?v=3.1" defer></script>
+</head>
+<body class="min-h-screen bg-[#F4F8FA] text-slate-800 flex">
+
+  <!-- Modular Shared Sidebar (Auto-mounted by layout.js) -->
+    <!-- Modular Shared Sidebar (Auto-mounted by layout.js) -->
+  <aside id="sidebar" class="fixed top-0 left-0 bottom-0 w-72 bg-white/95 backdrop-blur-xl z-40 transition-all duration-300 ease-in-out flex flex-col justify-between shadow-xl shadow-slate-900/5"></aside>
+
+  <!-- Main Container -->
+  <div id="main-container" class="flex-1 md:ml-72 flex flex-col min-h-screen transition-all duration-300 ease-in-out">
+
+    <!-- Top Bar with Rich Brand Gradient -->
+    <header class="header-gradient text-white h-20 px-6 flex items-center justify-between sticky top-0 z-30 shadow-md">
+      <div class="flex items-center gap-4">
+        <button onclick="toggleSidebar()" class="md:hidden p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white" title="Mở menu">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <div>
+          <div class="text-xs text-cyan-200/90 font-medium flex items-center gap-1.5">
+            <a href="../index.html" class="hover:underline">ASL LAW</a>
+            <span>/</span>
+            <span class="text-white font-semibold">Quản Lý Tác Vụ</span>
+            <span>/</span>
+            <span class="text-cyan-300 font-semibold">Dạng Danh Sách</span>
+          </div>
+          <h1 class="text-lg font-bold text-white tracking-tight">Quản Lý Tác Vụ Dạng Danh Sách</h1>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <!-- View Mode Switcher -->
+        <div class="flex items-center bg-white/10 p-1 rounded-xl border border-white/20 backdrop-blur-md">
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-white hover:text-cyan-200 font-bold text-xs flex items-center gap-1.5 transition-all">
+            <svg class="w-4 h-4 text-cyan-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"/></svg>
+            <span>Bảng Kanban</span>
+          </a>
+          <a href="list.html" class="px-3 py-1.5 rounded-lg bg-white text-[#002D54] font-extrabold text-xs shadow-md flex items-center gap-1.5 transition-all">
+            <svg class="w-4 h-4 text-[#0082B4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
+            <span>Dạng Danh Sách</span>
+          </a>
+        </div>
+
+        <!-- Create Task Button -->
+        <a href="create.html" class="px-3.5 py-2 rounded-xl bg-[#FF7A00] hover:bg-[#E66E00] text-white font-bold text-xs shadow-md shadow-orange-950/20 flex items-center gap-1.5 transition-all">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+          <span>Tạo Tác Vụ Mới</span>
+        </a>
+
+        <!-- User Profile Avatar -->
+        <div class="flex items-center gap-2 pl-2 border-l border-white/20">
+          <div class="w-8 h-8 rounded-full bg-[#FF7A00] text-white font-extrabold text-xs flex items-center justify-center ring-2 ring-white/50">
+            NA
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 p-6 md:p-8 w-full max-w-none space-y-6">
+
+      <!-- Metrics Summary Chips (Solid Bold Cards) -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+        <!-- 1. Tổng Tác Vụ (Solid Deep Navy) -->
+        <div class="rounded-2xl p-4 bg-[#002D54] text-white shadow-lg shadow-[#002D54]/25 transition-all hover:-translate-y-1">
+          <div class="text-[11px] font-bold text-cyan-200/90 uppercase tracking-wider">Tổng Tác Vụ</div>
+          <div class="text-2xl font-extrabold text-white mt-1">8 <span class="text-xs font-normal text-cyan-200/80">task</span></div>
+          <div class="text-[10px] text-cyan-100/80 mt-1 flex items-center gap-1">
+            <span class="bg-white/15 px-1.5 py-0.2 rounded">3 vụ việc</span> đang thụ lý
+          </div>
+        </div>
+
+        <!-- 2. Cần Làm (Solid Dark Slate) -->
+        <div class="rounded-2xl p-4 bg-[#334155] text-white shadow-lg shadow-slate-950/25 transition-all hover:-translate-y-1">
+          <div class="text-[11px] font-bold text-slate-200 uppercase tracking-wider">Cần Làm (TODO)</div>
+          <div class="text-2xl font-extrabold text-white mt-1">2 <span class="text-xs font-normal text-slate-300">task</span></div>
+          <div class="text-[10px] text-amber-200 mt-1 font-semibold flex items-center gap-1">
+            <span class="bg-white/15 px-1.5 py-0.2 rounded">1 khóa</span> phụ thuộc
+          </div>
+        </div>
+
+        <!-- 3. Đang Thực Hiện (Solid ASL Cerulean) -->
+        <div class="rounded-2xl p-4 bg-[#0082B4] text-white shadow-lg shadow-cyan-950/25 transition-all hover:-translate-y-1">
+          <div class="text-[11px] font-bold text-cyan-100 uppercase tracking-wider">Đang Thực Hiện</div>
+          <div class="text-2xl font-extrabold text-white mt-1">2 <span class="text-xs font-normal text-cyan-200/80">task</span></div>
+          <div class="text-[10px] text-cyan-100/90 mt-1 flex items-center gap-1">
+            <span class="bg-white/15 px-1.5 py-0.2 rounded">Tiến độ TB</span> 65%
+          </div>
+        </div>
+
+        <!-- 4. Chờ Phê Duyệt (Solid Brand Orange) -->
+        <div class="rounded-2xl p-4 bg-[#FF7A00] text-white shadow-lg shadow-orange-950/25 transition-all hover:-translate-y-1">
+          <div class="text-[11px] font-bold text-orange-100 uppercase tracking-wider">Chờ Phê Duyệt</div>
+          <div class="text-2xl font-extrabold text-white mt-1">2 <span class="text-xs font-normal text-orange-100/80">task</span></div>
+          <div class="text-[10px] text-white mt-1 font-semibold flex items-center gap-1">
+            <span class="bg-white/20 px-1.5 py-0.2 rounded">1 Partner Gate</span>
+          </div>
+        </div>
+
+        <!-- 5. Đã Hoàn Thành (Solid Emerald Green) -->
+        <div class="rounded-2xl p-4 bg-[#047857] text-white shadow-lg shadow-emerald-950/25 transition-all hover:-translate-y-1">
+          <div class="text-[11px] font-bold text-emerald-100 uppercase tracking-wider">Đã Hoàn Thành</div>
+          <div class="text-2xl font-extrabold text-white mt-1">2 <span class="text-xs font-normal text-emerald-200">task</span></div>
+          <div class="text-[10px] text-emerald-100 mt-1 flex items-center gap-1">
+            <span class="bg-white/20 px-1.5 py-0.2 rounded font-bold">✓ 100%</span> nghiệm thu
+          </div>
+        </div>
+
+        <!-- 6. Khẩn Cấp / Quá Hạn (Solid Alert Crimson) -->
+        <div class="rounded-2xl p-4 bg-[#D9381E] text-white shadow-lg shadow-red-950/25 transition-all hover:-translate-y-1">
+          <div class="text-[11px] font-bold text-red-100 uppercase tracking-wider flex items-center gap-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
+            Khẩn Cấp
+          </div>
+          <div class="text-2xl font-extrabold text-white mt-1">2 <span class="text-xs font-normal text-red-100/80">task</span></div>
+          <div class="text-[10px] text-red-100 mt-1 font-semibold flex items-center gap-1">
+            <span class="bg-white/20 px-1.5 py-0.2 rounded">Hạn 24h</span> cần nộp
+          </div>
+        </div>
+      </div>
+
+      <!-- Advanced Filter & Search Toolbar -->
+      <section class="glass-card rounded-2xl p-4 space-y-3">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          
+          <!-- Search Bar -->
+          <div class="flex-1 max-w-md relative">
+            <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <input type="text" id="task-search" onkeyup="filterTable()" placeholder="Tìm theo mã task (TASK-104), tên tác vụ, luật sư..." class="w-full pl-10 pr-4 py-2 rounded-xl bg-white border border-slate-200 text-xs font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#0082B4] shadow-sm">
+          </div>
+
+          <!-- Filter Dropdowns -->
+          <div class="flex flex-wrap items-center gap-2.5">
+            <!-- Filter by Case / Job -->
+            <select id="filter-job" onchange="filterTable()" class="px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs font-bold text-[#002D54] focus:outline-none focus:border-[#0082B4] shadow-sm">
+              <option value="ALL" selected>Tất cả Vụ Việc (Job)</option>
+              <option value="IP09">ASL-2026-IP09: Tranh chấp Nhãn hiệu VinFast</option>
+              <option value="MNA01">ASL-2026-MNA01: M&A Thaco - HAGL Agrico</option>
+              <option value="LIT03">ASL-2026-LIT03: Tranh chấp Cổ đông BĐS Phúc Khang</option>
+            </select>
+
+            <!-- Filter by Status -->
+            <select id="filter-status" onchange="filterTable()" class="px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-700 focus:outline-none focus:border-[#0082B4] shadow-sm">
+              <option value="ALL" selected>Tất cả Trạng Thái</option>
+              <option value="TODO">Cần Làm (TODO)</option>
+              <option value="IN_PROGRESS">Đang Thực Hiện</option>
+              <option value="WAITING_APPROVAL">Chờ Phê Duyệt</option>
+              <option value="COMPLETED">Đã Hoàn Thành</option>
+            </select>
+
+            <!-- Filter by Priority -->
+            <select id="filter-priority" onchange="filterTable()" class="px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-700 focus:outline-none focus:border-[#0082B4] shadow-sm">
+              <option value="ALL" selected>Tất cả Mức Ưu Tiên</option>
+              <option value="URGENT">Khẩn Cấp</option>
+              <option value="HIGH">Ưu Tiên Cao</option>
+              <option value="NORMAL">Trung Bình</option>
+              <option value="GATE">Partner Gate</option>
+            </select>
+
+            <!-- Reset Filters -->
+            <button onclick="resetFilters()" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-xs transition-colors">
+              Đặt lại
+            </button>
+          </div>
+        </div>
+
+        <!-- Bulk Action Bar (Hidden by default, shown when items checked) -->
+        <div id="bulk-bar" class="hidden flex items-center justify-between p-2.5 rounded-xl bg-blue-50 border border-blue-200 text-xs text-[#002D54]">
+          <div class="flex items-center gap-2 font-bold">
+            <span id="selected-count">0</span>
+            <span>tác vụ đã chọn</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="alert('Đã giao lại người phụ trách')" class="px-3 py-1.5 rounded-lg bg-white border border-blue-300 text-xs font-bold hover:bg-blue-100 transition-colors">Giao lại phụ trách</button>
+            <button onclick="alert('Đã cập nhật gia hạn deadline')" class="px-3 py-1.5 rounded-lg bg-white border border-blue-300 text-xs font-bold hover:bg-blue-100 transition-colors">Đổi hạn chót</button>
+            <button onclick="alert('Đã đánh dấu hoàn thành hàng loạt')" class="px-3 py-1.5 rounded-lg bg-emerald-600 text-white text-xs font-bold hover:bg-emerald-700 transition-colors">Đánh dấu hoàn tất</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Grouped Task List Tables -->
+      <div class="space-y-6">
+
+        <!-- ======================================================== -->
+        <!-- GROUP 1: ASL-2026-IP09                                   -->
+        <!-- ======================================================== -->
+        <section class="task-group glass-card rounded-2xl overflow-hidden shadow-sm" data-group-job="IP09">
+          
+          <!-- Group Accordion Header -->
+          <div class="p-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between cursor-pointer" onclick="toggleGroup('group-ip09')">
+            <div class="flex items-center gap-3">
+              <svg id="chevron-group-ip09" class="w-4 h-4 text-slate-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-[#002D54] text-white">ASL-2026-IP09</span>
+                  <h3 class="font-extrabold text-sm text-[#002D54]">Vụ Việc: Khiếu Nại Từ Chối Đăng Ký Nhãn Hiệu VinFast Toàn Cầu</h3>
+                  <span class="text-xs text-slate-500 font-semibold">(Thân chủ: VinFast Trading & Production JSC)</span>
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-xs font-bold text-slate-500">3 Tác vụ</span>
+              <div class="w-24 bg-slate-200 h-2 rounded-full overflow-hidden">
+                <div class="bg-[#0082B4] h-full w-[45%]"></div>
+              </div>
+              <span class="text-xs font-extrabold text-[#0082B4]">45%</span>
+            </div>
+          </div>
+
+          <!-- Group Table Container -->
+          <div id="group-ip09" class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-100/75 border-b border-slate-200 text-slate-600 font-bold uppercase text-[10px] tracking-wider">
+                <tr>
+                  <th class="p-3.5 w-10 text-center"><input type="checkbox" onchange="toggleSelectAllGroup(this, 'group-ip09')" class="rounded border-slate-300"></th>
+                  <th class="p-3.5 w-24">Mã Task</th>
+                  <th class="p-3.5 min-w-[260px]">Tên Tác Vụ</th>
+                  <th class="p-3.5 w-44">Phụ Trách</th>
+                  <th class="p-3.5 w-36">Thời Gian Làm</th>
+                  <th class="p-3.5 w-36">Trạng Thái</th>
+                  <th class="p-3.5 w-28">Mức Ưu Tiên</th>
+                  <th class="p-3.5 w-32">Tiến Độ</th>
+                  <th class="p-3.5 w-28">Hạn Chót</th>
+                  <th class="p-3.5 w-24 text-right">Thao Tác</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 bg-white">
+                
+                <!-- Row 1 -->
+                <tr class="task-row hover:bg-slate-50/80 transition-colors" data-task-code="TASK-104" data-job="IP09" data-status="TODO" data-priority="URGENT" data-logged-hours="1.5" data-est-hours="4.0">
+                  <td class="p-3.5 text-center"><input type="checkbox" onchange="updateBulkBar()" class="task-check rounded border-slate-300"></td>
+                  <td class="p-3.5 font-mono font-bold text-red-600">TASK-104</td>
+                  <td class="p-3.5">
+                    <div class="font-bold text-[#002D54] hover:text-[#0082B4]">
+                      <a href="detail.html">Nộp Đơn Khiếu Nại Lên Cục SHTT</a>
+                    </div>
+                    <div class="text-[11px] text-red-600 font-medium flex items-center gap-1 mt-0.5">
+                      <span><svg class="w-3.5 h-3.5 inline-block text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg> Bị khóa phụ thuộc vào TASK-102 (Soạn dự thảo)</span>
+                    </div>
+                  </td>
+                  <td class="p-3.5">
+                    <div class="flex items-center gap-2">
+                      <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-700 font-bold flex items-center justify-center text-[10px]">PT</span>
+                      <span class="font-semibold text-slate-700">Paralegal Trang</span>
+                    </div>
+                  </td>
+                  <td class="p-3.5">
+                    <div class="flex items-center gap-1.5">
+                      <span class="font-mono text-[11px] font-bold text-amber-900 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+                        <span class="row-logged-hours">1.5</span>h / 4h
+                      </span>
+                      <button onclick="openLogTimeModal('TASK-104', 'Nộp Đơn Khiếu Nại Lên Cục SHTT', 1.5, 4.0)" class="p-1 rounded hover:bg-amber-100 text-amber-700 transition-colors" title="Ghi nhận giờ làm">
+                        <svg class="w-3.5 h-3.5 inline-block text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                      </button>
+                    </div>
+                  </td>
+                  <td class="p-3.5">
+                    <span class="px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-slate-800 text-white shadow-sm inline-block">
+                      Cần Làm (TODO)
+                    </span>
+                  </td>
+                  <td class="p-3.5">
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-red-100 text-red-700">Khẩn Cấp</span>
+                  </td>
+                  <td class="p-3.5">
+                    <div class="flex items-center gap-2">
+                      <div class="w-16 bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                        <div class="bg-red-500 h-full w-[10%]"></div>
+                      </div>
+                      <span class="font-mono text-[10px] text-slate-500 font-bold">10%</span>
+                    </div>
+                  </td>
+                  <td class="p-3.5">
+                    <span class="font-mono text-red-600 font-extrabold bg-red-50 px-2 py-0.5 rounded text-[11px]">Hôm nay 16:00</span>
+                  </td>
+                  <td class="p-3.5 text-right">
+                    <a href="detail.html" class="w-8 h-8 rounded-lg inline-flex items-center justify-center text-slate-400 hover:text-[#0082B4] hover:bg-slate-100 transition-colors" title="Xem chi tiết tác vụ">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    </a>
+                  </td>
+                </tr>
+
+                <!-- Row 2 -->
+                <tr class="task-row hover:bg-slate-50/80 transition-colors" data-task-code="TASK-102" data-job="IP09" data-status="IN_PROGRESS" data-priority="HIGH" data-logged-hours="5.5" data-est-hours="6.0">
+                  <td class="p-3.5 text-center"><input type="checkbox" onchange="updateBulkBar()" class="task-check rounded border-slate-300"></td>
+                  <td class="p-3.5 font-mono font-bold text-[#0082B4]">TASK-102</td>
+                  <td class="p-3.5">
+                    <div class="font-bold text-[#002D54] hover:text-[#0082B4]">
+                      <a href="detail.html">Soạn Thảo Đơn Khiếu Nại Từ Chối Nhãn Hiệu</a>
+                    </div>
+                    <div class="text-[11px] text-slate-400 mt-0.5">Dự thảo văn bản pháp lý phản hồi công văn từ chối của Cục SHTT nhóm 12</div>
+                  </td>
+                  <td class="p-3.5">
+                    <div class="flex items-center gap-2">
+                      <span class="w-6 h-6 rounded-full bg-[#0082B4] text-white font-bold flex items-center justify-center text-[10px]">LM</span>
+                      <span class="font-semibold text-slate-700">LS. Lê Hoàng Minh</span>
+                    </div>
+                  </td>
+                  <td class="p-3.5">
+                    <div class="flex items-center gap-1.5">
+                      <span class="font-mono text-[11px] font-bold text-amber-900 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+                        <span class="row-logged-hours">5.5</span>h / 6h
+                      </span>
+                      <button onclick="openLogTimeModal('TASK-102', 'Soạn Thảo Đơn Khiếu Nại Từ Chối Nhãn Hiệu', 5.5, 6.0)" class="p-1 rounded hover:bg-amber-100 text-amber-700 transition-colors" title="Ghi nhận giờ làm">
+                        <svg class="w-3.5 h-3.5 inline-block text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                      </button>
+                    </div>
+                  </td>
+                  <td class="p-3.5">
+                    <span class="px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-gradient-to-r from-[#002D54] to-[#0082B4] text-white shadow-sm inline-block">
+                      Đang Thực Hiện
+                    </span>
+                  </td>
+                  <td class="p-3.5">
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800">Ưu Tiên Cao</span>
+                  </td>
+                  <td class="p-3.5">
+                    <div class="flex items-center gap-2">
+                      <div class="w-16 bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                        <div class="bg-[#0082B4] h-full w-[70%]"></div>
+                      </div>
+                      <span class="font-mono text-[10px] text-[#0082B4] font-bold">70%</span>
+                    </div>
+                  </td>
+                  <td class="p-3.5">
+                    <span class="font-mono text-amber-700 font-bold text-[11px]">29/10/2026</span>
+                  </td>
+                  <td class="p-3.5 text-right">
+                    <a href="detail.html" class="w-8 h-8 rounded-lg inline-flex items-center justify-center text-slate-400 hover:text-[#0082B4] hover:bg-slate-100 transition-colors" title="Xem chi tiết tác vụ">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    </a>
+                  </td>
+                </tr>
+
+                <!-- Row 3 -->
+                <tr class="task-row hover:bg-slate-50/80 transition-colors" data-task-code="TASK-100" data-job="IP09" data-status="COMPLETED" data-priority="NORMAL" data-logged-hours="3.0" data-est-hours="3.0">
+                  <td class="p-3.5 text-center"><input type="checkbox" onchange="updateBulkBar()" class="task-check rounded border-slate-300"></td>
+                  <td class="p-3.5 font-mono font-bold text-slate-400">TASK-100</td>
+                  <td class="p-3.5">
+                    <div class="font-bold text-slate-500 line-through">
+                      <a href="detail.html">Ký Hợp Đồng Dịch Vụ & Nhận Tạm Ứng Đợt 1</a>
+                    </div>
+                    <div class="text-[11px] text-emerald-600 font-medium flex items-center gap-1 mt-0.5">
+                      <span>✓ Đã thanh toán tạm ứng 120.000.000 ₫ và đối soát khớp MISA</span>
+                    </div>
+                  </td>
+                  <td class="p-3.5">
+                    <div class="flex items-center gap-2">
+                      <span class="w-6 h-6 rounded-full bg-[#002D54] text-white font-bold flex items-center justify-center text-[10px]">NT</span>
+                      <span class="font-semibold text-slate-700">LS. Trần Nam</span>
+                    </div>
+                  </td>
+                  <td class="p-3.5">
+                    <div class="flex items-center gap-1.5">
+                      <span class="font-mono text-[11px] font-bold text-amber-900 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+                        <span class="row-logged-hours">3.0</span>h / 3h
+                      </span>
+                      <button onclick="openLogTimeModal('TASK-100', 'Ký Hợp Đồng Dịch Vụ & Nhận Tạm Ứng Đợt 1', 3.0, 3.0)" class="p-1 rounded hover:bg-amber-100 text-amber-700 transition-colors" title="Ghi nhận giờ làm">
+                        <svg class="w-3.5 h-3.5 inline-block text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                      </button>
+                    </div>
+                  </td>
+                  <td class="p-3.5">
+                    <span class="px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-emerald-700 text-white shadow-sm inline-block">
+                      Đã Hoàn Thành
+                    </span>
+                  </td>
+                  <td class="p-3.5">
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-600">Trung Bình</span>
+                  </td>
+                  <td class="p-3.5">
+                    <div class="flex items-center gap-2">
+                      <div class="w-16 bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                        <div class="bg-emerald-500 h-full w-full"></div>
+                      </div>
+                      <span class="font-mono text-[10px] text-emerald-600 font-bold">100%</span>
+                    </div>
+                  </td>
+                  <td class="p-3.5">
+                    <span class="font-mono text-slate-400 text-[11px]">12/10/2026</span>
+                  </td>
+                  <td class="p-3.5 text-right">
+                    <a href="detail.html" class="w-8 h-8 rounded-lg inline-flex items-center justify-center text-slate-400 hover:text-[#0082B4] hover:bg-slate-100 transition-colors" title="Xem chi tiết tác vụ">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    </a>
+                  </td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ======================================================== -->
+        <!-- GROUP 2: ASL-2026-MNA01                                  -->
+        <!-- ======================================================== -->
+        <section class="task-group glass-card rounded-2xl overflow-hidden shadow-sm" data-group-job="MNA01">
+          
+          <div class="p-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between cursor-pointer" onclick="toggleGroup('group-mna01')">
+            <div class="flex items-center gap-3">
+              <svg id="chevron-group-mna01" class="w-4 h-4 text-slate-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-[#002D54] text-white">ASL-2026-MNA01</span>
+                  <h3 class="font-extrabold text-sm text-[#002D54]">Vụ Việc: Tư Vấn M&A Hợp Nhất Thaco Group - HAGL Agrico</h3>
+                  <span class="text-xs text-slate-500 font-semibold">(Thân chủ: Thaco Corporation)</span>
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-xs font-bold text-slate-500">3 Tác vụ</span>
+              <div class="w-24 bg-slate-200 h-2 rounded-full overflow-hidden">
+                <div class="bg-[#0082B4] h-full w-[60%]"></div>
+              </div>
+              <span class="text-xs font-extrabold text-[#0082B4]">60%</span>
+            </div>
+          </div>
+
+          <div id="group-mna01" class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-100/75 border-b border-slate-200 text-slate-600 font-bold uppercase text-[10px] tracking-wider">
+                <tr>
+                  <th class="p-3.5 w-10 text-center"><input type="checkbox" onchange="toggleSelectAllGroup(this, 'group-mna01')" class="rounded border-slate-300"></th>
+                  <th class="p-3.5 w-24">Mã Task</th>
+                  <th class="p-3.5 min-w-[260px]">Tên Tác Vụ</th>
+                  <th class="p-3.5 w-44">Phụ Trách</th>
+                  <th class="p-3.5 w-36">Thời Gian Làm</th>
+                  <th class="p-3.5 w-36">Trạng Thái</th>
+                  <th class="p-3.5 w-28">Mức Ưu Tiên</th>
+                  <th class="p-3.5 w-32">Tiến Độ</th>
+                  <th class="p-3.5 w-28">Hạn Chót</th>
+                  <th class="p-3.5 w-24 text-right">Thao Tác</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 bg-white">
+                
+                <!-- Row 4 -->
+                <tr class="task-row hover:bg-slate-50/80 transition-colors" data-task-code="TASK-101" data-job="MNA01" data-status="WAITING_APPROVAL" data-priority="GATE" data-logged-hours="4.0" data-est-hours="4.0">
+                  <td class="p-3.5 text-center"><input type="checkbox" onchange="updateBulkBar()" class="task-check rounded border-slate-300"></td>
+                  <td class="p-3.5 font-mono font-bold text-purple-700">TASK-101</td>
+                  <td class="p-3.5">
+                    <div class="font-bold text-[#002D54] hover:text-[#0082B4]">
+                      <a href="detail.html">Thẩm Tra Hồ Sơ Chuyển Nhượng Cổ Phần & Ký Partner Gate</a>
+                    </div>
+                    <div class="text-[11px] text-purple-700 font-medium flex items-center gap-1 mt-0.5">
+                      <span><svg class="w-3 h-3 text-amber-700 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/></svg>Cổng phê duyệt nội bộ Partner Gate</span>
+                    </div>
+                  </td>
+                  <td class="p-3.5">
+                    <div class="flex items-center gap-2">
+                      <span class="w-6 h-6 rounded-full bg-purple-100 text-purple-800 font-bold flex items-center justify-center text-[10px]">NA</span>
+                      <span class="font-semibold text-slate-700">LS. Nguyễn Anh</span>
+                    </div>
+                  </td>
+                  <td class="p-3.5">
+                    <div class="flex items-center gap-1.5">
+                      <span class="font-mono text-[11px] font-bold text-amber-900 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+                        <span class="row-logged-hours">4.0</span>h / 4h
+                      </span>
+                      <button onclick="openLogTimeModal('TASK-101', 'Thẩm Tra Hồ Sơ Chuyển Nhượng Cổ Phần', 4.0, 4.0)" class="p-1 rounded hover:bg-amber-100 text-amber-700 transition-colors" title="Ghi nhận giờ làm">
+                        <svg class="w-3.5 h-3.5 inline-block text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                      </button>
+                    </div>
+                  </td>
+                  <td class="p-3.5">
+                    <span class="px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-gradient-to-r from-[#D95300] to-[#FF7A00] text-white shadow-sm inline-block">
+                      Chờ Phê Duyệt
+                    </span>
+                  </td>
+                  <td class="p-3.5">
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-100 text-purple-800">Partner Gate</span>
+                  </td>
+                  <td class="p-3.5">
+                    <div class="flex items-center gap-2">
+                      <div class="w-16 bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                        <div class="bg-amber-500 h-full w-[90%]"></div>
+                      </div>
+                      <span class="font-mono text-[10px] text-amber-700 font-bold">90%</span>
+                    </div>
+                  </td>
+                  <td class="p-3.5">
+                    <span class="font-mono text-amber-700 font-bold text-[11px]">31/10/2026</span>
+                  </td>
+                  <td class="p-3.5 text-right">
+                    <a href="../cases/detail.html" class="px-2 py-1 rounded bg-[#0082B4] text-white font-bold text-[11px] hover:bg-[#002D54] transition-colors inline-block">
+                      Ký Duyệt
+                    </a>
+                  </td>
+                </tr>
+
+                <!-- Row 5 -->
+                <tr class="task-row hover:bg-slate-50/80 transition-colors" data-task-code="TASK-105" data-job="MNA01" data-status="IN_PROGRESS" data-priority="URGENT" data-logged-hours="4.5" data-est-hours="6.0">
+                  <td class="p-3.5 text-center"><input type="checkbox" onchange="updateBulkBar()" class="task-check rounded border-slate-300"></td>
+                  <td class="p-3.5 font-mono font-bold text-[#0082B4]">TASK-105</td>
+                  <td class="p-3.5">
+                    <div class="font-bold text-[#002D54] hover:text-[#0082B4]">
+                      <a href="detail.html">Rà Soát Báo Cáo Thẩm Định Due Diligence</a>
+                    </div>
+                    <div class="text-[11px] text-slate-400 mt-0.5">Rà soát 120 trang báo cáo thẩm định pháp lý rủi ro tài sản đảm bảo ngân hàng</div>
+                  </td>
+                  <td class="p-3.5">
+                    <div class="flex items-center gap-2">
+                      <span class="w-6 h-6 rounded-full bg-[#002D54] text-white font-bold flex items-center justify-center text-[10px]">NT</span>
+                      <span class="font-semibold text-slate-700">LS. Trần Nam (Lead)</span>
+                    </div>
+                  </td>
+                  <td class="p-3.5">
+                    <div class="flex items-center gap-1.5">
+                      <span class="font-mono text-[11px] font-bold text-amber-900 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+                        <span class="row-logged-hours">4.5</span>h / 6h
+                      </span>
+                      <button onclick="openLogTimeModal('TASK-105', 'Rà Soát Báo Cáo Thẩm Định Due Diligence', 4.5, 6.0)" class="p-1 rounded hover:bg-amber-100 text-amber-700 transition-colors" title="Ghi nhận giờ làm">
+                        <svg class="w-3.5 h-3.5 inline-block text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                      </button>
+                    </div>
+                  </td>
+                  <td class="p-3.5">
+                    <span class="px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-gradient-to-r from-[#002D54] to-[#0082B4] text-white shadow-sm inline-block">
+                      Đang Thực Hiện
+                    </span>
+                  </td>
+                  <td class="p-3.5">
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-red-100 text-red-700">Khẩn Cấp</span>
+                  </td>
+                  <td class="p-3.5">
+                    <div class="flex items-center gap-2">
+                      <div class="w-16 bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                        <div class="bg-[#0082B4] h-full w-[60%]"></div>
+                      </div>
+                      <span class="font-mono text-[10px] text-[#0082B4] font-bold">60%</span>
+                    </div>
+                  </td>
+                  <td class="p-3.5">
+                    <span class="font-mono text-red-600 font-extrabold bg-red-50 px-2 py-0.5 rounded text-[11px]">30/10/2026</span>
+                  </td>
+                  <td class="p-3.5 text-right">
+                    <a href="detail.html" class="w-8 h-8 rounded-lg inline-flex items-center justify-center text-slate-400 hover:text-[#0082B4] hover:bg-slate-100 transition-colors" title="Xem chi tiết tác vụ">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    </a>
+                  </td>
+                </tr>
+
+                <!-- Row 6 -->
+                <tr class="task-row hover:bg-slate-50/80 transition-colors" data-task-code="TASK-103" data-job="MNA01" data-status="TODO" data-priority="NORMAL" data-logged-hours="3.0" data-est-hours="8.0">
+                  <td class="p-3.5 text-center"><input type="checkbox" onchange="updateBulkBar()" class="task-check rounded border-slate-300"></td>
+                  <td class="p-3.5 font-mono font-bold text-slate-500">TASK-103</td>
+                  <td class="p-3.5">
+                    <div class="font-bold text-[#002D54] hover:text-[#0082B4]">
+                      <a href="detail.html">Chuẩn Bị Hồ Sơ Nộp Cục Cạnh Tranh & BVNTD</a>
+                    </div>
+                    <div class="text-[11px] text-slate-400 mt-0.5">Thu thập báo cáo tài chính kiểm toán 2 năm liên tiếp của hai bên tham gia</div>
+                  </td>
+                  <td class="p-3.5">
+                    <div class="flex items-center gap-2">
+                      <span class="w-6 h-6 rounded-full bg-blue-100 text-[#002D54] font-bold flex items-center justify-center text-[10px]">VT</span>
+                      <span class="font-semibold text-slate-700">Nguyễn Văn Thành</span>
+                    </div>
+                  </td>
+                  <td class="p-3.5">
+                    <div class="flex items-center gap-1.5">
+                      <span class="font-mono text-[11px] font-bold text-amber-900 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+                        <span class="row-logged-hours">3.0</span>h / 8h
+                      </span>
+                      <button onclick="openLogTimeModal('TASK-103', 'Chuẩn Bị Hồ Sơ Nộp Cục Cạnh Tranh & BVNTD', 3.0, 8.0)" class="p-1 rounded hover:bg-amber-100 text-amber-700 transition-colors" title="Ghi nhận giờ làm">
+                        <svg class="w-3.5 h-3.5 inline-block text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                      </button>
+                    </div>
+                  </td>
+                  <td class="p-3.5">
+                    <span class="px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-slate-800 text-white shadow-sm inline-block">
+                      Cần Làm (TODO)
+                    </span>
+                  </td>
+                  <td class="p-3.5">
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-700">Trung Bình</span>
+                  </td>
+                  <td class="p-3.5">
+                    <div class="flex items-center gap-2">
+                      <div class="w-16 bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                        <div class="bg-slate-400 h-full w-[20%]"></div>
+                      </div>
+                      <span class="font-mono text-[10px] text-slate-500 font-bold">20%</span>
+                    </div>
+                  </td>
+                  <td class="p-3.5">
+                    <span class="font-mono text-slate-600 font-bold text-[11px]">05/11/2026</span>
+                  </td>
+                  <td class="p-3.5 text-right">
+                    <a href="detail.html" class="w-8 h-8 rounded-lg inline-flex items-center justify-center text-slate-400 hover:text-[#0082B4] hover:bg-slate-100 transition-colors" title="Xem chi tiết tác vụ">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    </a>
+                  </td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ======================================================== -->
+        <!-- GROUP 3: ASL-2026-LIT03                                  -->
+        <!-- ======================================================== -->
+        <section class="task-group glass-card rounded-2xl overflow-hidden shadow-sm" data-group-job="LIT03">
+          
+          <div class="p-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between cursor-pointer" onclick="toggleGroup('group-lit03')">
+            <div class="flex items-center gap-3">
+              <svg id="chevron-group-lit03" class="w-4 h-4 text-slate-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-[#002D54] text-white">ASL-2026-LIT03</span>
+                  <h3 class="font-extrabold text-sm text-[#002D54]">Vụ Việc: Tranh Chấp Cổ Đông Sáng Lập Bất Động Sản Phúc Khang</h3>
+                  <span class="text-xs text-slate-500 font-semibold">(Thân chủ: Nhóm Cổ đông thiểu số)</span>
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-xs font-bold text-slate-500">2 Tác vụ</span>
+              <div class="w-24 bg-slate-200 h-2 rounded-full overflow-hidden">
+                <div class="bg-emerald-500 h-full w-[90%]"></div>
+              </div>
+              <span class="text-xs font-extrabold text-emerald-600">90%</span>
+            </div>
+          </div>
+
+          <div id="group-lit03" class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-100/75 border-b border-slate-200 text-slate-600 font-bold uppercase text-[10px] tracking-wider">
+                <tr>
+                  <th class="p-3.5 w-10 text-center"><input type="checkbox" onchange="toggleSelectAllGroup(this, 'group-lit03')" class="rounded border-slate-300"></th>
+                  <th class="p-3.5 w-24">Mã Task</th>
+                  <th class="p-3.5 min-w-[260px]">Tên Tác Vụ</th>
+                  <th class="p-3.5 w-44">Phụ Trách</th>
+                  <th class="p-3.5 w-36">Thời Gian Làm</th>
+                  <th class="p-3.5 w-36">Trạng Thái</th>
+                  <th class="p-3.5 w-28">Mức Ưu Tiên</th>
+                  <th class="p-3.5 w-32">Tiến Độ</th>
+                  <th class="p-3.5 w-28">Hạn Chót</th>
+                  <th class="p-3.5 w-24 text-right">Thao Tác</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 bg-white">
+                
+                <!-- Row 7 -->
+                <tr class="task-row hover:bg-slate-50/80 transition-colors" data-task-code="TASK-108" data-job="LIT03" data-status="WAITING_APPROVAL" data-priority="HIGH" data-logged-hours="1.5" data-est-hours="2.0">
+                  <td class="p-3.5 text-center"><input type="checkbox" onchange="updateBulkBar()" class="task-check rounded border-slate-300"></td>
+                  <td class="p-3.5 font-mono font-bold text-amber-700">TASK-108</td>
+                  <td class="p-3.5">
+                    <div class="font-bold text-[#002D54] hover:text-[#0082B4]">
+                      <a href="detail.html">Dự Thảo Bản Tự Khai Bổ Sung Tranh Chấp Gửi TAND TP.HCM</a>
+                    </div>
+                    <div class="text-[11px] text-slate-400 mt-0.5">Hoàn thiện chứng cứ vi phạm nghĩa vụ trung thành của người đại diện theo pháp luật</div>
+                  </td>
+                  <td class="p-3.5">
+                    <div class="flex items-center gap-2">
+                      <span class="w-6 h-6 rounded-full bg-pink-100 text-pink-700 font-bold flex items-center justify-center text-[10px]">TH</span>
+                      <span class="font-semibold text-slate-700">LS. Phạm Thu Hương</span>
+                    </div>
+                  </td>
+                  <td class="p-3.5">
+                    <div class="flex items-center gap-1.5">
+                      <span class="font-mono text-[11px] font-bold text-amber-900 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+                        <span class="row-logged-hours">1.5</span>h / 2h
+                      </span>
+                      <button onclick="openLogTimeModal('TASK-108', 'Dự Thảo Bản Tự Khai Bổ Sung Tranh Chấp', 1.5, 2.0)" class="p-1 rounded hover:bg-amber-100 text-amber-700 transition-colors" title="Ghi nhận giờ làm">
+                        <svg class="w-3.5 h-3.5 inline-block text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                      </button>
+                    </div>
+                  </td>
+                  <td class="p-3.5">
+                    <span class="px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-gradient-to-r from-[#D95300] to-[#FF7A00] text-white shadow-sm inline-block">
+                      Chờ Phê Duyệt
+                    </span>
+                  </td>
+                  <td class="p-3.5">
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800">Ưu Tiên Cao</span>
+                  </td>
+                  <td class="p-3.5">
+                    <div class="flex items-center gap-2">
+                      <div class="w-16 bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                        <div class="bg-amber-500 h-full w-[85%]"></div>
+                      </div>
+                      <span class="font-mono text-[10px] text-amber-700 font-bold">85%</span>
+                    </div>
+                  </td>
+                  <td class="p-3.5">
+                    <span class="font-mono text-amber-700 font-bold text-[11px]">01/11/2026</span>
+                  </td>
+                  <td class="p-3.5 text-right">
+                    <a href="detail.html" class="w-8 h-8 rounded-lg inline-flex items-center justify-center text-slate-400 hover:text-[#0082B4] hover:bg-slate-100 transition-colors" title="Xem chi tiết tác vụ">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    </a>
+                  </td>
+                </tr>
+
+                <!-- Row 8 -->
+                <tr class="task-row hover:bg-slate-50/80 transition-colors" data-task-code="TASK-107" data-job="LIT03" data-status="COMPLETED" data-priority="NORMAL" data-logged-hours="2.0" data-est-hours="2.0">
+                  <td class="p-3.5 text-center"><input type="checkbox" onchange="updateBulkBar()" class="task-check rounded border-slate-300"></td>
+                  <td class="p-3.5 font-mono font-bold text-slate-400">TASK-107</td>
+                  <td class="p-3.5">
+                    <div class="font-bold text-slate-500 line-through">
+                      <a href="detail.html">Thu Thập Trích Lục Thông Tin Doanh Nghiệp Tại Sở KH&ĐT</a>
+                    </div>
+                    <div class="text-[11px] text-emerald-600 font-medium flex items-center gap-1 mt-0.5">
+                      <span>✓ Đã nhận trích lục và lưu kho hồ sơ điện tử vụ việc</span>
+                    </div>
+                  </td>
+                  <td class="p-3.5">
+                    <div class="flex items-center gap-2">
+                      <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-700 font-bold flex items-center justify-center text-[10px]">PT</span>
+                      <span class="font-semibold text-slate-700">Paralegal Tuấn</span>
+                    </div>
+                  </td>
+                  <td class="p-3.5">
+                    <div class="flex items-center gap-1.5">
+                      <span class="font-mono text-[11px] font-bold text-amber-900 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+                        <span class="row-logged-hours">2.0</span>h / 2h
+                      </span>
+                      <button onclick="openLogTimeModal('TASK-107', 'Thu Thập Trích Lục Tại Sở KH&ĐT', 2.0, 2.0)" class="p-1 rounded hover:bg-amber-100 text-amber-700 transition-colors" title="Ghi nhận giờ làm">
+                        <svg class="w-3.5 h-3.5 inline-block text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                      </button>
+                    </div>
+                  </td>
+                  <td class="p-3.5">
+                    <span class="px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-emerald-700 text-white shadow-sm inline-block">
+                      Đã Hoàn Thành
+                    </span>
+                  </td>
+                  <td class="p-3.5">
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-600">Trung Bình</span>
+                  </td>
+                  <td class="p-3.5">
+                    <div class="flex items-center gap-2">
+                      <div class="w-16 bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                        <div class="bg-emerald-500 h-full w-full"></div>
+                      </div>
+                      <span class="font-mono text-[10px] text-emerald-600 font-bold">100%</span>
+                    </div>
+                  </td>
+                  <td class="p-3.5">
+                    <span class="font-mono text-slate-400 text-[11px]">27/10/2026</span>
+                  </td>
+                  <td class="p-3.5 text-right">
+                    <a href="detail.html" class="w-8 h-8 rounded-lg inline-flex items-center justify-center text-slate-400 hover:text-[#0082B4] hover:bg-slate-100 transition-colors" title="Xem chi tiết tác vụ">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    </a>
+                  </td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+      </div>
+
+    </main>
+
+  </div>
+
+  <script>
+    // Toggle Accordion Group
+    function toggleGroup(groupId) {
+      const el = document.getElementById(groupId);
+      const chevron = document.getElementById('chevron-' + groupId);
+      if (el.classList.contains('hidden')) {
+        el.classList.remove('hidden');
+        chevron.classList.remove('-rotate-90');
+      } else {
+        el.classList.add('hidden');
+        chevron.classList.add('-rotate-90');
+      }
+    }
+
+    // Toggle Select All in a Group
+    function toggleSelectAllGroup(masterCheck, groupId) {
+      const checkboxes = document.querySelectorAll('#' + groupId + ' .task-check');
+      checkboxes.forEach(cb => cb.checked = masterCheck.checked);
+      updateBulkBar();
+    }
+
+    // Update Bulk Action Bar
+    function updateBulkBar() {
+      const checkedBoxes = document.querySelectorAll('.task-check:checked');
+      const bulkBar = document.getElementById('bulk-bar');
+      const countEl = document.getElementById('selected-count');
+      if (checkedBoxes.length > 0) {
+        bulkBar.classList.remove('hidden');
+        countEl.textContent = checkedBoxes.length;
+      } else {
+        bulkBar.classList.add('hidden');
+      }
+    }
+
+    // Filter Table by Search Query, Job, Status, and Priority
+    function filterTable() {
+      const q = document.getElementById('task-search').value.toLowerCase().trim();
+      const jobFilter = document.getElementById('filter-job').value;
+      const statusFilter = document.getElementById('filter-status').value;
+      const priorityFilter = document.getElementById('filter-priority').value;
+
+      const rows = document.querySelectorAll('.task-row');
+      rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        const rowJob = row.getAttribute('data-job');
+        const rowStatus = row.getAttribute('data-status');
+        const rowPriority = row.getAttribute('data-priority');
+
+        const matchQ = !q || text.includes(q);
+        const matchJob = (jobFilter === 'ALL' || rowJob === jobFilter);
+        const matchStatus = (statusFilter === 'ALL' || rowStatus === statusFilter);
+        const matchPriority = (priorityFilter === 'ALL' || rowPriority === priorityFilter);
+
+        if (matchQ && matchJob && matchStatus && matchPriority) {
+          row.classList.remove('hidden');
+        } else {
+          row.classList.add('hidden');
+        }
+      });
+
+      // Hide group sections if all rows in that group are hidden
+      document.querySelectorAll('.task-group').forEach(group => {
+        const groupJob = group.getAttribute('data-group-job');
+        if (jobFilter !== 'ALL' && groupJob !== jobFilter) {
+          group.classList.add('hidden');
+        } else {
+          const visibleRows = group.querySelectorAll('.task-row:not(.hidden)');
+          if (visibleRows.length === 0) {
+            group.classList.add('hidden');
+          } else {
+            group.classList.remove('hidden');
+          }
+        }
+      });
+    }
+
+    // Reset all filters
+    function resetFilters() {
+      document.getElementById('task-search').value = '';
+      document.getElementById('filter-job').value = 'ALL';
+      document.getElementById('filter-status').value = 'ALL';
+      document.getElementById('filter-priority').value = 'ALL';
+      filterTable();
+    }
+
+    // ==========================================
+    // LOG TIME MODAL LOGIC (INTEGRATED TASK HOURS)
+    // ==========================================
+    let currentModalTask = null;
+
+    function openLogTimeModal(taskCode, taskTitle, currentHours, estHours) {
+      currentModalTask = { 
+        taskCode: taskCode, 
+        taskTitle: taskTitle, 
+        currentHours: parseFloat(currentHours) || 0, 
+        estHours: parseFloat(estHours) || 4 
+      };
+      
+      const modal = document.getElementById('log-time-modal');
+      document.getElementById('modal-task-code').value = taskCode;
+      document.getElementById('modal-task-display').textContent = `${taskCode}: ${taskTitle}`;
+      document.getElementById('modal-current-hours').textContent = `${currentModalTask.currentHours.toFixed(1)}h`;
+      
+      const hoursInput = document.getElementById('modal-hours-input');
+      hoursInput.value = '1.0';
+      updateModalNewTotal();
+
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('modal-date-input').value = today;
+      document.getElementById('modal-desc-input').value = '';
+
+      modal.classList.remove('hidden');
+    }
+
+    function closeLogTimeModal() {
+      const modal = document.getElementById('log-time-modal');
+      if (modal) modal.classList.add('hidden');
+      currentModalTask = null;
+    }
+
+    function updateModalNewTotal() {
+      if (!currentModalTask) return;
+      const addHours = parseFloat(document.getElementById('modal-hours-input').value) || 0;
+      const newTotal = currentModalTask.currentHours + addHours;
+      document.getElementById('modal-new-total').textContent = `${newTotal.toFixed(1)}h`;
+    }
+
+    function submitLogTime(e) {
+      e.preventDefault();
+      if (!currentModalTask) return;
+
+      const addHours = parseFloat(document.getElementById('modal-hours-input').value) || 0;
+      if (addHours <= 0) {
+        alert('Vui lòng nhập số giờ lớn hơn 0');
+        return;
+      }
+
+      const rowEl = document.querySelector(`.task-row[data-task-code="${currentModalTask.taskCode}"]`);
+      if (rowEl) {
+        const prevLogged = parseFloat(rowEl.getAttribute('data-logged-hours') || '0');
+        const est = parseFloat(rowEl.getAttribute('data-est-hours') || '4');
+        const newLogged = prevLogged + addHours;
+        
+        rowEl.setAttribute('data-logged-hours', newLogged.toFixed(1));
+
+        const hoursText = rowEl.querySelector('.row-logged-hours');
+        if (hoursText) hoursText.textContent = newLogged.toFixed(1);
+
+        const btn = rowEl.querySelector('button[onclick^="openLogTimeModal"]');
+        if (btn) {
+          const safeTitle = currentModalTask.taskTitle.replace(/'/g, "\\'");
+          btn.setAttribute('onclick', `openLogTimeModal('${currentModalTask.taskCode}', '${safeTitle}', ${newLogged.toFixed(1)}, ${est})`);
+        }
+      }
+
+      alert(`✓ Đã ghi nhận ${addHours} giờ công vào tác vụ ${currentModalTask.taskCode}!`);
+      closeLogTimeModal();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const hoursInput = document.getElementById('modal-hours-input');
+      if (hoursInput) {
+        hoursInput.addEventListener('input', updateModalNewTotal);
+      }
+    });
+  </script>
+
+  <!-- Log Time Interactive Modal -->
+  <div id="log-time-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl max-w-lg w-full shadow-2xl border border-slate-200 overflow-hidden">
+      <div class="p-5 bg-gradient-to-r from-[#002D54] to-[#0082B4] text-white flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center text-lg">
+            <svg class="w-3.5 h-3.5 inline-block text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <div>
+            <h3 class="font-extrabold text-base text-white">Ghi Nhận Giờ Làm Việc (Giờ Công)</h3>
+            <p class="text-xs text-cyan-200">Ghi nhận giờ trực tiếp trên tác vụ, không cần qua timesheet riêng</p>
+          </div>
+        </div>
+        <button onclick="closeLogTimeModal()" class="text-white/70 hover:text-white p-1 rounded-lg hover:bg-white/10 transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <form id="log-time-form" onsubmit="submitLogTime(event)" class="p-6 space-y-4 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Tác vụ đang thực hiện</label>
+          <div id="modal-task-display" class="p-3 bg-slate-50 rounded-xl border border-slate-200 font-bold text-[#002D54]">
+            TASK-104: Nộp Đơn Khiếu Nại Lên Cục SHTT
+          </div>
+          <input type="hidden" id="modal-task-code" value="">
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Số giờ làm việc thêm <span class="text-red-500">*</span></label>
+            <div class="relative">
+              <input type="number" id="modal-hours-input" step="0.25" min="0.25" max="24" value="1.0" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 font-mono text-sm font-bold text-[#002D54] focus:outline-none focus:ring-2 focus:ring-[#0082B4]">
+              <span class="absolute right-3.5 top-2.5 font-bold text-slate-400">giờ</span>
+            </div>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Ngày thực hiện <span class="text-red-500">*</span></label>
+            <input type="date" id="modal-date-input" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0082B4]">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Nhân sự thực hiện</label>
+            <select id="modal-assignee-input" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0082B4]">
+              <option value="PT">Paralegal Trang</option>
+              <option value="ML">LS. Trần Mai Linh</option>
+              <option value="NA">LS. Nguyễn Anh</option>
+              <option value="VT">Nguyễn Văn Thành</option>
+              <option value="NT">LS. Trần Nam</option>
+              <option value="TH">LS. Phạm Thu Hương</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Loại giờ làm</label>
+            <select id="modal-type-input" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0082B4]">
+              <option value="billable"><svg class="w-3.5 h-3.5 inline-block text-slate-400 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg> Tính phí thân chủ (Billable)</option>
+              <option value="non-billable"><svg class="w-3.5 h-3.5 inline-block text-slate-400 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg> Nội bộ văn phòng (Non-billable)</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Mô tả công việc đã thực hiện <span class="text-red-500">*</span></label>
+          <textarea id="modal-desc-input" required rows="3" placeholder="Ví dụ: Rà soát tài liệu đối chứng, soạn văn bản ý kiến pháp lý..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-normal focus:outline-none focus:ring-2 focus:ring-[#0082B4]"></textarea>
+        </div>
+
+        <div class="p-3 bg-amber-50 rounded-xl border border-amber-200 text-amber-900 flex items-center justify-between">
+          <span class="text-[11px]">Hiện tại đã ghi: <strong id="modal-current-hours">1.5h</strong></span>
+          <span class="text-[11px]">Sau khi thêm: <strong id="modal-new-total" class="text-emerald-700">2.5h</strong></span>
+        </div>
+
+        <div class="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+          <button type="button" onclick="closeLogTimeModal()" class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold transition-colors">
+            Hủy
+          </button>
+          <button type="submit" class="px-5 py-2.5 rounded-xl bg-[#002D54] hover:bg-[#0082B4] text-white font-bold shadow-md shadow-cyan-950/20 transition-all flex items-center gap-1.5">
+            <span><svg class="w-3.5 h-3.5 inline-block text-[#0082B4] mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg> Lưu Giờ Công Vào Tác Vụ</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</body>
+</html>

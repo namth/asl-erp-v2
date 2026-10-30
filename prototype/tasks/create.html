@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <script>(function(){if(localStorage.getItem('asl_theme')==='dark'){document.documentElement.classList.add('dark');}else{document.documentElement.classList.remove('dark');}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASL LAW - Tạo Tác Vụ Mới (Create Task)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/layout.css?v=3.1">
+  <script src="../assets/layout.js?v=3.1" defer></script>
+</head>
+<body class="min-h-screen bg-[#F4F8FA] text-slate-800 flex">  <!-- Modular Shared Sidebar (Auto-mounted by layout.js) -->
+  <aside id="sidebar" class="fixed top-0 left-0 bottom-0 w-72 bg-white/95 backdrop-blur-xl z-40 transition-all duration-300 ease-in-out flex flex-col justify-between shadow-xl shadow-slate-900/5"></aside>
+
+  <!-- Main Container -->
+  <div id="main-container" class="flex-1 md:ml-72 flex flex-col min-h-screen transition-all duration-300 ease-in-out">
+
+    <!-- Top Bar with Rich Brand Gradient -->
+    <header class="header-gradient text-white h-20 px-6 flex items-center justify-between sticky top-0 z-30 shadow-md">
+      <div class="flex items-center gap-4">
+        <button onclick="toggleSidebar()" class="md:hidden p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <div>
+          <div class="text-xs text-cyan-200/90 font-medium flex items-center gap-1.5">
+            <a href="index.html" class="hover:underline">Quản Lý Tác Vụ</a>
+            <span>/</span>
+            <span class="text-white font-semibold">Tạo Tác Vụ</span>
+          </div>
+          <h1 class="text-lg font-bold text-white tracking-tight">Thêm Mới Tác Vụ Nghiệp Vụ & Khóa Phụ Thuộc</h1>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition-colors">
+          &larr; Về Bảng Kanban
+        </a>
+      </div>
+    </header>
+
+    <!-- Main Content Form -->
+    <main class="flex-1 p-6 md:p-8 max-w-none mx-auto w-full space-y-8">
+
+      <form onsubmit="event.preventDefault(); alert('Tạo tác vụ thành công! Đã kích hoạt cơ chế khóa phụ thuộc Dependency Guard.'); window.location.href='index.html';" class="space-y-8">
+
+        <div class="glass-card rounded-3xl p-6 md:p-8 space-y-6">
+          <div class="border-b border-slate-100 pb-3">
+            <h2 class="text-base font-bold text-[#002D54]">Thông Tin Tác Vụ Chi Tiết</h2>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-xs">
+            <div class="md:col-span-2">
+              <label class="block font-bold text-slate-700 mb-1">Thuộc Hồ Sơ Vụ Việc <span class="text-red-500">*</span></label>
+              <select class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-sm font-semibold focus:border-[#0082B4] focus:outline-none">
+                <option selected>CASE-2026-089: Tranh chấp bảo hộ nhãn hiệu ASL (Sao Nam)</option>
+                <option>CASE-2026-092: Tư vấn M&A Thâu tóm Nhà máy Điện mặt trời (Foxconn)</option>
+              </select>
+            </div>
+
+            <div class="md:col-span-2">
+              <label class="block font-bold text-slate-700 mb-1">Tiêu Đề Tác Vụ <span class="text-red-500">*</span></label>
+              <input type="text" required placeholder="Ví dụ: Soạn thảo đơn phản tố vi phạm nhãn hiệu..." class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-sm font-semibold focus:border-[#0082B4] focus:outline-none">
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Người Thực Thi (Assignee)</label>
+              <select class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 focus:border-[#0082B4]">
+                <option selected>LS. Trần Mai Linh</option>
+                <option>LS. Hoàng Gia Huy</option>
+                <option>Trợ lý Vũ Minh Trang</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Mức Độ Ưu Tiên</label>
+              <select class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 focus:border-[#0082B4] font-bold text-red-600">
+                <option selected>Khẩn Cấp (Phải xử lý trước 17:00)</option>
+                <option>Cao</option>
+                <option>Trung Bình</option>
+                <option>Thấp</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Hạn Chót Hoàn Thành (Deadline)</label>
+              <input type="datetime-local" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 focus:border-[#0082B4]">
+            </div>
+
+            <!-- Task Dependency Selector -->
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Khóa Phụ Thuộc (Chỉ mở khi Task này xong)</label>
+              <select class="w-full px-3.5 py-2.5 rounded-xl bg-white border-2 border-amber-300 focus:border-[#0082B4] font-medium text-amber-900">
+                <option value="none">-- Không phụ thuộc (Có thể làm ngay) --</option>
+                <option selected>TASK-102: Soạn Dự Thảo Đơn Khiếu Nại SHTT</option>
+                <option>TASK-100: Ký HĐ Dịch Vụ Pháp Lý</option>
+              </select>
+              <span class="text-[10px] text-amber-600 font-medium">Hệ thống sẽ chặn kéo trạng thái nếu Task này chưa Xong</span>
+            </div>
+
+            <!-- Integrated Time Tracking (Giờ công & Thời gian làm) -->
+            <div class="md:col-span-2 p-4 rounded-2xl bg-amber-50/70 border border-amber-200 space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-xs text-amber-900 flex items-center gap-1.5">
+                  <svg class="w-3.5 h-3.5 inline-block text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Thiết Lập Thời Gian Làm Việc & Giờ Công
+                </span>
+                <span class="text-[11px] text-amber-700 font-medium">Tích hợp chấm công trực tiếp vào tác vụ</span>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div>
+                  <label class="block font-bold text-slate-700 mb-1 text-[11px]">Thời Gian Dự Kiến (Ước tính)</label>
+                  <div class="relative">
+                    <input type="number" step="0.5" min="0.5" value="4.0" class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-300 font-mono text-xs font-bold text-[#002D54] focus:border-[#0082B4]">
+                    <span class="absolute right-3 top-2 text-[11px] font-bold text-slate-400">giờ</span>
+                  </div>
+                </div>
+                <div>
+                  <label class="block font-bold text-slate-700 mb-1 text-[11px]">Giờ Đã Làm Ban Đầu (nếu có)</label>
+                  <div class="relative">
+                    <input type="number" step="0.5" min="0" value="0.0" class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-300 font-mono text-xs font-bold text-[#002D54] focus:border-[#0082B4]">
+                    <span class="absolute right-3 top-2 text-[11px] font-bold text-slate-400">giờ</span>
+                  </div>
+                </div>
+                <div>
+                  <label class="block font-bold text-slate-700 mb-1 text-[11px]">Cơ Chế Tính Phí Giờ</label>
+                  <select class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-300 text-xs font-medium text-slate-700 focus:border-[#0082B4]">
+                    <option selected><svg class="w-3.5 h-3.5 inline-block text-slate-400 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg> Tính phí thân chủ (Billable)</option>
+                    <option><svg class="w-3.5 h-3.5 inline-block text-slate-400 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg> Chi phí nội bộ (Non-billable)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="md:col-span-2">
+              <label class="block font-bold text-slate-700 mb-1">Nội Dung Chi Tiết / Hướng Dẫn Nghiệp Vụ</label>
+              <textarea rows="3" placeholder="Nhập yêu cầu cụ thể, trích dẫn văn bản liên quan..." class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 focus:border-[#0082B4] focus:outline-none"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between pt-2">
+          <a href="index.html" class="px-5 py-2.5 rounded-xl border border-slate-300 text-slate-600 font-bold text-xs hover:bg-slate-100">
+            Hủy Bỏ
+          </a>
+          <button type="submit" class="px-6 py-2.5 rounded-xl bg-[#002D54] hover:bg-[#0082B4] text-white font-bold text-xs shadow-md">
+            Khởi Tạo Tác Vụ
+          </button>
+        </div>
+
+      </form>
+
+    </main>
+
+  </div>
+
+</body>
+</html>

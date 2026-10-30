@@ -1,0 +1,1843 @@
+<!DOCTYPE html>
+<html lang="vi" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ERP ASL LAW - 3D Glassmorphic Light Theme UI/UX Studio</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    /* Brand Theme Colors */
+    :root {
+      --asl-navy: #002D54;
+      --asl-blue: #0082B4;
+      --asl-cyan: #0EA5E9;
+      --asl-orange: #FF7A00;
+      --asl-orange-light: #FFF4EB;
+      --asl-bg-light: #F4F8FA;
+    }
+
+    /* Ambient Background Glow */
+    .bg-mesh-light {
+      background-color: #F3F7FA;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(0, 130, 180, 0.08) 0px, transparent 55%),
+        radial-gradient(at 100% 0%, rgba(0, 45, 84, 0.06) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, rgba(255, 122, 0, 0.04) 0px, transparent 60%),
+        radial-gradient(at 100% 100%, rgba(0, 130, 180, 0.06) 0px, transparent 50%);
+    }
+
+    /* 3D Glassmorphic Cards with Specular Highlight Borders */
+    .glass-card-3d {
+      background: rgba(255, 255, 255, 0.82);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.95);
+      box-shadow: 
+        0 1px 2px 0 rgba(0, 45, 84, 0.04),
+        0 8px 24px -4px rgba(0, 45, 84, 0.07),
+        inset 0 1px 1px 0 rgba(255, 255, 255, 0.9);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .glass-card-3d:hover {
+      box-shadow: 
+        0 2px 4px 0 rgba(0, 45, 84, 0.05),
+        0 16px 36px -6px rgba(0, 45, 84, 0.11),
+        inset 0 1px 1.5px 0 rgba(255, 255, 255, 1);
+      transform: translateY(-2px);
+    }
+
+    /* Primary 3D Glossy Buttons */
+    .btn-3d-navy {
+      background: linear-gradient(180deg, #003B6D 0%, #002547 100%);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-top: 1px solid rgba(255, 255, 255, 0.5);
+      box-shadow: 
+        0 4px 12px -2px rgba(0, 45, 84, 0.35),
+        inset 0 1px 1px 0 rgba(255, 255, 255, 0.3);
+      transition: all 0.2s ease;
+    }
+    .btn-3d-navy:hover {
+      background: linear-gradient(180deg, #004987 0%, #002D54 100%);
+      box-shadow: 
+        0 6px 16px -2px rgba(0, 45, 84, 0.45),
+        inset 0 1px 1px 0 rgba(255, 255, 255, 0.4);
+      transform: translateY(-1px);
+    }
+    .btn-3d-navy:active {
+      transform: translateY(1px);
+      box-shadow: 0 2px 6px -1px rgba(0, 45, 84, 0.4);
+    }
+
+    /* Orange Accent 3D Buttons */
+    .btn-3d-orange {
+      background: linear-gradient(180deg, #FF8C1A 0%, #FF6F00 100%);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-top: 1px solid rgba(255, 255, 255, 0.6);
+      box-shadow: 
+        0 4px 14px -2px rgba(255, 122, 0, 0.4),
+        inset 0 1px 1px 0 rgba(255, 255, 255, 0.4);
+      transition: all 0.2s ease;
+    }
+    .btn-3d-orange:hover {
+      background: linear-gradient(180deg, #FFA033 0%, #FF7A00 100%);
+      box-shadow: 
+        0 6px 18px -2px rgba(255, 122, 0, 0.5),
+        inset 0 1px 1px 0 rgba(255, 255, 255, 0.5);
+      transform: translateY(-1px);
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(0, 45, 84, 0.03);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(0, 45, 84, 0.15);
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(0, 130, 180, 0.35);
+    }
+
+    @keyframes pulse-soft {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.04); opacity: 0.85; }
+    }
+    .animate-pulse-soft {
+      animation: pulse-soft 2.5s infinite ease-in-out;
+    }
+  </style>
+</head>
+<body class="h-full bg-mesh-light text-slate-800 antialiased overflow-hidden flex flex-col select-none">
+
+  <!-- ================= TOP APP BAR / STUDIO CONTROLLER ================= -->
+  <header class="h-14 bg-white/80 backdrop-blur-xl border-b border-white/70 shadow-[0_2px_15px_rgba(0,45,84,0.05)] px-5 flex items-center justify-between shrink-0 z-40">
+    <!-- Brand Logo & Studio Identity -->
+    <div class="flex items-center gap-3">
+      <!-- High Quality ASL Logo Container -->
+      <div class="h-9 flex items-center px-2 py-1 bg-white rounded-xl shadow-xs border border-slate-200/60">
+        <img src="logo-asl.png" onerror="this.onerror=null; this.src='file:///Users/namtran/.gemini/antigravity/brain/b999e189-2b21-4fb6-9f8e-e2d1abb8ae1f/.user_uploaded/media_1793084872809_c4b2e3e4.png';" alt="ASL LAW" class="h-7 w-auto object-contain" />
+      </div>
+
+      <div class="hidden sm:flex flex-col">
+        <div class="flex items-center gap-1.5">
+          <span class="font-extrabold text-[#002D54] text-xs tracking-tight uppercase">Enterprise ERP</span>
+          <span class="text-[10px] font-bold text-[#FF7A00] bg-orange-50 border border-orange-200/80 px-1.5 py-0.2 rounded-full font-mono">v2.5 3D Glass</span>
+        </div>
+        <span class="text-[10px] text-slate-400 font-medium">Associates of Successful Lawyers</span>
+      </div>
+    </div>
+
+    <!-- Screen Navigation Switcher (6 Primary Modules) -->
+    <div class="flex items-center gap-1 bg-slate-200/60 p-1 rounded-xl border border-slate-300/50 text-xs font-semibold shadow-inner">
+      <button onclick="setScreen('user-dashboard')" id="tab-user-dashboard" class="px-3 py-1.5 rounded-lg transition text-[#002D54] bg-white shadow-xs font-bold flex items-center gap-1.5">
+        <span class="w-2 h-2 rounded-full bg-[#0082B4]"></span>
+        <span>SCR-02: User Dashboard</span>
+      </button>
+
+      <button onclick="setScreen('admin-workflow')" id="tab-admin-workflow" class="px-3 py-1.5 rounded-lg transition text-slate-600 hover:text-[#002D54] flex items-center gap-1.5">
+        <span class="w-2 h-2 rounded-full bg-[#FF7A00]"></span>
+        <span>SCR-06: Workflow Builder (Admin)</span>
+      </button>
+
+      <button onclick="setScreen('case-workspace')" id="tab-case-workspace" class="px-3 py-1.5 rounded-lg transition text-slate-600 hover:text-[#002D54]">
+        SCR-08: Case Workspace
+      </button>
+
+      <button onclick="setScreen('kanban-tasks')" id="tab-kanban-tasks" class="px-3 py-1.5 rounded-lg transition text-slate-600 hover:text-[#002D54]">
+        SCR-09: Kanban
+      </button>
+
+      <button onclick="setScreen('misa-inbox')" id="tab-misa-inbox" class="px-3 py-1.5 rounded-lg transition text-slate-600 hover:text-[#002D54]">
+        SCR-11: MISA
+      </button>
+
+      <button onclick="setScreen('commissions')" id="tab-commissions" class="px-3 py-1.5 rounded-lg transition text-slate-600 hover:text-[#002D54]">
+        SCR-12: Hoa hồng
+      </button>
+
+      <button onclick="setScreen('floorplan')" id="tab-floorplan" class="px-3 py-1.5 rounded-lg transition text-slate-600 hover:text-[#002D54] flex items-center gap-1.5">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span>SCR-15: Văn Phòng 2.5D</span>
+      </button>
+    </div>
+
+    <!-- Header Right Quick Actions -->
+    <div class="flex items-center gap-2.5">
+      <!-- AI Assistant Button with Orange Orb Accent -->
+      <button onclick="toggleAiDrawer()" class="flex items-center gap-2 px-3 py-1.5 rounded-xl btn-3d-orange text-white text-xs font-bold shadow-md">
+        <span class="text-sm">✨</span>
+        <span class="hidden md:inline">Trợ lý AI ASL</span>
+      </button>
+
+      <!-- Global Bell Notification with Pulse -->
+      <div class="relative cursor-pointer p-2 rounded-xl bg-white/90 border border-slate-200/80 shadow-xs hover:bg-slate-50 transition" onclick="triggerNotificationToast()">
+        <svg class="w-4 h-4 text-[#002D54]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+        <span class="w-2 h-2 rounded-full bg-[#FF7A00] absolute top-1.5 right-1.5 ring-2 ring-white"></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= MASTER LAYOUT WRAPPER ================= -->
+  <div class="flex-1 flex overflow-hidden relative">
+
+    <!-- MASTER SHELL: 3D GLASSMORPHIC SIDEBAR -->
+    <aside id="main-sidebar" class="w-64 bg-white/70 backdrop-blur-2xl border-r border-white/80 shadow-[4px_0_24px_rgba(0,45,84,0.03)] flex flex-col shrink-0 transition-all duration-300 z-30">
+      
+      <!-- User Quick Info Header -->
+      <div class="p-4 border-b border-slate-200/60 flex items-center gap-3 bg-gradient-to-r from-blue-50/50 to-transparent">
+        <div class="relative">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#002D54] to-[#0082B4] flex items-center justify-center font-extrabold text-white text-xs shadow-md shadow-blue-900/20">
+            VT
+          </div>
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 absolute -bottom-0.5 -right-0.5 ring-2 ring-white"></span>
+        </div>
+        <div class="flex flex-col min-w-0">
+          <span class="text-xs font-bold text-[#002D54] truncate">LS. Nguyễn Văn Trường</span>
+          <span class="text-[10px] text-[#0082B4] font-semibold truncate">Trưởng nhóm Sở hữu Trí tuệ</span>
+        </div>
+      </div>
+
+      <!-- Navigation Tree -->
+      <nav class="flex-1 py-4 px-3 space-y-1.5 overflow-y-auto text-xs font-medium">
+        
+        <div class="text-[10px] font-bold text-slate-400 px-3 uppercase tracking-wider mb-1 font-mono">Bàn làm việc Cá nhân</div>
+        
+        <a href="javascript:void(0)" onclick="setScreen('user-dashboard')" class="flex items-center justify-between px-3 py-2.5 rounded-xl transition font-semibold group bg-gradient-to-r from-blue-50 to-white text-[#002D54] border border-blue-200/60 shadow-xs">
+          <div class="flex items-center gap-2.5">
+            <div class="w-7 h-7 rounded-lg bg-[#0082B4] text-white flex items-center justify-center shadow-xs">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+            </div>
+            <span>Dashboard Cá nhân</span>
+          </div>
+          <span class="text-[10px] bg-[#0082B4]/10 text-[#0082B4] px-1.5 py-0.5 rounded font-mono font-bold">SCR-02</span>
+        </a>
+
+        <a href="javascript:void(0)" onclick="setScreen('case-workspace')" class="flex items-center justify-between px-3 py-2 rounded-xl text-slate-600 hover:bg-white hover:text-[#002D54] hover:shadow-xs transition">
+          <div class="flex items-center gap-2.5">
+            <div class="w-7 h-7 rounded-lg bg-slate-100 text-slate-500 flex items-center justify-center">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            </div>
+            <span>Vụ việc & Hồ sơ</span>
+          </div>
+          <span class="text-[10px] bg-slate-100 text-slate-600 font-bold px-1.5 py-0.5 rounded">14</span>
+        </a>
+
+        <a href="javascript:void(0)" onclick="setScreen('kanban-tasks')" class="flex items-center justify-between px-3 py-2 rounded-xl text-slate-600 hover:bg-white hover:text-[#002D54] hover:shadow-xs transition">
+          <div class="flex items-center gap-2.5">
+            <div class="w-7 h-7 rounded-lg bg-slate-100 text-slate-500 flex items-center justify-center">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+            </div>
+            <span>Tác vụ Kanban (Jira)</span>
+          </div>
+          <span class="text-[10px] bg-orange-100 text-orange-700 font-bold px-1.5 py-0.5 rounded">4 gấp</span>
+        </a>
+
+        <div class="pt-4 text-[10px] font-bold text-slate-400 px-3 uppercase tracking-wider mb-1 font-mono">Tài chính & Phối hợp</div>
+
+        <a href="javascript:void(0)" onclick="setScreen('misa-inbox')" class="flex items-center justify-between px-3 py-2 rounded-xl text-slate-600 hover:bg-white hover:text-[#002D54] hover:shadow-xs transition">
+          <div class="flex items-center gap-2.5">
+            <div class="w-7 h-7 rounded-lg bg-slate-100 text-slate-500 flex items-center justify-center">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <span>Kế toán MISA</span>
+          </div>
+          <span class="w-5 h-5 rounded-full bg-rose-500/10 text-rose-600 border border-rose-200 flex items-center justify-center text-[10px] font-bold">1</span>
+        </a>
+
+        <a href="javascript:void(0)" onclick="setScreen('commissions')" class="flex items-center justify-between px-3 py-2 rounded-xl text-slate-600 hover:bg-white hover:text-[#002D54] hover:shadow-xs transition">
+          <div class="flex items-center gap-2.5">
+            <div class="w-7 h-7 rounded-lg bg-slate-100 text-slate-500 flex items-center justify-center">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+            </div>
+            <span>Hoa hồng Thực thu</span>
+          </div>
+        </a>
+
+        <!-- ADMIN SPECIAL ACCESS BLOCK -->
+        <div class="pt-4 text-[10px] font-bold text-[#FF7A00] px-3 uppercase tracking-wider mb-1 font-mono flex items-center gap-1">
+          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+          <span>Phân hệ Quản trị (Admin)</span>
+        </div>
+
+        <a href="javascript:void(0)" onclick="setScreen('admin-workflow')" class="flex items-center justify-between px-3 py-2.5 rounded-xl transition font-semibold group bg-gradient-to-r from-orange-50 to-white text-[#002D54] border border-orange-200/60 shadow-xs">
+          <div class="flex items-center gap-2.5">
+            <div class="w-7 h-7 rounded-lg bg-gradient-to-tr from-[#FF7A00] to-amber-500 text-white flex items-center justify-center shadow-xs">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/></svg>
+            </div>
+            <span>Workflow Builder Studio</span>
+          </div>
+          <span class="text-[10px] bg-orange-500/10 text-orange-600 px-1.5 py-0.5 rounded font-mono font-bold">SCR-06</span>
+        </a>
+
+        <a href="javascript:void(0)" class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-500 hover:bg-white hover:text-slate-800 transition">
+          <div class="w-7 h-7 rounded-lg bg-slate-100 text-slate-400 flex items-center justify-center">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+          </div>
+          <span>Nhật ký Audit Logs (Postgres)</span>
+        </a>
+      </nav>
+
+      <!-- Sidebar Bottom System Status Card -->
+      <div class="p-3 m-3 rounded-2xl bg-gradient-to-br from-blue-900 to-[#002D54] text-white space-y-2 shadow-lg shadow-blue-950/20">
+        <div class="flex items-center justify-between">
+          <span class="text-[10px] font-bold uppercase tracking-wider text-cyan-300 font-mono">ASL Cloud Server</span>
+          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+        </div>
+        <p class="text-[11px] text-slate-200">On-Premise Intranet: <span class="font-mono text-cyan-200">192.168.1.100</span></p>
+        <div class="w-full bg-white/20 h-1 rounded-full overflow-hidden">
+          <div class="bg-cyan-400 h-1 rounded-full" style="width: 28%"></div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- CONTENT CANVAS CONTAINER (VIEWPORT WRAPPER) -->
+    <main class="flex-1 flex flex-col overflow-hidden relative">
+
+      <!-- SCROLLABLE PAGE WORKSPACE -->
+      <div id="viewport-container" class="flex-1 overflow-y-auto p-6 transition-all duration-300">
+
+        <!-- ================= SCREEN 1: SCR-02 USER DASHBOARD ================= -->
+        <section id="screen-user-dashboard" class="space-y-6 max-w-7xl mx-auto">
+          <div id="state-content-user-dashboard">
+            <!-- Rendered by JS -->
+          </div>
+        </section>
+
+        <!-- ================= SCREEN 2: SCR-06 WORKFLOW BUILDER (ADMIN) ================= -->
+        <section id="screen-admin-workflow" class="space-y-6 max-w-7xl mx-auto hidden">
+          <div id="state-content-admin-workflow">
+            <!-- Rendered by JS -->
+          </div>
+        </section>
+
+        <!-- ================= SCREEN 3: SCR-08 CASE WORKSPACE ================= -->
+        <section id="screen-case-workspace" class="space-y-6 max-w-7xl mx-auto hidden">
+          <div id="state-content-case-workspace">
+            <!-- Rendered by JS -->
+          </div>
+        </section>
+
+        <!-- ================= SCREEN 4: SCR-09 KANBAN BOARD ================= -->
+        <section id="screen-kanban-tasks" class="space-y-6 max-w-7xl mx-auto hidden">
+          <div id="state-content-kanban-tasks">
+            <!-- Rendered by JS -->
+          </div>
+        </section>
+
+        <!-- ================= SCREEN 5: SCR-11 MISA ACCOUNTING INBOX ================= -->
+        <section id="screen-misa-inbox" class="space-y-6 max-w-7xl mx-auto hidden">
+          <div id="state-content-misa-inbox">
+            <!-- Rendered by JS -->
+          </div>
+        </section>
+
+        <!-- ================= SCREEN 6: SCR-12 BILLING & COMMISSIONS ================= -->
+        <section id="screen-commissions" class="space-y-6 max-w-7xl mx-auto hidden">
+          <div id="state-content-commissions">
+            <!-- Rendered by JS -->
+          </div>
+        </section>
+
+        <!-- ================= SCREEN 7: SCR-15 VIRTUAL OFFICE FLOORPLAN ================= -->
+        <section id="screen-floorplan" class="space-y-6 max-w-7xl mx-auto hidden">
+          <div id="state-content-floorplan">
+            <!-- Rendered by JS -->
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <!-- ================= RIGHT-EDGE FLOATING DOCK (STORYBOOK CONTROLLER) ================= -->
+    <button id="dock-pill-btn" onclick="toggleDock(true)" class="hidden fixed right-0 top-24 z-50 bg-[#002D54] hover:bg-[#003B6D] text-[#FF7A00] p-2.5 rounded-l-2xl shadow-2xl border-l border-y border-white/20 transition flex flex-col items-center gap-1 cursor-pointer group">
+      <svg class="w-5 h-5 text-[#FF7A00] group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
+      <span class="text-[10px] font-extrabold text-white uppercase tracking-wider [writing-mode:vertical-lr] rotate-180 py-1">4-STATES</span>
+    </button>
+
+    <aside id="dock-expanded" class="fixed right-4 top-20 z-50 bg-white/85 backdrop-blur-2xl text-[#002D54] p-2.5 rounded-2xl shadow-2xl border border-white/95 flex flex-col items-center gap-2.5 transition-all">
+      <div class="flex items-center justify-between w-full px-1 pb-1 border-b border-slate-200/80">
+        <span class="text-[10px] font-black uppercase text-[#0082B4] font-mono">SB HUB</span>
+        <button onclick="toggleDock(false)" class="p-1 rounded-md text-slate-400 hover:text-[#002D54] transition">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+
+      <!-- 4-State Switchers -->
+      <div class="flex flex-col gap-1 w-full">
+        <!-- 1. Success -->
+        <div class="relative group">
+          <button onclick="setState('success')" id="btn-state-success" class="p-2 w-full rounded-xl transition bg-[#002D54] text-white font-bold ring-2 ring-blue-500/30 flex justify-center shadow-sm">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </button>
+          <div class="absolute right-full mr-3 top-1/2 -translate-y-1/2 px-2.5 py-1.5 rounded-xl bg-[#002D54] text-white border border-slate-700 text-xs font-semibold whitespace-nowrap shadow-xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
+            1. Success (Dữ liệu hoạt động 3D)
+          </div>
+        </div>
+
+        <!-- 2. Loading -->
+        <div class="relative group">
+          <button onclick="setState('loading')" id="btn-state-loading" class="p-2 w-full rounded-xl transition text-slate-500 hover:bg-slate-100 flex justify-center">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </button>
+          <div class="absolute right-full mr-3 top-1/2 -translate-y-1/2 px-2.5 py-1.5 rounded-xl bg-[#002D54] text-white border border-slate-700 text-xs font-semibold whitespace-nowrap shadow-xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
+            2. Loading (Skeleton Kính mờ)
+          </div>
+        </div>
+
+        <!-- 3. Empty -->
+        <div class="relative group">
+          <button onclick="setState('empty')" id="btn-state-empty" class="p-2 w-full rounded-xl transition text-slate-500 hover:bg-slate-100 flex justify-center">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
+          </button>
+          <div class="absolute right-full mr-3 top-1/2 -translate-y-1/2 px-2.5 py-1.5 rounded-xl bg-[#002D54] text-white border border-slate-700 text-xs font-semibold whitespace-nowrap shadow-xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
+            3. Empty State (Chưa có dữ liệu)
+          </div>
+        </div>
+
+        <!-- 4. Error -->
+        <div class="relative group">
+          <button onclick="setState('error')" id="btn-state-error" class="p-2 w-full rounded-xl transition text-slate-500 hover:bg-slate-100 flex justify-center">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+          </button>
+          <div class="absolute right-full mr-3 top-1/2 -translate-y-1/2 px-2.5 py-1.5 rounded-xl bg-[#002D54] text-white border border-slate-700 text-xs font-semibold whitespace-nowrap shadow-xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
+            4. Error State (Guard Violation)
+          </div>
+        </div>
+      </div>
+
+      <div class="w-6 h-px bg-slate-200 my-0.5"></div>
+
+      <!-- Viewports Switcher -->
+      <div class="flex flex-col gap-1 w-full">
+        <button onclick="setViewport('desktop')" id="vp-desktop" class="p-1.5 w-full rounded-lg bg-blue-50 text-[#0082B4] font-bold flex justify-center">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        </button>
+        <button onclick="setViewport('laptop')" id="vp-laptop" class="p-1.5 w-full rounded-lg text-slate-400 hover:text-[#002D54] flex justify-center">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20h6l-.75-3M4 14h16M5 14h14a1 1 0 001-1V6a1 1 0 00-1-1H5a1 1 0 00-1 1v7a1 1 0 001 1z"/></svg>
+        </button>
+        <button onclick="setViewport('tablet')" id="vp-tablet" class="p-1.5 w-full rounded-lg text-slate-400 hover:text-[#002D54] flex justify-center">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+        </button>
+      </div>
+    </aside>
+
+    <!-- ================= SLIDE-IN AI ASSISTANT DRAWER (SCR-14) ================= -->
+    <div id="ai-drawer" class="fixed right-0 top-14 bottom-0 w-96 bg-white/90 backdrop-blur-2xl border-l border-white/80 shadow-2xl flex flex-col z-40 transform translate-x-full transition-transform duration-300">
+      <div class="h-14 px-4 bg-gradient-to-r from-[#002D54] to-[#00477E] text-white flex items-center justify-between shrink-0 shadow-md">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#FF7A00] to-amber-400 flex items-center justify-center text-white font-black text-xs shadow-md">
+            ✨
+          </div>
+          <div class="flex flex-col">
+            <span class="text-xs font-bold text-white">ASL Legal AI Intelligence</span>
+            <span class="text-[10px] text-cyan-200">Metadata & Workflow Assistant</span>
+          </div>
+        </div>
+        <button onclick="toggleAiDrawer()" class="p-1.5 rounded-lg text-slate-300 hover:text-white transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <!-- Chat History -->
+      <div id="ai-chat-messages" class="flex-1 p-4 overflow-y-auto space-y-3 text-xs">
+        <div class="flex gap-2">
+          <div class="w-6 h-6 rounded-full bg-[#0082B4]/10 text-[#0082B4] border border-[#0082B4]/30 flex items-center justify-center shrink-0 font-bold text-[10px]">AI</div>
+          <div class="glass-card-3d rounded-2xl rounded-tl-none p-3 text-slate-700 space-y-1">
+            <p class="font-medium">Chào Luật sư Trường! Tôi là trợ lý pháp lý AI của ASL Law. Tôi có thể giúp bạn kiểm tra lịch tòa án, tra cứu deadline vụ việc hoặc trạng thái đối soát MISA.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Prompt Chips -->
+      <div class="px-3 py-2 border-t border-slate-200/60 flex flex-wrap gap-1.5 bg-white/50">
+        <button onclick="askAi('Hôm nay tôi có bao nhiêu task cần hoàn thành trước 17h?')" class="text-[11px] bg-white border border-slate-200 hover:border-[#0082B4] px-2.5 py-1 rounded-full text-slate-700 transition shadow-2xs">
+          ⚡ Task gấp trước 17h hôm nay?
+        </button>
+        <button onclick="askAi('Kiểm tra đợt thu tiền MISA của vụ việc ASL-2026-IP-0045?')" class="text-[11px] bg-white border border-slate-200 hover:border-[#FF7A00] px-2.5 py-1 rounded-full text-slate-700 transition shadow-2xs">
+          💰 Tiền về vụ ASL-2026-IP-0045?
+        </button>
+      </div>
+
+      <!-- Chat Input Box -->
+      <div class="p-3 border-t border-slate-200/70 bg-white/80">
+        <div class="relative flex items-center">
+          <input type="text" id="ai-input" placeholder="Hỏi AI về vụ việc, task, deadline..." class="w-full pl-3 pr-10 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0082B4]/30 focus:border-[#0082B4] transition shadow-inner" onkeydown="if(event.key === 'Enter') handleAiSend()" />
+          <button onclick="handleAiSend()" class="absolute right-1.5 p-1.5 btn-3d-navy text-white rounded-lg transition">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ================= TOAST NOTIFICATION ================= -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 bg-[#002D54] text-white px-4 py-3 rounded-xl shadow-2xl border border-white/20 flex items-center gap-3 text-xs">
+    <div id="toast-icon"></div>
+    <div id="toast-msg"></div>
+  </div>
+
+  <!-- ================= JAVASCRIPT LOGIC & STATE RENDERING ================= -->
+  <script>
+    let currentScreen = 'user-dashboard';
+    let currentState = 'success';
+    let currentViewport = 'desktop';
+    let isAiDrawerOpen = false;
+
+    // Set Active Screen Tab
+    function setScreen(screenId) {
+      currentScreen = screenId;
+      const allScreens = ['user-dashboard', 'admin-workflow', 'case-workspace', 'kanban-tasks', 'misa-inbox', 'commissions', 'floorplan'];
+      allScreens.forEach(id => {
+        const tab = document.getElementById('tab-' + id);
+        const section = document.getElementById('screen-' + id);
+        if (id === screenId) {
+          tab.className = "px-3 py-1.5 rounded-lg transition text-[#002D54] bg-white shadow-xs font-bold flex items-center gap-1.5";
+          section.classList.remove('hidden');
+        } else {
+          tab.className = "px-3 py-1.5 rounded-lg transition text-slate-600 hover:text-[#002D54] flex items-center gap-1.5";
+          section.classList.add('hidden');
+        }
+      });
+      renderCurrentScreen();
+    }
+
+    // Set 4-State
+    function setState(state) {
+      currentState = state;
+      ['success', 'loading', 'empty', 'error'].forEach(st => {
+        const btn = document.getElementById('btn-state-' + st);
+        if (st === state) {
+          if (st === 'error') {
+            btn.className = "p-2 w-full rounded-xl transition bg-rose-600 text-white font-bold ring-2 ring-rose-400 flex justify-center shadow-sm";
+          } else {
+            btn.className = "p-2 w-full rounded-xl transition bg-[#002D54] text-white font-bold ring-2 ring-blue-500/30 flex justify-center shadow-sm";
+          }
+        } else {
+          btn.className = "p-2 w-full rounded-xl transition text-slate-500 hover:bg-slate-100 flex justify-center";
+        }
+      });
+      renderCurrentScreen();
+      showToast('Đã chuyển sang trạng thái: ' + state.toUpperCase(), 'info');
+    }
+
+    // Set Viewport
+    function setViewport(vp) {
+      currentViewport = vp;
+      const container = document.getElementById('viewport-container');
+      ['desktop', 'laptop', 'tablet'].forEach(v => {
+        const btn = document.getElementById('vp-' + v);
+        if (v === vp) {
+          btn.className = "p-1.5 w-full rounded-lg bg-blue-50 text-[#0082B4] font-bold flex justify-center";
+        } else {
+          btn.className = "p-1.5 w-full rounded-lg text-slate-400 hover:text-[#002D54] flex justify-center";
+        }
+      });
+
+      if (vp === 'desktop') {
+        container.className = "flex-1 overflow-y-auto p-6 transition-all duration-300 w-full";
+      } else if (vp === 'laptop') {
+        container.className = "flex-1 overflow-y-auto p-6 transition-all duration-300 max-w-[1280px] mx-auto border-x border-dashed border-blue-200/80 bg-white/40 shadow-inner";
+      } else if (vp === 'tablet') {
+        container.className = "flex-1 overflow-y-auto p-6 transition-all duration-300 max-w-[768px] mx-auto border-x border-dashed border-blue-200/80 bg-white/40 shadow-inner";
+      }
+    }
+
+    function toggleDock(open) {
+      document.getElementById('dock-expanded').style.display = open ? 'flex' : 'none';
+      document.getElementById('dock-pill-btn').style.display = open ? 'none' : 'flex';
+    }
+
+    function toggleAiDrawer() {
+      isAiDrawerOpen = !isAiDrawerOpen;
+      const drawer = document.getElementById('ai-drawer');
+      if (isAiDrawerOpen) {
+        drawer.classList.remove('translate-x-full');
+      } else {
+        drawer.classList.add('translate-x-full');
+      }
+    }
+
+    function showToast(msg, type = 'success') {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toast-msg');
+      const toastIcon = document.getElementById('toast-icon');
+      
+      toastMsg.innerText = msg;
+      if (type === 'success') {
+        toastIcon.innerHTML = `<span class="text-emerald-400 font-bold text-sm">✓</span>`;
+      } else if (type === 'error') {
+        toastIcon.innerHTML = `<span class="text-rose-400 font-bold text-sm">✕</span>`;
+      } else {
+        toastIcon.innerHTML = `<span class="text-amber-400 font-bold text-sm">ℹ</span>`;
+      }
+
+      toast.classList.remove('translate-y-24', 'opacity-0');
+      setTimeout(() => {
+        toast.classList.add('translate-y-24', 'opacity-0');
+      }, 3500);
+    }
+
+    function triggerNotificationToast() {
+      showToast('🔔 Cảnh báo Tác vụ: Đơn phản đối nhãn hiệu ASL Gateway cần nộp trước 17h hôm nay!', 'error');
+    }
+
+    // Render Logic
+    function renderCurrentScreen() {
+      if (currentScreen === 'user-dashboard') renderUserDashboard();
+      if (currentScreen === 'admin-workflow') renderAdminWorkflow();
+      if (currentScreen === 'case-workspace') renderCaseWorkspace();
+      if (currentScreen === 'kanban-tasks') renderKanbanTasks();
+      if (currentScreen === 'misa-inbox') renderMisaInbox();
+      if (currentScreen === 'commissions') renderCommissions();
+      if (currentScreen === 'floorplan') renderFloorplan();
+    }
+
+    // ==============================================================
+    // 1. RENDER SCR-02: USER DASHBOARD (BÀN LÀM VIỆC CÁ NHÂN LUẬT SƯ)
+    // ==============================================================
+    function renderUserDashboard() {
+      const container = document.getElementById('state-content-user-dashboard');
+
+      if (currentState === 'empty') {
+        container.innerHTML = `
+          <div class="glass-card-3d rounded-3xl p-12 text-center max-w-lg mx-auto space-y-4">
+            <div class="w-16 h-16 bg-blue-50 text-[#0082B4] rounded-2xl flex items-center justify-center mx-auto border border-blue-200">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+            </div>
+            <h3 class="font-bold text-[#002D54] text-base">Bạn Chưa Có Vụ Việc Nào Được Gán</h3>
+            <p class="text-slate-500 text-xs">Vui lòng liên hệ Trưởng bộ môn hoặc Super Admin để được phân công vụ việc mới.</p>
+            <button onclick="setState('success')" class="px-4 py-2 btn-3d-navy text-white rounded-xl text-xs font-bold">
+              + Tải Dữ liệu Mẫu Luật sư Trường
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      if (currentState === 'loading') {
+        container.innerHTML = `
+          <div class="space-y-6 animate-pulse">
+            <div class="h-20 bg-white/60 rounded-3xl border border-white"></div>
+            <div class="grid grid-cols-4 gap-4">
+              <div class="h-32 bg-white/60 rounded-3xl border border-white"></div>
+              <div class="h-32 bg-white/60 rounded-3xl border border-white"></div>
+              <div class="h-32 bg-white/60 rounded-3xl border border-white"></div>
+              <div class="h-32 bg-white/60 rounded-3xl border border-white"></div>
+            </div>
+            <div class="grid grid-cols-3 gap-6">
+              <div class="col-span-2 h-96 bg-white/60 rounded-3xl border border-white"></div>
+              <div class="h-96 bg-white/60 rounded-3xl border border-white"></div>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      if (currentState === 'error') {
+        container.innerHTML = `
+          <div class="glass-card-3d rounded-3xl p-6 border-l-4 border-l-rose-500 text-rose-900 space-y-2">
+            <h3 class="font-bold text-sm">Lỗi Đồng bộ Dữ liệu Cá nhân</h3>
+            <p class="text-xs">Không thể kết nối với dịch vụ Redis Session. Vui lòng bấm thử lại.</p>
+            <button onclick="setState('success')" class="px-3 py-1.5 bg-rose-600 text-white rounded-xl text-xs font-semibold">Thử lại ngay</button>
+          </div>
+        `;
+        return;
+      }
+
+      // SUCCESS OPERATIONAL DASHBOARD
+      container.innerHTML = `
+        <!-- Welcome Hero Banner with 3D Glass Surface -->
+        <div class="glass-card-3d rounded-3xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 relative overflow-hidden">
+          <!-- Ambient Decorative Orb Behind -->
+          <div class="absolute -right-10 -top-10 w-44 h-44 rounded-full bg-gradient-to-br from-[#0082B4]/10 to-[#FF7A00]/10 blur-2xl pointer-events-none"></div>
+
+          <div class="space-y-1.5 relative z-10">
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-bold text-[#0082B4] uppercase tracking-wider font-mono">ASL Portal • Thứ Ba, 27/10/2026</span>
+              <span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
+              <span class="text-xs text-emerald-600 font-semibold flex items-center gap-1">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span>Hệ thống Hoạt động 100%</span>
+              </span>
+            </div>
+            <h1 class="text-2xl font-extrabold text-[#002D54] tracking-tight">Chào buổi sáng, Luật sư Nguyễn Văn Trường 👋</h1>
+            <p class="text-xs text-slate-500">Bạn có <span class="font-bold text-[#FF7A00]">4 tác vụ ưu tiên</span> cần xử lý hôm nay, trong đó có 1 deadline nộp đơn lúc 17:00.</p>
+          </div>
+
+          <div class="flex items-center gap-2.5 relative z-10 shrink-0">
+            <button onclick="setScreen('case-workspace')" class="px-4 py-2.5 btn-3d-navy text-white rounded-xl text-xs font-bold flex items-center gap-2">
+              <svg class="w-4 h-4 text-cyan-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+              <span>Tiếp nhận Vụ việc Mới</span>
+            </button>
+            <button onclick="setScreen('kanban-tasks')" class="px-4 py-2.5 bg-white hover:bg-slate-50 text-[#002D54] rounded-xl text-xs font-bold border border-slate-200/80 shadow-xs transition">
+              Bảng Tác vụ Kanban →
+            </button>
+          </div>
+        </div>
+
+        <!-- 4 KPI Metrics Cards (3D Glassmorphic Glow) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          
+          <!-- KPI 1 -->
+          <div class="glass-card-3d rounded-3xl p-5 space-y-3 relative overflow-hidden group cursor-pointer" onclick="setScreen('case-workspace')">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Vụ việc Đang Thụ lý</span>
+              <div class="w-8 h-8 rounded-xl bg-blue-50 text-[#0082B4] border border-blue-200/60 flex items-center justify-center font-bold text-sm shadow-xs">
+                ⚖️
+              </div>
+            </div>
+            <div class="flex items-baseline gap-2">
+              <div class="text-3xl font-extrabold text-[#002D54] font-mono tracking-tight">14</div>
+              <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">+2 tháng này</span>
+            </div>
+            <div class="text-[11px] text-slate-500 flex items-center justify-between pt-1 border-t border-slate-100">
+              <span>Sở hữu Trí tuệ (9), Doanh nghiệp (5)</span>
+              <span class="text-[#0082B4] font-bold group-hover:translate-x-1 transition-transform">→</span>
+            </div>
+          </div>
+
+          <!-- KPI 2 (Urgent Orange Highlight) -->
+          <div class="glass-card-3d rounded-3xl p-5 space-y-3 relative overflow-hidden group cursor-pointer border-t-2 border-t-[#FF7A00]" onclick="setScreen('kanban-tasks')">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-orange-950 uppercase tracking-wider">Tác vụ Cần Làm Hôm nay</span>
+              <div class="w-8 h-8 rounded-xl bg-orange-100 text-[#FF7A00] border border-orange-200 flex items-center justify-center font-bold text-sm shadow-xs animate-bounce">
+                ⚡
+              </div>
+            </div>
+            <div class="flex items-baseline gap-2">
+              <div class="text-3xl font-extrabold text-[#FF7A00] font-mono tracking-tight">04</div>
+              <span class="text-[11px] font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-full border border-rose-200">1 sắp quá hạn</span>
+            </div>
+            <div class="text-[11px] text-slate-500 flex items-center justify-between pt-1 border-t border-slate-100">
+              <span>Hạn chót gần nhất: <strong class="text-rose-600 font-mono">17:00</strong></span>
+              <span class="text-[#FF7A00] font-bold group-hover:translate-x-1 transition-transform">→</span>
+            </div>
+          </div>
+
+          <!-- KPI 3 -->
+          <div class="glass-card-3d rounded-3xl p-5 space-y-3 relative overflow-hidden group cursor-pointer">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Hạn chót Trong 3 Ngày</span>
+              <div class="w-8 h-8 rounded-xl bg-purple-50 text-purple-600 border border-purple-200/60 flex items-center justify-center font-bold text-sm shadow-xs">
+                📅
+              </div>
+            </div>
+            <div class="flex items-baseline gap-2">
+              <div class="text-3xl font-extrabold text-[#002D54] font-mono tracking-tight">07</div>
+              <span class="text-xs text-slate-500 font-medium">SLA Cục SHTT</span>
+            </div>
+            <div class="text-[11px] text-slate-500 flex items-center justify-between pt-1 border-t border-slate-100">
+              <span>3 nộp đơn, 4 phản biện</span>
+              <span class="text-[#0082B4] font-bold group-hover:translate-x-1 transition-transform">→</span>
+            </div>
+          </div>
+
+          <!-- KPI 4 (Commission Highlight) -->
+          <div class="glass-card-3d rounded-3xl p-5 space-y-3 relative overflow-hidden group cursor-pointer" onclick="setScreen('commissions')">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Hoa hồng Tích lũy Tháng 10</span>
+              <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-200/60 flex items-center justify-center font-bold text-sm shadow-xs">
+                💵
+              </div>
+            </div>
+            <div class="flex items-baseline gap-1">
+              <div class="text-2xl font-extrabold text-emerald-700 font-mono tracking-tight">38.450.000</div>
+              <span class="text-xs font-bold text-slate-500">VNĐ</span>
+            </div>
+            <div class="text-[11px] text-slate-500 flex items-center justify-between pt-1 border-t border-slate-100">
+              <span class="text-emerald-600 font-bold">Dòng tiền thực thu Cash-basis</span>
+              <span class="text-emerald-700 font-bold group-hover:translate-x-1 transition-transform">→</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- 2 Columns Grid: Left = Urgent Tasks & My Active Cases, Right = Legal Calendar & AI Tips -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+          <!-- LEFT 2 COLS: URGENT ACTIONS & SPOTLIGHT CASES -->
+          <div class="lg:col-span-2 space-y-6">
+
+            <!-- Urgent Task Matrix Card -->
+            <div class="glass-card-3d rounded-3xl p-6 space-y-4">
+              <div class="flex items-center justify-between pb-3 border-b border-slate-200/60">
+                <div class="flex items-center gap-2.5">
+                  <span class="w-3 h-3 rounded-full bg-[#FF7A00] animate-ping"></span>
+                  <h2 class="font-bold text-sm text-[#002D54]">Ma trận Tác vụ Khẩn cấp Cần Xử lý Ngay</h2>
+                </div>
+                <span class="text-[11px] font-mono text-[#0082B4] font-bold bg-blue-50 px-2 py-0.5 rounded-md border border-blue-100">Sắp xếp theo SLA</span>
+              </div>
+
+              <div class="space-y-3">
+                <!-- Task 1 (Critical Orange) -->
+                <div class="p-4 rounded-2xl bg-white/90 border-2 border-orange-300 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-orange-400 transition">
+                  <div class="flex items-start gap-3">
+                    <input type="checkbox" class="mt-1 w-4 h-4 rounded text-[#FF7A00] focus:ring-orange-400 border-slate-300 cursor-pointer" onclick="showToast('Đã đánh dấu hoàn thành Task 1!', 'success')" />
+                    <div class="space-y-1">
+                      <div class="flex items-center gap-2">
+                        <span class="text-[10px] font-bold text-rose-700 bg-rose-50 px-2 py-0.2 rounded border border-rose-200 font-mono">HẠN: 17:00 HÔM NAY</span>
+                        <span class="text-[10px] text-slate-500 font-mono">Vụ: ASL-2026-IP-0045</span>
+                      </div>
+                      <h4 class="font-bold text-xs text-[#002D54]">Nộp bản giải trình phản đối nhãn hiệu quốc tế "ASL GATEWAY"</h4>
+                      <p class="text-[11px] text-slate-500">Cục SHTT yêu cầu bổ sung chứng cứ sử dụng trước tại Việt Nam.</p>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-2 shrink-0">
+                    <button onclick="setScreen('case-workspace')" class="px-3.5 py-1.5 btn-3d-navy text-white text-xs font-bold rounded-xl shadow-xs">
+                      Xử lý ngay →
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Task 2 -->
+                <div class="p-4 rounded-2xl bg-white/70 border border-slate-200/80 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-white transition">
+                  <div class="flex items-start gap-3">
+                    <input type="checkbox" class="mt-1 w-4 h-4 rounded text-blue-600 focus:ring-blue-400 border-slate-300 cursor-pointer" onclick="showToast('Đã đánh dấu hoàn thành Task 2!', 'success')" />
+                    <div class="space-y-1">
+                      <div class="flex items-center gap-2">
+                        <span class="text-[10px] font-bold text-[#0082B4] bg-blue-50 px-2 py-0.2 rounded border border-blue-200 font-mono">HẠN: MAI 09:00</span>
+                        <span class="text-[10px] text-slate-500 font-mono">Vụ: ASL-2026-CV-0019</span>
+                      </div>
+                      <h4 class="font-bold text-xs text-[#002D54]">Soạn bản tự khai tranh chấp ranh giới đất đai tại Quận 7, TP.HCM</h4>
+                      <p class="text-[11px] text-slate-500">Thân chủ: Bà Trần Thị Kim Chi • Đã có bản trích lục địa chính.</p>
+                    </div>
+                  </div>
+                  <button onclick="setScreen('kanban-tasks')" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition">
+                    Mở Task
+                  </button>
+                </div>
+
+                <!-- Task 3 -->
+                <div class="p-4 rounded-2xl bg-white/70 border border-slate-200/80 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-white transition">
+                  <div class="flex items-start gap-3">
+                    <input type="checkbox" class="mt-1 w-4 h-4 rounded text-blue-600 focus:ring-blue-400 border-slate-300 cursor-pointer" onclick="showToast('Đã đánh dấu hoàn thành Task 3!', 'success')" />
+                    <div class="space-y-1">
+                      <div class="flex items-center gap-2">
+                        <span class="text-[10px] font-bold text-purple-700 bg-purple-50 px-2 py-0.2 rounded border border-purple-200 font-mono">HẠN: 29/10</span>
+                        <span class="text-[10px] text-slate-500 font-mono">Vụ: ASL-2026-CORP-008</span>
+                      </div>
+                      <h4 class="font-bold text-xs text-[#002D54]">Thẩm tra pháp lý (Due Diligence) hợp đồng sáp nhập cổ phần</h4>
+                      <p class="text-[11px] text-slate-500">Khách hàng: Công ty Cổ phần Năng lượng Xanh Châu Á.</p>
+                    </div>
+                  </div>
+                  <button onclick="setScreen('kanban-tasks')" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition">
+                    Mở Task
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Active Cases Spotlight -->
+            <div class="glass-card-3d rounded-3xl p-6 space-y-4">
+              <div class="flex items-center justify-between pb-3 border-b border-slate-200/60">
+                <div class="flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-[#0082B4]"></span>
+                  <h2 class="font-bold text-sm text-[#002D54]">Vụ việc Tiêu biểu Đang Phụ trách (My Active Cases)</h2>
+                </div>
+                <a href="javascript:void(0)" onclick="setScreen('case-workspace')" class="text-xs text-[#0082B4] font-bold hover:underline">Xem tất cả 14 vụ việc →</a>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                
+                <!-- Case Spotlight 1 -->
+                <div class="p-4 rounded-2xl bg-white border border-slate-200/70 shadow-xs space-y-3 cursor-pointer hover:border-[#0082B4] transition" onclick="setScreen('case-workspace')">
+                  <div class="flex items-center justify-between">
+                    <span class="font-mono text-[10px] font-bold text-[#0082B4] bg-blue-50 px-2 py-0.5 rounded border border-blue-200">ASL-2026-IP-0045</span>
+                    <span class="text-[10px] font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">Giai đoạn 2/4</span>
+                  </div>
+                  <h4 class="font-bold text-xs text-[#002D54] line-clamp-1">Đăng ký Nhãn hiệu Độc quyền & Xử lý Phản đối "ASL GATEWAY"</h4>
+                  <p class="text-[11px] text-slate-500 truncate">Thân chủ: Cty CP Công nghệ ASL Gate</p>
+                  
+                  <div class="space-y-1 pt-1">
+                    <div class="flex justify-between text-[11px]">
+                      <span class="text-slate-500">Tiến độ quy trình</span>
+                      <span class="font-bold text-[#002D54]">65%</span>
+                    </div>
+                    <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                      <div class="bg-gradient-to-r from-[#0082B4] to-cyan-400 h-2 rounded-full" style="width: 65%"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Case Spotlight 2 -->
+                <div class="p-4 rounded-2xl bg-white border border-slate-200/70 shadow-xs space-y-3 cursor-pointer hover:border-[#0082B4] transition">
+                  <div class="flex items-center justify-between">
+                    <span class="font-mono text-[10px] font-bold text-purple-700 bg-purple-50 px-2 py-0.5 rounded border border-purple-200">ASL-2026-CV-0012</span>
+                    <span class="text-[10px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">Giai đoạn 3/5</span>
+                  </div>
+                  <h4 class="font-bold text-xs text-[#002D54] line-clamp-1">Tranh chấp Hợp đồng Thuê Mặt bằng Thương mại Vincom</h4>
+                  <p class="text-[11px] text-slate-500 truncate">Thân chủ: Tập đoàn F&B Golden Gate</p>
+                  
+                  <div class="space-y-1 pt-1">
+                    <div class="flex justify-between text-[11px]">
+                      <span class="text-slate-500">Tiến độ quy trình</span>
+                      <span class="font-bold text-[#002D54]">40%</span>
+                    </div>
+                    <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                      <div class="bg-gradient-to-r from-purple-600 to-indigo-400 h-2 rounded-full" style="width: 40%"></div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+
+          <!-- RIGHT 1 COL: CALENDAR & LEGAL REMINDERS -->
+          <div class="space-y-6">
+
+            <!-- Legal Hearing Calendar Card -->
+            <div class="glass-card-3d rounded-3xl p-5 space-y-4">
+              <div class="flex items-center justify-between pb-3 border-b border-slate-200/60">
+                <div class="flex items-center gap-2">
+                  <span class="text-base">⚖️</span>
+                  <h3 class="font-bold text-xs text-[#002D54]">Lịch Tố tụng & Làm việc Ngoài</h3>
+                </div>
+                <span class="text-[10px] font-bold text-[#FF7A00] font-mono">Tuần 44</span>
+              </div>
+
+              <div class="space-y-3 text-xs">
+                <!-- Event 1 -->
+                <div class="p-3 rounded-2xl bg-gradient-to-r from-blue-50 to-white border border-blue-200/80 space-y-1">
+                  <div class="flex items-center justify-between">
+                    <span class="font-bold text-[#002D54] text-xs">Phiên Hòa giải Tòa án Q.7</span>
+                    <span class="text-[10px] font-mono font-bold text-[#0082B4] bg-white px-2 py-0.5 rounded-full shadow-2xs">Thứ 5, 29/10</span>
+                  </div>
+                  <p class="text-[11px] text-slate-600">08:30 • TAND Quận 7 • Tranh chấp đất đai</p>
+                </div>
+
+                <!-- Event 2 -->
+                <div class="p-3 rounded-2xl bg-gradient-to-r from-orange-50 to-white border border-orange-200/80 space-y-1">
+                  <div class="flex items-center justify-between">
+                    <span class="font-bold text-orange-950 text-xs">Làm việc trực tiếp Cục SHTT</span>
+                    <span class="text-[10px] font-mono font-bold text-[#FF7A00] bg-white px-2 py-0.5 rounded-full shadow-2xs">Thứ 6, 30/10</span>
+                  </div>
+                  <p class="text-[11px] text-slate-600">14:00 • Phòng Thẩm định Nhãn hiệu số 2</p>
+                </div>
+              </div>
+
+              <button class="w-full py-2 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold rounded-xl border border-slate-200/80 shadow-2xs transition">
+                + Đồng bộ vào Google/Outlook Calendar
+              </button>
+            </div>
+
+            <!-- Quick AI Assistant Insight Card -->
+            <div class="rounded-3xl p-5 bg-gradient-to-br from-[#002D54] via-[#003866] to-[#0082B4] text-white shadow-xl shadow-blue-950/20 space-y-3 relative overflow-hidden">
+              <div class="flex items-center gap-2">
+                <span class="w-6 h-6 rounded-lg bg-[#FF7A00] flex items-center justify-center text-xs font-bold shadow-md">AI</span>
+                <span class="text-xs font-bold text-cyan-200">Gợi ý Tối ưu Hôm nay</span>
+              </div>
+              <p class="text-xs text-slate-100 leading-relaxed">
+                "Vụ việc <strong>ASL-2026-IP-0045</strong> đã được kế toán ghi nhận số tiền đợt 2 (60tr VNĐ). Bạn có thể tiến hành nộp dấu Cục SHTT ngay để hưởng hoa hồng đợt 2!"
+              </p>
+              <button onclick="setScreen('misa-inbox')" class="w-full py-2 bg-white text-[#002D54] rounded-xl text-xs font-extrabold hover:bg-cyan-50 transition shadow-sm">
+                Kiểm tra Đối soát MISA →
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+      `;
+    }
+
+    // =====================================================================
+    // 2. RENDER SCR-06: WORKFLOW BUILDER STUDIO (PHÂN HỆ QUẢN TRỊ ADMIN)
+    // =====================================================================
+    function renderAdminWorkflow() {
+      const container = document.getElementById('state-content-admin-workflow');
+
+      container.innerHTML = `
+        <div class="space-y-6">
+
+          <!-- Admin Header Bar with 3D Elevation -->
+          <div class="glass-card-3d rounded-3xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div class="space-y-1">
+              <div class="flex items-center gap-2">
+                <span class="font-mono text-xs font-bold text-white bg-[#FF7A00] px-2 py-0.5 rounded-md shadow-xs">ADMIN STUDIO</span>
+                <span class="text-xs text-slate-500 font-medium">Lõi No-Code / Dynamic Workflow Engine</span>
+                <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 font-mono">STRICT GOVERNANCE</span>
+              </div>
+              <h1 class="text-xl font-extrabold text-[#002D54]">Trình Thiết kế Quy trình Động: Đăng ký Nhãn hiệu Quốc tế (SHTT)</h1>
+              <p class="text-xs text-slate-500">Cấu hình các Giai đoạn (Stages), Tác vụ mặc định, Cổng phê duyệt (Approval Gates) và Phân nhánh điều kiện.</p>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex items-center gap-2.5 shrink-0">
+              <button onclick="showToast('Đã lưu bản thảo Workflow Template!', 'info')" class="px-4 py-2.5 bg-white hover:bg-slate-50 text-[#002D54] rounded-xl text-xs font-bold border border-slate-200/80 shadow-xs transition">
+                Lưu Nháp
+              </button>
+              <button onclick="showToast('✓ Đã xuất bản Workflow Template v2.4 thành công! Toàn bộ vụ việc mới sẽ áp dụng.', 'success')" class="px-4 py-2.5 btn-3d-navy text-white rounded-xl text-xs font-bold shadow-md flex items-center gap-2">
+                <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                <span>Xuất bản Bản mẫu (Publish)</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Main Studio Split View: Visual Canvas (70%) + Dynamic Fields Configurator (30%) -->
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+            <!-- LEFT 2 COLS: VISUAL WORKFLOW CANVAS -->
+            <div class="lg:col-span-2 space-y-4">
+              
+              <!-- Canvas Tools Header -->
+              <div class="flex items-center justify-between px-2">
+                <div class="flex items-center gap-2 text-xs font-bold text-[#002D54]">
+                  <span class="w-2.5 h-2.5 rounded-full bg-[#0082B4]"></span>
+                  <span>Sơ đồ Tiến trình Tuần tự (Sequential Stages & Decision Tree)</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <button class="px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-xs font-semibold text-slate-700 hover:border-[#0082B4] shadow-2xs">
+                    + Thêm Stage mới
+                  </button>
+                  <button class="px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-xs font-semibold text-slate-700 hover:border-[#FF7A00] shadow-2xs">
+                    + Thêm Cổng Duyệt
+                  </button>
+                </div>
+              </div>
+
+              <!-- Interactive Visual Canvas Container -->
+              <div class="p-6 rounded-3xl bg-white/60 backdrop-blur-md border border-white/90 shadow-sm space-y-6 relative">
+                
+                <!-- STAGE 1 CARD -->
+                <div class="glass-card-3d rounded-2xl p-5 border-l-4 border-l-[#0082B4] space-y-3">
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                      <span class="w-6 h-6 rounded-lg bg-blue-50 text-[#0082B4] font-bold text-xs flex items-center justify-center font-mono">01</span>
+                      <h3 class="font-bold text-xs text-[#002D54]">Giai đoạn 1: Tiếp nhận Yêu cầu & Tra cứu Nhãn hiệu Sơ bộ</h3>
+                    </div>
+                    <span class="text-[10px] text-slate-500 font-mono bg-slate-100 px-2 py-0.5 rounded">SLA: 03 Ngày</span>
+                  </div>
+
+                  <!-- Default Tasks List inside Stage 1 -->
+                  <div class="space-y-2 text-xs pl-8">
+                    <div class="p-2.5 rounded-xl bg-white border border-slate-200/80 flex items-center justify-between">
+                      <div class="flex items-center gap-2">
+                        <span class="text-slate-400">☰</span>
+                        <span class="font-medium text-slate-800">Task 1.1: Tra cứu nhãn hiệu trên cơ sở dữ liệu WIPO & Cục SHTT</span>
+                      </div>
+                      <span class="text-[10px] text-slate-500 font-mono bg-slate-50 px-2 py-0.5 rounded">Gán: PARALEGAL</span>
+                    </div>
+
+                    <div class="p-2.5 rounded-xl bg-white border border-slate-200/80 flex items-center justify-between">
+                      <div class="flex items-center gap-2">
+                        <span class="text-slate-400">☰</span>
+                        <span class="font-medium text-slate-800">Task 1.2: Soạn thảo Thư tư vấn khả năng đăng ký & Phân nhóm Nice Class</span>
+                      </div>
+                      <span class="text-[10px] text-slate-500 font-mono bg-slate-50 px-2 py-0.5 rounded">Gán: EXECUTOR</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Connector Arrow Flow 1 -> 2 -->
+                <div class="flex justify-center -my-2">
+                  <div class="px-3 py-1 bg-white rounded-full border border-slate-200 text-slate-400 text-xs shadow-xs font-mono flex items-center gap-1.5">
+                    <svg class="w-3.5 h-3.5 text-[#0082B4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
+                    <span>Chuyển tự động khi xong Task 1.2</span>
+                  </div>
+                </div>
+
+                <!-- STAGE 2 CARD WITH APPROVAL GATE -->
+                <div class="glass-card-3d rounded-2xl p-5 border-l-4 border-l-[#FF7A00] space-y-4">
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                      <span class="w-6 h-6 rounded-lg bg-orange-50 text-[#FF7A00] font-bold text-xs flex items-center justify-center font-mono">02</span>
+                      <h3 class="font-bold text-xs text-[#002D54]">Giai đoạn 2: Nộp đơn Chính thức & Theo dõi Thẩm định Hình thức</h3>
+                    </div>
+                    <span class="text-[10px] text-orange-700 font-bold bg-orange-50 px-2 py-0.5 rounded border border-orange-200 font-mono">CÓ CỔNG PHÊ DUYỆT</span>
+                  </div>
+
+                  <!-- Tasks in Stage 2 -->
+                  <div class="space-y-2 text-xs pl-8">
+                    <div class="p-2.5 rounded-xl bg-white border border-slate-200/80 flex items-center justify-between">
+                      <div class="flex items-center gap-2">
+                        <span class="text-slate-400">☰</span>
+                        <span class="font-medium text-slate-800">Task 2.1: Hoàn tất hồ sơ, nộp đơn tại Cục SHTT và nhận dấu ngày nộp đơn</span>
+                      </div>
+                      <span class="text-[10px] text-slate-500 font-mono bg-slate-50 px-2 py-0.5 rounded">Gán: EXECUTOR</span>
+                    </div>
+
+                    <!-- Highlighted Approval Gate Box -->
+                    <div class="p-3.5 rounded-xl bg-gradient-to-r from-orange-50/80 to-white border-2 border-orange-300 flex items-center justify-between shadow-xs">
+                      <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-[#FF7A00] text-white flex items-center justify-center font-bold text-xs shadow-xs">
+                          🛡️
+                        </div>
+                        <div>
+                          <span class="font-bold text-orange-950 text-xs">CỔNG PHÊ DUYỆT BẮT BUỘC (APPROVAL GATE)</span>
+                          <p class="text-[11px] text-orange-900">Bắt buộc Luật sư Trưởng ban (Supervisor) ký duyệt hồ sơ trước khi cơ quan tiếp nhận.</p>
+                        </div>
+                      </div>
+                      <span class="text-[10px] font-bold text-orange-800 bg-orange-100 px-2 py-1 rounded-lg font-mono">SUPERVISOR ONLY</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 3D CONDITIONAL BRANCHING DIAMOND -->
+                <div class="my-4 p-4 rounded-2xl bg-gradient-to-r from-blue-50/80 via-white to-orange-50/80 border-2 border-dashed border-[#0082B4] space-y-3">
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                      <span class="w-3 h-3 rounded-full bg-[#0082B4]"></span>
+                      <span class="font-bold text-xs text-[#002D54]">Logic Phân nhánh Điều kiện (Conditional Transitions)</span>
+                    </div>
+                    <span class="text-[10px] font-mono text-slate-500">Động thái từ Cục SHTT</span>
+                  </div>
+
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                    <!-- Branch A: Success -->
+                    <div class="p-3 rounded-xl bg-emerald-50/60 border border-emerald-200/80 space-y-1">
+                      <div class="flex items-center gap-1.5 text-emerald-800 font-bold">
+                        <span>✓ Nhánh A: Thẩm định Thành công</span>
+                      </div>
+                      <p class="text-[11px] text-emerald-900">Cục ra thông báo chấp nhận đơn hợp lệ -> Tự động chuyển tiếp sang <strong>Stage 3: Chờ Cấp văn bằng</strong>.</p>
+                    </div>
+
+                    <!-- Branch B: Dispute / Refusal -->
+                    <div class="p-3 rounded-xl bg-orange-50/60 border border-orange-200/80 space-y-1">
+                      <div class="flex items-center gap-1.5 text-orange-900 font-bold">
+                        <span>⚡ Nhánh B: Bị Bên Thứ 3 Phản đối</span>
+                      </div>
+                      <p class="text-[11px] text-orange-900">Tự động kích hoạt Nhánh tác vụ Khẩn: <strong>Soạn Thảo Bản Đối Chất & Khiếu Nại Bổ Sung</strong>.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- STAGE 3 CARD -->
+                <div class="glass-card-3d rounded-2xl p-5 border-l-4 border-l-emerald-500 space-y-3">
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                      <span class="w-6 h-6 rounded-lg bg-emerald-50 text-emerald-700 font-bold text-xs flex items-center justify-center font-mono">03</span>
+                      <h3 class="font-bold text-xs text-[#002D54]">Giai đoạn 3: Bàn giao Văn bằng Bảo hộ & Quyết toán MISA</h3>
+                    </div>
+                    <span class="text-[10px] text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 font-mono">LIÊN KẾT HOA HỒNG CASH-BASIS</span>
+                  </div>
+                  <p class="text-xs text-slate-500 pl-8">Khi giai đoạn này hoàn tất, hệ thống tự động phát tác vụ Kế toán MISA và chiết tính hoa hồng cho nhóm tham gia.</p>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- RIGHT 1 COL: DYNAMIC FORM FIELDS CONFIGURATOR (JSONB) -->
+            <div class="space-y-4">
+              <div class="flex items-center justify-between px-2">
+                <h3 class="font-bold text-xs text-[#002D54]">Trường Dữ liệu Động (Dynamic Fields)</h3>
+                <span class="text-[10px] text-slate-500 font-mono">Postgres JSONB</span>
+              </div>
+
+              <!-- Configurator Card -->
+              <div class="glass-card-3d rounded-3xl p-5 space-y-4">
+                <p class="text-xs text-slate-500">Admin tùy biến form nhập liệu đặc thù cho mảng <strong>Sở hữu Trí tuệ</strong> mà không cần lập trình viên sửa code.</p>
+
+                <!-- Configured Fields List -->
+                <div class="space-y-2.5 text-xs">
+                  
+                  <div class="p-3 rounded-xl bg-white border border-slate-200/80 shadow-2xs space-y-1">
+                    <div class="flex items-center justify-between">
+                      <span class="font-bold text-[#002D54]">Số Đơn Cục SHTT</span>
+                      <span class="text-[10px] font-mono text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded">TEXT • BẮT BUỘC</span>
+                    </div>
+                    <p class="text-[11px] text-slate-400 font-mono">key: application_number</p>
+                  </div>
+
+                  <div class="p-3 rounded-xl bg-white border border-slate-200/80 shadow-2xs space-y-1">
+                    <div class="flex items-center justify-between">
+                      <span class="font-bold text-[#002D54]">Ngày Nộp Đơn</span>
+                      <span class="text-[10px] font-mono text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded">DATE • BẮT BUỘC</span>
+                    </div>
+                    <p class="text-[11px] text-slate-400 font-mono">key: filing_date</p>
+                  </div>
+
+                  <div class="p-3 rounded-xl bg-white border border-slate-200/80 shadow-2xs space-y-1">
+                    <div class="flex items-center justify-between">
+                      <span class="font-bold text-[#002D54]">Ngày Ưu Tiên Paris</span>
+                      <span class="text-[10px] font-mono text-slate-600 bg-slate-100 px-1.5 py-0.5 rounded">DATE • TÙY CHỌN</span>
+                    </div>
+                    <p class="text-[11px] text-slate-400 font-mono">key: priority_date</p>
+                  </div>
+
+                  <div class="p-3 rounded-xl bg-white border border-slate-200/80 shadow-2xs space-y-1">
+                    <div class="flex items-center justify-between">
+                      <span class="font-bold text-[#002D54]">Nhóm Sản phẩm / Dịch vụ Nice</span>
+                      <span class="text-[10px] font-mono text-purple-700 bg-purple-50 px-1.5 py-0.5 rounded">MULTI-SELECT</span>
+                    </div>
+                    <p class="text-[11px] text-slate-400 font-mono">key: nice_classes (09, 42...)</p>
+                  </div>
+
+                </div>
+
+                <!-- Add Field Button -->
+                <button onclick="showToast('Mở hộp thoại cấu hình Trường dữ liệu JSONB mới', 'info')" class="w-full py-2.5 bg-white hover:bg-slate-50 text-[#002D54] rounded-xl text-xs font-bold border border-slate-200/80 shadow-xs transition flex items-center justify-center gap-1.5">
+                  <svg class="w-4 h-4 text-[#0082B4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                  <span>+ Bổ sung Trường Động Mới</span>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      `;
+    }
+
+    // =====================================================================
+    // 3. RENDER SCR-08: CASE WORKSPACE (NÂNG CẤP LIGHT THEME 3D)
+    // =====================================================================
+    function renderCaseWorkspace() {
+      const container = document.getElementById('state-content-case-workspace');
+      
+      container.innerHTML = `
+        <!-- Case Header Card (3D Glassmorphism) -->
+        <div class="glass-card-3d rounded-3xl p-6 shadow-sm space-y-4">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div class="space-y-1.5">
+              <div class="flex items-center gap-2">
+                <span class="font-mono text-xs font-bold text-[#0082B4] bg-blue-50 px-2.5 py-0.5 rounded-lg border border-blue-200">ASL-2026-IP-0045</span>
+                <span class="text-xs font-bold text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-lg border border-emerald-200">ĐANG THỰC HIỆN</span>
+                <span class="text-xs text-slate-500 font-medium">Sở hữu Trí tuệ / Nhãn hiệu Quốc tế</span>
+              </div>
+              <h1 class="text-xl font-extrabold text-[#002D54]">Đăng ký Nhãn hiệu Độc quyền & Giải trình Phản đối "ASL GATEWAY"</h1>
+              <p class="text-xs text-slate-600">Thân chủ: <span class="font-bold text-[#002D54]">Công ty Cổ phần Công nghệ ASL Gate</span> (MST: 0109988776)</p>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex items-center gap-2.5 shrink-0">
+              <button onclick="setScreen('kanban-tasks')" class="px-4 py-2.5 btn-3d-navy text-white rounded-xl text-xs font-bold shadow-md flex items-center gap-2">
+                <svg class="w-4 h-4 text-cyan-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                <span>Mở Kanban Board (SCR-09)</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Stepper Progress Bar -->
+          <div class="pt-3 border-t border-slate-200/60 space-y-2">
+            <div class="flex items-center justify-between text-xs">
+              <span class="font-medium text-slate-700">Khung Quy chuẩn Template: <span class="font-bold text-[#0082B4]">Giai đoạn 2/4 (Nộp đơn & Thẩm định hình thức)</span></span>
+              <span class="font-mono font-extrabold text-[#002D54]">65% Hoàn thành</span>
+            </div>
+            <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden p-0.5 border border-slate-200/60">
+              <div class="bg-gradient-to-r from-[#0082B4] via-cyan-400 to-[#FF7A00] h-1.5 rounded-full" style="width: 65%"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Billing Alert Card with Orange Accent -->
+        <div class="p-4 rounded-3xl bg-gradient-to-r from-orange-50/90 via-white to-blue-50/80 border border-orange-200/80 shadow-xs flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-2xl bg-[#FF7A00] text-white flex items-center justify-center font-bold text-base shadow-sm">
+              💰
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="font-bold text-xs text-[#002D54]">Đợt Thanh toán 2: Đã nộp đơn hợp lệ (40% - 60.000.000 VNĐ)</span>
+                <span class="text-[10px] bg-orange-100 text-orange-900 font-bold px-2 py-0.5 rounded-md font-mono">ĐỐI SOÁT MISA</span>
+              </div>
+              <p class="text-[11px] text-slate-600 mt-0.5">Quy trình tự động giải phóng cho luật sư ngay khi Kế toán bấm xác nhận tiền về.</p>
+            </div>
+          </div>
+          <button onclick="setScreen('misa-inbox')" class="px-4 py-2 btn-3d-orange text-white text-xs font-bold rounded-xl transition shrink-0 shadow-sm">
+            Xem Tác vụ Kế toán →
+          </button>
+        </div>
+
+        <!-- 2 Columns Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="lg:col-span-2 glass-card-3d rounded-3xl p-6 space-y-4">
+            <h2 class="font-bold text-xs text-[#002D54] uppercase tracking-wider">Trường Dữ liệu Động (JSONB) Của Vụ việc</h2>
+            <div class="grid grid-cols-2 gap-4 text-xs">
+              <div class="space-y-1">
+                <label class="text-slate-500 font-medium">Số Đơn Cục SHTT</label>
+                <input type="text" value="4-2026-12345" class="w-full p-2.5 bg-white border border-slate-200 rounded-xl font-mono text-[#002D54] font-bold" readonly />
+              </div>
+              <div class="space-y-1">
+                <label class="text-slate-500 font-medium">Ngày Nộp Đơn</label>
+                <input type="text" value="15/10/2026" class="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-[#002D54] font-medium" readonly />
+              </div>
+              <div class="space-y-1">
+                <label class="text-slate-500 font-medium">Ngày Ưu Tiên</label>
+                <input type="text" value="01/09/2026" class="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-[#002D54] font-medium" readonly />
+              </div>
+              <div class="space-y-1">
+                <label class="text-slate-500 font-medium">Nhóm Nice Class</label>
+                <input type="text" value="Class 09, Class 42" class="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-[#002D54] font-medium" readonly />
+              </div>
+            </div>
+          </div>
+
+          <div class="glass-card-3d rounded-3xl p-6 space-y-4">
+            <h2 class="font-bold text-xs text-[#002D54] uppercase tracking-wider">Nhân sự Phụ trách (Multi-Role)</h2>
+            <div class="space-y-3 text-xs">
+              <div class="flex items-center justify-between p-2 rounded-xl bg-slate-50">
+                <span class="font-bold text-[#002D54]">LS. Phạm Quốc Tuấn</span>
+                <span class="text-[10px] font-mono font-bold text-purple-700 bg-purple-50 px-2 py-0.5 rounded">SUPERVISOR</span>
+              </div>
+              <div class="flex items-center justify-between p-2 rounded-xl bg-blue-50/60 border border-blue-200/60">
+                <span class="font-bold text-[#002D54]">LS. Nguyễn Văn Trường</span>
+                <span class="text-[10px] font-mono font-bold text-[#0082B4] bg-white px-2 py-0.5 rounded">CASE_MANAGER</span>
+              </div>
+              <div class="flex items-center justify-between p-2 rounded-xl bg-slate-50">
+                <span class="font-bold text-[#002D54]">Lê Mai Anh</span>
+                <span class="text-[10px] font-mono font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">EXECUTOR</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // =====================================================================
+    // 4. RENDER SCR-09: KANBAN BOARD
+    // =====================================================================
+    function renderKanbanTasks() {
+      const container = document.getElementById('state-content-kanban-tasks');
+
+      container.innerHTML = `
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <h2 class="text-base font-extrabold text-[#002D54]">Bảng Tác vụ Lai (Kanban & Jira View)</h2>
+              <p class="text-xs text-slate-500">Kéo thả cập nhật trạng thái hoặc kiểm tra khóa Ràng buộc Tiên quyết (Dependency Guard)</p>
+            </div>
+            <button onclick="demoDependencyViolation()" class="px-3 py-1.5 bg-rose-50 text-rose-700 border border-rose-200 rounded-xl text-xs font-bold hover:bg-rose-100 transition">
+              Thử nghiệm Báo lỗi Dependency 🔒
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- COL 1 -->
+            <div class="p-3.5 rounded-3xl bg-slate-200/50 backdrop-blur-md border border-slate-300/60 min-h-[460px] space-y-3">
+              <div class="flex items-center justify-between px-2 font-bold text-xs text-slate-700">
+                <span>CHƯA BẮT ĐẦU</span>
+                <span class="w-5 h-5 rounded-full bg-slate-300 text-slate-700 flex items-center justify-center text-[10px]">1</span>
+              </div>
+              <div onclick="demoDependencyViolation()" class="glass-card-3d p-3.5 rounded-2xl space-y-2 cursor-pointer hover:border-[#FF7A00] transition">
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] font-mono text-slate-500 font-bold">TASK-04</span>
+                  <span class="text-[10px] text-rose-600 font-bold bg-rose-50 px-1.5 py-0.2 rounded border border-rose-200">🔒 Khóa Tiên quyết</span>
+                </div>
+                <h4 class="font-bold text-xs text-[#002D54]">Theo dõi thông báo hợp lệ Cục SHTT</h4>
+                <p class="text-[11px] text-slate-500">Phụ thuộc: Phải hoàn tất TASK-03</p>
+              </div>
+            </div>
+
+            <!-- COL 2 -->
+            <div class="p-3.5 rounded-3xl bg-orange-50/50 backdrop-blur-md border border-orange-200/60 min-h-[460px] space-y-3">
+              <div class="flex items-center justify-between px-2 font-bold text-xs text-orange-950">
+                <span>ĐANG LÀM</span>
+                <span class="w-5 h-5 rounded-full bg-orange-200 text-orange-900 flex items-center justify-center text-[10px]">1</span>
+              </div>
+              <div class="glass-card-3d p-3.5 rounded-2xl border-orange-300 space-y-2">
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] font-mono text-[#FF7A00] font-bold">TASK-03</span>
+                  <span class="text-[10px] text-rose-600 font-bold bg-rose-50 px-1.5 py-0.2 rounded">Hạn: Hôm nay 17h</span>
+                </div>
+                <h4 class="font-bold text-xs text-[#002D54]">Nộp đơn trực tiếp tại Cục SHTT & Lấy dấu nhận đơn</h4>
+                <button onclick="showToast('Đã gửi yêu cầu nghiệm thu lên Cổng duyệt!', 'success')" class="w-full py-1.5 btn-3d-orange text-white rounded-xl font-bold text-[11px]">
+                  Hoàn tất & Gửi duyệt →
+                </button>
+              </div>
+            </div>
+
+            <!-- COL 3 -->
+            <div class="p-3.5 rounded-3xl bg-blue-50/50 backdrop-blur-md border border-blue-200/60 min-h-[460px] space-y-3">
+              <div class="flex items-center justify-between px-2 font-bold text-xs text-blue-950">
+                <span>CHỜ DUYỆT CỔNG</span>
+                <span class="w-5 h-5 rounded-full bg-blue-200 text-blue-900 flex items-center justify-center text-[10px]">1</span>
+              </div>
+              <div class="glass-card-3d p-3.5 rounded-2xl border-blue-300 space-y-2">
+                <span class="text-[10px] font-mono text-[#0082B4] font-bold">GATE-02</span>
+                <h4 class="font-bold text-xs text-[#002D54]">Nghiệm thu hồ sơ trước khi nộp</h4>
+                <button onclick="showToast('✓ Đã ký duyệt Cổng thành công!', 'success')" class="w-full py-1.5 btn-3d-navy text-white rounded-xl font-bold text-[11px]">
+                  Ký Chấp thuận (SCR-10)
+                </button>
+              </div>
+            </div>
+
+            <!-- COL 4 -->
+            <div class="p-3.5 rounded-3xl bg-emerald-50/50 backdrop-blur-md border border-emerald-200/60 min-h-[460px] space-y-3">
+              <div class="flex items-center justify-between px-2 font-bold text-xs text-emerald-950">
+                <span>HOÀN TẤT</span>
+                <span class="w-5 h-5 rounded-full bg-emerald-200 text-emerald-900 flex items-center justify-center text-[10px]">2</span>
+              </div>
+              <div class="glass-card-3d p-3.5 rounded-2xl opacity-80 space-y-1">
+                <span class="text-[10px] font-mono text-emerald-700 font-bold">TASK-01</span>
+                <h4 class="font-medium text-xs text-slate-700 line-through">Soạn thảo tờ khai mẫu 01</h4>
+              </div>
+              <div class="glass-card-3d p-3.5 rounded-2xl opacity-80 space-y-1">
+                <span class="text-[10px] font-mono text-emerald-700 font-bold">TASK-02</span>
+                <h4 class="font-medium text-xs text-slate-700 line-through">Dịch công chứng tài liệu ưu tiên</h4>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      `;
+    }
+
+    function demoDependencyViolation() {
+      showToast('⚠️ Vi phạm Ràng buộc Tiên quyết: Không thể kích hoạt TASK-04 khi TASK-03 chưa hoàn thành!', 'error');
+    }
+
+    // =====================================================================
+    // 5. RENDER SCR-11: MISA ACCOUNTING INBOX
+    // =====================================================================
+    function renderMisaInbox() {
+      const container = document.getElementById('state-content-misa-inbox');
+
+      container.innerHTML = `
+        <div class="glass-card-3d rounded-3xl p-6 space-y-5">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-200/60">
+            <div>
+              <div class="flex items-center gap-2">
+                <h2 class="font-extrabold text-base text-[#002D54]">SCR-11: Bàn làm việc Kế toán (MISA Inbox)</h2>
+                <span class="text-xs bg-rose-100 text-rose-800 font-bold px-2 py-0.5 rounded-full">1 Tác vụ chờ đối soát</span>
+              </div>
+              <p class="text-xs text-slate-500">Quy trình Human-in-the-Loop phối hợp giữa phần mềm MISA bên ngoài và ERP ASL Law</p>
+            </div>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-gradient-to-r from-orange-50 via-white to-blue-50 border-2 border-[#FF7A00] space-y-4">
+            <div class="flex justify-between items-center pb-3 border-b border-orange-200">
+              <div>
+                <span class="text-[10px] font-mono font-bold text-[#FF7A00]">VỤ VIỆC: ASL-2026-IP-0045</span>
+                <h3 class="font-bold text-sm text-[#002D54]">Đợt 2: Nộp đơn hợp lệ Cục SHTT (40% hợp đồng)</h3>
+              </div>
+              <div class="text-right">
+                <span class="text-xs text-slate-500">Số tiền cần đối soát:</span>
+                <div class="text-xl font-extrabold text-[#002D54] font-mono">60.000.000 VNĐ</div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 text-xs">
+              <div class="space-y-1">
+                <label class="font-bold text-[#002D54]">Số Hóa đơn MISA (*)</label>
+                <input type="text" id="misa-inv-no" value="HD-2026-00456" class="w-full p-2.5 bg-white border border-slate-300 rounded-xl font-mono text-[#002D54] font-bold" />
+              </div>
+              <div class="space-y-1">
+                <label class="font-bold text-[#002D54]">Mã Giao dịch Ngân hàng (*)</label>
+                <input type="text" id="misa-bank-ref" value="VCB-FT-202610279988" class="w-full p-2.5 bg-white border border-slate-300 rounded-xl font-mono text-[#002D54] font-bold" />
+              </div>
+            </div>
+
+            <div class="flex justify-end pt-2">
+              <button onclick="confirmMisaPayment()" class="px-5 py-2.5 btn-3d-orange text-white rounded-xl text-xs font-bold shadow-md flex items-center gap-2">
+                <span>✓ Xác nhận Tiền về & Mở khóa Quy trình</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function confirmMisaPayment() {
+      showToast('🎉 Đã đối soát MISA thành công! Vụ việc được mở khóa và hoa hồng đã được ghi nhận.', 'success');
+      setTimeout(() => setScreen('commissions'), 1200);
+    }
+
+    // =====================================================================
+    // 6. RENDER SCR-12: COMMISSIONS & BILLING
+    // =====================================================================
+    function renderCommissions() {
+      const container = document.getElementById('state-content-commissions');
+
+      container.innerHTML = `
+        <div class="glass-card-3d rounded-3xl p-6 space-y-5">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-200/60">
+            <div>
+              <div class="flex items-center gap-2">
+                <h2 class="font-extrabold text-base text-[#002D54]">SCR-12: Bảng Chiết tính Hoa hồng Tự động theo Dòng tiền Thực thu</h2>
+                <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded font-mono">Cash-basis Engine</span>
+              </div>
+              <p class="text-xs text-slate-500">Phân bổ ngay lập tức khi Kế toán bấm xác nhận tiền về từ MISA</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-3 gap-4">
+            <div class="p-4 rounded-2xl bg-white border border-slate-200 space-y-1">
+              <span class="text-[11px] text-slate-500">Tổng Giá trị Hợp đồng</span>
+              <div class="text-lg font-bold text-[#002D54] font-mono">150.000.000 VNĐ</div>
+            </div>
+            <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 space-y-1">
+              <span class="text-[11px] text-emerald-800 font-bold">Thực thu (Cash-in)</span>
+              <div class="text-lg font-bold text-emerald-700 font-mono">105.000.000 VNĐ</div>
+            </div>
+            <div class="p-4 rounded-2xl bg-blue-50 border border-blue-200 space-y-1">
+              <span class="text-[11px] text-[#0082B4] font-bold">Quỹ Hoa hồng Tích lũy</span>
+              <div class="text-lg font-bold text-[#002D54] font-mono">24.150.000 VNĐ</div>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto rounded-2xl border border-slate-200 bg-white">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-50 text-slate-600 font-semibold border-b border-slate-200">
+                <tr>
+                  <th class="p-3">Nhân sự Thụ hưởng</th>
+                  <th class="p-3">Vai trò</th>
+                  <th class="p-3">Tỷ lệ %</th>
+                  <th class="p-3 text-right">Số tiền Hoa hồng (VNĐ)</th>
+                  <th class="p-3 text-center">Trạng thái</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100">
+                <tr>
+                  <td class="p-3 font-bold text-[#002D54]">Trần Minh Tuấn</td>
+                  <td class="p-3"><span class="bg-blue-50 text-blue-700 font-bold px-2 py-0.5 rounded text-[10px]">SALES</span></td>
+                  <td class="p-3 font-mono font-bold">5.00%</td>
+                  <td class="p-3 text-right font-mono font-bold text-[#002D54]">3.000.000</td>
+                  <td class="p-3 text-center"><span class="text-[10px] text-emerald-700 font-bold bg-emerald-100 px-2 py-0.5 rounded">TÍCH LŨY</span></td>
+                </tr>
+                <tr>
+                  <td class="p-3 font-bold text-[#002D54]">LS. Nguyễn Văn Trường</td>
+                  <td class="p-3"><span class="bg-orange-50 text-orange-700 font-bold px-2 py-0.5 rounded text-[10px]">CASE_MANAGER</span></td>
+                  <td class="p-3 font-mono font-bold">7.00%</td>
+                  <td class="p-3 text-right font-mono font-bold text-[#002D54]">4.200.000</td>
+                  <td class="p-3 text-center"><span class="text-[10px] text-emerald-700 font-bold bg-emerald-100 px-2 py-0.5 rounded">TÍCH LŨY</span></td>
+                </tr>
+                <tr>
+                  <td class="p-3 font-bold text-[#002D54]">LS. Phạm Quốc Tuấn</td>
+                  <td class="p-3"><span class="bg-purple-50 text-purple-700 font-bold px-2 py-0.5 rounded text-[10px]">SUPERVISOR</span></td>
+                  <td class="p-3 font-mono font-bold">3.00%</td>
+                  <td class="p-3 text-right font-mono font-bold text-[#002D54]">1.800.000</td>
+                  <td class="p-3 text-center"><span class="text-[10px] text-emerald-700 font-bold bg-emerald-100 px-2 py-0.5 rounded">TÍCH LŨY</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    }
+
+    // ==============================================================
+    // 7. RENDER SCR-15: VIRTUAL OFFICE FLOORPLAN (VĂN PHÒNG SỐ 2.5D)
+    // ==============================================================
+    function renderFloorplan() {
+      const container = document.getElementById('state-content-floorplan');
+
+      if (currentState === 'empty') {
+        container.innerHTML = `
+          <div class="glass-card-3d rounded-3xl p-12 text-center max-w-lg mx-auto space-y-4">
+            <div class="w-16 h-16 bg-blue-50 text-[#0082B4] rounded-2xl flex items-center justify-center mx-auto border border-blue-200">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+            </div>
+            <h3 class="font-bold text-[#002D54] text-base">Phòng Ban Chưa Có Nhân Sự Hoạt Động</h3>
+            <p class="text-slate-500 text-xs">Chưa có luật sư hoặc chuyên viên nào được xếp chỗ ngồi trong sơ đồ phòng ban này.</p>
+            <button onclick="setState('success')" class="px-4 py-2 btn-3d-navy text-white rounded-xl text-xs font-bold">
+              Tải Dữ Liệu Demo Phòng SHTT
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      if (currentState === 'loading') {
+        container.innerHTML = `
+          <div class="space-y-6 animate-pulse">
+            <div class="h-20 bg-slate-200/60 rounded-3xl"></div>
+            <div class="h-44 bg-slate-200/60 rounded-3xl"></div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div class="h-52 bg-slate-200/60 rounded-3xl"></div>
+              <div class="h-52 bg-slate-200/60 rounded-3xl"></div>
+              <div class="h-52 bg-slate-200/60 rounded-3xl"></div>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      if (currentState === 'error') {
+        container.innerHTML = `
+          <div class="glass-card-3d rounded-3xl p-12 text-center max-w-lg mx-auto space-y-4 border-rose-300">
+            <div class="w-16 h-16 bg-rose-50 text-rose-500 rounded-2xl flex items-center justify-center mx-auto border border-rose-200">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+            </div>
+            <h3 class="font-bold text-rose-700 text-base">Không Thể Tải Sơ Đồ Văn Phòng Số</h3>
+            <p class="text-slate-500 text-xs">Mất kết nối với dịch vụ thời gian thực WebSocket Gateway. Vui lòng kiểm tra đường truyền nội bộ.</p>
+            <button onclick="setState('success')" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold transition">
+              Thử Lại Ngay
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      // Helper tạo stacked icons cho Storybook
+      function renderStorybookIcons(count, type, isLeader = false) {
+        const displayCount = Math.min(count, 10);
+        const hasMore = count > 10;
+        let label = '';
+        let svg = '';
+        let colorClass = '';
+
+        if (type === 'cases' || type === 'casesDoing') {
+          label = type === 'casesDoing' ? 'Vụ làm' : 'Vụ việc';
+          svg = '<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>';
+          colorClass = isLeader ? 'bg-indigo-600 text-white border-indigo-400' : 'bg-indigo-100 text-indigo-700 border-indigo-300';
+        } else if (type === 'casesManaging') {
+          label = 'Vụ QL';
+          svg = '<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>';
+          colorClass = isLeader ? 'bg-cyan-600 text-white border-cyan-300' : 'bg-cyan-100 text-cyan-800 border-cyan-300';
+        } else if (type === 'working' || type === 'tasksWorking') {
+          label = 'Đang làm';
+          svg = '<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>';
+          colorClass = isLeader ? 'bg-amber-400 text-slate-900 border-amber-200' : 'bg-amber-100 text-amber-700 border-amber-300';
+        } else if (type === 'pending' || type === 'tasksPending') {
+          label = 'Chờ';
+          svg = '<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6l4 2"/></svg>';
+          colorClass = isLeader ? 'bg-slate-500 text-white border-slate-300' : 'bg-slate-100 text-slate-700 border-slate-300';
+        }
+
+        let icons = '';
+        if (count === 0) {
+          icons = `<span class="text-[10px] ${isLeader ? 'text-blue-300' : 'text-slate-400'} italic">0</span>`;
+        } else {
+          for (let i = 0; i < displayCount; i++) {
+            icons += `
+              <span class="inline-flex items-center justify-center w-5 h-5 rounded-full border shadow-xs ring-1 ${isLeader ? 'ring-[#001D38]' : 'ring-white'} ${colorClass} shrink-0 transition-transform hover:scale-125 hover:z-20">
+                ${svg}
+              </span>
+            `;
+          }
+          if (hasMore) {
+            icons += `<span class="text-xs font-black ${isLeader ? 'text-amber-300' : 'text-slate-500'} ml-1 shrink-0">+</span>`;
+          }
+        }
+
+        const labelColor = isLeader ? 'text-cyan-200' : 'text-slate-500';
+        const pillBg = isLeader ? 'bg-white text-slate-900' : 'bg-slate-900 text-white';
+
+        return `
+          <div class="group flex items-center gap-1.5 py-0.5 cursor-pointer relative" title="${count} ${label.toLowerCase()}">
+            <span class="text-[10px] font-bold ${labelColor} w-14 shrink-0 truncate">${label}:</span>
+            <div class="flex items-center -space-x-1.5 shrink-0 py-0.5">
+              ${icons}
+            </div>
+            <span class="opacity-0 group-hover:opacity-100 transition-opacity duration-150 px-1.5 py-0.2 rounded-md text-[10px] font-black ${pillBg} shadow-md shrink-0 ml-1">
+              ${count}
+            </span>
+          </div>
+        `;
+      }
+
+      // SUCCESS STATE
+      container.innerHTML = `
+        <!-- Top Command Strip with Branch Selector -->
+        <div class="glass-card-3d rounded-2xl p-4 flex flex-wrap items-center justify-between gap-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#002D54] to-[#0082B4] text-white flex items-center justify-center shadow-md">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h1 class="text-sm font-extrabold text-[#002D54]">Văn Phòng Số Trực Quan (SCR-15)</h1>
+                <span class="text-[9px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full border border-emerald-300">LIVE SYNC</span>
+              </div>
+              <p class="text-[11px] text-slate-500">Giám sát tải công việc theo icon xếp chồng và phê duyệt thời gian thực</p>
+            </div>
+          </div>
+
+          <!-- Quick KPIs & Link -->
+          <div class="flex items-center gap-2">
+            <div class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/80 border border-slate-200 text-xs">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+              <span class="text-slate-600">Đang làm:</span>
+              <span class="font-bold text-[#002D54]">6</span>
+            </div>
+            <div class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/80 border border-slate-200 text-xs">
+              <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+              <span class="text-slate-600">Chờ duyệt:</span>
+              <span class="font-bold text-amber-700">2</span>
+            </div>
+            <a href="prototype/operations/floorplan.html" target="_blank" class="px-3 py-1.5 btn-3d-navy text-white text-xs font-bold rounded-lg flex items-center gap-1 shadow-sm">
+              <span>Mở Đầy Đủ</span>
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Room Box Demo -->
+        <div class="glass-card-3d rounded-2xl p-4 space-y-4 bg-gradient-to-b from-blue-50/40 via-white to-slate-50/60 border border-blue-100 mt-2">
+          
+          <!-- HÀNG TRÊN: BÀN TRƯỞNG PHÒNG (BÊN TRÁI - MÀU ĐẶC ĐẬM) + HÀNG ĐỢI PHÊ DUYỆT (BÊN PHẢI) -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-3 items-stretch">
+            
+            <!-- 1. BÀN TRƯỞNG PHÒNG (BÊN TRÁI MÀN HÌNH - MÀU ĐẶC ĐẬM #001D38) -->
+            <div class="lg:col-span-5 bg-[#001D38] border-2 border-[#00386B] text-white p-3.5 rounded-2xl shadow-xl flex items-center gap-3.5">
+              <!-- Ảnh vuông -->
+              <div class="flex flex-col items-center text-center w-24 shrink-0">
+                <div class="w-16 h-16 rounded-xl overflow-hidden ring-2 ring-cyan-400 shadow-md bg-slate-800 shrink-0">
+                  <img src="https://images.unsplash.com/photo-1556157382-97eda2d62296?w=400&auto=format&fit=crop&q=80" alt="TS.LS Đỗ Trọng Hải" class="w-full h-full object-cover">
+                </div>
+                <div class="mt-1.5 w-full">
+                  <h3 class="text-xs font-bold text-white truncate">TS.LS Đỗ Trọng Hải</h3>
+                  <p class="text-[9px] text-cyan-200 truncate">Trưởng ban SHTT</p>
+                </div>
+              </div>
+
+              <!-- 4 dòng thông số xếp lớp icon (Vụ làm, Vụ QL, Đang làm, Chờ) -->
+              <div class="flex-1 w-full flex flex-col justify-center space-y-1 pl-2.5 border-l border-white/15">
+                ${renderStorybookIcons(3, 'casesDoing', true)}
+                ${renderStorybookIcons(8, 'casesManaging', true)}
+                ${renderStorybookIcons(4, 'tasksWorking', true)}
+                ${renderStorybookIcons(2, 'tasksPending', true)}
+              </div>
+            </div>
+
+            <!-- 2. HÀNG ĐỢI PHÊ DUYỆT (BÊN PHẢI MÀN HÌNH: TITLE TRÊN BOX, NHÂN VIÊN CĂN TRÁI TRONG BOX ĐỂ ĐỨNG GẦN SẾP) -->
+            <div class="lg:col-span-7 flex flex-col justify-between">
+              <!-- Title trên box chờ -->
+              <div class="flex items-center justify-between mb-1.5">
+                <div class="flex items-center gap-1.5">
+                  <svg class="w-3.5 h-3.5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6l4 2"/></svg>
+                  <span class="text-[11px] font-extrabold uppercase tracking-wider text-amber-900">Hàng đợi phê duyệt (Gate G1 - G5)</span>
+                </div>
+                <span class="text-[10px] font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full border border-amber-200">1 nhân sự đang chờ</span>
+              </div>
+
+              <!-- Box chờ duyệt: CĂN TRÁI (justify-start) ĐỂ ĐỨNG SÁT BÀN SẾP BÊN TRÁI -->
+              <div class="flex-1 bg-amber-50/70 border-2 border-dashed border-amber-300 rounded-xl p-2.5 flex items-center justify-start gap-2.5">
+                <!-- Chỉ hiện nhân sự đó và số tác vụ đang cần phê duyệt -->
+                <div class="flex items-center gap-2.5 bg-white p-2 rounded-xl border border-amber-300 shadow-xs">
+                  <div class="w-10 h-10 rounded-lg overflow-hidden ring-1 ring-amber-400 bg-slate-800 flex-shrink-0">
+                    <img src="https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=400&auto=format&fit=crop&q=80" alt="LS. Lê Thị Hương" class="w-full h-full object-cover">
+                  </div>
+                  <div>
+                    <div class="text-xs font-bold text-slate-800">LS. Lê Thị Hương</div>
+                    <div class="text-[10px] text-amber-700 font-bold flex items-center gap-1">
+                      <svg class="w-3 h-3 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                      <span>1 tác vụ cần phê duyệt</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- BÀN NHÂN SỰ: CHIA LÀM ĐÔI (TRÁI: ẢNH + TÊN KÈM CHỨC VỤ; PHẢI: ICON XẾP LỚP VỤ VIỆC, ĐANG LÀM, CHỜ) -->
+          <div class="pt-1 space-y-2">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+
+              <!-- Station 1 -->
+              <div onclick="showToast('Xem thông tin: LS. Nguyễn Văn An', 'info')" class="cursor-pointer glass-card-3d rounded-xl p-3 border border-blue-200/80 hover:border-[#0082B4] transition shadow-xs group">
+                <div class="grid grid-cols-12 gap-2.5 items-center">
+                  <div class="col-span-5 flex flex-col items-center text-center">
+                    <div class="w-13 h-13 rounded-xl overflow-hidden ring-2 ring-cyan-500/70 shadow-xs bg-slate-100">
+                      <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&auto=format&fit=crop&q=80" alt="LS. Nguyễn Văn An" class="w-full h-full object-cover">
+                    </div>
+                    <h4 class="text-xs font-bold text-[#002D54] truncate mt-1">LS. Nguyễn Văn An</h4>
+                    <p class="text-[10px] text-slate-500 truncate">Luật sư SHTT</p>
+                  </div>
+                  <div class="col-span-7 flex flex-col justify-center space-y-1 pl-2 border-l border-slate-100 text-left">
+                    ${renderStorybookIcons(5, 'cases', false)}
+                    ${renderStorybookIcons(3, 'working', false)}
+                    ${renderStorybookIcons(2, 'pending', false)}
+                  </div>
+                </div>
+              </div>
+
+              <!-- Station 2 -->
+              <div onclick="showToast('Xem thông tin: LS. Trần Thu Thảo', 'info')" class="cursor-pointer glass-card-3d rounded-xl p-3 border border-blue-200/80 hover:border-[#0082B4] transition shadow-xs group">
+                <div class="grid grid-cols-12 gap-2.5 items-center">
+                  <div class="col-span-5 flex flex-col items-center text-center">
+                    <div class="w-13 h-13 rounded-xl overflow-hidden ring-2 ring-purple-500/70 shadow-xs bg-purple-50">
+                      <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&auto=format&fit=crop&q=80" alt="LS. Trần Thu Thảo" class="w-full h-full object-cover">
+                    </div>
+                    <h4 class="text-xs font-bold text-[#002D54] truncate mt-1">LS. Trần Thu Thảo</h4>
+                    <p class="text-[10px] text-slate-500 truncate">Chuyên viên SHTT</p>
+                  </div>
+                  <div class="col-span-7 flex flex-col justify-center space-y-1 pl-2 border-l border-slate-100 text-left">
+                    ${renderStorybookIcons(4, 'cases', false)}
+                    ${renderStorybookIcons(2, 'working', false)}
+                    ${renderStorybookIcons(1, 'pending', false)}
+                  </div>
+                </div>
+              </div>
+
+              <!-- Station 3 (Đang xếp hàng: VẪN HIỂN THỊ ĐẦY ĐỦ ICON XẾP LỚP) -->
+              <div onclick="showToast('Xem thông tin: LS. Lê Thị Hương (Đang xếp hàng)', 'info')" class="cursor-pointer glass-card-3d rounded-xl p-3 border-2 border-dashed border-amber-300 bg-amber-50/40 hover:bg-amber-50/70 transition shadow-xs group">
+                <div class="grid grid-cols-12 gap-2.5 items-center">
+                  <div class="col-span-5 flex flex-col items-center text-center">
+                    <div class="w-13 h-13 rounded-xl overflow-hidden ring-2 ring-amber-400 shadow-xs bg-amber-50">
+                      <img src="https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=400&auto=format&fit=crop&q=80" alt="LS. Lê Thị Hương" class="w-full h-full object-cover">
+                    </div>
+                    <h4 class="text-xs font-bold text-[#002D54] truncate mt-1">LS. Lê Thị Hương</h4>
+                    <p class="text-[10px] text-amber-700 truncate font-semibold">Đang xếp hàng</p>
+                  </div>
+                  <div class="col-span-7 flex flex-col justify-center space-y-1 pl-2 border-l border-amber-200 text-left">
+                    ${renderStorybookIcons(5, 'cases', false)}
+                    ${renderStorybookIcons(1, 'working', false)}
+                    ${renderStorybookIcons(2, 'pending', false)}
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      `;
+    }
+
+    function askAi(question) {
+      document.getElementById('ai-input').value = question;
+      handleAiSend();
+    }
+
+    function handleAiSend() {
+      const input = document.getElementById('ai-input');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const chatBox = document.getElementById('ai-chat-messages');
+      chatBox.innerHTML += `
+        <div class="flex gap-2 justify-end">
+          <div class="bg-gradient-to-r from-[#002D54] to-[#00477E] text-white rounded-2xl rounded-tr-none p-3 max-w-[85%] shadow-xs">
+            <p>${text}</p>
+          </div>
+        </div>
+      `;
+
+      input.value = '';
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      setTimeout(() => {
+        let aiReply = '';
+        if (text.includes('17h') || text.includes('quá hạn')) {
+          aiReply = `Hôm nay bạn có **1 tác vụ cực kỳ khẩn cấp**:<br>• **TASK-03**: Nộp bản giải trình nhãn hiệu quốc tế ASL GATEWAY lên Cục SHTT trước **17:00**.<br>Bạn có muốn mở ngay trên màn hình Kanban không?`;
+        } else if (text.includes('ASL-2026-IP-0045') || text.includes('MISA') || text.includes('tiền')) {
+          aiReply = `Đợt thu 2 của vụ việc **ASL-2026-IP-0045** (60.000.000 VNĐ) đã được kế toán xác nhận trên hệ thống theo hóa đơn **HD-2026-00456**. Hoa hồng của bạn là **4.200.000 VNĐ** đã được ghi nhận!`;
+        } else {
+          aiReply = `Hệ thống ERP ASL LAW ghi nhận vụ việc đang hoạt động đúng tiến độ theo Workflow Template nghiêm ngặt.`;
+        }
+
+        chatBox.innerHTML += `
+          <div class="flex gap-2">
+            <div class="w-6 h-6 rounded-full bg-[#0082B4]/10 text-[#0082B4] border border-[#0082B4]/30 flex items-center justify-center shrink-0 font-bold text-[10px]">AI</div>
+            <div class="glass-card-3d rounded-2xl rounded-tl-none p-3 text-slate-800 space-y-1">
+              <p>${aiReply}</p>
+            </div>
+          </div>
+        `;
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }, 600);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderCurrentScreen();
+    });
+  </script>
+</body>
+</html>

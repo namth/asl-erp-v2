@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <script>(function(){if(localStorage.getItem('asl_theme')==='dark'){document.documentElement.classList.add('dark');}else{document.documentElement.classList.remove('dark');}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASL LAW - Xét Duyệt & Thực Hiện Thu Chi Kế Toán</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/layout.css?v=3.1">
+  <script src="../assets/layout.js?v=3.1" defer></script>
+</head>
+<body class="min-h-screen bg-[#F4F8FA] text-slate-800 flex">
+
+  <!-- Modular Shared Sidebar (Auto-mounted by layout.js) -->
+  <aside id="sidebar" class="fixed top-0 left-0 bottom-0 w-72 bg-white/95 backdrop-blur-xl z-40 transition-all duration-300 ease-in-out flex flex-col justify-between shadow-xl shadow-slate-900/5"></aside>
+
+  <!-- Main Container -->
+  <div id="main-container" class="flex-1 md:ml-72 flex flex-col min-h-screen transition-all duration-300 ease-in-out">
+
+    <!-- Top Bar with Rich Brand Gradient -->
+    <header class="header-gradient text-white h-20 px-6 flex items-center justify-between sticky top-0 z-30 shadow-md">
+      <div class="flex items-center gap-4">
+        <button onclick="toggleSidebar()" class="md:hidden p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white" title="Mở menu">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <div>
+          <div class="text-xs text-cyan-200/90 font-medium flex items-center gap-1.5">
+            <a href="../index.html" class="hover:underline">ASL LAW</a>
+            <span>/</span>
+            <span class="text-white font-semibold">Kế Toán & Đối Soát Thu Chi</span>
+          </div>
+          <h1 class="text-lg font-bold text-white tracking-tight">Xét Duyệt & Thực Hiện Thu - Chi Kế Toán (Đối Soát Thủ Công)</h1>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <!-- Create Financial Task Button -->
+        <a href="create-invoice.html" class="px-3.5 py-2 rounded-xl bg-[#FF7A00] hover:bg-[#E66E00] text-white font-bold text-xs shadow-md shadow-orange-950/20 flex items-center gap-1.5 transition-all">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+          <span>Tạo Task Thu / Chi Mới</span>
+        </a>
+
+        <a href="../finance/index.html" class="px-3.5 py-2 rounded-xl bg-white/15 hover:bg-white/25 border border-white/20 text-white font-bold text-xs flex items-center gap-1.5 transition-all">
+          <svg class="w-4 h-4 text-cyan-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <span>Bảng Hoa Hồng Thực Thu</span>
+        </a>
+
+        <!-- User Profile -->
+        <div class="flex items-center gap-2 pl-2 border-l border-white/20">
+          <div class="w-8 h-8 rounded-full bg-emerald-600 text-white font-extrabold text-xs flex items-center justify-center ring-2 ring-white/50">
+            TT
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 p-6 md:p-8 max-w-none mx-auto w-full space-y-6">
+
+      <!-- 4 Solid KPI Cards (Đồng bộ phong cách Dashboard) -->
+      <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Metric 1: Tổng Task Chờ Kế Toán (Solid Deep Navy) -->
+        <div class="rounded-2xl p-6 relative overflow-hidden bg-[#002D54] text-white shadow-lg shadow-[#002D54]/25 transition-all hover:-translate-y-1">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-cyan-200/90 uppercase tracking-wider">Chờ Kế Toán Thực Hiện</span>
+            <span class="p-2 rounded-xl bg-white/15 text-white backdrop-blur-sm">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+            </span>
+          </div>
+          <div class="text-3xl font-extrabold text-white mt-3 font-mono"><span id="kpi-pending-total">06</span> <span class="text-xs font-semibold text-cyan-200/80">task thu - chi</span></div>
+          <div class="text-xs text-cyan-100/90 mt-2 flex items-center gap-1.5 font-medium">
+            <span class="text-emerald-300 font-bold bg-white/10 px-2 py-0.5 rounded-md text-[10px]">✓ Giám đốc đã duyệt</span> chuyển sang KT
+          </div>
+        </div>
+
+        <!-- Metric 2: Khoản Thu Chờ Xuất Hóa Đơn (Solid ASL Cerulean) -->
+        <div class="rounded-2xl p-6 relative overflow-hidden bg-[#0082B4] text-white shadow-lg shadow-cyan-950/25 transition-all hover:-translate-y-1">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-cyan-100 uppercase tracking-wider">Khoản Thu Chờ Xuất HĐ</span>
+            <span class="p-2 rounded-xl bg-white/15 text-white backdrop-blur-sm">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            </span>
+          </div>
+          <div class="text-3xl font-extrabold text-white mt-3 font-mono"><span id="kpi-pending-thu">03</span> <span class="text-xs font-semibold text-cyan-100">khoản thu</span></div>
+          <div class="text-xs text-cyan-100/90 mt-2 font-medium">
+            Tổng <strong class="font-mono">306.000.000 ₫</strong> • Cần xuất HĐ & điền Link
+          </div>
+        </div>
+
+        <!-- Metric 3: Khoản Chi Chờ Thanh Toán (Solid Alert Crimson) -->
+        <div class="rounded-2xl p-6 relative overflow-hidden bg-[#D9381E] text-white shadow-lg shadow-red-950/25 transition-all hover:-translate-y-1">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-red-100 uppercase tracking-wider">Khoản Chi Chờ Giải Ngân</span>
+            <span class="p-2 rounded-xl bg-white/20 text-white backdrop-blur-sm">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+            </span>
+          </div>
+          <div class="text-3xl font-extrabold text-white mt-3 font-mono"><span id="kpi-pending-chi">03</span> <span class="text-xs font-semibold text-red-100">khoản chi</span></div>
+          <div class="text-xs text-red-100/90 mt-2 font-medium">
+            Tổng <strong class="font-mono">92.500.000 ₫</strong> • Chuyển khoản & bấm Đã Chi
+          </div>
+        </div>
+
+        <!-- Metric 4: Đã Hoàn Tất Đối Soát (Solid Emerald Green) -->
+        <div class="rounded-2xl p-6 relative overflow-hidden bg-[#047857] text-white shadow-lg shadow-emerald-950/25 transition-all hover:-translate-y-1">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-emerald-100 uppercase tracking-wider">Đã Thực Hiện & Đối Soát</span>
+            <span class="p-2 rounded-xl bg-white/15 text-white backdrop-blur-sm">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </span>
+          </div>
+          <div class="text-3xl font-extrabold text-white mt-3 font-mono"><span id="kpi-completed-count">24</span> <span class="text-xs font-semibold text-emerald-100">hoàn tất</span></div>
+          <div class="text-xs text-emerald-100/90 mt-2 flex items-center gap-1.5 font-medium">
+            <span class="text-white font-bold bg-white/20 px-2 py-0.5 rounded-md text-[10px]">100% Thủ công</span> lưu đủ Link HĐ & Đã chi
+          </div>
+        </div>
+      </section>
+
+      <!-- Quy trình luồng phê duyệt Thu - Chi 3 bước (Visual Workflow Stepline) -->
+      <section class="glass-card rounded-2xl p-5 border border-slate-200/80 bg-gradient-to-r from-slate-50 via-white to-cyan-50/40">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-[#002D54] text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-sm">
+              LUỒNG
+            </div>
+            <div>
+              <h2 class="text-xs font-extrabold text-[#002D54] uppercase tracking-wider">Quy Trình Phê Duyệt & Đối Soát Thu - Chi Thủ Công (3 Bước)</h2>
+              <p class="text-[11px] text-slate-500 mt-0.5">Mọi tác vụ thu tiền hoặc chi tiền đều qua Giám đốc phê duyệt trước khi chuyển sang Kế toán thực hiện</p>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2 text-xs">
+            <!-- Step 1 -->
+            <div class="flex items-center gap-2 px-3 py-2 rounded-xl bg-white border border-slate-200 shadow-2xs">
+              <span class="w-5 h-5 rounded-full bg-slate-200 text-slate-700 font-extrabold text-[10px] flex items-center justify-center">1</span>
+              <div>
+                <div class="font-bold text-slate-800 text-[11px]">Người thực hiện tạo Task</div>
+                <div class="text-[10px] text-slate-400">Task Thu tiền / Task Chi tiền</div>
+              </div>
+            </div>
+
+            <svg class="w-4 h-4 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+
+            <!-- Step 2 -->
+            <div class="flex items-center gap-2 px-3 py-2 rounded-xl bg-blue-50/80 border border-blue-200 shadow-2xs">
+              <span class="w-5 h-5 rounded-full bg-[#0082B4] text-white font-extrabold text-[10px] flex items-center justify-center">2</span>
+              <div>
+                <div class="font-bold text-[#002D54] text-[11px]">Giám đốc phê duyệt</div>
+                <div class="text-[10px] text-[#0082B4]">Duyệt nghiệp vụ & chuyển KT</div>
+              </div>
+            </div>
+
+            <svg class="w-4 h-4 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+
+            <!-- Step 3 -->
+            <div class="flex items-center gap-2 px-3 py-2 rounded-xl bg-amber-50/90 border border-amber-300 shadow-2xs">
+              <span class="w-5 h-5 rounded-full bg-[#FF7A00] text-white font-extrabold text-[10px] flex items-center justify-center">3</span>
+              <div>
+                <div class="font-bold text-[#002D54] text-[11px]">Kế toán duyệt & thực hiện</div>
+                <div class="text-[10px] text-amber-800 font-semibold">Thu: Điền Link HĐ • Chi: Bấm Đã Chi</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Filter Tabs & Search Bar -->
+      <section class="glass-card rounded-2xl p-6 space-y-5">
+        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
+          <!-- Tabs -->
+          <div class="flex items-center gap-2 flex-wrap">
+            <button onclick="filterAccountingTab('ALL_PENDING', this)" class="acc-tab px-4 py-2 rounded-xl bg-[#002D54] text-white font-bold text-xs shadow-sm">
+              Chờ Kế Toán Xử Lý (6)
+            </button>
+            <button onclick="filterAccountingTab('THU', this)" class="acc-tab px-4 py-2 rounded-xl bg-blue-50 hover:bg-blue-100 text-[#0082B4] font-bold text-xs transition-colors flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-[#0082B4]"></span>
+              <span>Khoản Thu • Chờ Xuất HĐ & Điền Link (3)</span>
+            </button>
+            <button onclick="filterAccountingTab('CHI', this)" class="acc-tab px-4 py-2 rounded-xl bg-orange-50 hover:bg-orange-100 text-[#D9381E] font-bold text-xs transition-colors flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-[#D9381E]"></span>
+              <span>Khoản Chi • Chờ Bấm Đã Chi (3)</span>
+            </button>
+            <button onclick="filterAccountingTab('WAIT_DIRECTOR', this)" class="acc-tab px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-colors">
+              Đang Chờ Giám Đốc Duyệt (2)
+            </button>
+            <button onclick="filterAccountingTab('COMPLETED', this)" class="acc-tab px-4 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold text-xs transition-colors">
+              ✓ Đã Hoàn Tất (3)
+            </button>
+          </div>
+
+          <!-- Search & Export -->
+          <div class="flex items-center gap-2">
+            <div class="relative">
+              <input type="text" id="acc-search" onkeyup="searchAccountingTable()" placeholder="Tìm mã task, vụ việc, khách hàng..." class="w-64 pl-9 pr-3.5 py-2 rounded-xl bg-white border border-slate-200 text-xs focus:border-[#0082B4] focus:outline-none shadow-sm">
+              <svg class="w-4 h-4 text-slate-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            </div>
+            <button onclick="toggleAllAccDetails()" id="btn-toggle-all" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-[#002D54] font-bold text-xs flex items-center gap-1.5 transition-all">
+              <svg id="icon-toggle-all" class="w-4 h-4 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+              <span id="text-toggle-all">Sổ Tất Cả Chi Tiết</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Accounting Review & Execution Table -->
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border-collapse" id="accounting-table">
+            <thead>
+              <tr class="border-b border-slate-200 text-[10px] text-slate-400 font-bold uppercase tracking-wider bg-slate-50/60">
+                <th class="py-3.5 px-4 w-36">Mã Task</th>
+                <th class="py-3.5 px-4 w-28">Loại</th>
+                <th class="py-3.5 px-4 min-w-[250px]">Nội Dung Task Thu / Chi & Vụ Việc</th>
+                <th class="py-3.5 px-4 min-w-[170px]">Khách Hàng / Người Nhận</th>
+                <th class="py-3.5 px-4 w-36">Số Tiền</th>
+                <th class="py-3.5 px-4 min-w-[170px]">Người Tạo & GĐ Duyệt</th>
+                <th class="py-3.5 px-4 min-w-[320px]">Kế Toán Thực Hiện (Điền Link HĐ / Đã Chi)</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 font-medium bg-white">
+
+              <!-- ======================================================= -->
+              <!-- ITEM 1: KHOẢN THU 1 (Chờ xuất hóa đơn & điền link HĐ)   -->
+              <!-- ======================================================= -->
+              <tr class="acc-row hover:bg-slate-50/90 transition-colors cursor-pointer" data-type="THU" data-status="PENDING_KT" data-detail-id="acc-detail-1" id="row-task-1">
+                <td class="py-4 px-4 font-mono font-bold text-[#002D54]">
+                  <div class="flex items-center gap-2">
+                    <button onclick="event.stopPropagation(); toggleAccDetail('acc-detail-1', this)" class="btn-chevron p-1 rounded-lg hover:bg-slate-200 text-slate-400 hover:text-slate-800 transition-colors" title="Sổ chi tiết đối soát">
+                      <svg class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                    </button>
+                    <a href="detail.html" class="hover:underline font-extrabold text-[#002D54]">TASK-THU-109</a>
+                  </div>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-blue-50 text-[#0082B4] border border-blue-200">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12"/></svg>
+                    <span>Khoản Thu</span>
+                  </span>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-bold text-sm text-[#002D54]">Thu phí Đợt 2: Thẩm định & Nộp đơn Cục SHTT</div>
+                  <div class="text-[11px] text-slate-500 mt-0.5">
+                    Vụ việc: <a href="../cases/detail.html" class="font-bold text-[#0082B4] hover:underline">ASL-2026-TM109 (Nhãn hiệu 9Outfit)</a>
+                  </div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-bold text-slate-800">Công ty TNHH Thời Trang 9Outfit</div>
+                  <div class="text-[10px] text-slate-400 font-mono">MST: 0108991122</div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-mono font-extrabold text-sm text-emerald-600">+ 54.000.000 ₫</div>
+                  <div class="text-[10px] text-slate-400">Đã gồm VAT 8%</div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="text-[11px] text-slate-700">Tạo: <strong>LS. Hoàng Gia Huy</strong></div>
+                  <div class="inline-flex items-center gap-1 mt-1 px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    <span>✓ GĐ Nguyễn Anh đã duyệt</span>
+                  </div>
+                </td>
+                <td class="py-4 px-4" onclick="event.stopPropagation()">
+                  <div id="action-box-1" class="space-y-2">
+                    <div class="flex items-center gap-1.5">
+                      <input type="url" id="inv-link-1" placeholder="Dán link hóa đơn (meInvoice / OneDrive)..." value="https://meinvoice.vn/tra-cuu/HD-2026-0109" class="flex-1 px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-xs font-mono text-slate-700 focus:border-[#0082B4] focus:outline-none">
+                      <button onclick="confirmInvoiceIssued(1, 'TASK-THU-109', '54.000.000 ₫')" class="px-3 py-1.5 rounded-lg bg-[#0082B4] hover:bg-[#002D54] text-white font-bold text-xs whitespace-nowrap shadow-xs transition-colors flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        <span>Lưu Link HĐ & Duyệt Thu</span>
+                      </button>
+                    </div>
+                    <div class="text-[10px] text-amber-700 font-medium">Kế toán xuất hóa đơn thủ công và điền link hóa đơn để hoàn tất</div>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- EXPANDABLE DETAIL FOR ITEM 1 -->
+              <tr id="acc-detail-1" class="row-detail hidden bg-slate-50/90 border-b border-slate-200">
+                <td colspan="7" class="p-5">
+                  <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-xs space-y-4">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                      <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-4 rounded bg-[#0082B4]"></span>
+                        <span class="text-xs font-bold text-[#002D54] uppercase tracking-wider">Chi Tiết Phê Duyệt & Xuất Hóa Đơn Khoản Thu • TASK-THU-109</span>
+                      </div>
+                      <a href="detail.html" class="text-xs font-bold text-[#0082B4] hover:underline">Xem Chứng Từ Đầy Đủ &rarr;</a>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                      <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                        <div class="font-bold text-[#002D54]">1. Thông Tin Từ Người Thực Hiện</div>
+                        <div><span class="text-slate-400">Người lập task:</span> <strong>LS. Hoàng Gia Huy</strong> (08:45 - 29/10/2026)</div>
+                        <div><span class="text-slate-400">Nội dung:</span> Đề nghị xuất hóa đơn VAT đợt 2 theo Hợp đồng số HĐ-2026/TM109. Khách hàng đã báo chuyển khoản vào TK Vietcombank.</div>
+                      </div>
+                      <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                        <div class="font-bold text-[#002D54]">2. Xác Nhận Của Giám Đốc</div>
+                        <div><span class="text-slate-400">Người phê duyệt:</span> <strong class="text-emerald-700">LS. Nguyễn Anh (Giám đốc)</strong></div>
+                        <div><span class="text-slate-400">Thời gian duyệt:</span> <span class="font-mono">09:30 - 29/10/2026</span></div>
+                        <div><span class="text-slate-400">Ý kiến GĐ:</span> <em>"Đồng ý thu phí đợt 2, chuyển kế toán kiểm tra sổ phụ và xuất hóa đơn gửi khách."</em></div>
+                      </div>
+                      <div class="p-3.5 rounded-xl bg-blue-50/50 border border-blue-200 space-y-1">
+                        <div class="font-bold text-[#002D54]">3. Thông Tin Xuất Hóa Đơn Thủ Công</div>
+                        <div><span class="text-slate-400">Đơn vị nhận HĐ:</span> <strong>Công ty TNHH Thời Trang 9Outfit</strong></div>
+                        <div><span class="text-slate-400">Mã số thuế:</span> <span class="font-mono font-bold">0108991122</span></div>
+                        <div><span class="text-slate-400">Email nhận HĐ:</span> <span class="font-mono">accounting@9outfit.vn</span></div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- ======================================================= -->
+              <!-- ITEM 2: KHOẢN CHI 1 (Chờ kế toán chi & bấm nút Đã chi)  -->
+              <!-- ======================================================= -->
+              <tr class="acc-row hover:bg-slate-50/90 transition-colors cursor-pointer" data-type="CHI" data-status="PENDING_KT" data-detail-id="acc-detail-2" id="row-task-2">
+                <td class="py-4 px-4 font-mono font-bold text-[#002D54]">
+                  <div class="flex items-center gap-2">
+                    <button onclick="event.stopPropagation(); toggleAccDetail('acc-detail-2', this)" class="btn-chevron p-1 rounded-lg hover:bg-slate-200 text-slate-400 hover:text-slate-800 transition-colors" title="Sổ chi tiết khoản chi">
+                      <svg class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                    </button>
+                    <a href="detail.html" class="hover:underline font-extrabold text-[#D9381E]">TASK-CHI-204</a>
+                  </div>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-orange-50 text-[#D9381E] border border-orange-200">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 13l-5 5m0 0l-5-5m5 5V6"/></svg>
+                    <span>Khoản Chi</span>
+                  </span>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-bold text-sm text-[#002D54]">Chi nộp tiền tạm ứng án phí sơ thẩm TAND TP.HCM</div>
+                  <div class="text-[11px] text-slate-500 mt-0.5">
+                    Vụ việc: <a href="../cases/detail.html" class="font-bold text-[#0082B4] hover:underline">ASL-2026-LIT03 (Tranh chấp BĐS Phúc Khang)</a>
+                  </div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-bold text-slate-800">Cục THADS TP. Hồ Chí Minh</div>
+                  <div class="text-[10px] text-slate-400 font-mono">STK Kho bạc: 3949.0.1054289</div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-mono font-extrabold text-sm text-[#D9381E]">- 45.000.000 ₫</div>
+                  <div class="text-[10px] text-slate-400">Thông báo nộp án phí số 18</div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="text-[11px] text-slate-700">Tạo: <strong>LS. Phạm Thu Hương</strong></div>
+                  <div class="inline-flex items-center gap-1 mt-1 px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    <span>✓ GĐ Nguyễn Anh đã duyệt</span>
+                  </div>
+                </td>
+                <td class="py-4 px-4" onclick="event.stopPropagation()">
+                  <div id="action-box-2" class="flex items-center justify-between gap-2 bg-orange-50/60 p-2.5 rounded-xl border border-orange-200/80">
+                    <div class="text-[11px] text-slate-600">
+                      <span class="font-bold text-slate-800 block">Chờ kế toán chuyển khoản</span>
+                      <span class="text-[10px] text-slate-500">Bấm "Đã Chi" sau khi chuyển thành công</span>
+                    </div>
+                    <button onclick="confirmExpensePaid(2, 'TASK-CHI-204', '45.000.000 ₫', 'Chi nộp tiền tạm ứng án phí sơ thẩm TAND TP.HCM')" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs whitespace-nowrap shadow-sm transition-all flex items-center gap-1.5">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                      <span>Đã Chi</span>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- EXPANDABLE DETAIL FOR ITEM 2 -->
+              <tr id="acc-detail-2" class="row-detail hidden bg-slate-50/90 border-b border-slate-200">
+                <td colspan="7" class="p-5">
+                  <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-xs space-y-4">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                      <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-4 rounded bg-[#D9381E]"></span>
+                        <span class="text-xs font-bold text-[#002D54] uppercase tracking-wider">Chi Tiết Lệnh Chi Tiền Đã Qua Giám Đốc Duyệt • TASK-CHI-204</span>
+                      </div>
+                      <span class="text-xs font-bold text-amber-700">Hạn nộp án phí: Trước 17:00 ngày 30/10/2026</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                      <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                        <div class="font-bold text-[#002D54]">1. Đề Nghị Chi Từ Luật Sư</div>
+                        <div><span class="text-slate-400">Người đề nghị:</span> <strong>LS. Phạm Thu Hương</strong></div>
+                        <div><span class="text-slate-400">Lý do chi:</span> Nộp tạm ứng án phí KDTM sơ thẩm theo Thông báo số 18/TB-TA của TAND TP.HCM để Tòa chính thức thụ lý vụ án.</div>
+                      </div>
+                      <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                        <div class="font-bold text-[#002D54]">2. Phê Duyệt Của Giám Đốc</div>
+                        <div><span class="text-slate-400">Người duyệt:</span> <strong class="text-emerald-700">LS. Nguyễn Anh (Giám đốc)</strong></div>
+                        <div><span class="text-slate-400">Thời gian duyệt:</span> <span class="font-mono">10:15 - 29/10/2026</span></div>
+                        <div><span class="text-slate-400">Ghi chú GĐ:</span> <em>"Duyệt chi khẩn từ khoản tiền khách hàng đã tạm ứng. Kế toán chi ngay trong sáng nay."</em></div>
+                      </div>
+                      <div class="p-3.5 rounded-xl bg-orange-50/50 border border-orange-200 space-y-1">
+                        <div class="font-bold text-[#002D54]">3. Thông Tin Chuyển Khoản Thụ Hưởng</div>
+                        <div><span class="text-slate-400">Đơn vị nhận:</span> <strong>Cục Thi hành án dân sự TP.HCM</strong></div>
+                        <div><span class="text-slate-400">Số tài khoản:</span> <span class="font-mono font-bold text-[#D9381E]">3949.0.1054289</span> (Kho bạc NN TP.HCM)</div>
+                        <div><span class="text-slate-400">Nội dung CK:</span> <span class="font-mono">NOP TAM UNG AN PHI TB SO 18 Viec Phuc Khang</span></div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- ======================================================= -->
+              <!-- ITEM 3: KHOẢN THU 2 (Foxconn Patent - Chờ điền link HĐ) -->
+              <!-- ======================================================= -->
+              <tr class="acc-row hover:bg-slate-50/90 transition-colors cursor-pointer" data-type="THU" data-status="PENDING_KT" data-detail-id="acc-detail-3" id="row-task-3">
+                <td class="py-4 px-4 font-mono font-bold text-[#002D54]">
+                  <div class="flex items-center gap-2">
+                    <button onclick="event.stopPropagation(); toggleAccDetail('acc-detail-3', this)" class="btn-chevron p-1 rounded-lg hover:bg-slate-200 text-slate-400 hover:text-slate-800 transition-colors" title="Sổ chi tiết đối soát">
+                      <svg class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                    </button>
+                    <a href="detail.html" class="hover:underline font-extrabold text-[#002D54]">TASK-THU-112</a>
+                  </div>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-blue-50 text-[#0082B4] border border-blue-200">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12"/></svg>
+                    <span>Khoản Thu</span>
+                  </span>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-bold text-sm text-[#002D54]">Thu phí Đợt 1 (50%): Dịch vụ Sáng chế Foxconn Smart Factory</div>
+                  <div class="text-[11px] text-slate-500 mt-0.5">
+                    Vụ việc: <a href="../cases/detail.html" class="font-bold text-[#0082B4] hover:underline">ASL-2026-PAT04 (Sáng chế Foxconn)</a>
+                  </div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-bold text-slate-800">Foxconn Energy Vietnam Co., Ltd</div>
+                  <div class="text-[10px] text-slate-400 font-mono">MST: 2300994411</div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-mono font-extrabold text-sm text-emerald-600">+ 160.000.000 ₫</div>
+                  <div class="text-[10px] text-slate-400">Hợp đồng 320.000.000 ₫</div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="text-[11px] text-slate-700">Tạo: <strong>LS. Trần Mai Linh</strong></div>
+                  <div class="inline-flex items-center gap-1 mt-1 px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    <span>✓ GĐ Nam Trần đã duyệt</span>
+                  </div>
+                </td>
+                <td class="py-4 px-4" onclick="event.stopPropagation()">
+                  <div id="action-box-3" class="space-y-2">
+                    <div class="flex items-center gap-1.5">
+                      <input type="url" id="inv-link-3" placeholder="Dán link hóa đơn (meInvoice / OneDrive)..." class="flex-1 px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-xs font-mono text-slate-700 focus:border-[#0082B4] focus:outline-none">
+                      <button onclick="confirmInvoiceIssued(3, 'TASK-THU-112', '160.000.000 ₫')" class="px-3 py-1.5 rounded-lg bg-[#0082B4] hover:bg-[#002D54] text-white font-bold text-xs whitespace-nowrap shadow-xs transition-colors flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        <span>Lưu Link HĐ & Duyệt Thu</span>
+                      </button>
+                    </div>
+                    <div class="text-[10px] text-amber-700 font-medium">Điền link hóa đơn điện tử sau khi xuất cho Foxconn</div>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- EXPANDABLE DETAIL FOR ITEM 3 -->
+              <tr id="acc-detail-3" class="row-detail hidden bg-slate-50/90 border-b border-slate-200">
+                <td colspan="7" class="p-5">
+                  <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-xs space-y-3 text-xs">
+                    <div class="font-bold text-[#002D54]">Chi tiết yêu cầu xuất hóa đơn • TASK-THU-112</div>
+                    <p class="text-slate-600">Khách hàng FDI yêu cầu xuất hóa đơn VAT song ngữ Việt - Anh gửi kèm link tra cứu điện tử về địa chỉ email bộ phận kế toán Foxconn Bắc Giang: <span class="font-mono text-[#0082B4]">ap-vn@foxconn.com</span>.</p>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- ======================================================= -->
+              <!-- ITEM 4: KHOẢN CHI 2 (Lệ phí WIPO - Chờ bấm Đã chi)      -->
+              <!-- ======================================================= -->
+              <tr class="acc-row hover:bg-slate-50/90 transition-colors cursor-pointer" data-type="CHI" data-status="PENDING_KT" data-detail-id="acc-detail-4" id="row-task-4">
+                <td class="py-4 px-4 font-mono font-bold text-[#002D54]">
+                  <div class="flex items-center gap-2">
+                    <button onclick="event.stopPropagation(); toggleAccDetail('acc-detail-4', this)" class="btn-chevron p-1 rounded-lg hover:bg-slate-200 text-slate-400 hover:text-slate-800 transition-colors" title="Sổ chi tiết khoản chi">
+                      <svg class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                    </button>
+                    <a href="detail.html" class="hover:underline font-extrabold text-[#D9381E]">TASK-CHI-208</a>
+                  </div>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-orange-50 text-[#D9381E] border border-orange-200">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 13l-5 5m0 0l-5-5m5 5V6"/></svg>
+                    <span>Khoản Chi</span>
+                  </span>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-bold text-sm text-[#002D54]">Chi nộp lệ phí đăng ký Quốc tế Madrid (WIPO)</div>
+                  <div class="text-[11px] text-slate-500 mt-0.5">
+                    Vụ việc: <a href="../cases/detail.html" class="font-bold text-[#0082B4] hover:underline">ASL-2026-TM109 (Nhãn hiệu 9Outfit)</a>
+                  </div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-bold text-slate-800">WIPO Geneva / Cục SHTT</div>
+                  <div class="text-[10px] text-slate-400 font-mono">Thanh toán Quốc tế (1,400 CHF)</div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-mono font-extrabold text-sm text-[#D9381E]">- 35.000.000 ₫</div>
+                  <div class="text-[10px] text-slate-400">Quy đổi tỷ giá VCB</div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="text-[11px] text-slate-700">Tạo: <strong>LS. Hoàng Gia Huy</strong></div>
+                  <div class="inline-flex items-center gap-1 mt-1 px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    <span>✓ GĐ Nguyễn Anh đã duyệt</span>
+                  </div>
+                </td>
+                <td class="py-4 px-4" onclick="event.stopPropagation()">
+                  <div id="action-box-4" class="flex items-center justify-between gap-2 bg-orange-50/60 p-2.5 rounded-xl border border-orange-200/80">
+                    <div class="text-[11px] text-slate-600">
+                      <span class="font-bold text-slate-800 block">Chờ thanh toán lệ phí WIPO</span>
+                      <span class="text-[10px] text-slate-500">Bấm "Đã Chi" sau khi thanh toán</span>
+                    </div>
+                    <button onclick="confirmExpensePaid(4, 'TASK-CHI-208', '35.000.000 ₫', 'Chi nộp lệ phí đăng ký Quốc tế Madrid (WIPO)')" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs whitespace-nowrap shadow-sm transition-all flex items-center gap-1.5">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                      <span>Đã Chi</span>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- EXPANDABLE DETAIL FOR ITEM 4 -->
+              <tr id="acc-detail-4" class="row-detail hidden bg-slate-50/90 border-b border-slate-200">
+                <td colspan="7" class="p-5">
+                  <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-xs space-y-3 text-xs">
+                    <div class="font-bold text-[#002D54]">Chi tiết khoản chi lệ phí WIPO • TASK-CHI-208</div>
+                    <p class="text-slate-600">Thanh toán qua cổng WIPO Pay bằng thẻ Corporate Visa của ASL LAW hoặc chuyển khoản quốc tế theo thông báo thu phí Madrid số MM2-2026-9912.</p>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- ======================================================= -->
+              <!-- ITEM 5: KHOẢN THU 3 (Tất toán Kiểu dáng An Gia)         -->
+              <!-- ======================================================= -->
+              <tr class="acc-row hover:bg-slate-50/90 transition-colors cursor-pointer" data-type="THU" data-status="PENDING_KT" data-detail-id="acc-detail-5" id="row-task-5">
+                <td class="py-4 px-4 font-mono font-bold text-[#002D54]">
+                  <div class="flex items-center gap-2">
+                    <button onclick="event.stopPropagation(); toggleAccDetail('acc-detail-5', this)" class="btn-chevron p-1 rounded-lg hover:bg-slate-200 text-slate-400 hover:text-slate-800 transition-colors">
+                      <svg class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                    </button>
+                    <a href="detail.html" class="hover:underline font-extrabold text-[#002D54]">TASK-THU-115</a>
+                  </div>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-blue-50 text-[#0082B4] border border-blue-200">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12"/></svg>
+                    <span>Khoản Thu</span>
+                  </span>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-bold text-sm text-[#002D54]">Thu phí Đợt 2: Công bố đơn & Cấp bằng Kiểu dáng An Gia</div>
+                  <div class="text-[11px] text-slate-500 mt-0.5">
+                    Vụ việc: <a href="../cases/detail.html" class="font-bold text-[#0082B4] hover:underline">ASL-2026-DES02 (Kiểu dáng Mũ bảo hiểm)</a>
+                  </div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-bold text-slate-800">Công ty CP Nhựa An Gia</div>
+                  <div class="text-[10px] text-slate-400 font-mono">MST: 0314998821</div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-mono font-extrabold text-sm text-emerald-600">+ 92.000.000 ₫</div>
+                  <div class="text-[10px] text-slate-400">Thanh toán đợt cuối</div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="text-[11px] text-slate-700">Tạo: <strong>LS. Đỗ Quốc Tuấn</strong></div>
+                  <div class="inline-flex items-center gap-1 mt-1 px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    <span>✓ GĐ Mai Linh đã duyệt</span>
+                  </div>
+                </td>
+                <td class="py-4 px-4" onclick="event.stopPropagation()">
+                  <div id="action-box-5" class="space-y-2">
+                    <div class="flex items-center gap-1.5">
+                      <input type="url" id="inv-link-5" placeholder="Dán link hóa đơn (meInvoice / OneDrive)..." class="flex-1 px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-xs font-mono text-slate-700 focus:border-[#0082B4] focus:outline-none">
+                      <button onclick="confirmInvoiceIssued(5, 'TASK-THU-115', '92.000.000 ₫')" class="px-3 py-1.5 rounded-lg bg-[#0082B4] hover:bg-[#002D54] text-white font-bold text-xs whitespace-nowrap shadow-xs transition-colors flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        <span>Lưu Link HĐ & Duyệt Thu</span>
+                      </button>
+                    </div>
+                    <div class="text-[10px] text-amber-700 font-medium">Điền link hóa đơn VAT để hoàn tất thu phí</div>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- EXPANDABLE DETAIL FOR ITEM 5 -->
+              <tr id="acc-detail-5" class="row-detail hidden bg-slate-50/90 border-b border-slate-200">
+                <td colspan="7" class="p-5">
+                  <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-xs space-y-3 text-xs">
+                    <div class="font-bold text-[#002D54]">Chi tiết khoản thu • TASK-THU-115</div>
+                    <p class="text-slate-600">Khách hàng Công ty CP Nhựa An Gia đã thanh toán đủ 92.000.000 ₫. Kế toán xuất hóa đơn và dán link hóa đơn vào ô trên.</p>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- ======================================================= -->
+              <!-- ITEM 6: KHOẢN CHI 3 (Công tác phí thẩm định LDD M&A)    -->
+              <!-- ======================================================= -->
+              <tr class="acc-row hover:bg-slate-50/90 transition-colors cursor-pointer" data-type="CHI" data-status="PENDING_KT" data-detail-id="acc-detail-6" id="row-task-6">
+                <td class="py-4 px-4 font-mono font-bold text-[#002D54]">
+                  <div class="flex items-center gap-2">
+                    <button onclick="event.stopPropagation(); toggleAccDetail('acc-detail-6', this)" class="btn-chevron p-1 rounded-lg hover:bg-slate-200 text-slate-400 hover:text-slate-800 transition-colors">
+                      <svg class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                    </button>
+                    <a href="detail.html" class="hover:underline font-extrabold text-[#D9381E]">TASK-CHI-210</a>
+                  </div>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-orange-50 text-[#D9381E] border border-orange-200">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 13l-5 5m0 0l-5-5m5 5V6"/></svg>
+                    <span>Khoản Chi</span>
+                  </span>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-bold text-sm text-[#002D54]">Chi tạm ứng công tác phí & sao lục hồ sơ thẩm định LDD tại Gia Lai</div>
+                  <div class="text-[11px] text-slate-500 mt-0.5">
+                    Vụ việc: <a href="../cases/detail.html" class="font-bold text-[#0082B4] hover:underline">ASL-2026-MNA01 (M&A HAGL Agrico)</a>
+                  </div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-bold text-slate-800">LS. Hoàng Gia Huy (Nhận tạm ứng)</div>
+                  <div class="text-[10px] text-slate-400 font-mono">VCB: 0011009988776</div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-mono font-extrabold text-sm text-[#D9381E]">- 12.500.000 ₫</div>
+                  <div class="text-[10px] text-slate-400">Vé máy bay & Lệ phí sao lục</div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="text-[11px] text-slate-700">Tạo: <strong>LS. Hoàng Gia Huy</strong></div>
+                  <div class="inline-flex items-center gap-1 mt-1 px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    <span>✓ GĐ Trần Nam đã duyệt</span>
+                  </div>
+                </td>
+                <td class="py-4 px-4" onclick="event.stopPropagation()">
+                  <div id="action-box-6" class="flex items-center justify-between gap-2 bg-orange-50/60 p-2.5 rounded-xl border border-orange-200/80">
+                    <div class="text-[11px] text-slate-600">
+                      <span class="font-bold text-slate-800 block">Chờ chuyển khoản tạm ứng</span>
+                      <span class="text-[10px] text-slate-500">Bấm "Đã Chi" sau khi chuyển thành công</span>
+                    </div>
+                    <button onclick="confirmExpensePaid(6, 'TASK-CHI-210', '12.500.000 ₫', 'Chi tạm ứng công tác phí thẩm định LDD Gia Lai')" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs whitespace-nowrap shadow-sm transition-all flex items-center gap-1.5">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                      <span>Đã Chi</span>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- EXPANDABLE DETAIL FOR ITEM 6 -->
+              <tr id="acc-detail-6" class="row-detail hidden bg-slate-50/90 border-b border-slate-200">
+                <td colspan="7" class="p-5">
+                  <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-xs space-y-3 text-xs">
+                    <div class="font-bold text-[#002D54]">Chi tiết tạm ứng công tác phí • TASK-CHI-210</div>
+                    <p class="text-slate-600">Đã được Partner Lead LS. Trần Nam phê duyệt hạn mức công tác 3 ngày tại Gia Lai để kiểm tra thực địa và hồ sơ đất đai của HAGL Agrico.</p>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- ======================================================= -->
+              <!-- ITEM 7 & 8: ĐANG CHỜ GIÁM ĐỐC DUYỆT (Bước 2)            -->
+              <!-- ======================================================= -->
+              <tr class="acc-row hidden hover:bg-slate-50/90 transition-colors cursor-pointer" data-type="THU" data-status="WAIT_DIRECTOR" data-detail-id="acc-detail-7" id="row-task-7">
+                <td class="py-4 px-4 font-mono font-bold text-slate-600">
+                  <div class="flex items-center gap-2">
+                    <button onclick="event.stopPropagation(); toggleAccDetail('acc-detail-7', this)" class="btn-chevron p-1 rounded-lg hover:bg-slate-200 text-slate-400">
+                      <svg class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                    </button>
+                    <span>TASK-THU-118</span>
+                  </div>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-blue-50 text-[#0082B4] border border-blue-200">Khoản Thu</span>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-bold text-sm text-[#002D54]">Thu phí Đợt 2: Tư vấn M&A Thaco - HAGL Agrico</div>
+                  <div class="text-[11px] text-slate-500 mt-0.5">Vụ việc: ASL-2026-MNA01</div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-bold text-slate-800">Thaco Corporation</div>
+                  <div class="text-[10px] text-slate-400 font-mono">MST: 0303881234</div>
+                </td>
+                <td class="py-4 px-4 font-mono font-extrabold text-sm text-emerald-600">+ 250.000.000 ₫</td>
+                <td class="py-4 px-4">
+                  <div class="text-[11px] text-slate-700">Tạo: <strong>LS. Hoàng Gia Huy</strong></div>
+                  <div id="dir-badge-7" class="inline-flex items-center gap-1 mt-1 px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800">
+                    <span><svg class="w-3.5 h-3.5 inline-block text-amber-500 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Chờ Giám đốc duyệt</span>
+                  </div>
+                </td>
+                <td class="py-4 px-4" onclick="event.stopPropagation()">
+                  <div id="action-box-7" class="flex items-center justify-between gap-2 p-2 rounded-xl bg-slate-100 border border-slate-200">
+                    <span class="text-[11px] text-slate-500">Đang ở Bước 2 (Chờ Giám đốc duyệt)</span>
+                    <button onclick="directorApproveTask(7, 'THU', 'TASK-THU-118', '250.000.000 ₫')" class="px-3 py-1.5 rounded-lg bg-[#002D54] hover:bg-[#0082B4] text-white font-bold text-[11px] whitespace-nowrap transition-colors">
+                      GĐ Duyệt Chuyển KT
+                    </button>
+                  </div>
+                </td>
+              </tr>
+
+              <tr id="acc-detail-7" class="row-detail hidden bg-slate-50/90 border-b border-slate-200">
+                <td colspan="7" class="p-5">
+                  <div class="rounded-2xl bg-white border border-slate-200 p-4 text-xs text-slate-600">
+                    Task thu tiền này vừa được LS. Hoàng Gia Huy khởi tạo. Sau khi Giám đốc bấm duyệt sẽ tự động mở khóa phần điền Link Hóa Đơn cho Kế toán.
+                  </div>
+                </td>
+              </tr>
+
+              <tr class="acc-row hidden hover:bg-slate-50/90 transition-colors cursor-pointer" data-type="CHI" data-status="WAIT_DIRECTOR" data-detail-id="acc-detail-8" id="row-task-8">
+                <td class="py-4 px-4 font-mono font-bold text-slate-600">
+                  <div class="flex items-center gap-2">
+                    <button onclick="event.stopPropagation(); toggleAccDetail('acc-detail-8', this)" class="btn-chevron p-1 rounded-lg hover:bg-slate-200 text-slate-400">
+                      <svg class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                    </button>
+                    <span>TASK-CHI-212</span>
+                  </div>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-orange-50 text-[#D9381E] border border-orange-200">Khoản Chi</span>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-bold text-sm text-[#002D54]">Chi lệ phí thẩm định nội dung 02 nhóm Nhãn hiệu Cục SHTT</div>
+                  <div class="text-[11px] text-slate-500 mt-0.5">Vụ việc: ASL-2026-TM109</div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-bold text-slate-800">Cục Sở Hữu Trí Tuệ</div>
+                  <div class="text-[10px] text-slate-400 font-mono">Lệ phí quốc gia</div>
+                </td>
+                <td class="py-4 px-4 font-mono font-extrabold text-sm text-[#D9381E]">- 3.200.000 ₫</td>
+                <td class="py-4 px-4">
+                  <div class="text-[11px] text-slate-700">Tạo: <strong>LS. Hoàng Gia Huy</strong></div>
+                  <div id="dir-badge-8" class="inline-flex items-center gap-1 mt-1 px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800">
+                    <span><svg class="w-3.5 h-3.5 inline-block text-amber-500 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Chờ Giám đốc duyệt</span>
+                  </div>
+                </td>
+                <td class="py-4 px-4" onclick="event.stopPropagation()">
+                  <div id="action-box-8" class="flex items-center justify-between gap-2 p-2 rounded-xl bg-slate-100 border border-slate-200">
+                    <span class="text-[11px] text-slate-500">Đang ở Bước 2 (Chờ Giám đốc duyệt)</span>
+                    <button onclick="directorApproveTask(8, 'CHI', 'TASK-CHI-212', '3.200.000 ₫')" class="px-3 py-1.5 rounded-lg bg-[#002D54] hover:bg-[#0082B4] text-white font-bold text-[11px] whitespace-nowrap transition-colors">
+                      GĐ Duyệt Chuyển KT
+                    </button>
+                  </div>
+                </td>
+              </tr>
+
+              <tr id="acc-detail-8" class="row-detail hidden bg-slate-50/90 border-b border-slate-200">
+                <td colspan="7" class="p-5">
+                  <div class="rounded-2xl bg-white border border-slate-200 p-4 text-xs text-slate-600">
+                    Task đề nghị chi lệ phí nhà nước đang chờ Giám đốc phê duyệt trước khi chuyển sang Kế toán giải ngân.
+                  </div>
+                </td>
+              </tr>
+
+              <!-- ======================================================= -->
+              <!-- ITEM 9, 10, 11: ĐÃ HOÀN TẤT (Lịch sử đối soát)           -->
+              <!-- ======================================================= -->
+              <tr class="acc-row hidden hover:bg-slate-50/90 transition-colors cursor-pointer" data-type="THU" data-status="COMPLETED" data-detail-id="acc-detail-9">
+                <td class="py-4 px-4 font-mono font-bold text-emerald-700">
+                  <div class="flex items-center gap-2">
+                    <button onclick="event.stopPropagation(); toggleAccDetail('acc-detail-9', this)" class="btn-chevron p-1 rounded-lg hover:bg-slate-200 text-slate-400">
+                      <svg class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                    </button>
+                    <a href="detail.html" class="hover:underline">TASK-THU-101</a>
+                  </div>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-blue-50 text-[#0082B4] border border-blue-200">Khoản Thu</span>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-bold text-sm text-[#002D54]">Thu phí Đợt 1 (40%): Đăng ký Nhãn hiệu 9OUTFIT</div>
+                  <div class="text-[11px] text-slate-500 mt-0.5">Vụ việc: ASL-2026-TM109</div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-bold text-slate-800">Công ty TNHH Thời Trang 9Outfit</div>
+                </td>
+                <td class="py-4 px-4 font-mono font-extrabold text-sm text-emerald-600">+ 72.000.000 ₫</td>
+                <td class="py-4 px-4">
+                  <div class="text-[11px] text-slate-700">Tạo: <strong>LS. Hoàng Gia Huy</strong></div>
+                  <div class="text-[10px] text-emerald-700 font-bold">✓ GĐ Nguyễn Anh đã duyệt</div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-between gap-2">
+                    <div>
+                      <div class="text-[11px] font-bold text-emerald-800">✓ Đã xuất HĐ & Đã thu</div>
+                      <a href="https://meinvoice.vn/tra-cuu/HD-2026-0089" target="_blank" class="text-[10px] font-mono text-[#0082B4] underline block truncate max-w-[200px]">https://meinvoice.vn/tra-cuu/HD-2026-0089</a>
+                    </div>
+                    <a href="detail.html" class="px-2.5 py-1 rounded-lg bg-white border border-emerald-300 text-emerald-800 font-bold text-[10px]">Xem HĐ</a>
+                  </div>
+                </td>
+              </tr>
+
+              <tr id="acc-detail-9" class="row-detail hidden bg-slate-50/90 border-b border-slate-200">
+                <td colspan="7" class="p-5">
+                  <div class="rounded-2xl bg-white border border-slate-200 p-4 text-xs text-slate-600">
+                    Đã hoàn tất xuất hóa đơn và lưu link hóa đơn bởi Kế toán trưởng Trần Thị Thu Trang ngày 16/10/2026.
+                  </div>
+                </td>
+              </tr>
+
+              <tr class="acc-row hidden hover:bg-slate-50/90 transition-colors cursor-pointer" data-type="CHI" data-status="COMPLETED" data-detail-id="acc-detail-10">
+                <td class="py-4 px-4 font-mono font-bold text-emerald-700">
+                  <div class="flex items-center gap-2">
+                    <button onclick="event.stopPropagation(); toggleAccDetail('acc-detail-10', this)" class="btn-chevron p-1 rounded-lg hover:bg-slate-200 text-slate-400">
+                      <svg class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                    </button>
+                    <a href="detail.html" class="hover:underline">TASK-CHI-198</a>
+                  </div>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-orange-50 text-[#D9381E] border border-orange-200">Khoản Chi</span>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-bold text-sm text-[#002D54]">Chi lệ phí nộp đơn đăng ký Nhãn hiệu Cục SHTT</div>
+                  <div class="text-[11px] text-slate-500 mt-0.5">Vụ việc: ASL-2026-TM109</div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-bold text-slate-800">Cục Sở Hữu Trí Tuệ</div>
+                </td>
+                <td class="py-4 px-4 font-mono font-extrabold text-sm text-[#D9381E]">- 2.300.000 ₫</td>
+                <td class="py-4 px-4">
+                  <div class="text-[11px] text-slate-700">Tạo: <strong>LS. Hoàng Gia Huy</strong></div>
+                  <div class="text-[10px] text-emerald-700 font-bold">✓ GĐ Nguyễn Anh đã duyệt</div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-between gap-2">
+                    <div>
+                      <div class="text-[11px] font-bold text-emerald-800">✓ Đã Chi Thành Công</div>
+                      <div class="text-[10px] text-slate-500 font-mono">UNC: VCB-FT26289012 • 16/10/2026</div>
+                    </div>
+                    <span class="px-2 py-0.5 rounded bg-emerald-200 text-emerald-900 font-bold text-[10px]">Hoàn tất</span>
+                  </div>
+                </td>
+              </tr>
+
+              <tr id="acc-detail-10" class="row-detail hidden bg-slate-50/90 border-b border-slate-200">
+                <td colspan="7" class="p-5">
+                  <div class="rounded-2xl bg-white border border-slate-200 p-4 text-xs text-slate-600">
+                    Kế toán đã thực hiện chuyển khoản nộp lệ phí và xác nhận Đã Chi ngày 16/10/2026.
+                  </div>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Footer Info -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between border-t border-slate-100 pt-4 text-xs text-slate-500 gap-2">
+          <div>Hiển thị các tác vụ Thu - Chi đã được Giám đốc phê duyệt chuyển sang Kế toán thực hiện</div>
+          <div class="flex items-center gap-1.5">
+            <button class="px-3 py-1.5 rounded-lg bg-[#002D54] text-white font-bold">1</button>
+            <button class="px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-100">2</button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+  </div>
+
+  <script>
+    // Toggle single row detail
+    function toggleAccDetail(detailId, btn) {
+      const detailRow = document.getElementById(detailId);
+      if (!detailRow) return;
+      const isHidden = detailRow.classList.contains('hidden');
+      const mainRow = detailRow.previousElementSibling;
+      const chevron = mainRow ? mainRow.querySelector('.btn-chevron svg') : null;
+
+      if (isHidden) {
+        detailRow.classList.remove('hidden');
+        if (chevron) chevron.classList.add('rotate-90');
+      } else {
+        detailRow.classList.add('hidden');
+        if (chevron) chevron.classList.remove('rotate-90');
+      }
+    }
+
+    // Toggle all visible row details
+    let allAccExpanded = false;
+    function toggleAllAccDetails() {
+      allAccExpanded = !allAccExpanded;
+      const rows = document.querySelectorAll('.acc-row:not(.hidden)');
+      rows.forEach(r => {
+        const detailId = r.getAttribute('data-detail-id');
+        const detailRow = detailId ? document.getElementById(detailId) : null;
+        const chevron = r.querySelector('.btn-chevron svg');
+        if (detailRow) {
+          if (allAccExpanded) {
+            detailRow.classList.remove('hidden');
+            if (chevron) chevron.classList.add('rotate-90');
+          } else {
+            detailRow.classList.add('hidden');
+            if (chevron) chevron.classList.remove('rotate-90');
+          }
+        }
+      });
+      const txt = document.getElementById('text-toggle-all');
+      if (txt) txt.textContent = allAccExpanded ? 'Thu Gọn Tất Cả' : 'Sổ Tất Cả Chi Tiết';
+    }
+
+    // Xác nhận KHOẢN THU: Kế toán xuất hóa đơn & điền link hóa đơn
+    function confirmInvoiceIssued(rowNum, taskCode, amountText) {
+      const inputEl = document.getElementById('inv-link-' + rowNum);
+      const linkVal = inputEl ? inputEl.value.trim() : '';
+
+      if (!linkVal) {
+        alert('<svg class="w-3.5 h-3.5 inline-block text-amber-500 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg> Vui lòng điền Link Hóa Đơn đã xuất trước khi xác nhận hoàn tất khoản thu!');
+        if (inputEl) inputEl.focus();
+        return;
+      }
+
+      const actionBox = document.getElementById('action-box-' + rowNum);
+      const rowEl = document.getElementById('row-task-' + rowNum);
+
+      if (actionBox) {
+        actionBox.innerHTML = `
+          <div class="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-between gap-2">
+            <div>
+              <div class="text-[11px] font-bold text-emerald-800">✓ Đã xuất HĐ & Đã thu (${amountText})</div>
+              <a href="${linkVal}" target="_blank" class="text-[10px] font-mono text-[#0082B4] underline block truncate max-w-[210px]" title="${linkVal}">${linkVal}</a>
+            </div>
+            <span class="px-2 py-0.5 rounded bg-emerald-200 text-emerald-900 font-bold text-[10px] shrink-0">Hoàn tất</span>
+          </div>
+        `;
+      }
+
+      if (rowEl) {
+        rowEl.setAttribute('data-status', 'COMPLETED');
+      }
+
+      updateKpiCounters();
+    }
+
+    // Xác nhận KHOẢN CHI: Kế toán chi thành công & bấm nút "Đã Chi"
+    function confirmExpensePaid(rowNum, taskCode, amountText, descText) {
+      const actionBox = document.getElementById('action-box-' + rowNum);
+      const rowEl = document.getElementById('row-task-' + rowNum);
+      const nowStr = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' Hôm nay';
+
+      if (actionBox) {
+        actionBox.innerHTML = `
+          <div class="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-between gap-2">
+            <div>
+              <div class="text-[11px] font-bold text-emerald-800">✓ Đã Chi Thành Công (${amountText})</div>
+              <div class="text-[10px] text-slate-500 font-mono">Xác nhận lúc: ${nowStr}</div>
+            </div>
+            <span class="px-2 py-0.5 rounded bg-emerald-200 text-emerald-900 font-bold text-[10px] shrink-0">Đã Chi</span>
+          </div>
+        `;
+      }
+
+      if (rowEl) {
+        rowEl.setAttribute('data-status', 'COMPLETED');
+      }
+
+      updateKpiCounters();
+    }
+
+    // Giám đốc duyệt chuyển sang Kế toán (cho phép thử nghiệm luồng Bước 2 -> Bước 3)
+    function directorApproveTask(rowNum, type, taskCode, amountText) {
+      const rowEl = document.getElementById('row-task-' + rowNum);
+      const badgeEl = document.getElementById('dir-badge-' + rowNum);
+      const actionBox = document.getElementById('action-box-' + rowNum);
+
+      if (rowEl) {
+        rowEl.setAttribute('data-status', 'PENDING_KT');
+      }
+      if (badgeEl) {
+        badgeEl.className = 'inline-flex items-center gap-1 mt-1 px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200';
+        badgeEl.innerHTML = '<span>✓ GĐ Nguyễn Anh vừa duyệt</span>';
+      }
+
+      if (actionBox) {
+        if (type === 'THU') {
+          actionBox.outerHTML = `
+            <div id="action-box-${rowNum}" class="space-y-2">
+              <div class="flex items-center gap-1.5">
+                <input type="url" id="inv-link-${rowNum}" placeholder="Dán link hóa đơn (meInvoice / OneDrive)..." class="flex-1 px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-xs font-mono text-slate-700 focus:border-[#0082B4] focus:outline-none">
+                <button onclick="confirmInvoiceIssued(${rowNum}, '${taskCode}', '${amountText}')" class="px-3 py-1.5 rounded-lg bg-[#0082B4] hover:bg-[#002D54] text-white font-bold text-xs whitespace-nowrap shadow-xs transition-colors flex items-center gap-1">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                  <span>Lưu Link HĐ & Duyệt Thu</span>
+                </button>
+              </div>
+              <div class="text-[10px] text-amber-700 font-medium">Đã qua Giám đốc duyệt • Kế toán xuất HĐ và điền link</div>
+            </div>
+          `;
+        } else {
+          actionBox.outerHTML = `
+            <div id="action-box-${rowNum}" class="flex items-center justify-between gap-2 bg-orange-50/60 p-2.5 rounded-xl border border-orange-200/80">
+              <div class="text-[11px] text-slate-600">
+                <span class="font-bold text-slate-800 block">Đã qua GĐ duyệt • Chờ chi</span>
+                <span class="text-[10px] text-slate-500">Bấm "Đã Chi" sau khi chuyển khoản</span>
+              </div>
+              <button onclick="confirmExpensePaid(${rowNum}, '${taskCode}', '${amountText}', 'Khoản chi')" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs whitespace-nowrap shadow-sm transition-all flex items-center gap-1.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                <span>Đã Chi</span>
+              </button>
+            </div>
+          `;
+        }
+      }
+
+      updateKpiCounters();
+    }
+
+    function updateKpiCounters() {
+      const pendingThu = document.querySelectorAll('.acc-row[data-type="THU"][data-status="PENDING_KT"]').length;
+      const pendingChi = document.querySelectorAll('.acc-row[data-type="CHI"][data-status="PENDING_KT"]').length;
+      const totalPending = pendingThu + pendingChi;
+      const completedCount = 21 + document.querySelectorAll('.acc-row[data-status="COMPLETED"]').length;
+
+      const elTotal = document.getElementById('kpi-pending-total');
+      const elThu = document.getElementById('kpi-pending-thu');
+      const elChi = document.getElementById('kpi-pending-chi');
+      const elComp = document.getElementById('kpi-completed-count');
+
+      if (elTotal) elTotal.textContent = String(totalPending).padStart(2, '0');
+      if (elThu) elThu.textContent = String(pendingThu).padStart(2, '0');
+      if (elChi) elChi.textContent = String(pendingChi).padStart(2, '0');
+      if (elComp) elComp.textContent = String(completedCount).padStart(2, '0');
+    }
+
+    // Filter tabs
+    function filterAccountingTab(tabKey, btnEl) {
+      document.querySelectorAll('.acc-tab').forEach(b => {
+        b.className = "acc-tab px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-colors flex items-center gap-1.5";
+      });
+      if (btnEl) {
+        btnEl.className = "acc-tab px-4 py-2 rounded-xl bg-[#002D54] text-white font-bold text-xs shadow-sm flex items-center gap-1.5";
+      }
+
+      const rows = document.querySelectorAll('.acc-row');
+      rows.forEach(row => {
+        const type = row.getAttribute('data-type');
+        const status = row.getAttribute('data-status');
+        const detailId = row.getAttribute('data-detail-id');
+        const detailRow = detailId ? document.getElementById(detailId) : null;
+
+        let show = false;
+        if (tabKey === 'ALL_PENDING') {
+          show = (status === 'PENDING_KT');
+        } else if (tabKey === 'THU') {
+          show = (type === 'THU' && status === 'PENDING_KT');
+        } else if (tabKey === 'CHI') {
+          show = (type === 'CHI' && status === 'PENDING_KT');
+        } else if (tabKey === 'WAIT_DIRECTOR') {
+          show = (status === 'WAIT_DIRECTOR');
+        } else if (tabKey === 'COMPLETED') {
+          show = (status === 'COMPLETED');
+        }
+
+        if (show) {
+          row.classList.remove('hidden');
+        } else {
+          row.classList.add('hidden');
+          if (detailRow) detailRow.classList.add('hidden');
+        }
+      });
+    }
+
+    // Search filter
+    function searchAccountingTable() {
+      const q = document.getElementById('acc-search').value.toLowerCase().trim();
+      const rows = document.querySelectorAll('.acc-row');
+      rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        const detailId = row.getAttribute('data-detail-id');
+        const detailRow = detailId ? document.getElementById(detailId) : null;
+        if (!q || text.includes(q)) {
+          row.classList.remove('hidden');
+        } else {
+          row.classList.add('hidden');
+          if (detailRow) detailRow.classList.add('hidden');
+        }
+      });
+    }
+
+    // Click row to expand detail
+    document.querySelectorAll('.acc-row').forEach(row => {
+      row.addEventListener('click', function(e) {
+        if (e.target.closest('a') || e.target.closest('button') || e.target.closest('input')) return;
+        const detailId = this.getAttribute('data-detail-id');
+        const btn = this.querySelector('.btn-chevron');
+        if (detailId) toggleAccDetail(detailId, btn);
+      });
+    });
+
+    // Preserve ?role=... parameter on internal links
+    function syncRoleLinks() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const role = urlParams.get('role') || localStorage.getItem('asl_user_role') || 'admin';
+      document.querySelectorAll('a[href]').forEach(a => {
+        const href = a.getAttribute('href');
+        if (!href || href.startsWith('http') || href.startsWith('#') || href.startsWith('javascript:')) return;
+        try {
+          const clean = href.split('?')[0];
+          const query = href.includes('?') ? href.split('?')[1] : '';
+          const p = new URLSearchParams(query);
+          p.set('role', role);
+          a.setAttribute('href', clean + '?' + p.toString());
+        } catch(e) {}
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', syncRoleLinks);
+    } else {
+      syncRoleLinks();
+    }
+  </script>
+
+</body>
+</html>

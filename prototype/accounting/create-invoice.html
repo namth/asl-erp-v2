@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <script>(function(){if(localStorage.getItem('asl_theme')==='dark'){document.documentElement.classList.add('dark');}else{document.documentElement.classList.remove('dark');}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASL LAW - Tạo Task Thu Tiền / Chi Tiền (Gửi Giám Đốc Phê Duyệt)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/layout.css?v=3.1">
+  <script src="../assets/layout.js?v=3.1" defer></script>
+</head>
+<body class="min-h-screen bg-[#F4F8FA] text-slate-800 flex">
+
+  <!-- Modular Shared Sidebar (Auto-mounted by layout.js) -->
+  <aside id="sidebar" class="fixed top-0 left-0 bottom-0 w-72 bg-white/95 backdrop-blur-xl z-40 transition-all duration-300 ease-in-out flex flex-col justify-between shadow-xl shadow-slate-900/5"></aside>
+
+  <!-- Main Container -->
+  <div id="main-container" class="flex-1 md:ml-72 flex flex-col min-h-screen transition-all duration-300 ease-in-out">
+
+    <!-- Top Bar with Rich Brand Gradient -->
+    <header class="header-gradient text-white h-20 px-6 flex items-center justify-between sticky top-0 z-30 shadow-md">
+      <div class="flex items-center gap-4">
+        <button onclick="toggleSidebar()" class="md:hidden p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <div>
+          <div class="text-xs text-cyan-200/90 font-medium flex items-center gap-1.5">
+            <a href="index.html" class="hover:underline">Kế Toán & Hóa Đơn</a>
+            <span>/</span>
+            <span class="text-white font-semibold">Tạo Task Thu / Chi</span>
+          </div>
+          <h1 class="text-lg font-bold text-white tracking-tight">Tạo Task Thu Tiền / Chi Tiền (Gửi Giám Đốc Phê Duyệt)</h1>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition-colors">
+          &larr; Về Bàn Kế Toán
+        </a>
+      </div>
+    </header>
+
+    <!-- Main Content Form -->
+    <main class="flex-1 p-6 md:p-8 max-w-none mx-auto w-full space-y-6">
+
+      <!-- 3-Step Approval Workflow Banner -->
+      <div class="glass-card rounded-2xl p-5 border border-slate-200/90 bg-white">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+          <div class="flex items-center gap-3.5 p-3 rounded-xl bg-blue-50/80 border border-blue-200">
+            <div class="w-9 h-9 rounded-xl bg-[#002D54] text-white font-black text-xs flex items-center justify-center flex-shrink-0 shadow-sm">
+              01
+            </div>
+            <div>
+              <div class="text-xs font-extrabold text-[#002D54]">1. Người Thực Hiện Tạo Task</div>
+              <div class="text-[11px] text-slate-600">Lập Task Thu tiền hoặc Task Chi tiền gắn với vụ việc</div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-3.5 p-3 rounded-xl bg-slate-50 border border-slate-200/80">
+            <div class="w-9 h-9 rounded-xl bg-[#0082B4] text-white font-black text-xs flex items-center justify-center flex-shrink-0 shadow-sm">
+              02
+            </div>
+            <div>
+              <div class="text-xs font-extrabold text-[#002D54]">2. Giám Đốc Phê Duyệt</div>
+              <div class="text-[11px] text-slate-600">Giám đốc duyệt xong sẽ chuyển tiếp sang Kế toán</div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-3.5 p-3 rounded-xl bg-emerald-50/60 border border-emerald-200/70">
+            <div class="w-9 h-9 rounded-xl bg-[#047857] text-white font-black text-xs flex items-center justify-center flex-shrink-0 shadow-sm">
+              03
+            </div>
+            <div>
+              <div class="text-xs font-extrabold text-[#047857]">3. Kế Toán Duyệt & Thực Hiện</div>
+              <div class="text-[11px] text-slate-600">Khoản thu: Xuất HĐ & điền Link • Khoản chi: Bấm Đã Chi</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <form onsubmit="submitFinanceTask(event)" class="space-y-6">
+
+        <div class="glass-card rounded-3xl p-6 md:p-8 space-y-6">
+          <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
+            <div>
+              <h2 class="text-base font-bold text-[#002D54]">Chọn Loại Task Tài Chính & Thông Tin Vụ Việc</h2>
+              <p class="text-xs text-slate-500 mt-0.5">Yêu cầu sau khi tạo sẽ được gửi đến Giám đốc phê duyệt trước khi chuyển sang Kế toán thực hiện</p>
+            </div>
+
+            <!-- Task Type Switcher -->
+            <div class="flex items-center gap-2 bg-slate-100 p-1.5 rounded-xl border border-slate-200">
+              <button type="button" id="btn-type-thu" onclick="setTaskType('THU')" class="px-4 py-2 rounded-lg bg-[#047857] text-white font-bold text-xs shadow-sm transition-all flex items-center gap-1.5">
+                <span>↓ Task Thu Tiền (Yêu cầu xuất HĐ)</span>
+              </button>
+              <button type="button" id="btn-type-chi" onclick="setTaskType('CHI')" class="px-4 py-2 rounded-lg text-slate-600 hover:text-slate-900 font-bold text-xs transition-all flex items-center gap-1.5">
+                <span>↑ Task Chi Tiền (Đề nghị chi / tạm ứng)</span>
+              </button>
+            </div>
+          </div>
+
+          <input type="hidden" id="task-type-input" value="THU">
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-xs">
+            <div class="md:col-span-2">
+              <label class="block font-bold text-slate-700 mb-1.5">Hồ Sơ Vụ Việc Liên Kết <span class="text-red-500">*</span></label>
+              <select id="case-select" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-xs font-semibold text-[#002D54] focus:border-[#0082B4] focus:outline-none">
+                <option selected>ASL-2026-TM109 • Đăng ký Nhãn hiệu 9OUTFIT tại Việt Nam & Quốc tế (Công ty TNHH Thời Trang 9Outfit)</option>
+                <option>ASL-2026-MNA01 • Tư Vấn M&A Thâu Tóm & Tái Cấu Trúc HAGL Agrico (Thaco Corporation)</option>
+                <option>ASL-2026-LIT03 • Tranh Chấp Cổ Đông Sáng Lập Bất Động Sản Phúc Khang</option>
+                <option>ASL-2026-PAT04 • Hệ Thống Tối Ưu Hóa Năng Lượng Foxconn Smart Factory</option>
+              </select>
+            </div>
+
+            <div>
+              <label id="label-task-title" class="block font-bold text-slate-700 mb-1.5">Nội Dung Task Thu Tiền <span class="text-red-500">*</span></label>
+              <input type="text" id="input-task-title" value="Thu phí dịch vụ pháp lý Đợt 2: Thẩm định & Nộp đơn Cục SHTT" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 font-semibold focus:border-[#0082B4] focus:outline-none">
+            </div>
+
+            <div>
+              <label id="label-task-amount" class="block font-bold text-slate-700 mb-1.5">Số Tiền Đề Nghị Thu (VNĐ - Đã gồm VAT) <span class="text-red-500">*</span></label>
+              <input type="text" id="input-task-amount" value="54,000,000" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 font-mono font-bold text-emerald-700 focus:border-[#0082B4] focus:outline-none">
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-700 mb-1.5">Người Thực Hiện Tạo Task</label>
+              <input type="text" value="LS. Hoàng Gia Huy (Luật sư phụ trách vụ việc)" readonly class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 font-semibold text-slate-600">
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-700 mb-1.5">Giám Đốc Phê Duyệt (Bước 2) <span class="text-red-500">*</span></label>
+              <select class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 font-bold text-[#002D54] focus:border-[#0082B4] focus:outline-none">
+                <option selected>LS. Nguyễn Anh (Managing Partner / Giám đốc)</option>
+                <option>LS. Nam Trần (Senior Partner)</option>
+              </select>
+            </div>
+
+            <div id="field-milestone">
+              <label class="block font-bold text-slate-700 mb-1.5">Gắn Với Bước Quy Trình Vụ Việc</label>
+              <select class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 focus:border-[#0082B4] font-semibold text-[#002D54] focus:outline-none">
+                <option selected>Bước 2: Nộp đơn Cục SHTT (Mở khóa khi Kế toán điền Link HĐ & xác nhận thu)</option>
+                <option>Bước 5: Chờ cấp bằng (Thu phí hoàn tất vụ việc)</option>
+                <option>Thu phí định kỳ / Retainer</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-700 mb-1.5">Hạn Xử Lý Mong Muốn</label>
+              <input type="date" value="2026-10-30" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 focus:border-[#0082B4] focus:outline-none">
+            </div>
+
+            <div class="md:col-span-2">
+              <label id="label-bank-info" class="block font-bold text-slate-700 mb-1.5">Tài Khoản Nhận Thanh Toán / Thông Tin Xuất Hóa Đơn</label>
+              <input type="text" id="input-bank-info" value="Vietcombank CN Ba Đình - STK: 0011004889922 (ASL LAW) • Xuất HĐ VAT cho Công ty TNHH Thời Trang 9Outfit (MST: 0108829104)" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 focus:border-[#0082B4] focus:outline-none">
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between pt-2">
+          <a href="index.html" class="px-5 py-2.5 rounded-xl border border-slate-300 text-slate-600 font-bold text-xs hover:bg-slate-100">
+            Hủy Bỏ
+          </a>
+          <button type="submit" id="btn-submit-task" class="px-6 py-2.5 rounded-xl bg-[#002D54] hover:bg-[#0082B4] text-white font-bold text-xs shadow-md transition-colors flex items-center gap-2">
+            <span>Gửi Giám Đốc Phê Duyệt (Bước 2)</span>
+            <span>&rarr;</span>
+          </button>
+        </div>
+
+      </form>
+
+    </main>
+
+  </div>
+
+  <script>
+    function setTaskType(type) {
+      document.getElementById('task-type-input').value = type;
+      const btnThu = document.getElementById('btn-type-thu');
+      const btnChi = document.getElementById('btn-type-chi');
+      const labelTitle = document.getElementById('label-task-title');
+      const inputTitle = document.getElementById('input-task-title');
+      const labelAmount = document.getElementById('label-task-amount');
+      const inputAmount = document.getElementById('input-task-amount');
+      const labelBank = document.getElementById('label-bank-info');
+      const inputBank = document.getElementById('input-bank-info');
+
+      if (type === 'THU') {
+        btnThu.className = 'px-4 py-2 rounded-lg bg-[#047857] text-white font-bold text-xs shadow-sm transition-all flex items-center gap-1.5';
+        btnChi.className = 'px-4 py-2 rounded-lg text-slate-600 hover:text-slate-900 font-bold text-xs transition-all flex items-center gap-1.5';
+        labelTitle.innerHTML = 'Nội Dung Task Thu Tiền <span class="text-red-500">*</span>';
+        inputTitle.value = 'Thu phí dịch vụ pháp lý Đợt 2: Thẩm định & Nộp đơn Cục SHTT';
+        labelAmount.innerHTML = 'Số Tiền Đề Nghị Thu (VNĐ - Đã gồm VAT) <span class="text-red-500">*</span>';
+        inputAmount.value = '54,000,000';
+        inputAmount.className = 'w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 font-mono font-bold text-emerald-700 focus:border-[#0082B4] focus:outline-none';
+        labelBank.textContent = 'Tài Khoản Nhận Thanh Toán & Thông Tin Xuất Hóa Đơn (Kế toán sẽ điền Link HĐ sau khi xuất)';
+        inputBank.value = 'Vietcombank CN Ba Đình - STK: 0011004889922 (ASL LAW) • Xuất HĐ VAT cho Công ty TNHH Thời Trang 9Outfit (MST: 0108829104)';
+      } else {
+        btnChi.className = 'px-4 py-2 rounded-lg bg-[#D9381E] text-white font-bold text-xs shadow-sm transition-all flex items-center gap-1.5';
+        btnThu.className = 'px-4 py-2 rounded-lg text-slate-600 hover:text-slate-900 font-bold text-xs transition-all flex items-center gap-1.5';
+        labelTitle.innerHTML = 'Nội Dung Task Chi Tiền <span class="text-red-500">*</span>';
+        inputTitle.value = 'Chi nộp lệ phí thẩm định nội dung đơn nhãn hiệu tại Cục SHTT';
+        labelAmount.innerHTML = 'Số Tiền Đề Nghị Chi (VNĐ) <span class="text-red-500">*</span>';
+        inputAmount.value = '12,500,000';
+        inputAmount.className = 'w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 font-mono font-bold text-[#D9381E] focus:border-[#0082B4] focus:outline-none';
+        labelBank.textContent = 'Thông Tin Thụ Hưởng Khoản Chi (Kế toán chuyển khoản xong sẽ bấm nút Đã Chi)';
+        inputBank.value = 'Kho bạc Nhà nước / Cục Sở hữu trí tuệ - Nộp lệ phí theo thông báo số 1092/SHTT';
+      }
+    }
+
+    function submitFinanceTask(e) {
+      e.preventDefault();
+      const type = document.getElementById('task-type-input').value;
+      const title = document.getElementById('input-task-title').value;
+      const amount = document.getElementById('input-task-amount').value;
+      if (type === 'THU') {
+        alert(`<svg class="w-3.5 h-3.5 inline-block text-emerald-500 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> ĐÃ TẠO TASK THU TIỀN & GỬI GIÁM ĐỐC PHÊ DUYỆT!\n\n• Nội dung: ${title}\n• Số tiền thu: ${amount} đ\n• Quy trình tiếp theo:\n  1. Giám đốc (LS. Nguyễn Anh) phê duyệt yêu cầu.\n  2. Chuyển sang Kế toán đối soát thủ công, xuất hóa đơn và điền Link hóa đơn vào hệ thống.`);
+      } else {
+        alert(`<svg class="w-3.5 h-3.5 inline-block text-emerald-500 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> ĐÃ TẠO TASK CHI TIỀN & GỬI GIÁM ĐỐC PHÊ DUYỆT!\n\n• Nội dung: ${title}\n• Số tiền chi: ${amount} đ\n• Quy trình tiếp theo:\n  1. Giám đốc (LS. Nguyễn Anh) phê duyệt yêu cầu.\n  2. Chuyển sang Kế toán thực hiện chi tiền và bấm nút "Đã Chi".`);
+      }
+      window.location.href = 'index.html';
+    }
+  </script>
+
+</body>
+</html>

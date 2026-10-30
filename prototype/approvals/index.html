@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <script>(function(){if(localStorage.getItem('asl_theme')==='dark'){document.documentElement.classList.add('dark');}else{document.documentElement.classList.remove('dark');}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASL LAW - Trung Tâm Phê Duyệt Nhanh (Approval Hub)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/layout.css?v=3.1">
+  <script src="../assets/layout.js?v=3.1" defer></script>
+</head>
+<body class="min-h-screen bg-[#F4F8FA] text-slate-800 flex">
+
+  <!-- Modular Shared Sidebar (Auto-mounted by layout.js) -->
+  <aside id="sidebar" class="fixed top-0 left-0 bottom-0 w-72 bg-white/95 backdrop-blur-xl z-40 transition-all duration-300 ease-in-out flex flex-col justify-between shadow-xl shadow-slate-900/5"></aside>
+
+  <!-- Main Container -->
+  <div id="main-container" class="flex-1 md:ml-72 flex flex-col min-h-screen transition-all duration-300 ease-in-out">
+
+    <!-- Top Bar with Rich Brand Gradient -->
+    <header class="header-gradient text-white h-20 px-6 flex items-center justify-between sticky top-0 z-30 shadow-md">
+      <div class="flex items-center gap-4">
+        <button onclick="toggleSidebar()" class="md:hidden p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white" title="Mở menu">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <div>
+          <div class="text-xs text-cyan-200/90 font-medium flex items-center gap-1.5">
+            <a href="../index.html" class="hover:underline">ASL LAW</a>
+            <span>/</span>
+            <span class="text-white font-semibold">Phê Duyệt Nhanh</span>
+          </div>
+          <h1 class="text-lg font-bold text-white tracking-tight flex items-center gap-2">
+            <span>Trung Tâm Phê Duyệt Nhanh (Approval Hub)</span>
+            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-red-500 text-white shadow-sm animate-pulse">8 Cần Xử Lý</span>
+          </h1>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <!-- Quick Batch Approve Button -->
+        <button onclick="approveSelected()" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md shadow-emerald-950/20 flex items-center gap-1.5 transition-all">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+          <span>Duyệt Các Mục Đã Chọn</span>
+        </button>
+
+        <!-- User profile avatar -->
+        <div class="flex items-center gap-2 pl-2 border-l border-white/20">
+          <div class="w-8 h-8 rounded-full bg-[#FF7A00] text-white font-extrabold text-xs flex items-center justify-center ring-2 ring-white/50">
+            NA
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 p-6 md:p-8 max-w-none mx-auto w-full space-y-6">
+
+      <!-- KPI Summary Cards (Solid Bold Cards theo phong cách Dashboard) -->
+      <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <!-- 1. Tổng Chờ Duyệt (Solid Deep Navy) -->
+        <div onclick="filterApprovalType('ALL')" class="cursor-pointer rounded-2xl p-6 relative overflow-hidden bg-[#002D54] text-white shadow-lg shadow-[#002D54]/25 transition-all hover:-translate-y-1">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-cyan-200/90 uppercase tracking-wider">Tổng Chờ Duyệt</span>
+            <span class="p-2 rounded-xl bg-white/15 text-white backdrop-blur-sm">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </span>
+          </div>
+          <div class="text-3xl font-extrabold text-white mt-3 font-mono">08 <span class="text-xs font-semibold text-cyan-200/80">yêu cầu</span></div>
+          <div class="text-xs text-cyan-100/90 mt-2 flex items-center gap-1.5">
+            <span class="text-red-300 font-bold bg-white/10 px-2 py-0.5 rounded-md">Hôm nay</span> cần phản hồi trong ngày
+          </div>
+        </div>
+
+        <!-- 2. Quản Lý / Giám Đốc Duyệt (Solid ASL Cerulean) -->
+        <div onclick="filterApprovalType('MANAGER')" class="cursor-pointer rounded-2xl p-6 relative overflow-hidden bg-[#0082B4] text-white shadow-lg shadow-cyan-950/25 transition-all hover:-translate-y-1">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-cyan-100 uppercase tracking-wider">Giám Đốc / Quản Lý Duyệt</span>
+            <span class="p-2 rounded-xl bg-white/15 text-white backdrop-blur-sm">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            </span>
+          </div>
+          <div class="text-3xl font-extrabold text-white mt-3 font-mono">04 <span class="text-xs font-semibold text-cyan-200/80">hồ sơ</span></div>
+          <div class="text-xs text-cyan-100/90 mt-2 flex items-center gap-1.5">
+            <span class="text-white font-bold bg-white/20 px-2 py-0.5 rounded-md text-[10px]">Cổng Nghiệp Vụ</span> Tờ khai, Báo cáo & HĐ
+          </div>
+        </div>
+
+        <!-- 3. Kế Toán Duyệt & Thực Hiện (Solid Brand Orange) -->
+        <div onclick="filterApprovalType('ACCOUNTANT')" class="cursor-pointer rounded-2xl p-6 relative overflow-hidden bg-[#FF7A00] text-white shadow-lg shadow-orange-950/25 transition-all hover:-translate-y-1">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-orange-100 uppercase tracking-wider">Kế Toán Thực Hiện</span>
+            <span class="p-2 rounded-xl bg-white/20 text-white backdrop-blur-sm">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </span>
+          </div>
+          <div class="text-3xl font-extrabold text-white mt-3 font-mono">04 <span class="text-xs font-semibold text-orange-100/80">task thu / chi</span></div>
+          <div class="text-xs text-white mt-2 flex items-center gap-1.5 font-medium">
+            <span class="bg-white/20 px-2 py-0.5 rounded-md font-bold text-[10px]">Sau Khi GĐ Duyệt</span> Thu: Điền Link HĐ • Chi: Đã Chi
+          </div>
+        </div>
+
+        <!-- 4. Đã Xử Lý Tuần Này (Solid Emerald Green) -->
+        <div onclick="filterApprovalType('APPROVED')" class="cursor-pointer rounded-2xl p-6 relative overflow-hidden bg-[#047857] text-white shadow-lg shadow-emerald-950/25 transition-all hover:-translate-y-1">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-emerald-100 uppercase tracking-wider">Đã Xử Lý Tuần Này</span>
+            <span class="p-2 rounded-xl bg-white/15 text-white backdrop-blur-sm">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </span>
+          </div>
+          <div class="text-3xl font-extrabold text-white mt-3 font-mono">28 <span class="text-xs font-semibold text-emerald-200">hoàn tất</span></div>
+          <div class="text-xs text-emerald-100/90 mt-2 flex items-center gap-1.5">
+            <span class="text-white font-bold bg-white/20 px-2 py-0.5 rounded-md text-[10px]">98% Đúng Hạn</span> Đã lưu Audit Log
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Filter Controls & 2 Role Tabs (Lọc trực tiếp thành 2 loại: Giám đốc/Quản lý & Kế toán) -->
+      <section class="glass-card rounded-2xl p-5 space-y-4">
+        
+        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
+          <!-- 2 Role Tabs Filter -->
+          <div class="flex items-center gap-2 flex-wrap text-xs font-bold">
+            <button onclick="filterApprovalType('MANAGER')" id="tab-manager" class="approval-tab px-4 py-2.5 rounded-xl bg-[#002D54] text-white shadow-sm flex items-center gap-2 transition-all">
+              <span>Dành Cho Giám Đốc / Quản Lý Phê Duyệt</span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] bg-white text-[#002D54] font-black">4</span>
+            </button>
+            <button onclick="filterApprovalType('ACCOUNTANT')" id="tab-accountant" class="approval-tab px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors flex items-center gap-2">
+              <span>Dành Cho Kế Toán Phê Duyệt & Thực Hiện</span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] bg-amber-200 text-amber-900 font-black">4</span>
+            </button>
+            <button onclick="filterApprovalType('ALL')" id="tab-all" class="approval-tab px-3.5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors">
+              Tất Cả (8)
+            </button>
+            <button onclick="filterApprovalType('APPROVED')" id="tab-approved" class="approval-tab px-3.5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors">
+              Đã Xử Lý Gần Đây
+            </button>
+          </div>
+
+          <!-- Quick Search -->
+          <div class="flex items-center gap-2">
+            <input type="text" id="approval-search" onkeyup="searchApprovals()" placeholder="Tìm mã vụ, task, người trình, nội dung..." class="px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-xs focus:border-[#0082B4] focus:outline-none shadow-sm w-72">
+          </div>
+        </div>
+
+        <!-- Batch Action Toolbar -->
+        <div class="flex items-center justify-between text-xs bg-slate-50/80 p-3 rounded-xl border border-slate-200/80">
+          <div class="flex items-center gap-3">
+            <label class="flex items-center gap-2 cursor-pointer font-bold text-slate-700">
+              <input type="checkbox" id="check-all" onchange="toggleSelectAll(this)" class="w-4 h-4 rounded text-[#0082B4] focus:ring-0">
+              <span>Chọn tất cả các mục đang hiển thị</span>
+            </label>
+            <span id="selected-count" class="text-slate-400 font-medium">Đã chọn: 0 mục</span>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button onclick="approveSelected()" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-sm flex items-center gap-1 transition-colors">
+              <span>Phê Duyệt Nhanh Các Mục Chọn</span>
+            </button>
+            <button onclick="rejectSelected()" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-red-50 hover:text-red-700 text-slate-600 font-bold text-xs transition-colors">
+              <span>Từ Chối / Trả Về Sửa</span>
+            </button>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Approvals List Table (Đã bỏ cột Phân loại thẩm quyền theo yêu cầu) -->
+      <section class="glass-card rounded-3xl p-6 md:p-8 space-y-4">
+        
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="border-b border-slate-200 text-[10px] text-slate-400 font-bold uppercase tracking-wider">
+                <th class="py-3.5 px-3 w-10 text-center">#</th>
+                <th class="py-3.5 px-4 w-44">Hồ Sơ Vụ Việc / Thân Chủ</th>
+                <th class="py-3.5 px-4 min-w-[360px]">Nội Dung Yêu Cầu Phê Duyệt & Task Hiện Tại</th>
+                <th class="py-3.5 px-4 w-40">Người Tạo Task</th>
+                <th class="py-3.5 px-4 w-36">Giá Trị / Quy Mô</th>
+                <th class="py-3.5 px-4 text-right w-44">Thao Tác</th>
+              </tr>
+            </thead>
+            <tbody id="approvals-tbody" class="divide-y divide-slate-100 font-medium bg-white">
+
+              <!-- ITEM 1: MANAGER APPROVAL (Tờ khai nhãn hiệu Cục SHTT) -->
+              <tr class="approval-item hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors" data-role="MANAGER" data-id="APP-101">
+                <td class="py-4 px-3 text-center">
+                  <input type="checkbox" class="item-checkbox w-4 h-4 rounded text-[#0082B4] focus:ring-0" onchange="updateSelectedCount()">
+                </td>
+                <td class="py-4 px-4">
+                  <a href="../cases/detail.html?ref=ASL-2026-TM109" class="font-mono font-bold text-[#002D54] hover:underline flex items-center gap-1">
+                    <span>ASL-2026-TM109</span>
+                    <svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                  </a>
+                  <div class="text-[11px] text-slate-500 font-normal mt-0.5">Cty TNHH Thời Trang 9Outfit</div>
+                </td>
+                <td class="py-4 px-4 space-y-1">
+                  <div class="flex items-center gap-2">
+                    <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-blue-100 text-[#002D54] dark:bg-cyan-950/80 dark:text-cyan-300 dark:border dark:border-cyan-500/35">DUYỆT NGHIỆP VỤ</span>
+                    <span class="font-bold text-slate-800 text-xs">Duyệt Bộ Tờ Khai Đăng Ký Nhãn Hiệu Nhóm 25, 35 Cục SHTT</span>
+                  </div>
+                  <!-- Link hồ sơ vụ việc & task hiện tại -->
+                  <div class="text-[11px] text-slate-600 flex flex-wrap items-center gap-x-3 gap-y-1 pt-0.5">
+                    <span class="flex items-center gap-1 text-slate-500">
+                      <span class="inline-flex items-center gap-1"><svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg><span>Hồ sơ:</span></span>
+                      <a href="../cases/detail.html?ref=ASL-2026-TM109" class="text-[#0082B4] font-semibold hover:underline">ASL-2026-TM109 (Xem vụ việc)</a>
+                    </span>
+                    <span class="text-slate-300">•</span>
+                    <span class="flex items-center gap-1">
+                      <span class="w-2 h-2 rounded-full bg-[#FF7A00]"></span>
+                      <span class="text-slate-500">Đang ở task:</span>
+                      <a href="../tasks/detail.html?id=TASK-101" class="font-mono font-bold text-[#002D54] hover:underline">TASK-101: Nộp tờ khai Cục SHTT</a>
+                      <span class="text-slate-400 font-normal">(Bước 2)</span>
+                    </span>
+                  </div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-bold text-slate-800">LS. Hoàng Gia Huy</div>
+                  <div class="text-[10px] text-slate-400">Junior Associate</div>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="font-mono text-xs font-bold text-blue-700">Tờ khai 04 trang</span>
+                  <div class="text-[10px] text-emerald-600 font-bold">Đã kiểm tra hình thức</div>
+                </td>
+                <td class="py-4 px-4 text-right">
+                  <div class="flex items-center justify-end gap-1.5">
+                    <button onclick="openApprovalModal('APP-101')" class="px-3.5 py-1.5 rounded-lg bg-[#002D54] hover:bg-[#0082B4] text-white font-bold text-xs shadow-sm transition-colors flex items-center gap-1">
+                      <span>Duyệt</span>
+                      <span class="text-[10px]">&rarr;</span>
+                    </button>
+                    <button onclick="viewDocModal('Tờ khai đăng ký nhãn hiệu 9OUTFIT', 'ASL-2026-TM109')" class="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300" title="Xem nhanh tài liệu"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- ITEM 2: ACCOUNTANT APPROVAL (Khoản Thu 72M) -->
+              <tr class="approval-item hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors" data-role="ACCOUNTANT" data-id="APP-102">
+                <td class="py-4 px-3 text-center">
+                  <input type="checkbox" class="item-checkbox w-4 h-4 rounded text-[#0082B4] focus:ring-0" onchange="updateSelectedCount()">
+                </td>
+                <td class="py-4 px-4">
+                  <a href="../cases/detail.html?ref=ASL-2026-TM109" class="font-mono font-bold text-[#002D54] hover:underline flex items-center gap-1">
+                    <span>ASL-2026-TM109</span>
+                    <svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                  </a>
+                  <div class="text-[11px] text-slate-500 font-normal mt-0.5">Cty TNHH Thời Trang 9Outfit</div>
+                </td>
+                <td class="py-4 px-4 space-y-1">
+                  <div class="flex items-center gap-2">
+                    <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 dark:border dark:border-emerald-500/35">KẾ TOÁN THU TIỀN</span>
+                    <span class="font-bold text-slate-800 text-xs">Xuất Hóa Đơn VAT Đợt 1 & Điền Link Hóa Đơn</span>
+                    <span class="px-1.5 py-0.2 rounded text-[9px] bg-emerald-50 text-emerald-700 font-bold border border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-500/40">GĐ Đã Duyệt</span>
+                  </div>
+                  <!-- Link hồ sơ vụ việc & task hiện tại -->
+                  <div class="text-[11px] text-slate-600 flex flex-wrap items-center gap-x-3 gap-y-1 pt-0.5">
+                    <span class="flex items-center gap-1 text-slate-500">
+                      <span class="inline-flex items-center gap-1"><svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg><span>Hồ sơ:</span></span>
+                      <a href="../cases/detail.html?ref=ASL-2026-TM109" class="text-[#0082B4] font-semibold hover:underline">ASL-2026-TM109 (HĐ-089)</a>
+                    </span>
+                    <span class="text-slate-300">•</span>
+                    <span class="flex items-center gap-1">
+                      <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                      <span class="text-slate-500">Đang ở task:</span>
+                      <a href="../tasks/detail.html?id=TASK-102" class="font-mono font-bold text-[#002D54] hover:underline">TASK-102: Thu phí đợt 1 & xuất HĐ</a>
+                      <span class="text-slate-400 font-normal">(Bước 1)</span>
+                    </span>
+                  </div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-bold text-slate-800">LS. Hoàng Gia Huy</div>
+                  <div class="text-[10px] text-emerald-700 font-semibold">GĐ duyệt: LS. Nguyễn Anh</div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-mono text-xs font-black text-emerald-600">+ 72,000,000 ₫</div>
+                  <div class="text-[10px] text-slate-400">VAT 8%: 5.760.000 đ</div>
+                </td>
+                <td class="py-4 px-4 text-right">
+                  <div class="flex items-center justify-end gap-1.5">
+                    <button onclick="openApprovalModal('APP-102')" class="px-3.5 py-1.5 rounded-lg bg-[#047857] hover:bg-emerald-800 text-white font-bold text-xs shadow-sm transition-colors flex items-center gap-1">
+                      <span>Duyệt</span>
+                      <span class="text-[10px]">&rarr;</span>
+                    </button>
+                    <button onclick="viewDocModal('Bản dự thảo Hóa đơn điện tử VAT 72M', 'ASL-2026-TM109')" class="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300" title="Xem nhanh hóa đơn"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- ITEM 3: MANAGER APPROVAL (Báo cáo LDD M&A Thaco) -->
+              <tr class="approval-item hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors" data-role="MANAGER" data-id="APP-103">
+                <td class="py-4 px-3 text-center">
+                  <input type="checkbox" class="item-checkbox w-4 h-4 rounded text-[#0082B4] focus:ring-0" onchange="updateSelectedCount()">
+                </td>
+                <td class="py-4 px-4">
+                  <a href="../cases/detail.html?ref=ASL-2026-MNA01" class="font-mono font-bold text-[#002D54] hover:underline flex items-center gap-1">
+                    <span>ASL-2026-MNA01</span>
+                    <svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                  </a>
+                  <div class="text-[11px] text-slate-500 font-normal mt-0.5">Thaco Corporation</div>
+                </td>
+                <td class="py-4 px-4 space-y-1">
+                  <div class="flex items-center gap-2">
+                    <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-blue-100 text-[#002D54] dark:bg-cyan-950/80 dark:text-cyan-300 dark:border dark:border-cyan-500/35">DUYỆT NGHIỆP VỤ</span>
+                    <span class="font-bold text-slate-800 text-xs">Ký Duyệt Báo Cáo Thẩm Định Pháp Lý LDD (120 Trang)</span>
+                  </div>
+                  <!-- Link hồ sơ vụ việc & task hiện tại -->
+                  <div class="text-[11px] text-slate-600 flex flex-wrap items-center gap-x-3 gap-y-1 pt-0.5">
+                    <span class="flex items-center gap-1 text-slate-500">
+                      <span class="inline-flex items-center gap-1"><svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg><span>Hồ sơ:</span></span>
+                      <a href="../cases/detail.html?ref=ASL-2026-MNA01" class="text-[#0082B4] font-semibold hover:underline">ASL-2026-MNA01 (Thâu tóm HAGL Agrico)</a>
+                    </span>
+                    <span class="text-slate-300">•</span>
+                    <span class="flex items-center gap-1">
+                      <span class="w-2 h-2 rounded-full bg-[#FF7A00]"></span>
+                      <span class="text-slate-500">Đang ở task:</span>
+                      <a href="../tasks/detail.html?id=TASK-103" class="font-mono font-bold text-[#002D54] hover:underline">TASK-103: Thẩm định pháp lý LDD</a>
+                      <span class="text-slate-400 font-normal">(Bước 3)</span>
+                    </span>
+                  </div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-bold text-slate-800">LS. Trần Nam</div>
+                  <div class="text-[10px] text-slate-400">Senior Associate</div>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="font-mono text-xs font-bold text-purple-700">120 Trang PDF</span>
+                  <div class="text-[10px] text-slate-400">Kèm 18 phụ lục</div>
+                </td>
+                <td class="py-4 px-4 text-right">
+                  <div class="flex items-center justify-end gap-1.5">
+                    <button onclick="openApprovalModal('APP-103')" class="px-3.5 py-1.5 rounded-lg bg-[#002D54] hover:bg-[#0082B4] text-white font-bold text-xs shadow-sm transition-colors flex items-center gap-1">
+                      <span>Duyệt</span>
+                      <span class="text-[10px]">&rarr;</span>
+                    </button>
+                    <button onclick="viewDocModal('Báo cáo thẩm định pháp lý LDD Thaco M&A', 'ASL-2026-MNA01')" class="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- ITEM 4: ACCOUNTANT APPROVAL (Khoản Chi Tạm Ứng 45M) -->
+              <tr class="approval-item hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors" data-role="ACCOUNTANT" data-id="APP-104">
+                <td class="py-4 px-3 text-center">
+                  <input type="checkbox" class="item-checkbox w-4 h-4 rounded text-[#0082B4] focus:ring-0" onchange="updateSelectedCount()">
+                </td>
+                <td class="py-4 px-4">
+                  <a href="../cases/detail.html?ref=ASL-2026-LIT03" class="font-mono font-bold text-[#002D54] hover:underline flex items-center gap-1">
+                    <span>ASL-2026-LIT03</span>
+                    <svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                  </a>
+                  <div class="text-[11px] text-slate-500 font-normal mt-0.5">Nhóm Cổ Đông Phúc Khang</div>
+                </td>
+                <td class="py-4 px-4 space-y-1">
+                  <div class="flex items-center gap-2">
+                    <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-red-100 text-red-700 dark:bg-rose-950/80 dark:text-rose-300 dark:border dark:border-rose-500/35">KẾ TOÁN CHI TIỀN</span>
+                    <span class="font-bold text-slate-800 text-xs">Chi Tiền Tạm Ứng Án Phí Sơ Thẩm Tại TAND TP.HCM</span>
+                    <span class="px-1.5 py-0.2 rounded text-[9px] bg-emerald-50 text-emerald-700 font-bold border border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-500/40">GĐ Đã Duyệt</span>
+                  </div>
+                  <!-- Link hồ sơ vụ việc & task hiện tại -->
+                  <div class="text-[11px] text-slate-600 flex flex-wrap items-center gap-x-3 gap-y-1 pt-0.5">
+                    <span class="flex items-center gap-1 text-slate-500">
+                      <span class="inline-flex items-center gap-1"><svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg><span>Hồ sơ:</span></span>
+                      <a href="../cases/detail.html?ref=ASL-2026-LIT03" class="text-[#0082B4] font-semibold hover:underline">ASL-2026-LIT03 (Tranh chấp BĐS)</a>
+                    </span>
+                    <span class="text-slate-300">•</span>
+                    <span class="flex items-center gap-1">
+                      <span class="w-2 h-2 rounded-full bg-red-500"></span>
+                      <span class="text-slate-500">Đang ở task:</span>
+                      <a href="../tasks/detail.html?id=TASK-104" class="font-mono font-bold text-[#002D54] hover:underline">TASK-104: Nộp tiền tạm ứng án phí</a>
+                      <span class="text-slate-400 font-normal">(Bước 2)</span>
+                    </span>
+                  </div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-bold text-slate-800">LS. Phạm Thu Hương</div>
+                  <div class="text-[10px] text-emerald-700 font-semibold">GĐ duyệt: LS. Nguyễn Anh</div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-mono text-xs font-black text-red-600">- 45,000,000 ₫</div>
+                  <div class="text-[10px] text-slate-400">Tạm ứng Tòa án</div>
+                </td>
+                <td class="py-4 px-4 text-right">
+                  <div class="flex items-center justify-end gap-1.5">
+                    <button onclick="openApprovalModal('APP-104')" class="px-3.5 py-1.5 rounded-lg bg-[#D9381E] hover:bg-red-700 text-white font-bold text-xs shadow-sm transition-colors flex items-center gap-1">
+                      <span>Duyệt</span>
+                      <span class="text-[10px]">&rarr;</span>
+                    </button>
+                    <button onclick="viewDocModal('Giấy nộp tiền tạm ứng án phí TAND TP.HCM', 'ASL-2026-LIT03')" class="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- ITEM 5: MANAGER APPROVAL (Đơn yêu cầu BPKCTT) -->
+              <tr class="approval-item hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors" data-role="MANAGER" data-id="APP-105">
+                <td class="py-4 px-3 text-center">
+                  <input type="checkbox" class="item-checkbox w-4 h-4 rounded text-[#0082B4] focus:ring-0" onchange="updateSelectedCount()">
+                </td>
+                <td class="py-4 px-4">
+                  <a href="../cases/detail.html?ref=ASL-2026-LIT03" class="font-mono font-bold text-[#002D54] hover:underline flex items-center gap-1">
+                    <span>ASL-2026-LIT03</span>
+                    <svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                  </a>
+                  <div class="text-[11px] text-slate-500 font-normal mt-0.5">Nhóm Cổ Đông Phúc Khang</div>
+                </td>
+                <td class="py-4 px-4 space-y-1">
+                  <div class="flex items-center gap-2">
+                    <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-blue-100 text-[#002D54] dark:bg-cyan-950/80 dark:text-cyan-300 dark:border dark:border-cyan-500/35">DUYỆT NGHIỆP VỤ</span>
+                    <span class="font-bold text-slate-800 text-xs">Duyệt Đơn Yêu Cầu Áp Dụng BPKCTT Phong Tỏa Tài Khoản 15 Tỷ</span>
+                  </div>
+                  <!-- Link hồ sơ vụ việc & task hiện tại -->
+                  <div class="text-[11px] text-slate-600 flex flex-wrap items-center gap-x-3 gap-y-1 pt-0.5">
+                    <span class="flex items-center gap-1 text-slate-500">
+                      <span class="inline-flex items-center gap-1"><svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg><span>Hồ sơ:</span></span>
+                      <a href="../cases/detail.html?ref=ASL-2026-LIT03" class="text-[#0082B4] font-semibold hover:underline">ASL-2026-LIT03 (Tranh chấp BĐS)</a>
+                    </span>
+                    <span class="text-slate-300">•</span>
+                    <span class="flex items-center gap-1">
+                      <span class="w-2 h-2 rounded-full bg-[#FF7A00]"></span>
+                      <span class="text-slate-500">Đang ở task:</span>
+                      <a href="../tasks/detail.html?id=TASK-105" class="font-mono font-bold text-[#002D54] hover:underline">TASK-105: Soạn đơn yêu cầu BPKCTT</a>
+                      <span class="text-slate-400 font-normal">(Bước 2)</span>
+                    </span>
+                  </div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-bold text-slate-800">LS. Phạm Thu Hương</div>
+                  <div class="text-[10px] text-slate-400">Luật sư tranh tụng</div>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="font-mono text-xs font-bold text-red-600">Phong tỏa 15 Tỷ</span>
+                  <div class="text-[10px] text-slate-400">Điều 114 BLTTDS</div>
+                </td>
+                <td class="py-4 px-4 text-right">
+                  <div class="flex items-center justify-end gap-1.5">
+                    <button onclick="openApprovalModal('APP-105')" class="px-3.5 py-1.5 rounded-lg bg-[#002D54] hover:bg-[#0082B4] text-white font-bold text-xs shadow-sm transition-colors flex items-center gap-1">
+                      <span>Duyệt</span>
+                      <span class="text-[10px]">&rarr;</span>
+                    </button>
+                    <button onclick="viewDocModal('Đơn đề nghị áp dụng BPKCTT phong tỏa TK', 'ASL-2026-LIT03')" class="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- ITEM 6: ACCOUNTANT APPROVAL (Khoản Chi Lệ phí WIPO 35M) -->
+              <tr class="approval-item hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors" data-role="ACCOUNTANT" data-id="APP-106">
+                <td class="py-4 px-3 text-center">
+                  <input type="checkbox" class="item-checkbox w-4 h-4 rounded text-[#0082B4] focus:ring-0" onchange="updateSelectedCount()">
+                </td>
+                <td class="py-4 px-4">
+                  <a href="../cases/detail.html?ref=ASL-2026-PAT04" class="font-mono font-bold text-[#002D54] hover:underline flex items-center gap-1">
+                    <span>ASL-2026-PAT04</span>
+                    <svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                  </a>
+                  <div class="text-[11px] text-slate-500 font-normal mt-0.5">Foxconn Energy Vietnam</div>
+                </td>
+                <td class="py-4 px-4 space-y-1">
+                  <div class="flex items-center gap-2">
+                    <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-red-100 text-red-700 dark:bg-rose-950/80 dark:text-rose-300 dark:border dark:border-rose-500/35">KẾ TOÁN CHI TIỀN</span>
+                    <span class="font-bold text-slate-800 text-xs">Chi Thanh Toán Lệ Phí Tra Cứu Sáng Chế Quốc Tế WIPO</span>
+                    <span class="px-1.5 py-0.2 rounded text-[9px] bg-emerald-50 text-emerald-700 font-bold border border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-500/40">GĐ Đã Duyệt</span>
+                  </div>
+                  <!-- Link hồ sơ vụ việc & task hiện tại -->
+                  <div class="text-[11px] text-slate-600 flex flex-wrap items-center gap-x-3 gap-y-1 pt-0.5">
+                    <span class="flex items-center gap-1 text-slate-500">
+                      <span class="inline-flex items-center gap-1"><svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg><span>Hồ sơ:</span></span>
+                      <a href="../cases/detail.html?ref=ASL-2026-PAT04" class="text-[#0082B4] font-semibold hover:underline">ASL-2026-PAT04 (Sáng chế Foxconn)</a>
+                    </span>
+                    <span class="text-slate-300">•</span>
+                    <span class="flex items-center gap-1">
+                      <span class="w-2 h-2 rounded-full bg-red-500"></span>
+                      <span class="text-slate-500">Đang ở task:</span>
+                      <a href="../tasks/detail.html?id=TASK-106" class="font-mono font-bold text-[#002D54] hover:underline">TASK-106: Thanh toán phí WIPO</a>
+                      <span class="text-slate-400 font-normal">(Bước 1)</span>
+                    </span>
+                  </div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-bold text-slate-800">LS. Lê Hoàng Nam</div>
+                  <div class="text-[10px] text-emerald-700 font-semibold">GĐ duyệt: LS. Nguyễn Anh</div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-mono text-xs font-black text-red-600">- 35,000,000 ₫</div>
+                  <div class="text-[10px] text-slate-400">~ 1,400 CHF (Geneva)</div>
+                </td>
+                <td class="py-4 px-4 text-right">
+                  <div class="flex items-center justify-end gap-1.5">
+                    <button onclick="openApprovalModal('APP-106')" class="px-3.5 py-1.5 rounded-lg bg-[#D9381E] hover:bg-red-700 text-white font-bold text-xs shadow-sm transition-colors flex items-center gap-1">
+                      <span>Duyệt</span>
+                      <span class="text-[10px]">&rarr;</span>
+                    </button>
+                    <button onclick="viewDocModal('Invoice phí WIPO quốc tế', 'ASL-2026-PAT04')" class="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- ITEM 7: MANAGER APPROVAL (Hợp đồng SHTT Foxconn 320M) -->
+              <tr class="approval-item hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors" data-role="MANAGER" data-id="APP-107">
+                <td class="py-4 px-3 text-center">
+                  <input type="checkbox" class="item-checkbox w-4 h-4 rounded text-[#0082B4] focus:ring-0" onchange="updateSelectedCount()">
+                </td>
+                <td class="py-4 px-4">
+                  <a href="../cases/detail.html?ref=ASL-2026-PAT04" class="font-mono font-bold text-[#002D54] hover:underline flex items-center gap-1">
+                    <span>ASL-2026-PAT04</span>
+                    <svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                  </a>
+                  <div class="text-[11px] text-slate-500 font-normal mt-0.5">Foxconn Energy Vietnam</div>
+                </td>
+                <td class="py-4 px-4 space-y-1">
+                  <div class="flex items-center gap-2">
+                    <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-blue-100 text-[#002D54] dark:bg-cyan-950/80 dark:text-cyan-300 dark:border dark:border-cyan-500/35">DUYỆT NGHIỆP VỤ</span>
+                    <span class="font-bold text-slate-800 text-xs">Ký Duyệt Hợp Đồng Dịch Vụ Đại Diện SHTT Song Ngữ (320M)</span>
+                  </div>
+                  <!-- Link hồ sơ vụ việc & task hiện tại -->
+                  <div class="text-[11px] text-slate-600 flex flex-wrap items-center gap-x-3 gap-y-1 pt-0.5">
+                    <span class="flex items-center gap-1 text-slate-500">
+                      <span class="inline-flex items-center gap-1"><svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg><span>Hồ sơ:</span></span>
+                      <a href="../cases/detail.html?ref=ASL-2026-PAT04" class="text-[#0082B4] font-semibold hover:underline">ASL-2026-PAT04 (Sáng chế Foxconn)</a>
+                    </span>
+                    <span class="text-slate-300">•</span>
+                    <span class="flex items-center gap-1">
+                      <span class="w-2 h-2 rounded-full bg-[#FF7A00]"></span>
+                      <span class="text-slate-500">Đang ở task:</span>
+                      <a href="../tasks/detail.html?id=TASK-107" class="font-mono font-bold text-[#002D54] hover:underline">TASK-107: Ký hợp đồng SHTT</a>
+                      <span class="text-slate-400 font-normal">(Bước 1)</span>
+                    </span>
+                  </div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-bold text-slate-800">LS. Lê Hoàng Nam</div>
+                  <div class="text-[10px] text-slate-400">Senior Patent Attorney</div>
+                </td>
+                <td class="py-4 px-4">
+                  <span class="font-mono text-xs font-bold text-emerald-700">320,000,000 ₫</span>
+                  <div class="text-[10px] text-slate-400">Song ngữ Anh - Việt</div>
+                </td>
+                <td class="py-4 px-4 text-right">
+                  <div class="flex items-center justify-end gap-1.5">
+                    <button onclick="openApprovalModal('APP-107')" class="px-3.5 py-1.5 rounded-lg bg-[#002D54] hover:bg-[#0082B4] text-white font-bold text-xs shadow-sm transition-colors flex items-center gap-1">
+                      <span>Duyệt</span>
+                      <span class="text-[10px]">&rarr;</span>
+                    </button>
+                    <button onclick="viewDocModal('Hợp đồng dịch vụ pháp lý sáng chế Foxconn', 'ASL-2026-PAT04')" class="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- ITEM 8: ACCOUNTANT APPROVAL (Khoản Thu Quyết Toán 85M) -->
+              <tr class="approval-item hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors" data-role="ACCOUNTANT" data-id="APP-108">
+                <td class="py-4 px-3 text-center">
+                  <input type="checkbox" class="item-checkbox w-4 h-4 rounded text-[#0082B4] focus:ring-0" onchange="updateSelectedCount()">
+                </td>
+                <td class="py-4 px-4">
+                  <a href="../cases/detail.html?ref=ASL-2026-DES02" class="font-mono font-bold text-[#002D54] hover:underline flex items-center gap-1">
+                    <span>ASL-2026-DES02</span>
+                    <svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                  </a>
+                  <div class="text-[11px] text-slate-500 font-normal mt-0.5">Cty CP Nhựa An Gia</div>
+                </td>
+                <td class="py-4 px-4 space-y-1">
+                  <div class="flex items-center gap-2">
+                    <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 dark:border dark:border-emerald-500/35">KẾ TOÁN THU TIỀN</span>
+                    <span class="font-bold text-slate-800 text-xs">Thu Phí Quyết Toán Hợp Đồng & Điền Link Hóa Đơn</span>
+                    <span class="px-1.5 py-0.2 rounded text-[9px] bg-emerald-50 text-emerald-700 font-bold border border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-500/40">GĐ Đã Duyệt</span>
+                  </div>
+                  <!-- Link hồ sơ vụ việc & task hiện tại -->
+                  <div class="text-[11px] text-slate-600 flex flex-wrap items-center gap-x-3 gap-y-1 pt-0.5">
+                    <span class="flex items-center gap-1 text-slate-500">
+                      <span class="inline-flex items-center gap-1"><svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg><span>Hồ sơ:</span></span>
+                      <a href="../cases/detail.html?ref=ASL-2026-DES02" class="text-[#0082B4] font-semibold hover:underline">ASL-2026-DES02 (Kiểu dáng An Gia)</a>
+                    </span>
+                    <span class="text-slate-300">•</span>
+                    <span class="flex items-center gap-1">
+                      <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                      <span class="text-slate-500">Đang ở task:</span>
+                      <a href="../tasks/detail.html?id=TASK-108" class="font-mono font-bold text-[#002D54] hover:underline">TASK-108: Quyết toán HĐ & đóng vụ</a>
+                      <span class="text-slate-400 font-normal">(Bước 4)</span>
+                    </span>
+                  </div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-bold text-slate-800">LS. Hoàng Gia Huy</div>
+                  <div class="text-[10px] text-emerald-700 font-semibold">GĐ duyệt: LS. Nguyễn Anh</div>
+                </td>
+                <td class="py-4 px-4">
+                  <div class="font-mono text-xs font-black text-emerald-600">+ 85,000,000 ₫</div>
+                  <div class="text-[10px] text-slate-400">Thanh toán đợt cuối</div>
+                </td>
+                <td class="py-4 px-4 text-right">
+                  <div class="flex items-center justify-end gap-1.5">
+                    <button onclick="openApprovalModal('APP-108')" class="px-3.5 py-1.5 rounded-lg bg-[#047857] hover:bg-emerald-800 text-white font-bold text-xs shadow-sm transition-colors flex items-center gap-1">
+                      <span>Duyệt</span>
+                      <span class="text-[10px]">&rarr;</span>
+                    </button>
+                    <button onclick="viewDocModal('Biên bản thanh lý hợp đồng An Gia', 'ASL-2026-DES02')" class="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                  </div>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL 1: POP-UP PHÊ DUYỆT DÀNH CHO GIÁM ĐỐC / NGƯỜI QUẢN LÝ   -->
+  <!-- ============================================================== -->
+  <div id="modal-manager" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-2xl w-full p-6 md:p-8 space-y-5 shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+        <div>
+          <span class="px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-blue-100 text-[#002D54] dark:bg-cyan-950/80 dark:text-cyan-300 dark:border dark:border-cyan-500/35 uppercase tracking-wide inline-flex items-center gap-1">
+            Cổng Phê Duyệt Của Giám Đốc / Người Quản Lý
+          </span>
+          <h3 id="mgr-modal-title" class="text-base font-extrabold text-[#002D54] mt-1.5">
+            Phê Duyệt Hồ Sơ Vụ Việc
+          </h3>
+        </div>
+        <button onclick="closeModal('modal-manager')" class="text-slate-400 hover:text-slate-700 text-2xl font-bold p-1">&times;</button>
+      </div>
+
+      <!-- Case Information Box -->
+      <div class="p-4 rounded-2xl bg-blue-50/60 border border-blue-200/80 space-y-2.5 text-xs">
+        <div class="flex items-center justify-between">
+          <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">1. Thông Tin Hồ Sơ Vụ Việc</span>
+          <a id="mgr-case-link" href="../cases/detail.html" target="_blank" class="text-xs font-bold text-[#0082B4] hover:underline flex items-center gap-1">
+            <span>Mở Hồ Sơ Vụ Việc Chi Tiết</span>
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+          </a>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <span class="text-slate-500 font-medium">Mã vụ việc:</span>
+            <span id="mgr-case-ref" class="font-mono font-bold text-[#002D54] ml-1">ASL-2026</span>
+          </div>
+          <div>
+            <span class="text-slate-500 font-medium">Lĩnh vực:</span>
+            <span id="mgr-case-domain" class="font-bold text-slate-700 ml-1">Sở Hữu Trí Tuệ</span>
+          </div>
+          <div class="sm:col-span-2">
+            <span class="text-slate-500 font-medium">Tên vụ việc:</span>
+            <span id="mgr-case-name" class="font-extrabold text-[#002D54] ml-1">Tên vụ việc</span>
+          </div>
+          <div class="sm:col-span-2">
+            <span class="text-slate-500 font-medium">Thân chủ / Khách hàng:</span>
+            <span id="mgr-case-client" class="font-bold text-slate-700 ml-1">Tên khách hàng</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Task Information Box -->
+      <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5 text-xs">
+        <div class="flex items-center justify-between">
+          <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">2. Thông Tin Task & Nội Dung Trình Duyệt</span>
+          <a id="mgr-task-link" href="../tasks/detail.html" target="_blank" class="text-xs font-bold text-[#0082B4] hover:underline flex items-center gap-1">
+            <span>Mở Chi Tiết Task</span>
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+          </a>
+        </div>
+        <div class="space-y-2">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <span class="text-slate-500 font-medium">Task hiện tại:</span>
+              <span id="mgr-task-name" class="font-bold text-[#002D54] ml-1">TASK-101: Tên task</span>
+            </div>
+            <div>
+              <span class="text-slate-500 font-medium">Giai đoạn:</span>
+              <span id="mgr-task-stage" class="px-2 py-0.5 rounded text-[10px] bg-amber-100 text-amber-800 font-bold ml-1">Bước 2</span>
+            </div>
+          </div>
+
+          <div>
+            <span class="text-slate-500 font-medium">Người tạo task / trình ký:</span>
+            <span id="mgr-task-author" class="font-bold text-slate-700 ml-1">LS. Hoàng Gia Huy</span>
+          </div>
+
+          <div>
+            <span class="text-slate-500 font-medium">Quy mô / Giá trị:</span>
+            <span id="mgr-task-amount" class="font-mono font-bold text-blue-700 ml-1">Tờ khai 04 trang</span>
+          </div>
+
+          <div class="pt-1">
+            <span class="text-slate-500 font-medium block mb-1">Nội dung chi tiết đề xuất phê duyệt:</span>
+            <div id="mgr-task-content" class="p-3 bg-white rounded-xl border border-slate-200 text-slate-700 text-xs leading-relaxed">
+              Nội dung mô tả...
+            </div>
+          </div>
+
+          <!-- Attachments list -->
+          <div id="mgr-attachments-container" class="pt-1">
+            <span class="text-slate-500 font-medium block mb-1">Tài liệu đính kèm kèm theo:</span>
+            <div id="mgr-attachments-list" class="flex flex-wrap gap-2">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Director Note / Instruction Input -->
+      <div class="space-y-1.5 text-xs">
+        <label class="block font-bold text-[#002D54]">Ý Kiến Chỉ Đạo Của Giám Đốc (Tùy chọn):</label>
+        <textarea id="mgr-note-input" rows="2" placeholder="Nhập ý kiến chỉ đạo, yêu cầu bổ sung hoặc phê chuẩn chuyển bước tiếp theo..." class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs focus:border-[#0082B4] focus:outline-none"></textarea>
+      </div>
+
+      <!-- Action Buttons: Không phê duyệt / Phê duyệt -->
+      <div class="flex items-center justify-between pt-2 border-t border-slate-100">
+        <button onclick="rejectManagerApproval()" class="px-5 py-2.5 rounded-xl border border-red-200 bg-red-50 hover:bg-red-100 text-red-700 dark:bg-rose-950/80 dark:text-rose-300 dark:border dark:border-rose-500/35 font-bold text-xs transition-colors flex items-center gap-1.5">
+          <span>Không Phê Duyệt</span>
+        </button>
+
+        <div class="flex items-center gap-2">
+          <button onclick="closeModal('modal-manager')" class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold">
+            Đóng
+          </button>
+          <button onclick="confirmManagerApproval()" class="px-6 py-2.5 rounded-xl bg-[#002D54] hover:bg-[#0082B4] text-white font-bold text-xs shadow-md shadow-cyan-950/20 transition-all flex items-center gap-1.5">
+            <span>Phê Duyệt</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL 2: POP-UP PHÊ DUYỆT & THỰC HIỆN DÀNH CHO KẾ TOÁN        -->
+  <!-- ============================================================== -->
+  <div id="modal-accountant" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-2xl w-full p-6 md:p-8 space-y-5 shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+        <div>
+          <span class="px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-amber-100 text-amber-900 uppercase tracking-wide inline-flex items-center gap-1">
+            Cổng Kế Toán Đối Soát & Phê Duyệt Thực Hiện
+          </span>
+          <h3 id="acc-modal-title" class="text-base font-extrabold text-[#002D54] mt-1.5">
+            Đối Soát & Xác Nhận Thu / Chi
+          </h3>
+        </div>
+        <button onclick="closeModal('modal-accountant')" class="text-slate-400 hover:text-slate-700 text-2xl font-bold p-1">&times;</button>
+      </div>
+
+      <!-- Case & Director Approval Status Box -->
+      <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5 text-xs">
+        <div class="flex items-center justify-between">
+          <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">1. Thông Tin Hồ Sơ & Phê Duyệt Trước Đó</span>
+          <a id="acc-case-link" href="../cases/detail.html" target="_blank" class="text-xs font-bold text-[#0082B4] hover:underline flex items-center gap-1">
+            <span>Mở Hồ Sơ Vụ Việc</span>
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+          </a>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <span class="text-slate-500 font-medium">Vụ việc:</span>
+            <span id="acc-case-ref" class="font-mono font-bold text-[#002D54] ml-1">ASL-2026</span>
+          </div>
+          <div>
+            <span class="text-slate-500 font-medium">Khách hàng:</span>
+            <span id="acc-case-client" class="font-bold text-slate-700 ml-1">Công ty ABC</span>
+          </div>
+          <div class="sm:col-span-2">
+            <span class="text-slate-500 font-medium">Task hiện tại:</span>
+            <a id="acc-task-link" href="../tasks/detail.html" target="_blank" class="font-mono font-bold text-[#002D54] ml-1 hover:underline">TASK-102</a>
+            <span id="acc-task-name" class="text-slate-700 font-medium ml-1">Thu phí dịch vụ</span>
+          </div>
+          <div class="sm:col-span-2 p-2.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+            <span class="font-bold">Trạng thái duyệt trước:</span>
+            <span id="acc-director-status">Giám đốc (LS. Nguyễn Anh) đã phê duyệt chuyển Kế toán</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Financial Transaction Details -->
+      <div class="p-4 rounded-2xl bg-amber-50/60 border border-amber-200/80 space-y-2 text-xs">
+        <div class="flex items-center justify-between">
+          <span class="text-[10px] font-extrabold uppercase tracking-wider text-amber-800">2. Số Tiền & Nội Dung Thanh Toán</span>
+          <span id="acc-task-type-badge" class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 dark:border dark:border-emerald-500/35">KHOẢN THU</span>
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="text-slate-600 font-semibold">Số tiền cần đối soát:</span>
+          <span id="acc-modal-amount" class="text-2xl font-black font-mono text-emerald-700">72,000,000 ₫</span>
+        </div>
+        <div id="acc-modal-desc" class="text-slate-600 pt-1 leading-relaxed">
+          Mô tả khoản thu...
+        </div>
+      </div>
+
+      <!-- Accountant Input Fields: Link Hóa Đơn & Ghi Chú -->
+      <div class="space-y-4 text-xs">
+        <div>
+          <label id="acc-link-label" class="block font-bold text-[#002D54] mb-1">
+            Link Hóa Đơn Điện Tử Đã Xuất / Link Chứng Từ <span class="text-red-500">*</span>
+          </label>
+          <input type="url" id="acc-modal-invoice-link" placeholder="Dán link tra cứu meInvoice, OneDrive hoặc link chứng từ..." class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 font-mono text-xs focus:border-[#0082B4] focus:outline-none shadow-sm">
+          <p id="acc-link-hint" class="text-[11px] text-slate-500 mt-1">
+            Đối với khoản thu: Kế toán xuất hóa đơn và dán link vào ô này để luật sư phụ trách gửi khách hàng.
+          </p>
+        </div>
+
+        <div>
+          <label class="block font-bold text-[#002D54] mb-1">Ghi Chú Đối Soát Ngân Hàng / Kế Toán:</label>
+          <textarea id="acc-modal-note" rows="2" placeholder="Ví dụ: Đã khớp sao kê VCB số FT263009..., mã hóa đơn HD-08901..." class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-xs focus:border-[#0082B4] focus:outline-none shadow-sm"></textarea>
+        </div>
+      </div>
+
+      <!-- Action Buttons: Từ Chối / Đã Duyệt -->
+      <div class="flex items-center justify-between pt-2 border-t border-slate-100">
+        <button onclick="rejectAccountantApproval()" class="px-5 py-2.5 rounded-xl border border-red-200 bg-red-50 hover:bg-red-100 text-red-700 dark:bg-rose-950/80 dark:text-rose-300 dark:border dark:border-rose-500/35 font-bold text-xs transition-colors flex items-center gap-1.5">
+          <span>Từ Chối / Yêu Cầu Sửa</span>
+        </button>
+
+        <div class="flex items-center gap-2">
+          <button onclick="closeModal('modal-accountant')" class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold">
+            Đóng
+          </button>
+          <button onclick="confirmAccountantApprovalAction()" id="btn-acc-confirm" class="px-6 py-2.5 rounded-xl bg-[#047857] hover:bg-emerald-800 text-white font-bold text-xs shadow-md shadow-emerald-950/20 transition-all flex items-center gap-1.5">
+            <span>Đã Duyệt</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Document Preview Modal (Mockup) -->
+  <div id="doc-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-2xl w-full p-6 space-y-5 shadow-2xl border border-slate-200">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div>
+          <span class="text-[10px] font-bold text-[#0082B4] uppercase tracking-wide">Trình Ký Duyệt Hồ Sơ Điện Tử (Digital Sign)</span>
+          <h3 id="modal-doc-title" class="text-base font-bold text-[#002D54]">Tài Liệu</h3>
+        </div>
+        <button onclick="closeDocModal()" class="text-slate-400 hover:text-slate-700 text-lg font-bold p-1">&times;</button>
+      </div>
+
+      <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 space-y-3 text-xs leading-relaxed">
+        <div class="flex items-center justify-between">
+          <span class="font-bold text-slate-700">Vụ việc liên quan:</span>
+          <span id="modal-case-ref" class="font-mono font-bold text-[#002D54]">ASL-2026</span>
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="font-bold text-slate-700">Chữ ký số hợp lệ:</span>
+          <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 dark:border dark:border-emerald-500/35">VNPT-CA / Viettel-CA Ready</span>
+        </div>
+        <div class="p-4 bg-white rounded-xl border border-slate-200 text-slate-600">
+          <p>Tài liệu này đã được rà soát nội bộ và kiểm tra tính hợp lệ về thể thức văn bản. Sau khi bấm Chấp Thuận Ký Duyệt, hệ thống sẽ tự động gắn tem ký số của Partner/Kế toán trưởng và gửi thông báo điện tử.</p>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-2.5 pt-2">
+        <button onclick="closeDocModal()" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold">
+          Đóng
+        </button>
+        <button onclick="approveModalDoc()" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-md shadow-emerald-950/20">
+          Chấp Thuận Ký Duyệt Điện Tử
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Detailed Data Dictionary for Approval Items
+    const APPROVAL_DATA = {
+      'APP-101': {
+        role: 'MANAGER',
+        caseRef: 'ASL-2026-TM109',
+        caseTitle: 'Đăng ký Nhãn hiệu 9OUTFIT tại Việt Nam & Quốc tế',
+        client: 'Công ty TNHH Thời Trang 9Outfit',
+        domain: 'Sở Hữu Trí Tuệ (Trademark)',
+        taskId: 'TASK-101',
+        taskTitle: 'Nộp tờ khai đăng ký nhãn hiệu nhóm 25, 35 tại Cục SHTT',
+        stage: 'Bước 2: Nộp đơn Cục SHTT',
+        author: 'LS. Hoàng Gia Huy (Junior Associate)',
+        amount: 'Tờ khai 04 trang (Đã kiểm tra hình thức)',
+        content: 'Trình Giám đốc phê duyệt bộ tờ khai đăng ký nhãn hiệu số 4-2026-08911 nhóm 25, 35 kèm mẫu nhãn và tài liệu ưu tiên. Hồ sơ đã được rà soát đối chiếu danh mục sản phẩm dịch vụ chuẩn Nice 12.',
+        attachments: ['To_khai_nhan_hieu_9Outfit_Nice12.pdf', 'Mau_nhan_hieu_color_vector.ai'],
+        note: ''
+      },
+      'APP-102': {
+        role: 'ACCOUNTANT',
+        type: 'THU',
+        caseRef: 'ASL-2026-TM109',
+        caseTitle: 'Đăng ký Nhãn hiệu 9OUTFIT tại Việt Nam & Quốc tế',
+        client: 'Công ty TNHH Thời Trang 9Outfit (MST: 0108829104)',
+        taskId: 'TASK-102',
+        taskTitle: 'Thu phí dịch vụ đợt 1 và xuất hóa đơn VAT',
+        stage: 'Bước 1: Tra cứu & Ký HĐ',
+        author: 'LS. Hoàng Gia Huy',
+        directorApproved: 'Giám đốc (LS. Nguyễn Anh) đã phê duyệt lúc 10:15 Hôm nay',
+        amount: '+ 72,000,000 ₫ (Thu phí đợt 1 - 40%)',
+        content: 'Khách hàng đã thanh toán 40% giá trị hợp đồng qua tài khoản Vietcombank của Hãng luật. Giám đốc đã duyệt. Kế toán đối soát sao kê ngân hàng, xuất hóa đơn điện tử meInvoice và điền Link hóa đơn vào hệ thống.',
+        invoiceLink: 'https://meinvoice.vn/tra-cuu/HD-2026-089-9OUTFIT',
+        note: 'Đã khớp sao kê VCB số FT2630092182901 lúc 09:45'
+      },
+      'APP-103': {
+        role: 'MANAGER',
+        caseRef: 'ASL-2026-MNA01',
+        caseTitle: 'Tư Vấn M&A Thâu Tóm & Tái Cấu Trúc HAGL Agrico',
+        client: 'Thaco Corporation (Tập đoàn Trường Hải)',
+        domain: 'Doanh Nghiệp & M&A',
+        taskId: 'TASK-103',
+        taskTitle: 'Phát hành Báo cáo Thẩm định Pháp lý LDD cuối cùng',
+        stage: 'Bước 3: Thẩm định chuyên sâu (Due Diligence)',
+        author: 'LS. Trần Nam (Senior Associate)',
+        amount: '120 Trang PDF (Kèm 18 phụ lục)',
+        content: 'Trình Giám đốc ký duyệt Báo cáo thẩm định pháp lý LDD đánh giá toàn diện 15 nông trường cao su, tài sản đảm bảo ngân hàng BIDV/Vietinbank và cơ cấu nợ vay trị giá 7.400 tỷ đồng trước khi bàn giao cho Hội đồng Quản trị Thaco.',
+        attachments: ['Bao_cao_LDD_Thaco_HAGL_Final_v3.pdf', 'Phu_luc_Tai_san_bao_dam.xlsx'],
+        note: ''
+      },
+      'APP-104': {
+        role: 'ACCOUNTANT',
+        type: 'CHI',
+        caseRef: 'ASL-2026-LIT03',
+        caseTitle: 'Tranh Chấp Cổ Đông Sáng Lập Bất Động Sản Phúc Khang',
+        client: 'Nhóm Cổ Đông Sáng Lập (Ông Nguyễn Văn H.)',
+        taskId: 'TASK-104',
+        taskTitle: 'Chi nộp tiền tạm ứng án phí sơ thẩm tại TAND TP.HCM',
+        stage: 'Bước 2: Thụ lý sơ thẩm Tòa án',
+        author: 'LS. Phạm Thu Hương (Luật sư tranh tụng)',
+        directorApproved: 'Giám đốc (LS. Nguyễn Anh) đã phê duyệt lúc 08:30 Hôm nay',
+        amount: '- 45,000,000 ₫ (Chi tạm ứng án phí)',
+        content: 'Nộp tiền tạm ứng án phí tại Chi cục Thi hành án dân sự theo Thông báo nộp tiền số 18/TB-TA của TAND TP.HCM. Giám đốc đã duyệt chi. Kế toán thực hiện chuyển khoản nộp ngân sách nhà nước, chi xong bấm "Đã Chi".',
+        invoiceLink: 'https://asl.sharepoint.com/finance/unc/UNC-VCB-45M-TA.pdf',
+        note: 'Nộp vào TK Chi cục THADS TP.HCM tại KBNN TP.HCM'
+      },
+      'APP-105': {
+        role: 'MANAGER',
+        caseRef: 'ASL-2026-LIT03',
+        caseTitle: 'Tranh Chấp Cổ Đông Sáng Lập Bất Động Sản Phúc Khang',
+        client: 'Nhóm Cổ Đông Sáng Lập (Ông Nguyễn Văn H.)',
+        domain: 'Luật Dân Sự & Tranh Tụng',
+        taskId: 'TASK-105',
+        taskTitle: 'Soạn đơn yêu cầu áp dụng BPKCTT phong tỏa tài khoản',
+        stage: 'Bước 2: Thụ lý sơ thẩm Tòa án',
+        author: 'LS. Phạm Thu Hương (Luật sư tranh tụng)',
+        amount: 'Phong tỏa 15 Tỷ VNĐ (Khoản 10 Điều 114 BLTTDS)',
+        content: 'Trình Giám đốc duyệt khẩn cấp Đơn đề nghị TAND TP.HCM áp dụng biện pháp khẩn cấp tạm thời: Phong tỏa 15.000.000.000 đồng trên tài khoản bị đơn tại Techcombank để ngăn ngừa tẩu tán tài sản trước phiên mở phiên họp hòa giải.',
+        attachments: ['Don_de_nghi_BPKCTT_phong_toa_TK.pdf', 'Chung_cu_nguy_co_tau_tan.pdf'],
+        note: ''
+      },
+      'APP-106': {
+        role: 'ACCOUNTANT',
+        type: 'CHI',
+        caseRef: 'ASL-2026-PAT04',
+        caseTitle: 'Hệ Thống Tối Ưu Hóa Năng Lượng Foxconn Smart Factory',
+        client: 'Foxconn Energy Vietnam Co., Ltd',
+        taskId: 'TASK-106',
+        taskTitle: 'Chi thanh toán lệ phí tra cứu sáng chế quốc tế WIPO',
+        stage: 'Bước 1: PCT Quốc tế',
+        author: 'LS. Lê Hoàng Nam (Senior Patent Attorney)',
+        directorApproved: 'Giám đốc (LS. Nguyễn Anh) đã phê duyệt lúc 11:20 Hôm nay',
+        amount: '- 35,000,000 ₫ (~ 1,400 CHF WIPO)',
+        content: 'Thanh toán lệ phí chuyển tiếp và tra cứu quốc tế cho Văn phòng WIPO Geneva qua cổng thanh toán thẻ tín dụng doanh nghiệp của Hãng luật ASL LAW. Giám đốc đã phê duyệt. Kế toán thực hiện thanh toán ngoại tệ và bấm "Đã Chi".',
+        invoiceLink: 'https://asl.sharepoint.com/finance/invoices/WIPO-Receipt-PCT-2026.pdf',
+        note: 'Phí WIPO PCT/IB/301 số đơn PCT/VN2026/00004'
+      },
+      'APP-107': {
+        role: 'MANAGER',
+        caseRef: 'ASL-2026-PAT04',
+        caseTitle: 'Hệ Thống Tối Ưu Hóa Năng Lượng Foxconn Smart Factory',
+        client: 'Foxconn Energy Vietnam Co., Ltd',
+        domain: 'Sở Hữu Trí Tuệ (Patent)',
+        taskId: 'TASK-107',
+        taskTitle: 'Ký duyệt Hợp đồng dịch vụ đại diện SHTT song ngữ Anh - Việt',
+        stage: 'Bước 1: Ký kết hợp đồng',
+        author: 'LS. Lê Hoàng Nam (Senior Patent Attorney)',
+        amount: '320,000,000 ₫ (Hợp đồng trọn gói 2 năm)',
+        content: 'Trình Giám đốc duyệt hợp đồng dịch vụ pháp lý độc quyền đại diện nộp đơn sáng chế hệ thống tối ưu hóa lưới điện thông minh Foxconn. Các điều khoản thanh toán theo 3 đợt, giới hạn trách nhiệm bồi thường và bảo mật NDA đã được hai bên thống nhất.',
+        attachments: ['Hop_dong_SHTT_Foxconn_ASL_Bilingual_Final.pdf'],
+        note: ''
+      },
+      'APP-108': {
+        role: 'ACCOUNTANT',
+        type: 'THU',
+        caseRef: 'ASL-2026-DES02',
+        caseTitle: 'Kiểu Dáng Công Nghiệp Mũ Bảo Hiểm Khí Động Học An Gia',
+        client: 'Công ty CP Nhựa An Gia (MST: 0312984112)',
+        taskId: 'TASK-108',
+        taskTitle: 'Thu phí quyết toán thanh lý vụ việc & điền Link hóa đơn',
+        stage: 'Bước 4: Quyết toán & Đóng vụ việc',
+        author: 'LS. Hoàng Gia Huy',
+        directorApproved: 'Giám đốc (LS. Nguyễn Anh) đã phê duyệt lúc 09:00 Hôm nay',
+        amount: '+ 85,000,000 ₫ (Quyết toán 100% hợp đồng)',
+        content: 'Đã hoàn tất cấp bằng độc quyền Kiểu dáng số 34892. Khách hàng đã chuyển khoản đủ 85.000.000 đ thanh lý hợp đồng. Kế toán xuất hóa đơn VAT quyết toán meInvoice và điền Link hóa đơn để gửi khách hàng đóng vụ việc.',
+        invoiceLink: 'https://meinvoice.vn/tra-cuu/HD-2026-092-ANGIA',
+        note: 'Đã nhận đủ UNC Vietcombank số FT2630018899 lúc 13:50'
+      }
+    };
+
+    let currentActiveAppId = '';
+
+    // Open Modal according to Role
+    function openApprovalModal(appId) {
+      currentActiveAppId = appId;
+      const data = APPROVAL_DATA[appId];
+      if (!data) return;
+
+      if (data.role === 'MANAGER') {
+        // Populate Manager Modal
+        document.getElementById('mgr-modal-title').textContent = data.taskTitle;
+        document.getElementById('mgr-case-ref').textContent = data.caseRef;
+        document.getElementById('mgr-case-domain').textContent = data.domain || 'Nghiệp vụ pháp lý';
+        document.getElementById('mgr-case-name').textContent = data.caseTitle;
+        document.getElementById('mgr-case-client').textContent = data.client;
+        document.getElementById('mgr-case-link').href = `../cases/detail.html?ref=${data.caseRef}`;
+        
+        document.getElementById('mgr-task-name').textContent = `${data.taskId}: ${data.taskTitle}`;
+        document.getElementById('mgr-task-link').href = `../tasks/detail.html?id=${data.taskId}`;
+        document.getElementById('mgr-task-stage').textContent = data.stage;
+        document.getElementById('mgr-task-author').textContent = data.author;
+        document.getElementById('mgr-task-amount').textContent = data.amount;
+        document.getElementById('mgr-task-content').textContent = data.content;
+        document.getElementById('mgr-note-input').value = data.note || '';
+
+        const attachContainer = document.getElementById('mgr-attachments-list');
+        attachContainer.innerHTML = '';
+        if (data.attachments && data.attachments.length > 0) {
+          data.attachments.forEach(file => {
+            const pill = document.createElement('span');
+            pill.className = 'px-2.5 py-1 rounded-lg bg-blue-50 text-[#002D54] font-mono text-[11px] font-semibold border border-blue-200 flex items-center gap-1';
+            pill.innerHTML = `<span class="inline-flex items-center gap-1"><svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/></svg><span>${file}</span></span>`;
+            attachContainer.appendChild(pill);
+          });
+        } else {
+          attachContainer.innerHTML = '<span class="text-slate-400">Không có tệp đính kèm</span>';
+        }
+
+        document.getElementById('modal-manager').classList.remove('hidden');
+
+      } else if (data.role === 'ACCOUNTANT') {
+        // Populate Accountant Modal
+        document.getElementById('acc-modal-title').textContent = `${data.type === 'THU' ? 'Xét Duyệt Khoản Thu' : 'Xét Duyệt Khoản Chi'}: ${data.taskTitle}`;
+        document.getElementById('acc-case-ref').textContent = data.caseRef;
+        document.getElementById('acc-case-client').textContent = data.client;
+        document.getElementById('acc-case-link').href = `../cases/detail.html?ref=${data.caseRef}`;
+        
+        document.getElementById('acc-task-name').textContent = data.taskTitle;
+        document.getElementById('acc-task-link').textContent = data.taskId;
+        document.getElementById('acc-task-link').href = `../tasks/detail.html?id=${data.taskId}`;
+        document.getElementById('acc-director-status').textContent = data.directorApproved;
+        
+        const badgeType = document.getElementById('acc-task-type-badge');
+        const confirmBtn = document.getElementById('btn-acc-confirm');
+        const linkLabel = document.getElementById('acc-link-label');
+        const linkHint = document.getElementById('acc-link-hint');
+
+        if (data.type === 'THU') {
+          badgeType.className = 'px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 dark:border dark:border-emerald-500/35';
+          badgeType.textContent = 'KHOẢN THU (XUẤT HĐ)';
+          confirmBtn.className = 'px-6 py-2.5 rounded-xl bg-[#047857] hover:bg-emerald-800 text-white font-bold text-xs shadow-md transition-all flex items-center gap-1.5';
+          confirmBtn.innerHTML = '<span>Đã Duyệt & Lưu Link HĐ</span>';
+          linkLabel.innerHTML = 'Link Hóa Đơn Điện Tử Đã Xuất (meInvoice/OneDrive) <span class="text-red-500">*</span>';
+          linkHint.textContent = 'Đối với khoản thu: Kế toán xuất hóa đơn và dán link vào ô này để luật sư phụ trách gửi khách hàng.';
+        } else {
+          badgeType.className = 'px-2 py-0.5 rounded text-[10px] font-bold bg-red-100 text-red-700 dark:bg-rose-950/80 dark:text-rose-300 dark:border dark:border-rose-500/35';
+          badgeType.textContent = 'KHOẢN CHI (GIẢI NGÂN)';
+          confirmBtn.className = 'px-6 py-2.5 rounded-xl bg-[#D9381E] hover:bg-red-700 text-white font-bold text-xs shadow-md transition-all flex items-center gap-1.5';
+          confirmBtn.innerHTML = '<span>Đã Chi (Xác Nhận Giải Ngân)</span>';
+          linkLabel.innerHTML = 'Link Ủy Nhiệm Chi (UNC) / Chứng Từ Ngân Hàng (Tùy chọn)';
+          linkHint.textContent = 'Đối với khoản chi: Dán link ảnh chụp UNC hoặc giấy nộp tiền ngân sách (nếu có) và bấm "Đã Chi".';
+        }
+
+        document.getElementById('acc-modal-amount').textContent = data.amount;
+        document.getElementById('acc-modal-desc').textContent = data.content;
+        document.getElementById('acc-modal-invoice-link').value = data.invoiceLink || '';
+        document.getElementById('acc-modal-note').value = data.note || '';
+
+        document.getElementById('modal-accountant').classList.remove('hidden');
+      }
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).classList.add('hidden');
+    }
+
+    // Manager Action: Phê Duyệt
+    function confirmManagerApproval() {
+      const data = APPROVAL_DATA[currentActiveAppId];
+      const note = document.getElementById('mgr-note-input').value.trim();
+      closeModal('modal-manager');
+
+      const row = document.querySelector(`.approval-item[data-id="${currentActiveAppId}"]`);
+      if (row) {
+        row.classList.add('bg-emerald-50/70');
+        const btn = row.querySelector('button');
+        if (btn) {
+          btn.className = "px-3 py-1.5 rounded-lg bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 dark:border dark:border-emerald-500/35 font-bold text-xs cursor-default";
+          btn.textContent = "Đã Phê Duyệt";
+          btn.disabled = true;
+        }
+        const cb = row.querySelector('.item-checkbox');
+        if (cb) cb.disabled = true;
+      }
+
+      alert(`GIÁM ĐỐC / QUẢN LÝ ĐÃ PHÊ DUYỆT THÀNH CÔNG!\n\n• Vụ việc: ${data.caseRef}\n• Task: ${data.taskTitle}\n• Ý kiến chỉ đạo: ${note || '(Không có)'}\n\nHồ sơ đã được đóng dấu chữ ký số điện tử và chuyển tiếp sang bước tiếp theo.`);
+    }
+
+    // Manager Action: Không Phê Duyệt
+    function rejectManagerApproval() {
+      const data = APPROVAL_DATA[currentActiveAppId];
+      const reason = prompt(`Nhập lý do KHÔNG PHÊ DUYỆT yêu cầu ${data.taskTitle} (Gửi thông báo trả về cho ${data.author}):`);
+      if (reason === null) return; // User cancelled prompt
+      
+      closeModal('modal-manager');
+
+      const row = document.querySelector(`.approval-item[data-id="${currentActiveAppId}"]`);
+      if (row) {
+        row.classList.add('bg-red-50/50');
+        const btn = row.querySelector('button');
+        if (btn) {
+          btn.className = "px-3 py-1.5 rounded-lg bg-red-100 text-red-700 dark:bg-rose-950/80 dark:text-rose-300 dark:border dark:border-rose-500/35 font-bold text-xs cursor-default";
+          btn.textContent = "Đã Từ Chối";
+          btn.disabled = true;
+        }
+        const cb = row.querySelector('.item-checkbox');
+        if (cb) cb.disabled = true;
+      }
+
+      alert(`ĐÃ TỪ CHỐI PHÊ DUYỆT!\n\n• Vụ việc: ${data.caseRef}\n• Lý do: "${reason || 'Chưa đạt yêu cầu'}"\n\nHệ thống đã gửi thông báo trả hồ sơ cho ${data.author} để chỉnh sửa.`);
+    }
+
+    // Accountant Action: Đã Duyệt / Đã Chi
+    function confirmAccountantApprovalAction() {
+      const data = APPROVAL_DATA[currentActiveAppId];
+      const link = document.getElementById('acc-modal-invoice-link').value.trim();
+      const note = document.getElementById('acc-modal-note').value.trim();
+
+      if (data.type === 'THU' && !link) {
+        alert('Vui lòng điền Link hóa đơn điện tử đã xuất trước khi bấm xác nhận duyệt khoản thu!');
+        document.getElementById('acc-modal-invoice-link').focus();
+        return;
+      }
+
+      closeModal('modal-accountant');
+
+      const row = document.querySelector(`.approval-item[data-id="${currentActiveAppId}"]`);
+      if (row) {
+        row.classList.add('bg-emerald-50/70');
+        const btn = row.querySelector('button');
+        if (btn) {
+          btn.className = "px-3 py-1.5 rounded-lg bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 dark:border dark:border-emerald-500/35 font-bold text-xs cursor-default";
+          btn.textContent = (data.type === 'THU' ? "Đã Duyệt Thu" : "Đã Chi Xong");
+          btn.disabled = true;
+        }
+        const cb = row.querySelector('.item-checkbox');
+        if (cb) cb.disabled = true;
+      }
+
+      if (data.type === 'THU') {
+        alert(`KẾ TOÁN ĐÃ PHÊ DUYỆT THU & LƯU LINK HÓA ĐƠN!\n\n• Vụ việc: ${data.caseRef}\n• Task: ${data.taskTitle}\n• Link hóa đơn: ${link}\n• Ghi chú: ${note || '(Không có)'}\n\nĐã cập nhật Link hóa đơn vào hồ sơ vụ việc.`);
+      } else {
+        alert(`KẾ TOÁN XÁC NHẬN ĐÃ CHI THÀNH CÔNG!\n\n• Vụ việc: ${data.caseRef}\n• Task: ${data.taskTitle}\n• Số tiền đã chi: ${data.amount}\n• Trạng thái: Đã Chi (Hoàn tất giải ngân).`);
+      }
+    }
+
+    // Accountant Action: Từ Chối
+    function rejectAccountantApproval() {
+      const data = APPROVAL_DATA[currentActiveAppId];
+      const reason = prompt(`Nhập lý do TỪ CHỐI yêu cầu tài chính ${data.taskTitle} (Gửi trả lại cho ${data.author}):`);
+      if (reason === null) return;
+
+      closeModal('modal-accountant');
+
+      const row = document.querySelector(`.approval-item[data-id="${currentActiveAppId}"]`);
+      if (row) {
+        row.classList.add('bg-red-50/50');
+        const btn = row.querySelector('button');
+        if (btn) {
+          btn.className = "px-3 py-1.5 rounded-lg bg-red-100 text-red-700 dark:bg-rose-950/80 dark:text-rose-300 dark:border dark:border-rose-500/35 font-bold text-xs cursor-default";
+          btn.textContent = "Đã Từ Chối";
+          btn.disabled = true;
+        }
+        const cb = row.querySelector('.item-checkbox');
+        if (cb) cb.disabled = true;
+      }
+
+      alert(`KẾ TOÁN ĐÃ TỪ CHỐI YÊU CẦU!\n\n• Vụ việc: ${data.caseRef}\n• Lý do: "${reason || 'Số tiền không khớp hoặc chưa nhận được sao kê'}"\n\nHệ thống đã chuyển trạng thái yêu cầu sửa đổi.`);
+    }
+
+    // Role Tab Filtering (2 Main Types: MANAGER & ACCOUNTANT)
+    function filterApprovalType(roleType) {
+      document.querySelectorAll('.approval-tab').forEach(t => {
+        t.className = 'approval-tab px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors font-bold text-xs flex items-center gap-2';
+      });
+
+      const tabId = (roleType === 'ALL' ? 'tab-all' : roleType === 'MANAGER' ? 'tab-manager' : roleType === 'ACCOUNTANT' ? 'tab-accountant' : 'tab-approved');
+      const activeTab = document.getElementById(tabId);
+      if (activeTab) {
+        activeTab.className = 'approval-tab px-4 py-2.5 rounded-xl bg-[#002D54] text-white shadow-sm font-bold text-xs flex items-center gap-2';
+      }
+
+      const rows = document.querySelectorAll('.approval-item');
+      rows.forEach(row => {
+        const itemRole = row.getAttribute('data-role');
+        if (roleType === 'ALL' || itemRole === roleType) {
+          row.classList.remove('hidden');
+        } else {
+          row.classList.add('hidden');
+        }
+      });
+      updateSelectedCount();
+    }
+
+    // Search
+    function searchApprovals() {
+      const q = document.getElementById('approval-search').value.toLowerCase().trim();
+      const rows = document.querySelectorAll('.approval-item');
+      rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        if (!q || text.includes(q)) {
+          row.classList.remove('hidden');
+        } else {
+          row.classList.add('hidden');
+        }
+      });
+      updateSelectedCount();
+    }
+
+    // Select all toggle
+    function toggleSelectAll(masterCb) {
+      const visibleCheckboxes = document.querySelectorAll('.approval-item:not(.hidden) .item-checkbox:not(:disabled)');
+      visibleCheckboxes.forEach(cb => {
+        cb.checked = masterCb.checked;
+      });
+      updateSelectedCount();
+    }
+
+    function updateSelectedCount() {
+      const checkedCount = document.querySelectorAll('.approval-item:not(.hidden) .item-checkbox:checked').length;
+      document.getElementById('selected-count').textContent = `Đã chọn: ${checkedCount} mục`;
+    }
+
+    // Batch approve
+    function approveSelected() {
+      const checkedBoxes = document.querySelectorAll('.approval-item:not(.hidden) .item-checkbox:checked');
+      if (checkedBoxes.length === 0) {
+        alert("Vui lòng tích chọn ít nhất 1 mục cần phê duyệt!");
+        return;
+      }
+
+      checkedBoxes.forEach(cb => {
+        const row = cb.closest('.approval-item');
+        const btn = row.querySelector('button');
+        if (btn) {
+          btn.className = "px-3 py-1.5 rounded-lg bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 dark:border dark:border-emerald-500/35 font-bold text-xs cursor-default";
+          btn.textContent = "Đã Duyệt";
+          btn.disabled = true;
+        }
+        cb.checked = false;
+        cb.disabled = true;
+        row.classList.add('bg-emerald-50/70');
+      });
+
+      document.getElementById('check-all').checked = false;
+      updateSelectedCount();
+      alert(`ĐÃ DUYỆT HÀNG LOẠT THÀNH CÔNG!\n\nĐã hoàn tất phê duyệt cho ${checkedBoxes.length} mục đã chọn.`);
+    }
+
+    function rejectSelected() {
+      const checkedBoxes = document.querySelectorAll('.approval-item:not(.hidden) .item-checkbox:checked');
+      if (checkedBoxes.length === 0) {
+        alert("Vui lòng tích chọn ít nhất 1 mục cần từ chối / yêu cầu sửa đổi!");
+        return;
+      }
+      const reason = prompt("Nhập lý do từ chối hoặc nội dung yêu cầu điều chỉnh gửi cho người trình ký:");
+      if (reason) {
+        alert(`Đã gửi yêu cầu điều chỉnh đối với ${checkedBoxes.length} mục đã chọn.\nLý do: "${reason}"`);
+      }
+    }
+
+    // Document Modal preview
+    let currentModalDoc = '';
+    function viewDocModal(title, caseRef) {
+      currentModalDoc = title;
+      document.getElementById('modal-doc-title').textContent = title;
+      document.getElementById('modal-case-ref').textContent = caseRef;
+      document.getElementById('doc-modal').classList.remove('hidden');
+    }
+
+    function closeDocModal() {
+      document.getElementById('doc-modal').classList.add('hidden');
+    }
+
+    function approveModalDoc() {
+      closeDocModal();
+      alert(`ĐÃ CHẤP THUẬN KÝ DUYỆT ĐIỆN TỬ!\n\nTài liệu "${currentModalDoc}" đã được đóng dấu chữ ký số điện tử của cấp thẩm quyền.`);
+    }
+
+    // Initialize Default View: MANAGER tab active
+    document.addEventListener('DOMContentLoaded', () => {
+      filterApprovalType('MANAGER');
+    });
+  </script>
+
+</body>
+</html>

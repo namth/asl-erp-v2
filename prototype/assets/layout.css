@@ -1,0 +1,921 @@
+/* ASL LAW ERP Design Tokens & Shared Layout Styles */
+:root {
+  --asl-navy: #002D54;
+  --asl-navy-dark: #001A33;
+  --asl-cerulean: #0082B4;
+  --asl-cerulean-light: #EBF7FC;
+  --asl-orange: #FF7A00;
+  --asl-orange-light: #FFF4E5;
+  --asl-bg: #F4F8FA;
+  --asl-surface: #FFFFFF;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: var(--asl-bg);
+  color: #1E293B;
+  overflow-x: hidden;
+}
+
+.mono {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* 3D Glassmorphism Cards */
+.glass-card {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 0 10px 30px -5px rgba(0, 45, 84, 0.06), 0 0 0 1px rgba(0, 130, 180, 0.06);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card:hover {
+  box-shadow: 0 20px 40px -10px rgba(0, 45, 84, 0.12), 0 0 0 1px rgba(0, 130, 180, 0.12);
+}
+
+/* Enterprise Brand Header Gradient */
+.header-gradient {
+  background: linear-gradient(135deg, #002240 0%, #002D54 40%, #004D7A 80%, #0082B4 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 20px -2px rgba(0, 34, 64, 0.25);
+}
+
+/* Sidebar Top Header seamless with Main Header */
+.sidebar-header-gradient {
+  background: linear-gradient(135deg, #001A33 0%, #002240 50%, #002D54 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.sidebar-header-gradient #sidebar-logo-full span {
+  color: rgba(178, 235, 242, 0.95) !important;
+  letter-spacing: 0.1em;
+}
+
+.sidebar-header-gradient #btn-collapse-sidebar {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.sidebar-header-gradient #btn-collapse-sidebar:hover {
+  color: #FFFFFF !important;
+  background-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Sidebar Active Nav Item Icons: Pure White */
+.active-nav-item svg,
+a.bg-gradient-to-r svg,
+a[class*="from-[#002D54]"] svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(241, 245, 249, 0.6);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.5);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.8);
+}
+
+/* ==============================================================================
+   ASL LAW ERP - ADVANCED DARK MODE THEME SYSTEM (v2.5 PRO)
+   Comprehensive Contrast & Surface Engineering - 100% WCAG AAA Compliant
+   ============================================================================== */
+
+html.dark {
+  --asl-bg: #0B132B;
+  --asl-surface: #1E293B;
+  color-scheme: dark;
+}
+
+/* 1. Base Body & Root Containers */
+html.dark, 
+html.dark body, 
+body.dark,
+html.dark [class*="bg-[#F4F8FA]"] {
+  background-color: #0B132B !important;
+  color: #E2E8F0 !important;
+}
+
+html.dark #main-container,
+body.dark #main-container {
+  background-color: #0B132B !important;
+}
+
+/* 2. Glass Cards (Panels & Widgets) */
+html.dark .glass-card, 
+body.dark .glass-card {
+  background: rgba(30, 41, 59, 0.92) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid #334155 !important;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(0, 130, 180, 0.2) !important;
+  color: #F1F5F9 !important;
+}
+
+html.dark .glass-card:hover, 
+body.dark .glass-card:hover {
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(0, 130, 180, 0.4) !important;
+  border-color: #475569 !important;
+}
+
+/* 3. TEXT CONTRAST OVERRIDES - Biến mọi chữ tối thành chữ sáng rõ ràng */
+html.dark [class*="text-[#002D54]"],
+html.dark [class*="text-[#1E293B]"],
+html.dark [class*="text-[#132338]"],
+html.dark [class*="text-slate-900"],
+html.dark [class*="text-slate-800"] {
+  color: #F8FAFC !important;
+}
+
+html.dark a[class*="text-[#002D54]"]:hover,
+html.dark a[class*="text-[#1E293B]"]:hover {
+  color: #38BDF8 !important;
+}
+
+html.dark [class*="text-slate-700"],
+html.dark [class*="text-slate-600"] {
+  color: #CBD5E1 !important;
+}
+
+html.dark [class*="text-slate-500"],
+html.dark [class*="text-slate-400"] {
+  color: #94A3B8 !important;
+}
+
+/* Domain & Action Text Highlights in Dark Mode */
+html.dark [class*="text-[#0082B4]"] {
+  color: #38BDF8 !important;
+}
+
+html.dark [class*="text-[#976D00]"],
+html.dark [class*="text-[#94681E]"],
+html.dark [class*="text-[#B3891E]"],
+html.dark [class*="text-[#B45309]"],
+html.dark [class*="text-[#C59B27]"] {
+  color: #FCD34D !important;
+}
+
+html.dark [class*="text-[#1E7E34]"],
+html.dark [class*="text-emerald-700"],
+html.dark [class*="text-emerald-800"] {
+  color: #4ADE80 !important;
+}
+
+html.dark [class*="text-[#C93B2B]"],
+html.dark [class*="text-red-700"],
+html.dark [class*="text-red-800"] {
+  color: #F87171 !important;
+}
+
+html.dark [class*="text-purple-800"],
+html.dark [class*="text-purple-700"] {
+  color: #C084FC !important;
+}
+
+html.dark [class*="text-orange-800"],
+html.dark [class*="text-[#FF7A00]"] {
+  color: #FB923C !important;
+}
+
+/* 4. BACKGROUND CONTRAST OVERRIDES - Triệt tiêu mọi vết nền sáng */
+/* Giữ nguyên nền trắng tuyệt đối cho Logo ASL LAW trong Dark Mode */
+html.dark .preserve-white,
+html.dark .logo-container,
+html.dark #sidebar-logo-full > div,
+html.dark #sidebar-logo-collapsed > div,
+html.dark .sidebar-header-gradient .bg-white,
+html.dark [id*="sidebar-logo"] .bg-white,
+html.dark .sidebar-logo-box {
+  background-color: #FFFFFF !important;
+  color: #002D54 !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
+}
+
+/* Nền trắng thông thường -> Slate 800 */
+html.dark .bg-white:not([class*="bg-white/"]):not(.preserve-white):not(.logo-container),
+html.dark [class*="bg-white"]:not([class*="bg-white/"]):not(.preserve-white):not(.logo-container) {
+  background-color: #1E293B !important;
+  color: #F1F5F9 !important;
+}
+
+/* Nền xám/đá nhạt -> Slate 900 */
+html.dark [class*="bg-slate-50"],
+html.dark [class*="bg-stone-50"],
+html.dark [class*="bg-slate-100"],
+html.dark [class*="bg-stone-100"] {
+  background-color: #0F172A !important;
+}
+
+html.dark [class*="bg-slate-200"],
+html.dark [class*="bg-stone-200"] {
+  background-color: #334155 !important;
+}
+
+/* Nền kem/be/vàng nhạt trong quy trình & stepper -> Dark Amber Surface */
+html.dark [class*="bg-[#FBF3DC]"],
+html.dark [class*="bg-[#FDF6E2]"],
+html.dark [class*="bg-[#F7F2E7]"],
+html.dark [class*="bg-[#FBF9F5]"],
+html.dark [class*="bg-[#FCFAF5]"],
+html.dark [class*="bg-[#FFFDF9]"],
+html.dark [class*="bg-[#F5E8D0]"] {
+  background-color: rgba(30, 41, 59, 0.95) !important;
+  border-color: rgba(245, 158, 11, 0.35) !important;
+}
+
+/* Nền phân nhánh quy trình */
+html.dark [class*="bg-[#EBF7EE]"] {
+  background-color: rgba(16, 185, 129, 0.15) !important;
+  border-color: rgba(52, 211, 153, 0.35) !important;
+}
+
+html.dark [class*="bg-[#FDF0ED]"] {
+  background-color: rgba(239, 68, 68, 0.15) !important;
+  border-color: rgba(248, 113, 113, 0.35) !important;
+}
+
+/* 5. BORDER OVERRIDES - Chuyển mọi viền sáng sang Slate 700 / Dark Border */
+html.dark [class*="border-slate-100"],
+html.dark [class*="border-slate-200"],
+html.dark [class*="border-slate-300"],
+html.dark [class*="border-stone-100"],
+html.dark [class*="border-stone-200"],
+html.dark [class*="border-stone-300"],
+html.dark [class*="border-[#CBDCE8]"],
+html.dark [class*="border-[#E9DFCE]"],
+html.dark [class*="border-[#ECD9A2]"],
+html.dark [class*="divide-slate-100"],
+html.dark [class*="divide-slate-200"] {
+  border-color: #334155 !important;
+}
+
+html.dark [class*="border-[#B9E6C3]"] {
+  border-color: rgba(52, 211, 153, 0.35) !important;
+}
+
+html.dark [class*="border-[#F9CBC1]"] {
+  border-color: rgba(248, 113, 113, 0.35) !important;
+}
+
+/* Nút thêm giai đoạn viền nét đứt */
+html.dark button[class*="border-dashed"] {
+  border-color: #475569 !important;
+  background-color: transparent !important;
+  color: #94A3B8 !important;
+}
+
+html.dark button[class*="border-dashed"]:hover {
+  border-color: #FCD34D !important;
+  background-color: rgba(30, 41, 59, 0.8) !important;
+  color: #FCD34D !important;
+}
+
+/* 6. SIDEBAR COMPONENT IN DARK MODE */
+html.dark #sidebar, 
+body.dark #sidebar {
+  background-color: rgba(15, 23, 42, 0.98) !important;
+  border-right: 1px solid #1E293B !important;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.7) !important;
+}
+
+html.dark #sidebar-role-selector, 
+body.dark #sidebar-role-selector {
+  background-color: rgba(15, 23, 42, 0.9) !important;
+  border-color: #1E293B !important;
+}
+
+html.dark #sidebar-role-selector select, 
+body.dark #sidebar-role-selector select {
+  background-color: #1E293B !important;
+  border-color: #334155 !important;
+  color: #F1F5F9 !important;
+}
+
+html.dark #sidebar .border-t, 
+html.dark #sidebar .border-b,
+body.dark #sidebar .border-t, 
+body.dark #sidebar .border-b {
+  border-color: #1E293B !important;
+}
+
+html.dark .nav-section-title {
+  color: #64748B !important;
+}
+
+html.dark .nav-item {
+  color: #94A3B8 !important;
+}
+
+html.dark .nav-item:hover {
+  background-color: rgba(30, 41, 59, 0.9) !important;
+  color: #38BDF8 !important;
+}
+
+html.dark .nav-item.active-nav-item, 
+html.dark .nav-item.bg-gradient-to-r {
+  background: linear-gradient(to right, #002D54, #0082B4) !important;
+  color: #FFFFFF !important;
+}
+
+/* 7. FORM INPUTS, SELECTS & TEXTAREAS */
+html.dark input[type="text"]:not(.bg-transparent):not([class*="bg-transparent"]),
+html.dark input[type="email"]:not(.bg-transparent):not([class*="bg-transparent"]),
+html.dark input[type="password"]:not(.bg-transparent):not([class*="bg-transparent"]),
+html.dark input[type="date"]:not(.bg-transparent):not([class*="bg-transparent"]),
+html.dark input[type="datetime-local"]:not(.bg-transparent):not([class*="bg-transparent"]),
+html.dark input[type="number"]:not(.bg-transparent):not([class*="bg-transparent"]),
+html.dark input[type="url"]:not(.bg-transparent):not([class*="bg-transparent"]),
+html.dark input[type="search"]:not(.bg-transparent):not([class*="bg-transparent"]),
+html.dark input[type="tel"]:not(.bg-transparent):not([class*="bg-transparent"]),
+html.dark input:not([type]):not(.bg-transparent):not([class*="bg-transparent"]),
+html.dark select,
+html.dark textarea:not(.bg-transparent):not([class*="bg-transparent"]) {
+  background-color: #0F172A !important;
+  border-color: #334155 !important;
+  color: #F8FAFC !important;
+}
+
+/* Explicit rule for transparent inputs in headers / search pills */
+html.dark input.bg-transparent,
+html.dark input[class*="bg-transparent"],
+html.dark header input,
+html.dark [class*="header-gradient"] input {
+  background-color: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  color: #FFFFFF !important;
+}
+
+/* Date picker calendar indicator */
+html.dark input[type="date"]::-webkit-calendar-picker-indicator,
+html.dark input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.9) !important;
+  cursor: pointer;
+}
+
+/* Checkbox and radio inputs */
+html.dark input[type="checkbox"],
+html.dark input[type="radio"] {
+  background-color: #0F172A !important;
+  border-color: #475569 !important;
+  accent-color: #0082B4 !important;
+}
+
+/* White opacity card backgrounds converting to slate */
+html.dark main [class*="bg-white/9"],
+html.dark main [class*="bg-white/8"],
+html.dark main [class*="bg-white/50"],
+html.dark .task-card[class*="bg-white"] {
+  background-color: #1E293B !important;
+  color: #F1F5F9 !important;
+}
+
+html.dark select option {
+  background-color: #0F172A !important;
+  color: #F8FAFC !important;
+}
+
+html.dark input::placeholder,
+html.dark textarea::placeholder {
+  color: #64748B !important;
+}
+
+html.dark input:focus,
+html.dark textarea:focus,
+html.dark select:focus {
+  border-color: #38BDF8 !important;
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.25) !important;
+}
+
+/* 8. TABLE DATA & ROW DETAILS */
+html.dark table thead tr {
+  background-color: #0F172A !important;
+  border-color: #334155 !important;
+}
+
+html.dark table thead th {
+  color: #94A3B8 !important;
+  border-color: #334155 !important;
+}
+
+html.dark table tbody {
+  background-color: #1E293B !important;
+}
+
+html.dark table tbody tr {
+  border-color: #334155 !important;
+  background-color: transparent !important;
+}
+
+html.dark table tbody tr:hover {
+  background-color: rgba(51, 65, 85, 0.45) !important;
+}
+
+/* Row Expandable Panels */
+html.dark .row-detail,
+html.dark .case-detail-panel {
+  background-color: #0F172A !important;
+  border-color: #334155 !important;
+}
+
+html.dark .row-detail > td > div,
+html.dark .case-detail-panel > td > div {
+  background-color: #1E293B !important;
+  border-color: #334155 !important;
+  color: #E2E8F0 !important;
+}
+
+/* 9. FILTER TABS & PAGINATION */
+html.dark .status-tab {
+  background-color: #0F172A !important;
+  border: 1px solid #334155 !important;
+  color: #CBD5E1 !important;
+}
+
+html.dark .status-tab:hover {
+  background-color: #1E293B !important;
+  color: #F1F5F9 !important;
+  border-color: #475569 !important;
+}
+
+html.dark .status-tab[class*="bg-[#002D54]"] {
+  background-color: #0082B4 !important;
+  border-color: #0082B4 !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 12px rgba(0, 130, 180, 0.4) !important;
+}
+
+/* Secondary Action Buttons (Xuất Excel, Quay lại, Thao tác) */
+html.dark button[class*="bg-white"][class*="border"],
+html.dark a[class*="bg-white"][class*="border"] {
+  background-color: #1E293B !important;
+  border-color: #334155 !important;
+  color: #E2E8F0 !important;
+}
+
+html.dark button[class*="bg-white"][class*="border"]:hover,
+html.dark a[class*="bg-white"][class*="border"]:hover {
+  background-color: #27354A !important;
+  border-color: #475569 !important;
+  color: #FFFFFF !important;
+}
+
+/* Pagination Buttons */
+html.dark [class*="border-slate-200 hover:bg-slate-100"] {
+  background-color: #0F172A !important;
+  border-color: #334155 !important;
+  color: #94A3B8 !important;
+}
+
+html.dark [class*="border-slate-200 hover:bg-slate-100"]:hover {
+  background-color: #1E293B !important;
+  color: #F1F5F9 !important;
+  border-color: #475569 !important;
+}
+
+/* 10. STEPPER TIẾN ĐỘ VỤ VIỆC TRONG CASE DETAIL */
+html.dark [class*="bg-[#F5E8D0]"] {
+  background-color: rgba(245, 158, 11, 0.25) !important;
+}
+
+html.dark [class*="bg-[#132338]"] {
+  background-color: #0082B4 !important;
+  color: #FFFFFF !important;
+}
+
+/* 11. KANBAN / PIPELINE COLUMNS & TASK CARDS */
+html.dark .pipeline-col,
+html.dark .kanban-column {
+  background-color: #111C2E !important;
+  border-color: #334155 !important;
+}
+
+html.dark .kanban-column[class*="bg-slate-100"],
+html.dark .pipeline-col[class*="bg-slate-100"] {
+  background-color: #0F172A !important;
+  border-color: #334155 !important;
+}
+
+html.dark .kanban-column[class*="bg-blue-50"],
+html.dark .pipeline-col[class*="bg-blue-50"] {
+  background-color: #0D1B2A !important;
+  border-color: #1E3A5F !important;
+}
+
+html.dark .kanban-column[class*="bg-amber-50"],
+html.dark .pipeline-col[class*="bg-amber-50"] {
+  background-color: #1A1813 !important;
+  border-color: #3D2D18 !important;
+}
+
+html.dark .kanban-column[class*="bg-emerald-50"],
+html.dark .pipeline-col[class*="bg-emerald-50"] {
+  background-color: #0D1F1A !important;
+  border-color: #1A382B !important;
+}
+
+html.dark .pipeline-col.drag-over,
+html.dark .kanban-cards-container.column-drag-over {
+  background-color: rgba(0, 130, 180, 0.15) !important;
+  border-color: #0082B4 !important;
+}
+
+html.dark .card-drag,
+html.dark .task-card {
+  background-color: #1E293B !important;
+  border-color: #334155 !important;
+  color: #F1F5F9 !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4) !important;
+}
+
+html.dark .card-drag:hover,
+html.dark .task-card:hover {
+  border-color: #475569 !important;
+  box-shadow: 0 10px 20px -3px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* Precise subtle borders for tinted task cards in Dark Mode */
+html.dark .task-card.border-red-200,
+html.dark .task-card[class*="border-red-"] {
+  border-color: rgba(239, 68, 68, 0.4) !important;
+}
+
+html.dark .task-card.border-blue-200,
+html.dark .task-card[class*="border-blue-"] {
+  border-color: rgba(56, 189, 248, 0.35) !important;
+}
+
+html.dark .task-card.border-amber-200,
+html.dark .task-card[class*="border-amber-"] {
+  border-color: rgba(245, 158, 11, 0.35) !important;
+}
+
+html.dark .task-card.border-emerald-200,
+html.dark .task-card[class*="border-emerald-"] {
+  border-color: rgba(16, 185, 129, 0.35) !important;
+}
+
+html.dark .task-card.border-slate-200,
+html.dark .task-card.border-slate-300,
+html.dark .task-card[class*="border-slate-"] {
+  border-color: #334155 !important;
+}
+
+html.dark .task-card .task-title,
+html.dark .task-card h4,
+html.dark .card-drag .card-title,
+html.dark .card-drag h3,
+html.dark .card-drag .card-value-display {
+  color: #F8FAFC !important;
+}
+
+html.dark .task-card .border-t,
+html.dark .task-card [class*="border-slate-100"] {
+  border-color: #334155 !important;
+}
+
+/* 12. LIGHT BADGES IN DARK MODE */
+html.dark [class*="bg-blue-50"] {
+  background-color: rgba(0, 130, 180, 0.2) !important;
+  color: #38BDF8 !important;
+  border-color: rgba(0, 130, 180, 0.4) !important;
+}
+
+html.dark [class*="bg-emerald-50"],
+html.dark [class*="bg-emerald-100"] {
+  background-color: rgba(16, 185, 129, 0.2) !important;
+  color: #34D399 !important;
+  border-color: rgba(16, 185, 129, 0.4) !important;
+}
+
+html.dark [class*="bg-orange-50"],
+html.dark [class*="bg-amber-50"] {
+  background-color: rgba(255, 122, 0, 0.2) !important;
+  color: #FB923C !important;
+  border-color: rgba(255, 122, 0, 0.4) !important;
+}
+
+html.dark [class*="bg-red-50"],
+html.dark [class*="bg-red-100"] {
+  background-color: rgba(239, 68, 68, 0.2) !important;
+  color: #F87171 !important;
+  border-color: rgba(239, 68, 68, 0.4) !important;
+}
+
+html.dark [class*="bg-purple-50"] {
+  background-color: rgba(168, 85, 247, 0.2) !important;
+  color: #C084FC !important;
+  border-color: rgba(168, 85, 247, 0.4) !important;
+}
+
+/* 13. MODALS, POPUPS & DRAWERS */
+html.dark .modal-content,
+html.dark [id*="modal"] .bg-white,
+html.dark [id*="Modal"] .bg-white {
+  background-color: #1E293B !important;
+  border-color: #334155 !important;
+  color: #F1F5F9 !important;
+}
+
+/* 14. WORKFLOW DESIGNER STAGE CARDS */
+html.dark .stage-card {
+  background-color: #1E293B !important;
+  border-color: #334155 !important;
+}
+
+html.dark #dynamic-fields-list > div {
+  background-color: #0F172A !important;
+  border-color: #334155 !important;
+  color: #F1F5F9 !important;
+}
+
+/* 15. CUSTOM SCROLLBARS IN DARK MODE */
+html.dark ::-webkit-scrollbar-track {
+  background: #0B132B !important;
+}
+html.dark ::-webkit-scrollbar-thumb {
+  background: #334155 !important;
+}
+html.dark ::-webkit-scrollbar-thumb:hover {
+  background: #475569 !important;
+}
+
+/* Extra Precision Rules for Approvals & Workflow Designer Tabs in Dark Mode */
+html.dark .approval-tab {
+  background-color: #0F172A !important;
+  border: 1px solid #334155 !important;
+  color: #CBD5E1 !important;
+}
+
+html.dark .approval-tab:hover {
+  background-color: #1E293B !important;
+  color: #F1F5F9 !important;
+  border-color: #475569 !important;
+}
+
+html.dark .approval-tab[class*="bg-[#002D54]"] {
+  background-color: #0082B4 !important;
+  border-color: #0082B4 !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 12px rgba(0, 130, 180, 0.4) !important;
+}
+
+html.dark .approval-tab[class*="bg-[#002D54]"] span[class*="bg-white"] {
+  background-color: #FFFFFF !important;
+  color: #002D54 !important;
+}
+
+/* Workflow Left Column Categories in Dark Mode */
+html.dark button[id*="wf-btn-"][class*="bg-[#F7F2E7]"],
+html.dark [id*="cat-"] button[class*="bg-[#F7F2E7]"] {
+  background-color: rgba(197, 155, 39, 0.2) !important;
+  color: #FCD34D !important;
+  border-color: rgba(197, 155, 39, 0.45) !important;
+}
+
+html.dark [id*="cat-"] button:not([class*="bg-[#F7F2E7]"]) {
+  color: #CBD5E1 !important;
+}
+
+html.dark [id*="cat-"] button:not([class*="bg-[#F7F2E7]"]):hover {
+  background-color: #1E293B !important;
+  color: #F8FAFC !important;
+}
+
+/* ==============================================================================
+   16. PROGRESS BARS & METRIC INDICATORS (Sáng rõ, hiện đại, không dùng gradient tối)
+   ============================================================================== */
+/* Rãnh chạy (Track) của progress bar trong Dark Mode */
+html.dark div[class*="rounded-full"][class*="overflow-hidden"],
+html.dark .w-full[class*="bg-slate-100"][class*="rounded-full"],
+html.dark .w-full[class*="bg-slate-200"][class*="rounded-full"] {
+  background-color: #334155 !important; /* Slate 700 */
+}
+
+/* Chỉ số tiến độ (Indicator): Thay toàn bộ gradient tối thành dải màu sáng rõ, tương phản cao */
+html.dark .prob-bar,
+html.dark div[class*="from-[#002D54]"][class*="rounded-full"][style*="width"],
+html.dark div[class*="rounded-full"][class*="overflow-hidden"] > div[class*="bg-gradient-"][class*="from-[#002D54]"],
+html.dark div[class*="rounded-full"][class*="overflow-hidden"] > div[class*="from-indigo-"],
+html.dark div[class*="rounded-full"][class*="overflow-hidden"] > div[class*="from-teal-"] {
+  background: linear-gradient(90deg, #0082B4 0%, #38BDF8 100%) !important;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.4) !important;
+}
+
+/* Thanh tiến độ vàng / cam (Hours / Litigation) */
+html.dark .hours-progress-bar,
+html.dark div[class*="rounded-full"][class*="overflow-hidden"] > div[class*="bg-amber-"],
+html.dark div[class*="rounded-full"][class*="overflow-hidden"] > div[class*="bg-[#C89B3C]"],
+html.dark div[class*="rounded-full"][class*="overflow-hidden"] > div[class*="from-[#FF7A00]"] {
+  background: linear-gradient(90deg, #FF7A00 0%, #FBBF24 100%) !important;
+  box-shadow: 0 0 10px rgba(251, 191, 36, 0.4) !important;
+}
+
+/* ==============================================================================
+   17. SIDEBAR BADGES & CASE NUMBERS (Số hồ sơ vụ việc & Tác vụ)
+   ============================================================================== */
+html.dark .nav-badge,
+html.dark aside .nav-badge,
+html.dark #sidebar .nav-badge {
+  background-color: #334155 !important;
+  color: #F8FAFC !important;
+}
+
+/* Huy hiệu số vụ việc (Case Badge) */
+html.dark .nav-badge.bg-blue-100,
+html.dark aside .nav-badge[class*="bg-blue-100"],
+html.dark #sidebar .nav-badge[class*="bg-blue-100"] {
+  background-color: rgba(6, 182, 212, 0.22) !important;
+  color: #38BDF8 !important;
+  border: 1px solid rgba(56, 189, 248, 0.35) !important;
+}
+
+/* Huy hiệu tác vụ (Tasks Badge) */
+html.dark .nav-badge.bg-amber-100,
+html.dark aside .nav-badge[class*="bg-amber-100"],
+html.dark #sidebar .nav-badge[class*="bg-amber-100"] {
+  background-color: rgba(245, 158, 11, 0.22) !important;
+  color: #FCD34D !important;
+  border: 1px solid rgba(245, 158, 11, 0.35) !important;
+}
+
+/* ==============================================================================
+   18. AI ASSISTANT BOTTOM DOCK & INPUT AREA (Trang Trợ Lý AI)
+   ============================================================================== */
+html.dark .sticky.bottom-0[class*="from-[#F4F8FA]"] {
+  background: linear-gradient(to top, #0B132B 0%, rgba(11, 19, 43, 0.95) 75%, transparent 100%) !important;
+}
+
+html.dark .sticky.bottom-0 form > div,
+html.dark .sticky.bottom-0 [class*="bg-white"] {
+  background-color: #1E293B !important;
+  border-color: #334155 !important;
+}
+
+html.dark #prompt-input {
+  color: #F8FAFC !important;
+  background-color: transparent !important;
+}
+
+html.dark #prompt-input::placeholder {
+  color: #94A3B8 !important;
+}
+
+/* Thẻ câu hỏi mẫu (Prompt Suggestion Cards) */
+html.dark .grid button[onclick*="sendQuickPrompt"] {
+  background-color: #1E293B !important;
+  border-color: #334155 !important;
+  color: #E2E8F0 !important;
+}
+html.dark .grid button[onclick*="sendQuickPrompt"]:hover {
+  background-color: #27354A !important;
+  border-color: #38BDF8 !important;
+}
+html.dark .grid button[onclick*="sendQuickPrompt"] .font-bold {
+  color: #38BDF8 !important;
+}
+
+/* Bong bóng chat AI phản hồi */
+html.dark #view-active-chat .bg-white,
+html.dark #typing-indicator .bg-white,
+html.dark [id*="dynamic-messages"] .bg-white {
+  background-color: #1E293B !important;
+  border-color: #334155 !important;
+  color: #E2E8F0 !important;
+}
+html.dark #view-active-chat .bg-white .text-\[\#002D54\],
+html.dark [id*="dynamic-messages"] .text-\[\#002D54\] {
+  color: #38BDF8 !important;
+}
+html.dark [id*="dynamic-messages"] .bg-slate-50 {
+  background-color: #0F172A !important;
+  border-color: #334155 !important;
+  color: #CBD5E1 !important;
+}
+
+/* ==============================================================================
+   19. APPROVALS HUB TAGS & WORKFLOW BADGES (Danh sách Duyệt Nhanh)
+   ============================================================================== */
+/* Duyệt Nghiệp Vụ / Blue Badge */
+html.dark span[class*="bg-blue-100"],
+html.dark span[class*="bg-cyan-100"],
+html.dark .tag-blue {
+  background-color: rgba(14, 165, 233, 0.22) !important;
+  color: #38BDF8 !important;
+  border: 1px solid rgba(56, 189, 248, 0.35) !important;
+}
+
+/* Kế Toán Thu Tiền / Emerald Badge */
+html.dark span[class*="bg-emerald-100"],
+html.dark span[class*="bg-green-100"],
+html.dark .tag-green {
+  background-color: rgba(16, 185, 129, 0.22) !important;
+  color: #34D399 !important;
+  border: 1px solid rgba(52, 211, 153, 0.35) !important;
+}
+
+/* Kế Toán Chi Tiền / Red / Rose Badge */
+html.dark span[class*="bg-red-100"],
+html.dark span[class*="bg-rose-100"],
+html.dark .tag-red {
+  background-color: rgba(244, 63, 94, 0.22) !important;
+  color: #FB7185 !important;
+  border: 1px solid rgba(251, 113, 133, 0.35) !important;
+}
+
+/* Giai đoạn / Task Warning / Amber Badge */
+html.dark span[class*="bg-amber-100"],
+html.dark span[class*="bg-yellow-100"],
+html.dark .tag-amber {
+  background-color: rgba(245, 158, 11, 0.22) !important;
+  color: #FCD34D !important;
+  border: 1px solid rgba(245, 158, 11, 0.35) !important;
+}
+
+/* Purple / M&A Badge */
+html.dark span[class*="bg-purple-100"],
+html.dark span[class*="bg-indigo-100"],
+html.dark .tag-purple {
+  background-color: rgba(168, 85, 247, 0.22) !important;
+  color: #C084FC !important;
+  border: 1px solid rgba(192, 132, 252, 0.35) !important;
+}
+
+/* GĐ Đã Duyệt Sub-badge */
+html.dark span[class*="bg-emerald-50"] {
+  background-color: rgba(16, 185, 129, 0.25) !important;
+  color: #6EE7B7 !important;
+  border: 1px solid rgba(110, 231, 183, 0.45) !important;
+}
+
+/* Action button (Xem tài liệu) trong danh sách */
+html.dark td button[class*="bg-slate-100"],
+html.dark td button[class*="bg-slate-50"] {
+  background-color: #334155 !important;
+  color: #E2E8F0 !important;
+  border: 1px solid #475569 !important;
+}
+html.dark td button[class*="bg-slate-100"]:hover,
+html.dark td button[class*="bg-slate-50"]:hover {
+  background-color: #475569 !important;
+  color: #FFFFFF !important;
+}
+
+/* ==============================================================================
+   20. KANBAN & PIPELINE BOARDS (Quản lý tác vụ & CRM)
+   ============================================================================== */
+html.dark .kanban-column,
+html.dark .pipeline-col {
+  background-color: #0F172A !important;
+  border-color: #334155 !important;
+}
+
+html.dark .kanban-column[class*="bg-blue-50"] {
+  background-color: rgba(14, 165, 233, 0.08) !important;
+  border-color: rgba(56, 189, 248, 0.25) !important;
+}
+
+html.dark .kanban-column[class*="bg-amber-50"] {
+  background-color: rgba(245, 158, 11, 0.08) !important;
+  border-color: rgba(245, 158, 11, 0.25) !important;
+}
+
+html.dark .kanban-column[class*="bg-emerald-50"] {
+  background-color: rgba(16, 185, 129, 0.08) !important;
+  border-color: rgba(52, 211, 153, 0.25) !important;
+}
+
+html.dark .card-drag {
+  background-color: #1E293B !important;
+  border-color: #334155 !important;
+  color: #F8FAFC !important;
+}
+
+html.dark .card-drag:hover {
+  border-color: #38BDF8 !important;
+}
+
+html.dark .stage-total {
+  background-color: #1E293B !important;
+  border-color: #334155 !important;
+  color: #38BDF8 !important;
+}
+
+/* Status Badge in Task List */
+html.dark span[class*="from-[#002D54]"] {
+  background: linear-gradient(90deg, #0082B4 0%, #38BDF8 100%) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.3) !important;
+}
+
+

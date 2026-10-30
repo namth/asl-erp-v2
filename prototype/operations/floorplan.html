@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <script>(function(){if(localStorage.getItem('asl_theme')==='dark'){document.documentElement.classList.add('dark');}else{document.documentElement.classList.remove('dark');}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASL LAW - Văn Phòng Số Trực Quan 2.5D (Virtual Office Floorplan SCR-15)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/layout.css?v=3.2">
+  <script src="../assets/layout.js?v=3.2" defer></script>
+  <style>
+    /* 2.5D Isometric Floor Grid */
+    .floor-grid-canvas {
+      background-size: 36px 36px;
+      background-image: 
+        linear-gradient(to right, rgba(0, 45, 84, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(0, 45, 84, 0.05) 1px, transparent 1px);
+    }
+    html.dark .floor-grid-canvas {
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+    }
+
+    /* 2.5D Realistic Human Figure Card Elevation */
+    .desk-card {
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      transform-style: preserve-3d;
+    }
+    .desk-card:hover {
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 20px 35px -10px rgba(0, 45, 84, 0.22), 0 0 0 1px rgba(0, 130, 180, 0.35);
+    }
+    html.dark .desk-card:hover {
+      box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(56, 189, 248, 0.45);
+    }
+
+    /* Real Human 2.5D Portrait Cutout & Depth */
+    .human-portrait-cutout {
+      filter: drop-shadow(0 6px 8px rgba(0, 45, 84, 0.22));
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s ease;
+    }
+    .desk-card:hover .human-portrait-cutout {
+      transform: scale(1.06) translateY(-2px);
+      filter: drop-shadow(0 10px 14px rgba(0, 45, 84, 0.35));
+    }
+
+    /* Holographic Floating Head Badge */
+    .head-badge-25d {
+      box-shadow: 0 4px 12px -2px rgba(0, 45, 84, 0.25);
+    }
+
+    /* Queue Walking Animation */
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(255, 122, 0, 0.5); }
+      50% { box-shadow: 0 0 0 8px rgba(255, 122, 0, 0); }
+    }
+    .queue-glow {
+      animation: pulseGlow 2.2s infinite ease-in-out;
+    }
+
+    /* Idle Relax Floating */
+    @keyframes idleFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-3px); }
+    }
+    .idle-float {
+      animation: idleFloat 3s ease-in-out infinite;
+    }
+  
+    /* Square Photo Styling for Leader & Staff */
+    .square-photo-box {
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      object-position: top;
+    }
+    .queue-lane-box {
+      border: 2px dashed #FF7A00;
+      background: rgba(255, 122, 0, 0.05);
+    }
+    html.dark .queue-lane-box {
+      background: rgba(255, 122, 0, 0.1);
+    }
+
+  </style>
+</head>
+<body class="min-h-screen bg-[#F4F8FA] dark:bg-slate-950 text-slate-800 dark:text-slate-100 flex selection:bg-[#0082B4] selection:text-white">
+
+  <!-- Modular Shared Sidebar (Auto-mounted by layout.js) -->
+  <aside id="sidebar" class="fixed top-0 left-0 bottom-0 w-72 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl z-40 transition-all duration-300 ease-in-out flex flex-col justify-between shadow-xl shadow-slate-900/5"></aside>
+
+  <!-- Main Container -->
+  <div id="main-container" class="flex-1 md:ml-72 flex flex-col min-h-screen transition-all duration-300 ease-in-out">
+
+    <!-- Top Bar with Rich Brand Gradient -->
+    <header class="header-gradient text-white h-20 px-6 flex items-center justify-between sticky top-0 z-30 shadow-md">
+      <div class="flex items-center gap-4">
+        <button onclick="toggleSidebar()" class="md:hidden p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white" title="Mở menu">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <div>
+          <div class="text-xs text-cyan-200/90 font-medium flex items-center gap-1.5">
+            <span>Giám Sát &amp; Điều Hành</span>
+            <span>/</span>
+            <span class="text-white font-semibold">SCR-15: Văn Phòng Số Trực Quan</span>
+          </div>
+          <h1 class="text-lg font-bold text-white tracking-tight flex items-center gap-2">
+            <span>Trung Tâm Chỉ Huy Phòng Ban (Virtual War Room 2.5D)</span>
+            <span id="live-indicator-badge" class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-500/20 text-emerald-200 border border-emerald-300/30 flex items-center gap-1">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+              <span>LIVE SYNC</span>
+            </span>
+          </h1>
+        </div>
+      </div>
+
+      <!-- Header Department Switcher & Quick Actions -->
+      <div class="flex items-center gap-3">
+        <!-- Branch Selector (Lọc theo Chi Nhánh) -->
+        <div class="flex items-center gap-2">
+          <label for="branch-select" class="text-xs text-white/80 font-bold hidden sm:inline-flex items-center gap-1">
+            <svg class="w-3.5 h-3.5 text-cyan-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+            <span>Chi nhánh:</span>
+          </label>
+          <div class="relative">
+            <select id="branch-select" onchange="changeBranchView(this.value)" class="bg-white/10 hover:bg-white/20 text-white font-bold text-xs px-3.5 py-2 rounded-xl border border-white/20 focus:outline-none focus:ring-2 focus:ring-cyan-300 cursor-pointer appearance-none pr-8">
+              <option value="all-branches" class="text-slate-900 bg-white">Tất Cả Chi Nhánh (Toàn Hệ Thống - 7 Phòng Ban)</option>
+              <option value="branch-hn" selected class="text-slate-900 bg-white">Trụ Sở Chính Hà Nội (4 Phòng Ban)</option>
+              <option value="branch-hcm" class="text-slate-900 bg-white">Chi Nhánh TP. Hồ Chí Minh (2 Phòng Ban)</option>
+              <option value="branch-dn" class="text-slate-900 bg-white">Chi Nhánh Đà Nẵng (1 Phòng Ban)</option>
+            </select>
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-white/80">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4-States Switcher Control Pill -->
+        <div class="hidden lg:flex items-center bg-white/10 p-1 rounded-xl border border-white/15 text-[11px] font-bold">
+          <button onclick="setUIState('success')" id="btn-state-success" class="px-2.5 py-1 rounded-lg bg-white text-[#002D54] shadow-sm transition-all font-extrabold">Thành Công</button>
+          <button onclick="setUIState('loading')" id="btn-state-loading" class="px-2.5 py-1 rounded-lg text-white hover:bg-white/10 transition-all">Đang Tải</button>
+          <button onclick="setUIState('empty')" id="btn-state-empty" class="px-2.5 py-1 rounded-lg text-white hover:bg-white/10 transition-all">Phòng Trống</button>
+          <button onclick="setUIState('error')" id="btn-state-error" class="px-2.5 py-1 rounded-lg text-white hover:bg-white/10 transition-all">Sự Cố</button>
+        </div>
+
+        <!-- Quick AI Assistance -->
+        <a href="../ai-assistant/index.html" class="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-cyan-200 transition-colors border border-white/15" title="Hỏi Trợ lý AI về Tải trọng phòng ban">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        </a>
+      </div>
+    </header>
+
+    <!-- Main Floorplan Area (Sát ngay dưới 4 ô thống kê) -->
+    <main class="flex-1 p-4 md:p-6 max-w-none mx-auto w-full space-y-3.5">
+
+      <!-- ======================================================== -->
+      <!-- TOP KPI STRIP: WORKLOAD & STATUS OVERVIEW                -->
+      <!-- ======================================================== -->
+      <section class="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
+        <!-- Metric 1: Total Staff -->
+        <div class="glass-card rounded-2xl p-4 border border-slate-200/80 dark:border-slate-800 bg-white/90 dark:bg-slate-900/90 flex items-center justify-between">
+          <div>
+            <div id="stat-total-label" class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Tổng Nhân Sự</div>
+            <div id="stat-total-staff" class="text-xl font-extrabold text-[#002D54] dark:text-white font-mono mt-0.5">24 nhân sự</div>
+            <div class="text-[10px] text-emerald-600 dark:text-emerald-400 mt-0.5 font-medium flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+              <span>100% có mặt tại văn phòng</span>
+            </div>
+          </div>
+          <div class="w-10 h-10 rounded-xl bg-blue-50 dark:bg-sky-950/60 text-[#0082B4] dark:text-cyan-400 flex items-center justify-center font-bold">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+          </div>
+        </div>
+
+        <!-- Metric 2: Working Active -->
+        <div class="glass-card rounded-2xl p-4 border border-slate-200/80 dark:border-slate-800 bg-white/90 dark:bg-slate-900/90 flex items-center justify-between">
+          <div>
+            <div class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Đang Xử Lý Hồ Sơ</div>
+            <div id="stat-working-count" class="text-xl font-extrabold text-[#0082B4] dark:text-cyan-400 font-mono mt-0.5">18 nhân sự</div>
+            <div class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5 font-medium">Chiếm 75% tải trọng toàn viện</div>
+          </div>
+          <div class="w-10 h-10 rounded-xl bg-sky-50 dark:bg-sky-950/60 text-sky-600 dark:text-sky-300 flex items-center justify-center font-bold">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          </div>
+        </div>
+
+        <!-- Metric 3: Idle / Relaxing (Lucide Coffee Line Icon) -->
+        <div class="glass-card rounded-2xl p-4 border border-slate-200/80 dark:border-slate-800 bg-white/90 dark:bg-slate-900/90 flex items-center justify-between">
+          <div>
+            <div class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Đang Nghỉ Ngơi / Rảnh</div>
+            <div id="stat-resting-count" class="text-xl font-extrabold text-emerald-600 dark:text-emerald-400 font-mono mt-0.5">04 nhân sự</div>
+            <div class="text-[10px] text-emerald-600 dark:text-emerald-400 mt-0.5 font-medium">Sẵn sàng nhận vụ việc mới</div>
+          </div>
+          <div class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8zM6 1v3M10 1v3M14 1v3"/></svg>
+          </div>
+        </div>
+
+        <!-- Metric 4: Waiting Approval -->
+        <div class="glass-card rounded-2xl p-4 border border-orange-200/90 dark:border-orange-800/80 bg-orange-50/40 dark:bg-orange-950/30 flex items-center justify-between">
+          <div>
+            <div class="text-[10px] font-bold uppercase tracking-wider text-orange-800 dark:text-orange-300">Chờ Sếp Phê Duyệt</div>
+            <div id="stat-pending-approvals" class="text-xl font-extrabold text-[#FF7A00] font-mono mt-0.5">05 hồ sơ</div>
+            <div class="text-[10px] text-orange-700 dark:text-orange-400 mt-0.5 font-bold flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-[#FF7A00] animate-ping"></span>
+              <span>4 người đang xếp hàng</span>
+            </div>
+          </div>
+          <div class="w-10 h-10 rounded-xl bg-[#FF7A00] text-white flex items-center justify-center font-bold shadow-md shadow-orange-950/20">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- 2.5D ISOMETRIC VIRTUAL OFFICE FLOORPLAN ROOMS CONTAINER   -->
+      <!-- ======================================================== -->
+      <div id="floorplan-viewport-container" class="space-y-4">
+        <!-- Rendered dynamically by JavaScript based on Director / Manager role -->
+      </div>
+        
+
+      <!-- ======================================================== -->
+      <!-- 4-STATES CONTAINER OVERLAYS (SKELETON / EMPTY / ERROR)   -->
+      <!-- ======================================================== -->
+      <!-- LOADING SKELETON STATE -->
+      <section id="state-overlay-loading" class="hidden rounded-3xl p-8 border border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-900/90 shadow-sm space-y-6">
+        <div class="h-20 bg-slate-200 dark:bg-slate-800 rounded-3xl animate-pulse"></div>
+        <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+          <div class="h-36 bg-slate-200 dark:bg-slate-800 rounded-2xl animate-pulse"></div>
+          <div class="h-36 bg-slate-200 dark:bg-slate-800 rounded-2xl animate-pulse"></div>
+          <div class="h-36 bg-slate-200 dark:bg-slate-800 rounded-2xl animate-pulse"></div>
+          <div class="h-36 bg-slate-200 dark:bg-slate-800 rounded-2xl animate-pulse"></div>
+        </div>
+        <div class="text-center text-xs font-bold text-slate-400 py-4 animate-pulse">
+          Đang nạp dữ liệu vị trí bàn ghế và trạng thái nhân sự thời gian thực...
+        </div>
+      </section>
+
+      <!-- EMPTY STATE -->
+      <section id="state-overlay-empty" class="hidden rounded-3xl p-12 border border-dashed border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-sm text-center space-y-4">
+        <div class="w-16 h-16 rounded-3xl bg-slate-100 dark:bg-slate-800 text-slate-400 flex items-center justify-center text-2xl mx-auto">
+          🏢
+        </div>
+        <h3 class="text-base font-extrabold text-[#002D54] dark:text-white">Phòng Ban Này Chưa Có Nhân Sự Hoạt Động</h3>
+        <p class="text-xs text-slate-500 dark:text-slate-400 max-w-md mx-auto">
+          Hiện tại phòng ban được chọn chưa được gán nhân sự hoặc đang trong kỳ nghỉ lễ. Bạn có thể thêm nhân sự từ màn hình Quản lý người dùng.
+        </p>
+        <a href="../users/index.html" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#002D54] hover:bg-[#0082B4] text-white font-bold text-xs shadow-md">
+          <span>+ Phân công Nhân sự vào Phòng</span>
+        </a>
+      </section>
+
+      <!-- ERROR STATE -->
+      <section id="state-overlay-error" class="hidden rounded-3xl p-10 border border-red-200 dark:border-red-900 bg-red-50/50 dark:bg-red-950/30 shadow-sm text-center space-y-4">
+        <div class="w-14 h-14 rounded-2xl bg-red-100 dark:bg-red-900 text-red-600 dark:text-red-200 flex items-center justify-center text-2xl mx-auto">
+          ⚠️
+        </div>
+        <h3 class="text-base font-extrabold text-red-900 dark:text-red-200">Gián Đoạn Kết Nối Trực Quan Thời Gian Thực</h3>
+        <p class="text-xs text-red-700 dark:text-red-300 max-w-md mx-auto">
+          Không thể kết nối tới máy chủ WebSocket của phòng ban. Dữ liệu bàn ghế có thể chưa được đồng bộ mới nhất.
+        </p>
+        <button onclick="setUIState('success')" class="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs shadow-md">
+          Thử Kết Nối Lại Ngay
+        </button>
+      </section>
+
+    </main>
+
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- SLIDE-OVER RIGHT SIDE DRAWER: STAFF CASE DETAILS         -->
+  <!-- ======================================================== -->
+  <div id="staff-drawer-backdrop" onclick="closeStaffDrawer()" class="fixed inset-0 bg-slate-950/50 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+  <aside id="staff-drawer" class="fixed top-0 right-0 bottom-0 w-full sm:w-[460px] bg-white dark:bg-slate-900 shadow-2xl z-50 transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col justify-between border-l border-slate-200 dark:border-slate-800">
+    <!-- Drawer Header -->
+    <div class="p-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between header-gradient text-white">
+      <div class="flex items-center gap-3.5">
+        <div id="drawer-avatar" class="w-14 h-14 rounded-2xl overflow-hidden ring-2 ring-white/70 shadow-lg flex-shrink-0 bg-slate-800">
+          <img id="drawer-photo" src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&auto=format&fit=crop&q=80" alt="Avatar" class="w-full h-full object-cover object-top" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=Staff&background=002D54&color=fff';">
+        </div>
+        <div>
+          <h3 id="drawer-name" class="font-extrabold text-base text-white">CV. Lê Hoàng Nam</h3>
+          <p id="drawer-title" class="text-xs text-cyan-200">Trợ lý Luật sư • Phòng Sở Hữu Trí Tuệ</p>
+        </div>
+      </div>
+      <button onclick="closeStaffDrawer()" class="p-2 rounded-xl hover:bg-white/20 text-white transition-colors" title="Đóng">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <!-- Drawer Body -->
+    <div class="p-6 overflow-y-auto flex-1 space-y-6 text-xs">
+      
+      <!-- Current Workload Status Pill -->
+      <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-700 flex items-center justify-between">
+        <div>
+          <div class="text-[10px] font-bold uppercase text-slate-400">Trạng Thái Hiện Tại</div>
+          <div id="drawer-status-pill" class="text-sm font-extrabold text-emerald-600 dark:text-emerald-400 mt-0.5 flex items-center gap-1.5">
+            <span>☕ Đang nghỉ ngơi (0 việc đang làm)</span>
+          </div>
+        </div>
+        <div class="text-right">
+          <div class="text-[10px] font-bold uppercase text-slate-400">Tải Trọng Tuần</div>
+          <div class="text-sm font-extrabold text-[#002D54] dark:text-cyan-400 font-mono">65% (Tối Ưu)</div>
+        </div>
+      </div>
+
+      <!-- Active Assigned Cases & Tasks List -->
+      <div class="space-y-3">
+        <div class="flex items-center justify-between">
+          <h4 class="font-extrabold text-sm text-[#002D54] dark:text-white flex items-center gap-2">
+            <span class="w-2 h-4 rounded-full bg-[#0082B4]"></span>
+            <span>Danh Sách Tác Vụ Của Nhân Sự</span>
+          </h4>
+          <span class="text-[10px] font-bold text-slate-400">2 Task Đang Chờ</span>
+        </div>
+
+        <!-- Task Item 1 -->
+        <div class="p-3.5 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 space-y-2">
+          <div class="flex items-start justify-between gap-2">
+            <div>
+              <span class="px-2 py-0.5 rounded text-[9px] font-bold bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300">Chờ Tiếp Nhận (TODO)</span>
+              <h5 class="font-bold text-xs text-[#002D54] dark:text-white mt-1">Tra cứu đối chứng nhãn hiệu bánh gạo 'SaoFood'</h5>
+            </div>
+            <span class="font-mono text-[10px] font-bold text-[#0082B4]">ASL-2026-TM109</span>
+          </div>
+          <div class="flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400 pt-1 border-t border-slate-100 dark:border-slate-700/80">
+            <span>Hạn chót: <strong>02/11/2026</strong></span>
+            <span class="text-emerald-600 font-bold">Độ khó: Trung bình</span>
+          </div>
+        </div>
+
+        <!-- Task Item 2 -->
+        <div class="p-3.5 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 space-y-2">
+          <div class="flex items-start justify-between gap-2">
+            <div>
+              <span class="px-2 py-0.5 rounded text-[9px] font-bold bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-300">Chờ Tiếp Nhận (TODO)</span>
+              <h5 class="font-bold text-xs text-[#002D54] dark:text-white mt-1">Dịch thuật tài liệu sáng chế thiết bị IoT</h5>
+            </div>
+            <span class="font-mono text-[10px] font-bold text-[#0082B4]">ASL-2026-PAT04</span>
+          </div>
+          <div class="flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400 pt-1 border-t border-slate-100 dark:border-slate-700/80">
+            <span>Hạn chót: <strong>05/11/2026</strong></span>
+            <span class="text-blue-600 font-bold">Độ khó: Cơ bản</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Drawer Footer Quick Actions (Bộ 3 Nút Hành Động Nhanh) -->
+    <div class="p-5 border-t border-slate-100 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-800/50 space-y-2.5">
+      <div class="grid grid-cols-2 gap-2">
+        <button onclick="quickAssignTask()" class="px-3 py-2.5 rounded-xl bg-[#002D54] hover:bg-[#0082B4] text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-md transition-all">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+          <span>Giao Việc Nhanh</span>
+        </button>
+        <button onclick="sendQuickReminder()" class="px-3 py-2.5 rounded-xl bg-[#FF7A00] hover:bg-[#E66E00] text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-md transition-all">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+          <span>Nhắn Tin / Nhắc Nhở</span>
+        </button>
+      </div>
+      <a href="../users/detail.html" class="w-full py-2 rounded-xl border border-slate-300 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-xs text-center block transition-colors">
+        Xem Hồ Sơ 360° &amp; KPIs Cá Nhân &rarr;
+      </a>
+    </div>
+  </aside>
+
+  <!-- ======================================================== -->
+  <!-- MODAL: APPROVAL GATE MODAL (KÝ DUYỆT TRỰC TIẾP TẠI BÀN SẾP) -->
+  <!-- ======================================================== -->
+  <div id="approval-modal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-800 space-y-5 animate-scaleIn">
+      <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-2xl overflow-hidden ring-2 ring-[#FF7A00] shadow-md flex-shrink-0 bg-slate-800">
+            <img id="modal-appr-photo" src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&auto=format&fit=crop&q=80" alt="Avatar" class="w-full h-full object-cover object-top" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=Staff&background=FF7A00&color=fff';">
+          </div>
+          <div>
+            <h3 class="font-extrabold text-sm text-[#002D54] dark:text-white">Phê Duyệt Cổng Giai Đoạn (Gate Approval)</h3>
+            <p class="text-[10px] text-slate-400 font-mono">BÀN TRƯỞNG PHÒNG • KÝ DUYỆT ĐIỆN TỬ</p>
+          </div>
+        </div>
+        <button onclick="closeApprovalGate()" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-600">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div class="p-3.5 rounded-2xl bg-blue-50/60 dark:bg-sky-950/40 border border-blue-200 dark:border-sky-800/40 space-y-1">
+          <div class="text-[10px] font-bold text-slate-400 uppercase">Hồ sơ trình duyệt</div>
+          <div id="modal-appr-title" class="font-bold text-sm text-[#002D54] dark:text-white">Tờ khai đăng ký nhãn hiệu 9OUTFIT</div>
+          <div class="text-[11px] text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-2">
+            <span>Vụ việc: <strong id="modal-appr-case" class="text-[#0082B4] font-mono">ASL-2026-TM109</strong></span>
+            <span>•</span>
+            <span>Người trình: <strong id="modal-appr-user" class="text-slate-800 dark:text-slate-200">LS. Mai Linh</strong></span>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 dark:text-slate-300 text-[11px] mb-1">Ý Kiến / Ghi Chú Phê Duyệt Của Trưởng Phòng:</label>
+          <textarea id="modal-appr-note" rows="2" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs focus:ring-2 focus:ring-[#0082B4] focus:outline-none" placeholder="Đã kiểm tra đối chiếu tờ khai và giấy ủy quyền hợp lệ. Ký duyệt nộp Cục!"></textarea>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-2.5 pt-2 border-t border-slate-100 dark:border-slate-800">
+        <button onclick="executeRejectApproval()" class="px-4 py-2.5 rounded-xl border border-red-200 dark:border-red-800 text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40 font-bold text-xs transition-colors">
+          Trả Về Yêu Cầu Sửa
+        </button>
+        <button onclick="executeApproveApproval()" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#002D54] to-[#0082B4] hover:from-[#001D38] hover:to-[#00709B] text-white font-bold text-xs shadow-md shadow-cyan-950/20 flex items-center gap-1.5 transition-all">
+          <svg class="w-4 h-4 text-cyan-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+          <span>Ký Chấp Thuận Điện Tử</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive Floorplan JavaScript Engine -->
+  <script>
+    // 1. DỮ LIỆU CHI NHÁNH & CÁC PHÒNG BAN (MỖI CHI NHÁNH CÓ 1 HOẶC NHIỀU PHÒNG BAN)
+    const branchesData = {
+      'branch-hn': {
+        id: 'branch-hn',
+        name: 'Trụ Sở Chính Hà Nội',
+        shortName: 'Hà Nội',
+        address: 'Tòa nhà ASL Tower, Cầu Giấy, Hà Nội',
+        departmentIds: ['dept-ip', 'dept-litigation', 'dept-corp', 'dept-acc']
+      },
+      'branch-hcm': {
+        id: 'branch-hcm',
+        name: 'Chi Nhánh TP. Hồ Chí Minh',
+        shortName: 'TP.HCM',
+        address: 'Tầng 8, Tòa Bitexco Financial, Q.1, TP.HCM',
+        departmentIds: ['dept-hcm-corp', 'dept-hcm-ip']
+      },
+      'branch-dn': {
+        id: 'branch-dn',
+        name: 'Chi Nhánh Đà Nẵng',
+        shortName: 'Đà Nẵng',
+        address: 'Tầng 5, Tòa Indochina Riverside, Hải Châu, Đà Nẵng',
+        departmentIds: ['dept-dn-consult']
+      }
+    };
+
+    const allDepartments = {
+      // --- HÀ NỘI ---
+      'dept-ip': {
+        id: 'dept-ip',
+        branchId: 'branch-hn',
+        branchName: 'Hà Nội',
+        name: 'Phòng Sở Hữu Trí Tuệ',
+        field: 'Sở Hữu Trí Tuệ & Chuyển Giao',
+        leader: {
+          name: 'TS.LS Đỗ Trọng Hải',
+          field: 'Sở Hữu Trí Tuệ & Chuyển Giao',
+          casesDoing: 3,
+          casesManaging: 8,
+          tasksWorking: 4,
+          tasksPending: 2,
+          photo: 'https://images.unsplash.com/photo-1556157382-97eda2d62296?w=400&auto=format&fit=crop&q=80'
+        },
+        stats: { total: 8, working: 6, resting: 2, pending: 2 },
+        queue: [
+          {
+            id: 'appr-101',
+            name: 'LS. Mai Linh',
+            role: 'Luật sư Cấp cao',
+            photo: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&auto=format&fit=crop&q=80',
+            pendingCount: 1,
+            title: 'Tờ khai đăng ký nhãn hiệu 9OUTFIT',
+            caseCode: 'ASL-2026-TM109'
+          },
+          {
+            id: 'appr-102',
+            name: 'CV. Trịnh Thu Hà',
+            role: 'Chuyên viên Pháp lý',
+            photo: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&auto=format&fit=crop&q=80',
+            pendingCount: 2,
+            title: 'Ý kiến phản hồi hình thức Cục SHTT',
+            caseCode: 'ASL-2026-TM088'
+          }
+        ],
+        staff: [
+          { id: 'usr-01', name: 'LS. Mai Linh', role: 'Luật sư Cấp cao', photo: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&auto=format&fit=crop&q=80', casesCount: 5, working: 2, pending: 1, inQueue: true },
+          { id: 'usr-02', name: 'CV. Trịnh Thu Hà', role: 'Chuyên viên Pháp lý', photo: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&auto=format&fit=crop&q=80', casesCount: 4, working: 1, pending: 2, inQueue: true },
+          { id: 'usr-03', name: 'LS. Trần Quốc Tuấn', role: 'Luật sư Thành viên', photo: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&auto=format&fit=crop&q=80', casesCount: 6, working: 3, pending: 1, inQueue: false },
+          { id: 'usr-04', name: 'CV. Lê Hoàng Nam', role: 'Trợ lý Luật sư', photo: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&auto=format&fit=crop&q=80', casesCount: 2, working: 0, pending: 2, inQueue: false, isIdle: true },
+          { id: 'usr-05', name: 'LS. Đỗ Thùy Trang', role: 'Chuyên viên SHTT Cấp cao', photo: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&auto=format&fit=crop&q=80', casesCount: 5, working: 2, pending: 0, inQueue: false },
+          { id: 'usr-06', name: 'CV. Phạm Đức Thắng', role: 'Trợ lý Nhãn hiệu', photo: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&auto=format&fit=crop&q=80', casesCount: 3, working: 1, pending: 3, inQueue: false },
+          { id: 'usr-07', name: 'CV. Hoàng Minh Phúc', role: 'Chuyên viên Dịch thuật', photo: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&auto=format&fit=crop&q=80', casesCount: 2, working: 0, pending: 1, inQueue: false, isIdle: true },
+          { id: 'usr-08', name: 'LS. Vũ Lan Anh', role: 'Luật sư Tranh chấp', photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80', casesCount: 7, working: 4, pending: 1, inQueue: false }
+        ]
+      },
+      'dept-litigation': {
+        id: 'dept-litigation',
+        branchId: 'branch-hn',
+        branchName: 'Hà Nội',
+        name: 'Phòng Tranh Tụng & Tòa Án',
+        field: 'Tranh Tụng & Trọng Tài Thương Mại',
+        leader: {
+          name: 'LS. Phạm Hùng Dũng',
+          field: 'Tranh Tụng & Trọng Tài',
+          casesDoing: 2,
+          casesManaging: 6,
+          tasksWorking: 5,
+          tasksPending: 1,
+          photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=80'
+        },
+        stats: { total: 6, working: 5, resting: 1, pending: 1 },
+        queue: [
+          {
+            id: 'appr-201',
+            name: 'LS. Bùi Tiến Dũng',
+            role: 'Luật sư Tranh tụng',
+            photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&auto=format&fit=crop&q=80',
+            pendingCount: 1,
+            title: 'Đơn khởi kiện vụ án tranh chấp hợp đồng thương mại',
+            caseCode: 'ASL-2026-LIT08'
+          }
+        ],
+        staff: [
+          { id: 'usr-lit-01', name: 'LS. Bùi Tiến Dũng', role: 'Luật sư Tranh tụng', photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&auto=format&fit=crop&q=80', casesCount: 6, working: 2, pending: 1, inQueue: true },
+          { id: 'usr-lit-02', name: 'LS. Vũ Thị Bích', role: 'Luật sư Cao cấp', photo: 'https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=400&auto=format&fit=crop&q=80', casesCount: 5, working: 3, pending: 0, inQueue: false },
+          { id: 'usr-lit-03', name: 'CV. Đặng Minh Quân', role: 'Trợ lý Tòa án', photo: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&auto=format&fit=crop&q=80', casesCount: 4, working: 1, pending: 2, inQueue: false },
+          { id: 'usr-lit-04', name: 'CV. Phan Thu Thủy', role: 'Chuyên viên Chứng cứ', photo: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&auto=format&fit=crop&q=80', casesCount: 2, working: 0, pending: 1, inQueue: false, isIdle: true },
+          { id: 'usr-lit-05', name: 'LS. Nguyễn Hữu Trí', role: 'Luật sư Thành viên', photo: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&auto=format&fit=crop&q=80', casesCount: 5, working: 2, pending: 2, inQueue: false },
+          { id: 'usr-lit-06', name: 'CV. Lê Thảo Trang', role: 'Thư ký Phiên tòa', photo: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&auto=format&fit=crop&q=80', casesCount: 4, working: 3, pending: 1, inQueue: false }
+        ]
+      },
+      'dept-corp': {
+        id: 'dept-corp',
+        branchId: 'branch-hn',
+        branchName: 'Hà Nội',
+        name: 'Phòng Doanh Nghiệp & M&A',
+        field: 'Tư Vấn M&A & Đầu Tư Doanh Nghiệp',
+        leader: {
+          name: 'LS. Vũ Hoàng Long',
+          field: 'M&A & Đầu Tư Doanh Nghiệp',
+          casesDoing: 2,
+          casesManaging: 6,
+          tasksWorking: 3,
+          tasksPending: 1,
+          photo: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&auto=format&fit=crop&q=80'
+        },
+        stats: { total: 6, working: 4, resting: 2, pending: 1 },
+        queue: [
+          {
+            id: 'appr-301',
+            name: 'LS. Trần Đình Hưng',
+            role: 'Luật sư M&A',
+            photo: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&auto=format&fit=crop&q=80',
+            pendingCount: 1,
+            title: 'Hợp đồng mua bán vốn góp (SPA) dự án Logistics',
+            caseCode: 'ASL-2026-MA14'
+          }
+        ],
+        staff: [
+          { id: 'usr-corp-01', name: 'LS. Trần Đình Hưng', role: 'Luật sư M&A', photo: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&auto=format&fit=crop&q=80', casesCount: 5, working: 1, pending: 2, inQueue: true },
+          { id: 'usr-corp-02', name: 'LS. Ngô Bảo Ngọc', role: 'Cố vấn Tái cấu trúc', photo: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&auto=format&fit=crop&q=80', casesCount: 6, working: 3, pending: 1, inQueue: false },
+          { id: 'usr-corp-03', name: 'CV. Phạm Khánh Linh', role: 'Chuyên viên Due Diligence', photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80', casesCount: 4, working: 2, pending: 0, inQueue: false },
+          { id: 'usr-corp-04', name: 'CV. Dương Văn Lâm', role: 'Trợ lý Pháp chế', photo: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&auto=format&fit=crop&q=80', casesCount: 2, working: 0, pending: 2, inQueue: false, isIdle: true },
+          { id: 'usr-corp-05', name: 'LS. Tạ Quang Huy', role: 'Luật sư Doanh nghiệp', photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=80', casesCount: 5, working: 2, pending: 1, inQueue: false },
+          { id: 'usr-corp-06', name: 'CV. Đỗ Nhật Minh', role: 'Chuyên viên Giấy phép', photo: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&auto=format&fit=crop&q=80', casesCount: 4, working: 1, pending: 3, inQueue: false }
+        ]
+      },
+      'dept-acc': {
+        id: 'dept-acc',
+        branchId: 'branch-hn',
+        branchName: 'Hà Nội',
+        name: 'Phòng Kế Toán & Thu Chi',
+        field: 'Tài Chính & Kế Toán Doanh Nghiệp',
+        leader: {
+          name: 'Bà Nguyễn Bích Thủy',
+          field: 'Kế Toán & Quản Trị Thu Chi',
+          casesDoing: 4,
+          casesManaging: 8,
+          tasksWorking: 5,
+          tasksPending: 1,
+          photo: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&auto=format&fit=crop&q=80'
+        },
+        stats: { total: 4, working: 4, resting: 0, pending: 1 },
+        queue: [
+          {
+            id: 'appr-401',
+            name: 'CV. Đinh Thu Trang',
+            role: 'Kế toán Thanh toán',
+            photo: 'https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=400&auto=format&fit=crop&q=80',
+            pendingCount: 1,
+            title: 'Phiếu chi hoa hồng luật sư vụ việc ASL-2026-IP045',
+            caseCode: 'MISA-2026-EXP92'
+          }
+        ],
+        staff: [
+          { id: 'usr-acc-01', name: 'CV. Đinh Thu Trang', role: 'Kế toán Thanh toán', photo: 'https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=400&auto=format&fit=crop&q=80', casesCount: 4, working: 1, pending: 1, inQueue: true },
+          { id: 'usr-acc-02', name: 'CV. Nguyễn Lan Hương', role: 'Kế toán Doanh thu', photo: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&auto=format&fit=crop&q=80', casesCount: 5, working: 2, pending: 2, inQueue: false },
+          { id: 'usr-acc-03', name: 'CV. Lê Phương Nam', role: 'Kế toán Công nợ', photo: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&auto=format&fit=crop&q=80', casesCount: 3, working: 2, pending: 0, inQueue: false },
+          { id: 'usr-acc-04', name: 'CV. Trần Thảo Nhi', role: 'Chuyên viên Thuế', photo: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&auto=format&fit=crop&q=80', casesCount: 4, working: 3, pending: 1, inQueue: false }
+        ]
+      },
+
+      // --- CHI NHÁNH TP. HỒ CHÍ MINH ---
+      'dept-hcm-corp': {
+        id: 'dept-hcm-corp',
+        branchId: 'branch-hcm',
+        branchName: 'TP.HCM',
+        name: 'Phòng Doanh Nghiệp Phía Nam',
+        field: 'Đầu Tư FDI & Dự Án Phía Nam',
+        leader: {
+          name: 'LS. Nguyễn Hữu Nam',
+          field: 'Đầu Tư FDI & Dự Án Phía Nam',
+          casesDoing: 2,
+          casesManaging: 5,
+          tasksWorking: 3,
+          tasksPending: 1,
+          photo: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&auto=format&fit=crop&q=80'
+        },
+        stats: { total: 4, working: 3, resting: 1, pending: 1 },
+        queue: [
+          {
+            id: 'appr-hcm-101',
+            name: 'LS. Võ Thanh Tùng',
+            role: 'Luật sư Dự án FDI',
+            photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&auto=format&fit=crop&q=80',
+            pendingCount: 1,
+            title: 'Hồ sơ xin cấp Giấy chứng nhận đăng ký đầu tư (IRC)',
+            caseCode: 'ASL-2026-FDI02'
+          }
+        ],
+        staff: [
+          { id: 'usr-hcm-01', name: 'LS. Võ Thanh Tùng', role: 'Luật sư Dự án FDI', photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&auto=format&fit=crop&q=80', casesCount: 5, working: 2, pending: 1, inQueue: true },
+          { id: 'usr-hcm-02', name: 'CV. Lý Mỹ Duyên', role: 'Chuyên viên Pháp lý', photo: 'https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=400&auto=format&fit=crop&q=80', casesCount: 4, working: 2, pending: 2, inQueue: false },
+          { id: 'usr-hcm-03', name: 'LS. Huỳnh Tấn Phát', role: 'Luật sư Thành viên', photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=80', casesCount: 6, working: 3, pending: 1, inQueue: false },
+          { id: 'usr-hcm-04', name: 'CV. Trần Quốc Đại', role: 'Trợ lý Pháp lý', photo: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&auto=format&fit=crop&q=80', casesCount: 2, working: 0, pending: 1, inQueue: false, isIdle: true }
+        ]
+      },
+      'dept-hcm-ip': {
+        id: 'dept-hcm-ip',
+        branchId: 'branch-hcm',
+        branchName: 'TP.HCM',
+        name: 'Phòng Sở Hữu Trí Tuệ Phía Nam',
+        field: 'Bảo Hộ Nhãn Hiệu & Giám Định SHTT',
+        leader: {
+          name: 'LS. Đặng Mai Phương',
+          field: 'Bảo Hộ Nhãn Hiệu & Giám Định SHTT',
+          casesDoing: 2,
+          casesManaging: 4,
+          tasksWorking: 3,
+          tasksPending: 1,
+          photo: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&auto=format&fit=crop&q=80'
+        },
+        stats: { total: 4, working: 3, resting: 1, pending: 1 },
+        queue: [
+          {
+            id: 'appr-hcm-201',
+            name: 'CV. Lê Minh Tú',
+            role: 'Chuyên viên Tra cứu',
+            photo: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&auto=format&fit=crop&q=80',
+            pendingCount: 1,
+            title: 'Báo cáo tra cứu khả năng bảo hộ nhãn hiệu GlobalCare',
+            caseCode: 'ASL-2026-TM502'
+          }
+        ],
+        staff: [
+          { id: 'usr-hcm-ip-01', name: 'CV. Lê Minh Tú', role: 'Chuyên viên Tra cứu', photo: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&auto=format&fit=crop&q=80', casesCount: 4, working: 1, pending: 2, inQueue: true },
+          { id: 'usr-hcm-ip-02', name: 'LS. Hoàng Gia Huy', role: 'Luật sư Nhãn hiệu', photo: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&auto=format&fit=crop&q=80', casesCount: 5, working: 2, pending: 1, inQueue: false },
+          { id: 'usr-hcm-ip-03', name: 'CV. Nguyễn Thảo My', role: 'Trợ lý Kiểu dáng', photo: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&auto=format&fit=crop&q=80', casesCount: 3, working: 1, pending: 1, inQueue: false },
+          { id: 'usr-hcm-ip-04', name: 'CV. Trịnh Minh Trí', role: 'Chuyên viên Dịch thuật', photo: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&auto=format&fit=crop&q=80', casesCount: 2, working: 0, pending: 2, inQueue: false, isIdle: true }
+        ]
+      },
+
+      // --- CHI NHÁNH ĐÀ NẴNG ---
+      'dept-dn-consult': {
+        id: 'dept-dn-consult',
+        branchId: 'branch-dn',
+        branchName: 'Đà Nẵng',
+        name: 'Phòng Tư Vấn Đầu Tư Miền Trung',
+        field: 'Bất Động Sản & Dự Án Đầu Tư Miền Trung',
+        leader: {
+          name: 'LS. Trần Đình Vũ',
+          field: 'Bất Động Sản & Đầu Tư Miền Trung',
+          casesDoing: 1,
+          casesManaging: 3,
+          tasksWorking: 2,
+          tasksPending: 1,
+          photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=80'
+        },
+        stats: { total: 3, working: 2, resting: 1, pending: 1 },
+        queue: [
+          {
+            id: 'appr-dn-101',
+            name: 'LS. Phan Thị Kim Ngân',
+            role: 'Luật sư Bất động sản',
+            photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80',
+            pendingCount: 1,
+            title: 'Hợp đồng chuyển nhượng quyền sử dụng đất dự án KCN',
+            caseCode: 'ASL-2026-RE01'
+          }
+        ],
+        staff: [
+          { id: 'usr-dn-01', name: 'LS. Phan Thị Kim Ngân', role: 'Luật sư Bất động sản', photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80', casesCount: 4, working: 2, pending: 1, inQueue: true },
+          { id: 'usr-dn-02', name: 'CV. Nguyễn Văn Cường', role: 'Chuyên viên Quy hoạch', photo: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&auto=format&fit=crop&q=80', casesCount: 3, working: 1, pending: 2, inQueue: false },
+          { id: 'usr-dn-03', name: 'CV. Lê Thu Hằng', role: 'Trợ lý Pháp lý', photo: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&auto=format&fit=crop&q=80', casesCount: 2, working: 0, pending: 1, inQueue: false, isIdle: true }
+        ]
+      }
+    };
+
+    // 2. HÀM TẠO CÁC ICON XẾP LỚP NGANG (STACKED ICONS) TỐI ĐA 10 ICON, HOVER HIỆN SỐ LƯỢNG
+    function renderStackedIcons(count, type, isLeader = false) {
+      const displayCount = Math.min(count, 10);
+      const hasMore = count > 10;
+      
+      let labelText = '';
+      let iconSvg = '';
+      let colorClass = '';
+
+      if (type === 'cases' || type === 'casesDoing') {
+        labelText = type === 'casesDoing' ? 'Vụ làm' : 'Vụ việc';
+        iconSvg = '<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>';
+        colorClass = isLeader 
+          ? 'bg-indigo-600 text-white border-indigo-400' 
+          : 'bg-indigo-100 text-indigo-700 border-indigo-300 dark:bg-indigo-950 dark:text-indigo-300 dark:border-indigo-700';
+      } else if (type === 'casesManaging') {
+        labelText = 'Vụ QL';
+        iconSvg = '<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>';
+        colorClass = isLeader 
+          ? 'bg-cyan-600 text-white border-cyan-300' 
+          : 'bg-cyan-100 text-cyan-800 border-cyan-300 dark:bg-cyan-950 dark:text-cyan-300 dark:border-cyan-700';
+      } else if (type === 'working' || type === 'tasksWorking') {
+        labelText = 'Đang làm';
+        iconSvg = '<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>';
+        colorClass = isLeader 
+          ? 'bg-amber-400 text-slate-900 border-amber-200' 
+          : 'bg-amber-100 text-amber-700 border-amber-300 dark:bg-amber-950 dark:text-amber-300 dark:border-amber-700';
+      } else if (type === 'pending' || type === 'tasksPending') {
+        labelText = 'Chờ';
+        iconSvg = '<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6l4 2"/></svg>';
+        colorClass = isLeader 
+          ? 'bg-slate-500 text-white border-slate-300' 
+          : 'bg-slate-100 text-slate-700 border-slate-300 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-600';
+      }
+
+      let iconsHTML = '';
+      if (count === 0) {
+        iconsHTML = `<span class="text-[10px] ${isLeader ? 'text-blue-300' : 'text-slate-400'} italic">0</span>`;
+      } else {
+        for (let i = 0; i < displayCount; i++) {
+          iconsHTML += `
+            <span class="inline-flex items-center justify-center w-5 h-5 rounded-full border shadow-xs ring-1 ${isLeader ? 'ring-[#001D38]' : 'ring-white/90 dark:ring-slate-800'} ${colorClass} shrink-0 transition-transform hover:scale-125 hover:z-20">
+              ${iconSvg}
+            </span>
+          `;
+        }
+        if (hasMore) {
+          iconsHTML += `<span class="text-xs font-black ${isLeader ? 'text-amber-300' : 'text-slate-500 dark:text-slate-400'} ml-1 shrink-0">+</span>`;
+        }
+      }
+
+      const labelClass = isLeader 
+        ? 'text-[10px] font-bold text-cyan-200 w-14 shrink-0 truncate' 
+        : 'text-[10px] font-bold text-slate-500 dark:text-slate-400 w-14 shrink-0 truncate';
+
+      const pillClass = isLeader
+        ? 'opacity-0 group-hover:opacity-100 transition-opacity duration-150 px-1.5 py-0.2 rounded-md text-[10px] font-black bg-white text-slate-900 shadow-md shrink-0 ml-1'
+        : 'opacity-0 group-hover:opacity-100 transition-opacity duration-150 px-1.5 py-0.2 rounded-md text-[10px] font-black bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-md shrink-0 ml-1';
+
+      return `
+        <div class="group flex items-center gap-1.5 py-0.5 cursor-pointer relative" title="${count} ${labelText.toLowerCase()}">
+          <span class="${labelClass}">${labelText}:</span>
+          <div class="flex items-center -space-x-1.5 shrink-0 py-0.5">
+            ${iconsHTML}
+          </div>
+          <!-- Hover hiện số lượng chính xác -->
+          <span class="${pillClass}">
+            ${count}
+          </span>
+        </div>
+      `;
+    }
+
+    // 3. HÀM TẠO HTML CHO TỪNG PHÒNG BAN (ROOM BOX)
+    function generateRoomBoxHTML(dept) {
+      // Hàng đợi: Chỉ hiện nhân sự đó và số tác vụ đang cần phê duyệt, CĂN TRÁI trong box
+      let queueHTML = '';
+      if (dept.queue.length === 0) {
+        queueHTML = `
+          <div class="text-[11px] text-slate-400 dark:text-slate-500 italic py-3 px-2 flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            <span>Hiện tại không có nhân sự nào đang chờ duyệt</span>
+          </div>
+        `;
+      } else {
+        dept.queue.forEach(q => {
+          queueHTML += `
+            <div onclick="openApprovalGate('${q.id}', '${q.name}', '${q.title || 'Hồ sơ pháp lý'}', '${q.caseCode || 'ASL-2026'}', '${q.photo}')" class="desk-card cursor-pointer p-2.5 rounded-xl bg-white dark:bg-slate-800 border-2 border-[#FF7A00] shadow-md flex items-center gap-3 queue-glow relative group hover:border-amber-400 transition">
+              <!-- Ảnh vuông nhân sự -->
+              <div class="w-11 h-11 rounded-lg overflow-hidden ring-1 ring-[#FF7A00] shadow shrink-0 bg-slate-100 dark:bg-slate-700">
+                <img src="${q.photo}" alt="${q.name}" class="w-full h-full object-cover object-top square-photo-box" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(q.name)}&background=FF7A00&color=fff';">
+              </div>
+              <!-- Chỉ hiện nhân sự đó và số tác vụ đang cần phê duyệt -->
+              <div class="text-left min-w-[130px]">
+                <div class="font-black text-xs text-[#002D54] dark:text-white group-hover:text-[#FF7A00] transition truncate">${q.name}</div>
+                <div class="text-[11px] font-bold text-[#FF7A00] flex items-center gap-1 mt-0.5">
+                  <svg class="w-3.5 h-3.5 text-[#FF7A00] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  <span>${q.pendingCount || 1} tác vụ cần duyệt</span>
+                </div>
+              </div>
+              <div class="text-slate-400 group-hover:text-[#FF7A00] transition">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+              </div>
+            </div>
+          `;
+        });
+      }
+
+      // Các bàn làm việc nhân sự: CHIA LÀM ĐÔI (TRÁI: Ảnh, Tên, Chức vụ; PHẢI: Icon xếp chồng Vụ việc, Đang làm, Chờ)
+      let staffHTML = '';
+      dept.staff.forEach(s => {
+        const isIdle = s.working === 0;
+        const inQueue = s.inQueue;
+        staffHTML += `
+          <div id="desk-${s.id}" onclick="openStaffDrawer('${s.id}')" class="desk-card cursor-pointer rounded-2xl p-3 bg-white dark:bg-slate-800 border ${inQueue ? 'border-2 border-dashed border-amber-400 dark:border-amber-600 bg-amber-50/20' : (isIdle ? 'border border-emerald-300 dark:border-emerald-800 bg-emerald-50/15' : 'border border-slate-200 dark:border-slate-700')} shadow-sm hover:shadow-md transition-all group">
+            
+            <!-- CHIA LÀM ĐÔI: BÊN TRÁI & BÊN PHẢI -->
+            <div class="grid grid-cols-12 gap-2.5 items-center">
+              
+              <!-- BÊN TRÁI: Ảnh vuông, Tên nhân viên kèm Chức vụ -->
+              <div class="col-span-5 flex flex-col items-center text-center">
+                <div class="relative shrink-0">
+                  <div class="w-14 h-14 rounded-xl overflow-hidden ring-2 ${inQueue ? 'ring-amber-400 ring-dashed' : (isIdle ? 'ring-emerald-400' : 'ring-cyan-500/60')} shadow-md bg-slate-100 dark:bg-slate-700">
+                    <img src="${s.photo}" alt="${s.name}" class="w-full h-full object-cover object-top square-photo-box" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(s.name)}&background=002D54&color=fff';">
+                  </div>
+                  ${inQueue ? `
+                    <span class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-amber-500 border-2 border-white dark:border-slate-800 flex items-center justify-center text-[7px] text-white" title="Đang xếp hàng duyệt">
+                      <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </span>
+                  ` : `
+                    <span class="absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full ${isIdle ? 'bg-emerald-400' : 'bg-emerald-500'} border-2 border-white dark:border-slate-800"></span>
+                  `}
+                </div>
+                <div class="mt-1.5 w-full">
+                  <h4 class="font-extrabold text-xs text-[#002D54] dark:text-white group-hover:text-[#0082B4] transition truncate leading-tight">${s.name}</h4>
+                  <p class="text-[10px] text-slate-500 dark:text-slate-400 truncate mt-0.5">${s.role}</p>
+                  ${inQueue ? `
+                    <span class="inline-block mt-0.5 text-[9px] font-bold text-amber-700 dark:text-amber-400 bg-amber-100 dark:bg-amber-950/80 px-1.5 py-0.2 rounded border border-amber-300">Đang xếp hàng</span>
+                  ` : ''}
+                </div>
+              </div>
+
+              <!-- BÊN PHẢI: Số vụ việc, Số việc đang làm, Số việc đang chờ hiển thị dạng icon xếp chồng -->
+              <div class="col-span-7 flex flex-col justify-center space-y-1 pl-2 border-l border-slate-100 dark:border-slate-700/80 text-left">
+                ${renderStackedIcons(s.casesCount || 4, 'cases', false)}
+                ${renderStackedIcons(s.working, 'working', false)}
+                ${renderStackedIcons(s.pending, 'pending', false)}
+              </div>
+
+            </div>
+
+          </div>
+        `;
+      });
+
+      return `
+        <section class="floor-grid-canvas rounded-3xl p-5 sm:p-6 border border-slate-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 shadow-sm relative overflow-hidden space-y-4">
+          
+          <!-- Banner Tên Phòng Ban & Chi Nhánh -->
+          <div class="flex items-center justify-between pb-3 border-b border-slate-200/80 dark:border-slate-800">
+            <div class="flex items-center gap-2.5">
+              <div class="w-8 h-8 rounded-xl bg-[#002D54] text-white flex items-center justify-center font-bold text-xs shadow-sm">
+                <svg class="w-4 h-4 text-cyan-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <h2 class="text-sm font-black uppercase text-[#002D54] dark:text-white tracking-wide">${dept.name}</h2>
+                  <span class="text-[10px] font-bold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-700">${dept.branchName}</span>
+                </div>
+                <div class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Quy mô: ${dept.stats.total} nhân sự • ${dept.stats.working} đang làm • ${dept.stats.pending} hồ sơ chờ duyệt</div>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-300/40 flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span>HOẠT ĐỘNG</span>
+              </span>
+            </div>
+          </div>
+
+          <!-- TOP ROW: BÀN TRƯỞNG PHÒNG (BÊN TRÁI MÀN HÌNH - MÀU ĐẶC ĐẬM) + HÀNG ĐỢI PHÊ DUYỆT (BÊN PHẢI MÀN HÌNH) -->
+          <div class="flex flex-col lg:flex-row items-stretch gap-4">
+            
+            <!-- 1. BÀN TRƯỞNG PHÒNG (NẰM BÊN TRÁI MÀN HÌNH - MÀU ĐẶC ĐẬM #001D38) -->
+            <div class="w-full lg:w-[420px] shrink-0 flex flex-col justify-start">
+              <div class="text-xs font-black uppercase text-[#002D54] dark:text-cyan-400 tracking-wider flex items-center gap-1.5 mb-1.5">
+                <svg class="w-4 h-4 text-[#002D54] dark:text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15l-2 5l9-5l-2-10l-4 4l-4-4l-4 4l-2 10z"/></svg>
+                <span>BÀN TRƯỞNG PHÒNG</span>
+              </div>
+
+              <div class="p-4 rounded-2xl bg-[#001D38] border-2 border-[#00386B] text-white shadow-xl flex flex-col sm:flex-row items-center sm:items-start gap-4 flex-1">
+                <!-- Cột trái của sếp: Ảnh vuông + Tên + Lĩnh vực -->
+                <div class="flex flex-col items-center text-center sm:w-28 shrink-0">
+                  <div class="w-20 h-20 rounded-2xl overflow-hidden ring-2 ring-cyan-400 shadow-lg shrink-0 bg-slate-800 relative">
+                    <img src="${dept.leader.photo}" alt="${dept.leader.name}" class="w-full h-full object-cover object-top square-photo-box" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(dept.leader.name)}&background=002D54&color=fff';">
+                    <span class="absolute bottom-1 right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-[#001D38]"></span>
+                  </div>
+                  <div class="mt-2 w-full">
+                    <div class="font-black text-xs text-white leading-tight truncate">${dept.leader.name}</div>
+                    <div class="text-[10px] text-cyan-200 mt-0.5 truncate">${dept.leader.field}</div>
+                  </div>
+                </div>
+
+                <!-- Cột phải của sếp: 4 dòng chỉ số (Vụ làm, Vụ QL, Đang làm, Chờ) xếp lớp icon -->
+                <div class="flex-1 w-full flex flex-col justify-center space-y-1 sm:pl-3 sm:border-l border-white/15">
+                  ${renderStackedIcons(dept.leader.casesDoing || 3, 'casesDoing', true)}
+                  ${renderStackedIcons(dept.leader.casesManaging || 8, 'casesManaging', true)}
+                  ${renderStackedIcons(dept.leader.tasksWorking || 4, 'tasksWorking', true)}
+                  ${renderStackedIcons(dept.leader.tasksPending || 2, 'tasksPending', true)}
+                </div>
+              </div>
+            </div>
+
+            <!-- 2. HÀNG ĐỢI PHÊ DUYỆT (NẰM BÊN PHẢI MÀN HÌNH - TITLE TRÊN BOX CHỜ, NHÂN VIÊN CĂN TRÁI TRONG BOX ĐỂ ĐỨNG GẦN SẾP) -->
+            <div class="w-full lg:flex-1 flex flex-col space-y-1.5">
+              <!-- Title trên box chờ -->
+              <div class="flex items-center justify-between">
+                <div class="text-xs font-black uppercase text-amber-900 dark:text-amber-300 tracking-wider flex items-center gap-1.5">
+                  <svg class="w-4 h-4 text-[#FF7A00]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+                  <span>HÀNG ĐỢI PHÊ DUYỆT (GATE G1 - G5)</span>
+                  <span class="w-2 h-2 rounded-full bg-[#FF7A00] animate-ping"></span>
+                </div>
+                <span class="text-[10px] font-bold text-amber-700 dark:text-amber-400 bg-amber-100/80 dark:bg-amber-950 px-2 py-0.5 rounded-md">
+                  ${dept.queue.length} nhân sự đang xếp hàng
+                </span>
+              </div>
+
+              <!-- Box Chờ Hàng Đợi: CĂN TRÁI (justify-start) ĐỂ ĐỨNG GẦN SẾP Ở BÊN TRÁI -->
+              <div class="p-3 rounded-2xl bg-amber-50/70 dark:bg-amber-950/30 border-2 border-dashed border-[#FF7A00] flex-1 min-h-[95px] flex items-center justify-start gap-3 flex-wrap">
+                ${queueHTML}
+              </div>
+            </div>
+
+          </div>
+
+          <!-- DÃY BÀN LÀM VIỆC NHÂN SỰ -->
+          <div class="pt-2 space-y-2">
+            <div class="flex items-center justify-between">
+              <div class="text-xs font-black uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5 text-[#0082B4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                <span>Dãy Bàn Làm Việc Nhân Sự (${dept.staff.length} Bàn)</span>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+              ${staffHTML}
+            </div>
+          </div>
+
+        </section>
+      `;
+    }
+
+    // 4. HÀM CHUYỂN ĐỔI CHẾ ĐỘ HIỂN THỊ THEO CHI NHÁNH (LỌC THEO CHI NHÁNH)
+    function changeBranchView(branchKey) {
+      const container = document.getElementById('floorplan-viewport-container');
+      if (!container) return;
+
+      let targetDepartments = [];
+      let branchLabel = '';
+
+      if (branchKey === 'all-branches') {
+        targetDepartments = Object.keys(allDepartments).map(k => allDepartments[k]);
+        branchLabel = 'Toàn Hệ Thống';
+      } else {
+        const branch = branchesData[branchKey] || branchesData['branch-hn'];
+        targetDepartments = branch.departmentIds.map(id => allDepartments[id]).filter(Boolean);
+        branchLabel = branch.name;
+      }
+
+      let htmlAll = '';
+      let totalStaff = 0;
+      let workingStaff = 0;
+      let restingStaff = 0;
+      let pendingApprovals = 0;
+
+      targetDepartments.forEach(dept => {
+        htmlAll += generateRoomBoxHTML(dept);
+        totalStaff += dept.stats.total;
+        workingStaff += dept.stats.working;
+        restingStaff += dept.stats.resting;
+        pendingApprovals += dept.stats.pending;
+      });
+
+      container.innerHTML = htmlAll;
+
+      // Cập nhật số liệu tổng quan trên 4 ô KPI
+      const lbl = document.getElementById('stat-total-label');
+      if (lbl) lbl.textContent = 'Tổng Nhân Sự (' + branchLabel + ')';
+      
+      const stTotal = document.getElementById('stat-total-staff');
+      if (stTotal) stTotal.textContent = `${totalStaff.toString().padStart(2, '0')} nhân sự`;
+      
+      const stWork = document.getElementById('stat-working-count');
+      if (stWork) stWork.textContent = `${workingStaff.toString().padStart(2, '0')} nhân sự`;
+      
+      const stRest = document.getElementById('stat-resting-count');
+      if (stRest) stRest.textContent = `${restingStaff.toString().padStart(2, '0')} nhân sự`;
+      
+      const stPend = document.getElementById('stat-pending-approvals');
+      if (stPend) stPend.textContent = `${pendingApprovals.toString().padStart(2, '0')} hồ sơ`;
+    }
+
+    // Tương thích ngược changeViewMode
+    function changeViewMode(val) {
+      if (val === 'view-all') {
+        changeBranchView('all-branches');
+      } else if (val.startsWith('branch-')) {
+        changeBranchView(val);
+      } else {
+        changeBranchView('branch-hn');
+      }
+    }
+
+    // 4. DANH MỤC CHI TIẾT TÁC VỤ CHO SLIDE DRAWER
+    const staffProfiles = {
+      'usr-01': {
+        name: 'LS. Mai Linh',
+        role: 'Luật sư Cấp cao • SHTT',
+        photo: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&auto=format&fit=crop&q=80',
+        status: 'Đang xếp hàng chờ duyệt Cổng Gate G3 (2 việc)',
+        statusClass: 'text-amber-600 dark:text-amber-400',
+        workload: '78%',
+        tasks: [
+          { code: 'ASL-2026-TM109', title: 'Tờ khai đăng ký nhãn hiệu 9OUTFIT', due: '02/11/2026', tag: 'Chờ duyệt Gate G3', badgeClass: 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300' },
+          { code: 'ASL-2026-TM112', title: 'Soạn thảo đơn phản đối nhãn hiệu đối thủ', due: '05/11/2026', tag: 'Đang làm', badgeClass: 'bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300' }
+        ]
+      },
+      'usr-02': {
+        name: 'CV. Trịnh Thu Hà',
+        role: 'Chuyên viên Pháp lý • SHTT',
+        photo: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&auto=format&fit=crop&q=80',
+        status: 'Đang xếp hàng chờ duyệt Cổng Gate G2 (1 việc)',
+        statusClass: 'text-amber-600 dark:text-amber-400',
+        workload: '62%',
+        tasks: [
+          { code: 'ASL-2026-TM088', title: 'Ý kiến phản hồi hình thức Cục SHTT', due: '03/11/2026', tag: 'Chờ duyệt Gate G2', badgeClass: 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300' }
+        ]
+      },
+      'usr-03': {
+        name: 'LS. Trần Quốc Tuấn',
+        role: 'Luật sư Thành viên • Nhãn hiệu',
+        photo: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&auto=format&fit=crop&q=80',
+        status: '3 Đang làm • 1 Chờ',
+        statusClass: 'text-[#0082B4] dark:text-cyan-400',
+        workload: '85%',
+        tasks: [
+          { code: 'ASL-2026-TM102', title: 'Soạn thảo tờ khai đăng ký nhãn hiệu VINATECH nhóm 09', due: '04/11/2026', tag: 'Đang làm', badgeClass: 'bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300' },
+          { code: 'ASL-2026-TM081', title: 'Nộp công văn giải trình sửa đổi đơn Cục SHTT', due: '06/11/2026', tag: 'Đang làm', badgeClass: 'bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300' }
+        ]
+      },
+      'usr-04': {
+        name: 'CV. Lê Hoàng Nam',
+        role: 'Trợ lý Luật sư • Sẵn sàng',
+        photo: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&auto=format&fit=crop&q=80',
+        status: 'Đang nghỉ ngơi (0 việc đang làm)',
+        statusClass: 'text-emerald-600 dark:text-emerald-400',
+        workload: '15%',
+        tasks: [
+          { code: 'ASL-2026-PAT04', title: 'Dịch thuật tài liệu sáng chế thiết bị IoT (Chờ nhận)', due: '05/11/2026', tag: 'Chờ tiếp nhận', badgeClass: 'bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-300' }
+        ]
+      },
+      'usr-05': {
+        name: 'LS. Đỗ Thùy Trang',
+        role: 'Chuyên viên SHTT Cấp cao',
+        photo: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&auto=format&fit=crop&q=80',
+        status: '2 Đang làm • 0 Chờ',
+        statusClass: 'text-[#0082B4] dark:text-cyan-400',
+        workload: '60%',
+        tasks: [
+          { code: 'ASL-2026-TM109', title: 'Thẩm định đối chứng nhãn hiệu SaoFood nhóm 30', due: '05/11/2026', tag: 'Đang làm', badgeClass: 'bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300' }
+        ]
+      },
+      'usr-06': {
+        name: 'CV. Phạm Đức Thắng',
+        role: 'Trợ lý Nhãn hiệu',
+        photo: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&auto=format&fit=crop&q=80',
+        status: '1 Đang làm • 3 Chờ',
+        statusClass: 'text-[#0082B4] dark:text-cyan-400',
+        workload: '70%',
+        tasks: [
+          { code: 'ASL-2026-TM105', title: 'Soát xét tài liệu chứng minh quyền ưu tiên đơn quốc tế', due: '06/11/2026', tag: 'Đang làm', badgeClass: 'bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300' }
+        ]
+      },
+      'usr-07': {
+        name: 'CV. Hoàng Minh Phúc',
+        role: 'Chuyên viên Dịch thuật',
+        photo: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&auto=format&fit=crop&q=80',
+        status: 'Đang nghỉ ngơi (0 việc đang làm)',
+        statusClass: 'text-emerald-600 dark:text-emerald-400',
+        workload: '10%',
+        tasks: []
+      },
+      'usr-08': {
+        name: 'LS. Vũ Lan Anh',
+        role: 'Luật sư Tranh chấp Nhãn hiệu',
+        photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80',
+        status: '4 Đang làm • 1 Chờ (Tải cao)',
+        statusClass: 'text-red-600 dark:text-red-400',
+        workload: '95%',
+        tasks: [
+          { code: 'ASL-2026-TM099', title: 'Chuẩn bị hồ sơ khiếu nại quyết định Cục SHTT', due: '03/11/2026', tag: 'Khẩn cấp', badgeClass: 'bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-300' }
+        ]
+      }
+    };
+
+    // 5. CÁC HÀM ĐIỀU KHIỂN GIAO DIỆN & DRAWER / MODAL
+    function setUIState(stateKey) {
+      ['success', 'loading', 'empty', 'error'].forEach(k => {
+        const btn = document.getElementById('btn-state-' + k);
+        if (btn) {
+          if (k === stateKey) {
+            btn.className = "px-2.5 py-1 rounded-lg bg-white text-[#002D54] shadow-sm transition-all font-extrabold";
+          } else {
+            btn.className = "px-2.5 py-1 rounded-lg text-white hover:bg-white/10 transition-all";
+          }
+        }
+      });
+
+      const container = document.getElementById('floorplan-viewport-container');
+      const overlayLoading = document.getElementById('state-overlay-loading');
+      const overlayEmpty = document.getElementById('state-overlay-empty');
+      const overlayError = document.getElementById('state-overlay-error');
+
+      container.classList.add('hidden');
+      overlayLoading.classList.add('hidden');
+      overlayEmpty.classList.add('hidden');
+      overlayError.classList.add('hidden');
+
+      if (stateKey === 'success') {
+        container.classList.remove('hidden');
+      } else if (stateKey === 'loading') {
+        overlayLoading.classList.remove('hidden');
+      } else if (stateKey === 'empty') {
+        overlayEmpty.classList.remove('hidden');
+      } else if (stateKey === 'error') {
+        overlayError.classList.remove('hidden');
+      }
+    }
+
+    function openStaffDrawer(staffId) {
+      const staff = staffProfiles[staffId] || {
+        name: 'Nhân sự ASL LAW',
+        role: 'Luật sư Chuyên trách',
+        photo: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&auto=format&fit=crop&q=80',
+        status: 'Đang làm việc tích cực',
+        statusClass: 'text-[#0082B4] dark:text-cyan-400',
+        workload: '70%',
+        tasks: [
+          { code: 'ASL-2026-CASE01', title: 'Soát xét hồ sơ vụ việc khách hàng doanh nghiệp', due: '05/11/2026', tag: 'Đang làm', badgeClass: 'bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300' }
+        ]
+      };
+      
+      document.getElementById('drawer-name').textContent = staff.name;
+      document.getElementById('drawer-title').textContent = staff.role;
+      document.getElementById('drawer-photo').src = staff.photo;
+      
+      const statusPill = document.getElementById('drawer-status-pill');
+      statusPill.className = `text-sm font-extrabold ${staff.statusClass} mt-0.5 flex items-center gap-1.5`;
+      statusPill.innerHTML = `<span>${staff.status}</span>`;
+
+      const taskContainer = document.querySelector('#staff-drawer .space-y-3');
+      if (taskContainer) {
+        let taskHtml = `
+          <div class="flex items-center justify-between">
+            <h4 class="font-extrabold text-sm text-[#002D54] dark:text-white flex items-center gap-2">
+              <span class="w-2 h-4 rounded-full bg-[#0082B4]"></span>
+              <span>Danh Sách Tác Vụ Của Nhân Sự</span>
+            </h4>
+            <span class="text-[10px] font-bold text-slate-400">${staff.tasks.length} Việc</span>
+          </div>
+        `;
+
+        if (staff.tasks.length === 0) {
+          taskHtml += `
+            <div class="p-6 rounded-2xl bg-emerald-50/60 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 text-center space-y-2">
+              <svg class="w-8 h-8 text-emerald-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8zM6 1v3M10 1v3M14 1v3"/></svg>
+              <div class="font-bold text-emerald-800 dark:text-emerald-300 text-xs">Nhân sự hiện đang rảnh rỗi</div>
+              <p class="text-[10px] text-slate-500 dark:text-slate-400">Đã hoàn thành toàn bộ công việc được giao. Sẵn sàng nhận vụ việc mới!</p>
+            </div>
+          `;
+        } else {
+          staff.tasks.forEach(t => {
+            taskHtml += `
+              <div class="p-3.5 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 space-y-2">
+                <div class="flex items-start justify-between gap-2">
+                  <div>
+                    <span class="px-2 py-0.5 rounded text-[9px] font-bold ${t.badgeClass}">${t.tag}</span>
+                    <h5 class="font-bold text-xs text-[#002D54] dark:text-white mt-1">${t.title}</h5>
+                  </div>
+                  <span class="font-mono text-[10px] font-bold text-[#0082B4]">${t.code}</span>
+                </div>
+                <div class="flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400 pt-1 border-t border-slate-100 dark:border-slate-700/80">
+                  <span>Hạn chót: <strong>${t.due}</strong></span>
+                  <span class="text-blue-600 font-bold">Hồ sơ ASL</span>
+                </div>
+              </div>
+            `;
+          });
+        }
+        taskContainer.innerHTML = taskHtml;
+      }
+
+      document.getElementById('staff-drawer-backdrop').classList.remove('opacity-0', 'pointer-events-none');
+      document.getElementById('staff-drawer-backdrop').classList.add('opacity-100');
+      document.getElementById('staff-drawer').classList.remove('translate-x-full');
+    }
+
+    function closeStaffDrawer() {
+      document.getElementById('staff-drawer-backdrop').classList.add('opacity-0', 'pointer-events-none');
+      document.getElementById('staff-drawer-backdrop').classList.remove('opacity-100');
+      document.getElementById('staff-drawer').classList.add('translate-x-full');
+    }
+
+    function quickAssignTask() {
+      const taskTitle = prompt("Nhập tiêu đề công việc cần giao nhanh cho nhân sự này:");
+      if (taskTitle) {
+        alert(`Đã giao công việc mới: "${taskTitle}"!
+
+Nhân sự đã nhận được thông báo đẩy và công việc đã được nạp vào hàng chờ.`);
+        closeStaffDrawer();
+      }
+    }
+
+    function sendQuickReminder() {
+      alert("Đã gửi tin nhắn nhắc nhở trực tiếp tới Telegram và ứng dụng Web Chuông của nhân sự thành công!");
+    }
+
+    let currentApprId = null;
+
+    function openApprovalGate(apprId, userName, title, caseCode, userPhoto) {
+      currentApprId = apprId;
+      document.getElementById('modal-appr-user').textContent = userName;
+      document.getElementById('modal-appr-title').textContent = title;
+      document.getElementById('modal-appr-case').textContent = caseCode;
+      if (userPhoto) {
+        document.getElementById('modal-appr-photo').src = userPhoto;
+      }
+      document.getElementById('approval-modal').classList.remove('hidden');
+    }
+
+    function closeApprovalGate() {
+      document.getElementById('approval-modal').classList.add('hidden');
+    }
+
+    function executeApproveApproval() {
+      const user = document.getElementById('modal-appr-user').textContent;
+      alert(`ĐÃ KÝ DUYỆT ĐIỆN TỬ THÀNH CÔNG!
+
+• Hồ sơ: ${document.getElementById('modal-appr-title').textContent}
+• Người trình: ${user}
+
+Nhân sự ${user} đã hoàn tất thủ tục và tự động quay về bàn làm việc cá nhân.`);
+      closeApprovalGate();
+      // Tải lại view hiện tại để cập nhật bàn
+      const select = document.getElementById('branch-select');
+      const selectVal = select ? select.value : 'branch-hn';
+      changeBranchView(selectVal);
+    }
+
+    function executeRejectApproval() {
+      alert("Đã trả về hồ sơ kèm yêu cầu bổ sung chỉnh sửa. Nhân sự đã nhận được phản hồi.");
+      closeApprovalGate();
+    }
+
+    // 6. KHỞI TẠO THEO CHI NHÁNH & VAI TRÒ
+    document.addEventListener('DOMContentLoaded', () => {
+      const select = document.getElementById('branch-select');
+      const defaultBranch = 'branch-hn';
+      if (select) select.value = defaultBranch;
+      changeBranchView(defaultBranch);
+    });
+  </script>
+
+</body>
+</html>

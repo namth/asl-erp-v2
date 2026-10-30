@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <script>(function(){if(localStorage.getItem('asl_theme')==='dark'){document.documentElement.classList.add('dark');}else{document.documentElement.classList.remove('dark');}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASL LAW - Phễu Cơ Hội Kinh Doanh (CRM Pipeline)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/layout.css?v=3.2">
+  <script src="../assets/layout.js?v=3.2" defer></script>
+  <style>
+    .pipeline-col {
+      box-shadow: 0 1px 3px 0 rgba(0, 45, 84, 0.05);
+      min-height: 680px;
+      transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .card-drag {
+      cursor: grab;
+      user-select: none;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .card-drag:active {
+      cursor: grabbing;
+    }
+    .card-drag.dragging {
+      opacity: 0.35 !important;
+      transform: scale(0.97) rotate(-1deg);
+      border: 2px dashed #0082B4 !important;
+      box-shadow: 0 15px 30px rgba(0, 45, 84, 0.2);
+    }
+    .pipeline-col.drag-over {
+      outline: 2px dashed #0082B4;
+      outline-offset: -3px;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-[#F4F8FA] text-slate-800 flex overflow-x-hidden w-full">
+
+  <!-- Modular Shared Sidebar (Auto-mounted by layout.js) -->
+  <aside id="sidebar" class="fixed top-0 left-0 bottom-0 w-72 bg-white/95 backdrop-blur-xl z-40 transition-all duration-300 ease-in-out flex flex-col justify-between shadow-xl shadow-slate-900/5"></aside>
+
+  <!-- Main Container -->
+  <div id="main-container" class="flex-1 md:ml-72 flex flex-col min-h-screen w-full min-w-0 max-w-full overflow-x-hidden transition-all duration-300 ease-in-out">
+
+    <!-- Top Bar with Rich Brand Gradient -->
+    <header class="header-gradient text-white min-h-[4.5rem] py-3 px-4 sm:px-6 flex flex-wrap lg:flex-nowrap items-center justify-between gap-3 sticky top-0 z-30 shadow-md">
+      <div class="flex items-center gap-3 min-w-0">
+        <button onclick="toggleSidebar()" class="md:hidden p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white flex-shrink-0" title="Mở menu">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <div class="min-w-0">
+          <div class="text-[11px] text-cyan-200/90 font-medium flex items-center gap-1.5 truncate">
+            <a href="../index.html" class="hover:underline">ASL LAW</a>
+            <span>/</span>
+            <span class="text-cyan-200">CRM</span>
+            <span>/</span>
+            <span class="text-white font-semibold">Phễu Cơ Hội</span>
+          </div>
+          <h1 class="text-base sm:text-lg font-bold text-white tracking-tight truncate">Phễu Cơ Hội Kinh Doanh</h1>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <!-- View Mode Switcher (Giống trang Quản lý tác vụ) -->
+        <div class="flex items-center bg-white/10 p-1 rounded-xl border border-white/20 backdrop-blur-md">
+          <a href="index.html" class="px-3 py-1.5 rounded-lg bg-white text-[#002D54] font-extrabold text-xs shadow-md flex items-center gap-1.5 transition-all">
+            <svg class="w-4 h-4 text-[#0082B4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"/></svg>
+            <span>Bảng Phễu (Kanban)</span>
+          </a>
+          <a href="list.html" class="px-3 py-1.5 rounded-lg text-white hover:text-cyan-200 font-bold text-xs flex items-center gap-1.5 transition-all">
+            <svg class="w-4 h-4 text-cyan-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
+            <span>Dạng Danh Sách</span>
+          </a>
+        </div>
+
+        <!-- Switch to Customers Directory Button -->
+        <a href="customers.html" class="px-3.5 py-2 rounded-xl bg-white/15 hover:bg-white/25 border border-white/20 text-white font-bold text-xs flex items-center gap-1.5 transition-all">
+          <svg class="w-4 h-4 text-cyan-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+          <span>Danh Bạ Khách Hàng</span>
+        </a>
+
+        <!-- User profile -->
+        <div class="flex items-center gap-2 pl-2 border-l border-white/20">
+          <div class="w-8 h-8 rounded-full bg-[#FF7A00] text-white font-extrabold text-xs flex items-center justify-center ring-2 ring-white/50">
+            NA
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Area: Standard ERP Layout -->
+    <main class="flex-1 p-4 sm:p-6 md:p-8 w-full min-w-0 max-w-full space-y-6 overflow-x-hidden">
+
+      <!-- Headline & Introduction matching the entire ASL LAW ERP Design -->
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <span class="text-xs font-extrabold uppercase tracking-wider text-[#0082B4] px-2.5 py-0.5 rounded-full bg-cyan-50 border border-cyan-200/80 inline-block">CRM</span>
+          <h2 class="text-2xl md:text-3xl font-extrabold text-[#002D54] tracking-tight mt-1.5">Phễu cơ hội kinh doanh</h2>
+          <p class="text-xs md:text-sm text-slate-500 mt-1">Ghi nhận nguồn tiếp cận, ước lượng giá trị và chuyển đổi một chạm thành vụ việc chính thức.</p>
+        </div>
+
+        <div class="flex items-center gap-2 sm:gap-3 w-full sm:w-auto flex-wrap sm:flex-nowrap">
+          <!-- Quick search filter -->
+          <div class="relative flex-1 sm:w-64 min-w-[180px]">
+            <input type="text" id="pipelineSearch" oninput="filterCards()" placeholder="Tìm cơ hội, thân chủ..." class="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-200 bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-[#0082B4]/50 focus:border-[#0082B4]">
+            <svg class="w-4 h-4 text-slate-400 absolute left-2.5 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          </div>
+
+          <!-- Cơ hội mới CTA Button (Brand Orange, Plus Icon with clean label) -->
+          <a href="create-lead.html" class="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-[#FF7A00] hover:bg-[#E66E00] text-white font-bold text-xs shadow-md shadow-orange-950/20 transition-all whitespace-nowrap flex-shrink-0">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            <span>Cơ hội mới</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- KPI Overview Cards (Solid Bold Cards - Gọn gàng & Đã bỏ xác suất) -->
+      <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+        <!-- 1. Mới Tiếp Nhận (Solid Deep Navy) -->
+        <div class="rounded-2xl p-5 relative overflow-hidden bg-[#002D54] text-white shadow-md shadow-[#002D54]/20 transition-all hover:-translate-y-0.5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-cyan-200/90 uppercase tracking-wider">Mới Tiếp Nhận</span>
+            <span class="p-1.5 rounded-lg bg-white/15 text-white backdrop-blur-sm">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            </span>
+          </div>
+          <div class="text-xl sm:text-2xl font-bold text-white mt-2 font-mono tracking-tight">75.000.000 <span class="text-xs font-medium text-cyan-200/80">₫</span></div>
+          <div class="text-xs text-cyan-100/80 mt-1.5 flex items-center">
+            <span>2 cơ hội tiếp cận</span>
+          </div>
+        </div>
+
+        <!-- 2. Đang Tư Vấn (Solid ASL Cerulean) -->
+        <div class="rounded-2xl p-5 relative overflow-hidden bg-[#0082B4] text-white shadow-md shadow-cyan-950/20 transition-all hover:-translate-y-0.5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-cyan-100 uppercase tracking-wider">Đang Tư Vấn</span>
+            <span class="p-1.5 rounded-lg bg-white/15 text-white backdrop-blur-sm">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+            </span>
+          </div>
+          <div class="text-xl sm:text-2xl font-bold text-white mt-2 font-mono tracking-tight">600.000.000 <span class="text-xs font-medium text-cyan-200/80">₫</span></div>
+          <div class="text-xs text-cyan-100/80 mt-1.5 flex items-center">
+            <span>2 cơ hội chuyên sâu</span>
+          </div>
+        </div>
+
+        <!-- 3. Đã Gửi Báo Giá (Solid Brand Orange) -->
+        <div class="rounded-2xl p-5 relative overflow-hidden bg-[#FF7A00] text-white shadow-md shadow-orange-950/20 transition-all hover:-translate-y-0.5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-orange-100 uppercase tracking-wider">Đã Gửi Báo Giá</span>
+            <span class="p-1.5 rounded-lg bg-white/20 text-white backdrop-blur-sm">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            </span>
+          </div>
+          <div class="text-xl sm:text-2xl font-bold text-white mt-2 font-mono tracking-tight">710.000.000 <span class="text-xs font-medium text-orange-100/80">₫</span></div>
+          <div class="text-xs text-white/90 mt-1.5 flex items-center">
+            <span>2 cơ hội đang đàm phán</span>
+          </div>
+        </div>
+
+        <!-- 4. Đã Chốt / Ký HĐ (Solid Emerald Green) -->
+        <div class="rounded-2xl p-5 relative overflow-hidden bg-[#047857] text-white shadow-md shadow-emerald-950/20 transition-all hover:-translate-y-0.5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-emerald-100 uppercase tracking-wider">Đã Chốt / Ký HĐ</span>
+            <span class="p-1.5 rounded-lg bg-white/15 text-white backdrop-blur-sm">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </span>
+          </div>
+          <div class="text-xl sm:text-2xl font-bold text-white mt-2 font-mono tracking-tight">38.000.000 <span class="text-xs font-medium text-emerald-200">₫</span></div>
+          <div class="text-xs text-emerald-100/80 mt-1.5 flex items-center">
+            <span>1 cơ hội tạo vụ ngay</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4 Kanban Pipeline Columns (Synced with Tasks Board Style & Palette) -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 items-start w-full min-w-0">
+
+        <!-- Column 1: Mới tiếp nhận (Solid Dark Slate Header - Matching Task Board Column 1) -->
+        <div class="kanban-column pipeline-col bg-slate-100/90 rounded-2xl p-4 border border-slate-300 shadow-sm flex flex-col space-y-3 min-h-[720px] transition-colors" data-stage="moi-tiep-nhan" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'moi-tiep-nhan')">
+          <!-- Solid High-Contrast Slate Header -->
+          <div class="p-3.5 rounded-xl bg-slate-800 text-white shadow-md border border-slate-700 flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-slate-300 ring-2 ring-white/30"></span>
+              <h3 class="font-extrabold text-xs uppercase tracking-wider text-white">Mới Tiếp Nhận</h3>
+            </div>
+            <span class="column-count px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-slate-900 text-slate-200 border border-slate-700">2</span>
+          </div>
+
+          <div class="cards-container space-y-3 flex-1 min-h-[220px]">
+            <!-- Card 1: Đăng ký nhãn hiệu 'SaoFood' -->
+            <div class="card-drag bg-white dark:bg-slate-800 rounded-xl p-4 shadow-sm hover:shadow-md transition-all space-y-2.5 border border-slate-200 dark:border-slate-700" draggable="true" ondragstart="handleDragStart(event)" ondragend="handleDragEnd(event)" data-id="opp-1" data-val="45000000" data-prob="30" data-client="Sao Việt" data-title="Đăng ký nhãn hiệu 'SaoFood'" data-source="Website">
+              <div class="flex items-start justify-between gap-2">
+                <h3 class="font-bold text-xs md:text-sm text-[#002D54] dark:text-slate-100 leading-snug card-title hover:text-[#0082B4]">Đăng ký nhãn hiệu 'SaoFood'</h3>
+                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 dark:bg-sky-950/60 dark:text-sky-300 border border-blue-200 dark:border-sky-800/50 whitespace-nowrap card-source">Website</span>
+              </div>
+              <div class="text-xs text-slate-500 dark:text-slate-400 font-medium card-client">Thân chủ: <strong>Sao Việt</strong></div>
+              <div class="pt-1">
+                <div class="text-base font-extrabold text-[#002D54] dark:text-cyan-400 font-mono card-value-display">45.000.000 đ</div>
+                <div class="flex items-center gap-2.5 mt-2">
+                  <div class="flex-1 h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden border border-slate-200/50 dark:border-slate-600">
+                    <div class="h-full bg-gradient-to-r from-[#0082B4] to-cyan-400 rounded-full transition-all duration-300 prob-bar" style="width: 30%"></div>
+                  </div>
+                  <span class="text-[11px] font-bold text-[#0082B4] dark:text-cyan-400 font-mono prob-text">30%</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 2: Tư vấn ly hôn đơn phương -->
+            <div class="card-drag bg-white dark:bg-slate-800 rounded-xl p-4 shadow-sm hover:shadow-md transition-all space-y-2.5 border border-slate-200 dark:border-slate-700" draggable="true" ondragstart="handleDragStart(event)" ondragend="handleDragEnd(event)" data-id="opp-2" data-val="30000000" data-prob="20" data-client="Đỗ Mai Phương" data-title="Tư vấn ly hôn đơn phương" data-source="Facebook">
+              <div class="flex items-start justify-between gap-2">
+                <h3 class="font-bold text-xs md:text-sm text-[#002D54] dark:text-slate-100 leading-snug card-title hover:text-[#0082B4]">Tư vấn ly hôn đơn phương</h3>
+                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-indigo-50 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800/50 whitespace-nowrap card-source">Facebook</span>
+              </div>
+              <div class="text-xs text-slate-500 dark:text-slate-400 font-medium card-client">Thân chủ: <strong>Đỗ Mai Phương</strong></div>
+              <div class="pt-1">
+                <div class="text-base font-extrabold text-[#002D54] dark:text-cyan-400 font-mono card-value-display">30.000.000 đ</div>
+                <div class="flex items-center gap-2.5 mt-2">
+                  <div class="flex-1 h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden border border-slate-200/50 dark:border-slate-600">
+                    <div class="h-full bg-gradient-to-r from-[#0082B4] to-cyan-400 rounded-full transition-all duration-300 prob-bar" style="width: 20%"></div>
+                  </div>
+                  <span class="text-[11px] font-bold text-[#0082B4] dark:text-cyan-400 font-mono prob-text">20%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <a href="create-lead.html?stage=moi-tiep-nhan" class="w-full py-2.5 rounded-xl border border-dashed border-slate-300 hover:border-slate-500 text-slate-600 hover:text-slate-900 text-xs font-bold text-center block transition-colors bg-white/50 hover:bg-white dark:bg-slate-800/40 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800">
+            Thêm cơ hội vào cột này
+          </a>
+        </div>
+
+        <!-- Column 2: Đang tư vấn (Solid ASL Cerulean Header - Matching Task Board Column 2) -->
+        <div class="kanban-column pipeline-col bg-blue-50/70 rounded-2xl p-4 border border-blue-200/90 shadow-sm flex flex-col space-y-3 min-h-[720px] transition-colors" data-stage="dang-tu-van" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'dang-tu-van')">
+          <!-- Solid High-Contrast Cerulean Header -->
+          <div class="p-3.5 rounded-xl bg-gradient-to-r from-[#002D54] to-[#0082B4] text-white shadow-md border border-blue-400/30 flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-cyan-300 animate-pulse ring-2 ring-white/30"></span>
+              <h3 class="font-extrabold text-xs uppercase tracking-wider text-white">Đang Tư Vấn</h3>
+            </div>
+            <span class="column-count px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-white/20 text-white backdrop-blur-sm border border-white/30">2</span>
+          </div>
+
+          <div class="cards-container space-y-3 flex-1 min-h-[220px]">
+            <!-- Card 3: Tranh chấp đất đai Thủ Đức -->
+            <div class="card-drag bg-white dark:bg-slate-800 rounded-xl p-4 shadow-sm hover:shadow-md transition-all space-y-2.5 border border-slate-200 dark:border-slate-700" draggable="true" ondragstart="handleDragStart(event)" ondragend="handleDragEnd(event)" data-id="opp-3" data-val="120000000" data-prob="55" data-client="Phạm Đức Thắng" data-title="Tranh chấp đất đai Thủ Đức" data-source="Hotline">
+              <div class="flex items-start justify-between gap-2">
+                <h3 class="font-bold text-xs md:text-sm text-[#002D54] dark:text-slate-100 leading-snug card-title hover:text-[#0082B4]">Tranh chấp đất đai Thủ Đức</h3>
+                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/50 whitespace-nowrap card-source">Hotline</span>
+              </div>
+              <div class="text-xs text-slate-500 dark:text-slate-400 font-medium card-client">Thân chủ: <strong>Phạm Đức Thắng</strong></div>
+              <div class="pt-1">
+                <div class="text-base font-extrabold text-[#002D54] dark:text-cyan-400 font-mono card-value-display">120.000.000 đ</div>
+                <div class="flex items-center gap-2.5 mt-2">
+                  <div class="flex-1 h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden border border-slate-200/50 dark:border-slate-600">
+                    <div class="h-full bg-gradient-to-r from-[#0082B4] to-cyan-400 rounded-full transition-all duration-300 prob-bar" style="width: 55%"></div>
+                  </div>
+                  <span class="text-[11px] font-bold text-[#0082B4] dark:text-cyan-400 font-mono prob-text">55%</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 4: Rà soát hợp đồng M&A -->
+            <div class="card-drag bg-white dark:bg-slate-800 rounded-xl p-4 shadow-sm hover:shadow-md transition-all space-y-2.5 border border-slate-200 dark:border-slate-700" draggable="true" ondragstart="handleDragStart(event)" ondragend="handleDragEnd(event)" data-id="opp-4" data-val="480000000" data-prob="60" data-client="Hoàng Long" data-title="Rà soát hợp đồng M&A" data-source="Đối tác">
+              <div class="flex items-start justify-between gap-2">
+                <h3 class="font-bold text-xs md:text-sm text-[#002D54] dark:text-slate-100 leading-snug card-title hover:text-[#0082B4]">Rà soát hợp đồng M&amp;A</h3>
+                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-purple-50 text-purple-700 dark:bg-purple-950/60 dark:text-purple-300 border border-purple-200 dark:border-purple-800/50 whitespace-nowrap card-source">Đối tác</span>
+              </div>
+              <div class="text-xs text-slate-500 dark:text-slate-400 font-medium card-client">Thân chủ: <strong>Hoàng Long</strong></div>
+              <div class="pt-1">
+                <div class="text-base font-extrabold text-[#002D54] dark:text-cyan-400 font-mono card-value-display">480.000.000 đ</div>
+                <div class="flex items-center gap-2.5 mt-2">
+                  <div class="flex-1 h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden border border-slate-200/50 dark:border-slate-600">
+                    <div class="h-full bg-gradient-to-r from-[#0082B4] to-cyan-400 rounded-full transition-all duration-300 prob-bar" style="width: 60%"></div>
+                  </div>
+                  <span class="text-[11px] font-bold text-[#0082B4] dark:text-cyan-400 font-mono prob-text">60%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <a href="create-lead.html?stage=dang-tu-van" class="w-full py-2.5 rounded-xl border border-dashed border-blue-300 hover:border-blue-500 text-blue-700 hover:text-blue-900 text-xs font-bold text-center block transition-colors bg-white/50 hover:bg-white dark:bg-slate-800/40 dark:border-slate-700 dark:text-cyan-300 dark:hover:bg-slate-800">
+            Thêm cơ hội vào cột này
+          </a>
+        </div>
+
+        <!-- Column 3: Đã gửi báo giá (Solid Brand Orange Header - Matching Task Board Column 3) -->
+        <div class="kanban-column pipeline-col bg-amber-50/70 rounded-2xl p-4 border border-amber-200/90 shadow-sm flex flex-col space-y-3 min-h-[720px] transition-colors" data-stage="da-gui-bao-gia" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'da-gui-bao-gia')">
+          <!-- Solid High-Contrast Amber / Orange Header -->
+          <div class="p-3.5 rounded-xl bg-gradient-to-r from-[#D95300] to-[#FF7A00] text-white shadow-md border border-orange-400/30 flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-amber-200 ring-2 ring-white/30"></span>
+              <h3 class="font-extrabold text-xs uppercase tracking-wider text-white">Đã Gửi Báo Giá</h3>
+            </div>
+            <span class="column-count px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-white/20 text-white backdrop-blur-sm border border-white/30">1</span>
+          </div>
+
+          <div class="cards-container space-y-3 flex-1 min-h-[220px]">
+            <!-- Card 5: Đăng ký sáng chế thiết bị IoT -->
+            <div class="card-drag bg-white dark:bg-slate-800 rounded-xl p-4 shadow-sm hover:shadow-md transition-all space-y-2.5 border border-slate-200 dark:border-slate-700" draggable="true" ondragstart="handleDragStart(event)" ondragend="handleDragEnd(event)" data-id="opp-5" data-val="160000000" data-prob="75" data-client="Minh Phát Tech" data-title="Đăng ký sáng chế thiết bị IoT" data-source="Đối tác">
+              <div class="flex items-start justify-between gap-2">
+                <h3 class="font-bold text-xs md:text-sm text-[#002D54] dark:text-slate-100 leading-snug card-title hover:text-[#0082B4]">Đăng ký sáng chế thiết bị IoT</h3>
+                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-purple-50 text-purple-700 dark:bg-purple-950/60 dark:text-purple-300 border border-purple-200 dark:border-purple-800/50 whitespace-nowrap card-source">Đối tác</span>
+              </div>
+              <div class="text-xs text-slate-500 dark:text-slate-400 font-medium card-client">Thân chủ: <strong>Minh Phát Tech</strong></div>
+              <div class="pt-1">
+                <div class="text-base font-extrabold text-[#002D54] dark:text-cyan-400 font-mono card-value-display">160.000.000 đ</div>
+                <div class="flex items-center gap-2.5 mt-2">
+                  <div class="flex-1 h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden border border-slate-200/50 dark:border-slate-600">
+                    <div class="h-full bg-gradient-to-r from-[#0082B4] to-cyan-400 rounded-full transition-all duration-300 prob-bar" style="width: 75%"></div>
+                  </div>
+                  <span class="text-[11px] font-bold text-[#0082B4] dark:text-cyan-400 font-mono prob-text">75%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <a href="create-lead.html?stage=da-gui-bao-gia" class="w-full py-2.5 rounded-xl border border-dashed border-amber-300 hover:border-amber-500 text-amber-800 hover:text-amber-900 text-xs font-bold text-center block transition-colors bg-white/50 hover:bg-white dark:bg-slate-800/40 dark:border-slate-700 dark:text-amber-300 dark:hover:bg-slate-800">
+            Thêm cơ hội vào cột này
+          </a>
+        </div>
+
+        <!-- Column 4: Đã chốt / Ký HĐ (Solid Emerald Green Header - Matching Task Board Column 4) -->
+        <div class="kanban-column pipeline-col bg-emerald-50/70 rounded-2xl p-4 border border-emerald-200/90 shadow-sm flex flex-col space-y-3 min-h-[720px] transition-colors" data-stage="da-chot" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'da-chot')">
+          <!-- Solid High-Contrast Emerald Green Header -->
+          <div class="p-3.5 rounded-xl bg-gradient-to-r from-emerald-800 to-emerald-600 text-white shadow-md border border-emerald-400/30 flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-200 ring-2 ring-white/30"></span>
+              <h3 class="font-extrabold text-xs uppercase tracking-wider text-white">Đã Chốt / Ký HĐ</h3>
+            </div>
+            <span class="column-count px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-white/20 text-white backdrop-blur-sm border border-white/30">1</span>
+          </div>
+
+          <div class="cards-container space-y-3 flex-1 min-h-[220px]">
+            <!-- Card 6: Kiểu dáng công nghiệp bao bì -->
+            <div class="card-drag bg-white dark:bg-slate-800 rounded-xl p-4 shadow-sm hover:shadow-md transition-all space-y-2.5 border border-slate-200 dark:border-slate-700" draggable="true" ondragstart="handleDragStart(event)" ondragend="handleDragEnd(event)" data-id="opp-6" data-val="38000000" data-prob="100" data-client="Sao Việt" data-title="Kiểu dáng công nghiệp bao bì" data-source="Khách cũ">
+              <div class="flex items-start justify-between gap-2">
+                <h3 class="font-bold text-xs md:text-sm text-[#002D54] dark:text-slate-100 leading-snug card-title hover:text-[#0082B4]">Kiểu dáng công nghiệp bao bì</h3>
+                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200 dark:border-amber-800/50 whitespace-nowrap card-source">Khách cũ</span>
+              </div>
+              <div class="text-xs text-slate-500 dark:text-slate-400 font-medium card-client">Thân chủ: <strong>Sao Việt</strong></div>
+              <div class="pt-1">
+                <div class="text-base font-extrabold text-[#002D54] dark:text-cyan-400 font-mono card-value-display">38.000.000 đ</div>
+                <div class="flex items-center gap-2.5 mt-2">
+                  <div class="flex-1 h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden border border-slate-200/50 dark:border-slate-600">
+                    <div class="h-full bg-emerald-500 rounded-full transition-all duration-300 prob-bar" style="width: 100%"></div>
+                  </div>
+                  <span class="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 font-mono prob-text">100%</span>
+                </div>
+              </div>
+
+              <!-- 1-Click Convert to Case CTA Button (Brand ASL Cerulean) -->
+              <div class="won-action-box pt-2">
+                <a href="../cases/create.html?lead=SaoViet&title=Kiểu+dáng+công+nghiệp+bao+bì&val=38000000" class="w-full py-2.5 px-3 rounded-xl bg-[#002D54] hover:bg-[#0082B4] text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-md">
+                  <svg class="w-3.5 h-3.5 text-cyan-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                  <span>Tạo vụ việc chính thức</span>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="py-2.5 text-center text-[11px] text-emerald-800 dark:text-emerald-300 font-bold bg-emerald-100/60 dark:bg-emerald-950/40 rounded-xl border border-emerald-200 dark:border-emerald-800/40">
+            ✓ Chuyển đổi thành công sang Vụ việc
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Drag & Drop Engine and Real-time Recalculation Script -->
+  <script>
+    let draggedElement = null;
+
+    function formatVND(amount) {
+      return new Intl.NumberFormat('vi-VN').format(amount) + ' đ';
+    }
+
+    function handleDragStart(e) {
+      draggedElement = e.currentTarget;
+      e.currentTarget.classList.add('dragging');
+      e.dataTransfer.setData('text/plain', e.currentTarget.getAttribute('data-id'));
+      e.dataTransfer.effectAllowed = 'move';
+    }
+
+    function handleDragEnd(e) {
+      if (draggedElement) {
+        draggedElement.classList.remove('dragging');
+      }
+      document.querySelectorAll('.pipeline-col').forEach(col => {
+        col.classList.remove('drag-over');
+      });
+      draggedElement = null;
+    }
+
+    function handleDragOver(e) {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      const col = e.currentTarget;
+      if (!col.classList.contains('drag-over')) {
+        col.classList.add('drag-over');
+      }
+    }
+
+    function handleDragLeave(e) {
+      e.currentTarget.classList.remove('drag-over');
+    }
+
+    function handleDrop(e, targetStage) {
+      e.preventDefault();
+      const col = e.currentTarget;
+      col.classList.remove('drag-over');
+
+      if (!draggedElement) return;
+
+      const container = col.querySelector('.cards-container');
+      if (container) {
+        container.appendChild(draggedElement);
+        
+        // Update probability & won action button based on target stage
+        updateCardForStage(draggedElement, targetStage);
+
+        // Recalculate all totals
+        recalculateTotals();
+      }
+    }
+
+    function updateCardForStage(card, stage) {
+      const probBar = card.querySelector('.prob-bar');
+      const probText = card.querySelector('.prob-text');
+      let wonBox = card.querySelector('.won-action-box');
+
+      let newProb = 30;
+      if (stage === 'moi-tiep-nhan') newProb = 25;
+      else if (stage === 'dang-tu-van') newProb = 50;
+      else if (stage === 'da-gui-bao-gia') newProb = 75;
+      else if (stage === 'da-chot') newProb = 100;
+
+      card.setAttribute('data-prob', newProb);
+      if (probBar) {
+        probBar.style.width = newProb + '%';
+        if (stage === 'da-chot') {
+          probBar.className = 'h-full bg-emerald-500 rounded-full transition-all duration-300 prob-bar';
+        } else {
+          probBar.className = 'h-full bg-gradient-to-r from-[#0082B4] to-cyan-400 rounded-full transition-all duration-300 prob-bar';
+        }
+      }
+      if (probText) {
+        probText.textContent = newProb + '%';
+        if (stage === 'da-chot') {
+          probText.className = 'text-[11px] font-bold text-emerald-600 font-mono prob-text';
+        } else {
+          probText.className = 'text-[11px] font-bold text-[#0082B4] font-mono prob-text';
+        }
+      }
+
+      if (stage === 'da-chot') {
+        if (!wonBox) {
+          wonBox = document.createElement('div');
+          wonBox.className = 'won-action-box pt-2';
+          const title = encodeURIComponent(card.getAttribute('data-title') || '');
+          const client = encodeURIComponent(card.getAttribute('data-client') || '');
+          const val = card.getAttribute('data-val') || '';
+          wonBox.innerHTML = `
+            <a href="../cases/create.html?lead=${client}&title=${title}&val=${val}" class="w-full py-2.5 px-3 rounded-xl bg-[#002D54] hover:bg-[#0082B4] text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-md">
+              <svg class="w-3.5 h-3.5 text-cyan-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+              <span>Tạo vụ việc chính thức</span>
+            </a>
+          `;
+          card.appendChild(wonBox);
+        }
+      } else {
+        if (wonBox) {
+          wonBox.remove();
+        }
+      }
+    }
+
+    function recalculateTotals() {
+      const stages = ['moi-tiep-nhan', 'dang-tu-van', 'da-gui-bao-gia', 'da-chot'];
+      stages.forEach(stage => {
+        const col = document.querySelector(`.pipeline-col[data-stage="${stage}"]`);
+        if (!col) return;
+        const visibleCards = col.querySelectorAll('.card-drag:not([style*="display: none"])');
+        const countBadge = col.querySelector('.column-count');
+        if (countBadge) {
+          countBadge.textContent = visibleCards.length;
+        }
+      });
+    }
+
+    function filterCards() {
+      const q = (document.getElementById('pipelineSearch').value || '').toLowerCase().trim();
+      const cards = document.querySelectorAll('.card-drag');
+      cards.forEach(c => {
+        const text = c.textContent.toLowerCase();
+        if (!q || text.includes(q)) {
+          c.style.display = 'block';
+        } else {
+          c.style.display = 'none';
+        }
+      });
+      recalculateTotals();
+    }
+
+    // Bảo toàn vai trò ?role=... khi chuyển đổi chế độ xem
+    function syncRoleLinks() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const role = urlParams.get('role') || localStorage.getItem('asl_user_role') || 'admin';
+      document.querySelectorAll('a[href^="list.html"], a[href^="customers.html"], a[href^="create-lead.html"]').forEach(a => {
+        try {
+          const href = a.getAttribute('href');
+          const cleanHref = href.split('?')[0];
+          const query = href.includes('?') ? href.split('?')[1] : '';
+          const p = new URLSearchParams(query);
+          p.set('role', role);
+          a.setAttribute('href', cleanHref + '?' + p.toString());
+        } catch(e) {}
+      });
+    }
+
+    function initPipeline() {
+      syncRoleLinks();
+      recalculateTotals();
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initPipeline);
+    } else {
+      initPipeline();
+    }
+  </script>
+</body>
+</html>

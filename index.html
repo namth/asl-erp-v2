@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="vi" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ERP ASL LAW - Bàn Làm Việc Cá Nhân (Dashboard)</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+    .bg-mesh-light {
+      background-color: #F4F8FA;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(0, 130, 180, 0.08) 0px, transparent 55%),
+        radial-gradient(at 100% 0%, rgba(0, 45, 84, 0.06) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, rgba(255, 122, 0, 0.04) 0px, transparent 60%);
+    }
+    .glass-card-3d {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.95);
+      box-shadow: 
+        0 1px 3px 0 rgba(0, 45, 84, 0.04),
+        0 10px 28px -4px rgba(0, 45, 84, 0.07),
+        inset 0 1px 1px 0 rgba(255, 255, 255, 0.9);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .glass-card-3d:hover {
+      box-shadow: 
+        0 4px 6px 0 rgba(0, 45, 84, 0.05),
+        0 16px 36px -6px rgba(0, 45, 84, 0.12),
+        inset 0 1px 1.5px 0 rgba(255, 255, 255, 1);
+      transform: translateY(-2px);
+    }
+    .btn-3d-navy {
+      background: linear-gradient(180deg, #003B6D 0%, #002547 100%);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-top: 1px solid rgba(255, 255, 255, 0.5);
+      box-shadow: 0 4px 12px -2px rgba(0, 45, 84, 0.35), inset 0 1px 1px 0 rgba(255, 255, 255, 0.3);
+      transition: all 0.2s ease;
+    }
+    .btn-3d-navy:hover {
+      background: linear-gradient(180deg, #004987 0%, #002D54 100%);
+      transform: translateY(-1px);
+    }
+    .btn-3d-orange {
+      background: linear-gradient(180deg, #FF8C1A 0%, #FF6F00 100%);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-top: 1px solid rgba(255, 255, 255, 0.6);
+      box-shadow: 0 4px 14px -2px rgba(255, 122, 0, 0.4), inset 0 1px 1px 0 rgba(255, 255, 255, 0.4);
+      transition: all 0.2s ease;
+    }
+    .btn-3d-orange:hover {
+      background: linear-gradient(180deg, #FFA033 0%, #FF7A00 100%);
+      transform: translateY(-1px);
+    }
+  </style>
+</head>
+<body class="h-full bg-mesh-light text-slate-800 antialiased overflow-hidden flex flex-col select-none">
+
+  <!-- ================= MASTER TOP BAR ================= -->
+  <header class="h-16 bg-white/80 backdrop-blur-2xl border-b border-white/80 shadow-[0_2px_16px_rgba(0,45,84,0.05)] px-6 flex items-center justify-between shrink-0 z-40">
+    <div class="flex items-center gap-4">
+      <a href="dashboard.html" class="flex items-center gap-3">
+        <div class="h-10 px-2.5 py-1 bg-white rounded-xl shadow-xs border border-slate-200/60 flex items-center">
+          <img src="logo-asl.png" alt="ASL LAW" class="h-8 w-auto object-contain" />
+        </div>
+        <div class="hidden sm:flex flex-col">
+          <div class="flex items-center gap-1.5">
+            <span class="font-extrabold text-[#002D54] text-xs tracking-tight uppercase">Enterprise Legal ERP</span>
+            <span class="text-[10px] font-bold text-[#FF7A00] bg-orange-50 border border-orange-200 px-1.5 py-0.2 rounded-full font-mono">v2.5</span>
+          </div>
+          <span class="text-[10px] text-slate-400 font-medium">Hãng luật ASL LAW • Associates of Successful Lawyers</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- Center Search -->
+    <div class="hidden md:flex items-center relative w-96">
+      <input type="text" placeholder="Tìm kiếm vụ việc, thân chủ, văn bản pháp lý (Cmd + K)..." class="w-full pl-9 pr-4 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0082B4]/30 focus:border-[#0082B4] transition shadow-inner" />
+      <svg class="w-4 h-4 text-slate-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+    </div>
+
+    <!-- Actions -->
+    <div class="flex items-center gap-3">
+      <button onclick="toggleAiDrawer()" class="flex items-center gap-2 px-3.5 py-2 rounded-xl btn-3d-orange text-white text-xs font-bold shadow-md cursor-pointer">
+        <span>✨</span>
+        <span class="hidden sm:inline">Trợ lý AI ASL</span>
+      </button>
+
+      <div class="relative cursor-pointer p-2 rounded-xl bg-white border border-slate-200/80 shadow-xs hover:bg-slate-50 transition" onclick="alert('Thông báo: Có 1 deadline nộp đơn SHTT trước 17:00 hôm nay!')">
+        <svg class="w-4 h-4 text-[#002D54]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+        <span class="w-2 h-2 rounded-full bg-[#FF7A00] absolute top-1.5 right-1.5 ring-2 ring-white"></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= MAIN LAYOUT ================= -->
+  <div class="flex-1 flex overflow-hidden relative">
+
+    <!-- SIDEBAR -->
+    <aside class="w-64 bg-white/75 backdrop-blur-2xl border-r border-white/80 shadow-[4px_0_24px_rgba(0,45,84,0.03)] flex flex-col shrink-0 z-30">
+      
+      <!-- Current User Profile -->
+      <div class="p-4 border-b border-slate-200/60 flex items-center gap-3 bg-gradient-to-r from-blue-50/50 to-transparent">
+        <div class="relative">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#002D54] to-[#0082B4] flex items-center justify-center font-extrabold text-white text-xs shadow-md shadow-blue-900/20">
+            VT
+          </div>
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 absolute -bottom-0.5 -right-0.5 ring-2 ring-white"></span>
+        </div>
+        <div class="flex flex-col min-w-0">
+          <span class="text-xs font-bold text-[#002D54] truncate">LS. Nguyễn Văn Trường</span>
+          <span class="text-[10px] text-[#0082B4] font-semibold truncate">Trưởng nhóm Sở hữu Trí tuệ</span>
+        </div>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="flex-1 py-4 px-3 space-y-1.5 overflow-y-auto text-xs font-medium">
+        <div class="text-[10px] font-bold text-slate-400 px-3 uppercase tracking-wider mb-1 font-mono">Bàn Làm Việc Cá Nhân</div>
+        
+        <!-- Active Dashboard -->
+        <a href="dashboard.html" class="flex items-center justify-between px-3 py-2.5 rounded-xl font-bold bg-gradient-to-r from-blue-50 to-white text-[#002D54] border border-blue-200/80 shadow-xs">
+          <div class="flex items-center gap-2.5">
+            <div class="w-7 h-7 rounded-lg bg-[#0082B4] text-white flex items-center justify-center shadow-xs">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+            </div>
+            <span>Dashboard Cá nhân</span>
+          </div>
+          <span class="text-[10px] bg-[#0082B4]/10 text-[#0082B4] px-1.5 py-0.5 rounded font-mono font-bold">SCR-02</span>
+        </a>
+
+        <a href="crm.html" class="flex items-center justify-between px-3 py-2 rounded-xl text-slate-600 hover:bg-white hover:text-[#002D54] hover:shadow-xs transition">
+          <div class="flex items-center gap-2.5">
+            <div class="w-7 h-7 rounded-lg bg-slate-100 text-slate-500 flex items-center justify-center">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+            </div>
+            <span>Khách hàng & CRM</span>
+          </div>
+        </a>
+
+        <a href="cases.html" class="flex items-center justify-between px-3 py-2 rounded-xl text-slate-600 hover:bg-white hover:text-[#002D54] hover:shadow-xs transition">
+          <div class="flex items-center gap-2.5">
+            <div class="w-7 h-7 rounded-lg bg-slate-100 text-slate-500 flex items-center justify-center">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            </div>
+            <span>Vụ việc & Hồ sơ</span>
+          </div>
+          <span class="text-[10px] bg-slate-100 text-slate-600 font-bold px-1.5 py-0.5 rounded">14</span>
+        </a>
+
+        <a href="kanban.html" class="flex items-center justify-between px-3 py-2 rounded-xl text-slate-600 hover:bg-white hover:text-[#002D54] hover:shadow-xs transition">
+          <div class="flex items-center gap-2.5">
+            <div class="w-7 h-7 rounded-lg bg-slate-100 text-slate-500 flex items-center justify-center">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+            </div>
+            <span>Tác vụ Kanban (Jira)</span>
+          </div>
+          <span class="text-[10px] bg-orange-100 text-orange-700 font-bold px-1.5 py-0.5 rounded">4 gấp</span>
+        </a>
+
+        <div class="pt-4 text-[10px] font-bold text-slate-400 px-3 uppercase tracking-wider mb-1 font-mono">Tài Chính & Kế Toán</div>
+
+        <a href="accounting.html" class="flex items-center justify-between px-3 py-2 rounded-xl text-slate-600 hover:bg-white hover:text-[#002D54] hover:shadow-xs transition">
+          <div class="flex items-center gap-2.5">
+            <div class="w-7 h-7 rounded-lg bg-slate-100 text-slate-500 flex items-center justify-center">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <span>Kế toán MISA</span>
+          </div>
+          <span class="w-5 h-5 rounded-full bg-rose-500/10 text-rose-600 border border-rose-200 flex items-center justify-center text-[10px] font-bold">1</span>
+        </a>
+
+        <a href="finance.html" class="flex items-center justify-between px-3 py-2 rounded-xl text-slate-600 hover:bg-white hover:text-[#002D54] hover:shadow-xs transition">
+          <div class="flex items-center gap-2.5">
+            <div class="w-7 h-7 rounded-lg bg-slate-100 text-slate-500 flex items-center justify-center">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+            </div>
+            <span>Hoa hồng Thực thu</span>
+          </div>
+        </a>
+
+        <div class="pt-4 text-[10px] font-bold text-[#FF7A00] px-3 uppercase tracking-wider mb-1 font-mono flex items-center gap-1">
+          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+          <span>Quản trị Hệ Thống (Admin)</span>
+        </div>
+
+        <a href="workflow-builder.html" class="flex items-center justify-between px-3 py-2 rounded-xl text-slate-600 hover:bg-white hover:text-[#002D54] hover:shadow-xs transition">
+          <div class="flex items-center gap-2.5">
+            <div class="w-7 h-7 rounded-lg bg-orange-100 text-[#FF7A00] flex items-center justify-center">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/></svg>
+            </div>
+            <span>Workflow Builder</span>
+          </div>
+          <span class="text-[10px] bg-orange-500/10 text-orange-600 px-1.5 py-0.5 rounded font-mono font-bold">SCR-06</span>
+        </a>
+
+        <a href="audit-logs.html" class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-600 hover:bg-white hover:text-[#002D54] hover:shadow-xs transition">
+          <div class="w-7 h-7 rounded-lg bg-slate-100 text-slate-500 flex items-center justify-center">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+          </div>
+          <span>Nhật ký Audit Logs</span>
+        </a>
+
+        <a href="architecture.html" class="flex items-center justify-between px-3 py-2 rounded-xl text-slate-600 hover:bg-white hover:text-[#002D54] hover:shadow-xs transition">
+          <div class="flex items-center gap-2.5">
+            <div class="w-7 h-7 rounded-lg bg-blue-100 text-[#0082B4] flex items-center justify-center">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+            </div>
+            <span>Kiến trúc Hệ thống</span>
+          </div>
+          <span class="text-[10px] bg-blue-500/10 text-[#0082B4] px-1.5 py-0.5 rounded font-mono font-bold">ARCH</span>
+        </a>
+      </nav>
+
+      <!-- Bottom Server Status -->
+      <div class="p-3 m-3 rounded-2xl bg-gradient-to-br from-[#002D54] to-[#004273] text-white space-y-2 shadow-lg shadow-blue-950/20">
+        <div class="flex items-center justify-between">
+          <span class="text-[10px] font-bold uppercase tracking-wider text-cyan-300 font-mono">ASL On-Premise Server</span>
+          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+        </div>
+        <p class="text-[11px] text-slate-200">Intranet LAN: <span class="font-mono text-cyan-200">192.168.1.100</span></p>
+      </div>
+    </aside>
+
+    <!-- MAIN SCROLLABLE CONTENT WITH GENEROUS ROW MARGINS -->
+    <main class="flex-1 overflow-y-auto p-8 space-y-8">
+      
+      <!-- HERO WELCOME BANNER (ROW 1) -->
+      <div class="glass-card-3d rounded-3xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden">
+        <div class="space-y-2">
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-bold text-[#0082B4] uppercase tracking-wider font-mono">Hôm nay: Thứ Ba, 27/10/2026</span>
+            <span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
+            <span class="text-xs text-emerald-600 font-semibold flex items-center gap-1">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span>Đang kết nối Máy chủ Trụ sở ASL Law</span>
+            </span>
+          </div>
+          <h1 class="text-2xl font-extrabold text-[#002D54] tracking-tight">Chào buổi sáng, Luật sư Nguyễn Văn Trường 👋</h1>
+          <p class="text-xs text-slate-600">Bạn có <span class="font-bold text-[#FF7A00]">4 tác vụ ưu tiên</span> cần giải quyết, trong đó có 1 deadline nộp bản giải trình SHTT lúc 17:00.</p>
+        </div>
+
+        <div class="flex items-center gap-3 shrink-0">
+          <a href="cases.html" class="px-4 py-2.5 btn-3d-navy text-white rounded-xl text-xs font-bold flex items-center gap-2 shadow-md">
+            <svg class="w-4 h-4 text-cyan-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            <span>+ Tiếp nhận Vụ việc Mới</span>
+          </a>
+          <a href="kanban.html" class="px-4 py-2.5 bg-white hover:bg-slate-50 text-[#002D54] rounded-xl text-xs font-bold border border-slate-200/80 shadow-xs transition">
+            Bảng Tác vụ Kanban →
+          </a>
+        </div>
+      </div>
+
+      <!-- 4 KPI HERO METRICS (ROW 2 - AMPLE MARGINS) -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <!-- KPI 1 -->
+        <a href="cases.html" class="glass-card-3d rounded-3xl p-6 space-y-3 block group">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Vụ việc Đang Thụ lý</span>
+            <div class="w-9 h-9 rounded-xl bg-blue-50 text-[#0082B4] border border-blue-200/80 flex items-center justify-center font-bold text-sm shadow-xs">
+              ⚖️
+            </div>
+          </div>
+          <div class="flex items-baseline gap-2">
+            <div class="text-3xl font-extrabold text-[#002D54] font-mono tracking-tight">14</div>
+            <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">+2 tháng này</span>
+          </div>
+          <div class="text-[11px] text-slate-500 flex items-center justify-between pt-2 border-t border-slate-100">
+            <span>9 mảng SHTT, 5 mảng Doanh nghiệp</span>
+            <span class="text-[#0082B4] font-bold group-hover:translate-x-1 transition-transform">→</span>
+          </div>
+        </a>
+
+        <!-- KPI 2 (Urgent Orange) -->
+        <a href="kanban.html" class="glass-card-3d rounded-3xl p-6 space-y-3 block group border-t-2 border-t-[#FF7A00]">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-orange-950 uppercase tracking-wider">Tác vụ Cần Làm Hôm Nay</span>
+            <div class="w-9 h-9 rounded-xl bg-orange-100 text-[#FF7A00] border border-orange-200 flex items-center justify-center font-bold text-sm shadow-xs animate-bounce">
+              ⚡
+            </div>
+          </div>
+          <div class="flex items-baseline gap-2">
+            <div class="text-3xl font-extrabold text-[#FF7A00] font-mono tracking-tight">04</div>
+            <span class="text-[11px] font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-full border border-rose-200">1 sắp quá hạn 17h</span>
+          </div>
+          <div class="text-[11px] text-slate-500 flex items-center justify-between pt-2 border-t border-slate-100">
+            <span>Hạn chót gần nhất: <strong class="text-rose-600 font-mono">17:00</strong></span>
+            <span class="text-[#FF7A00] font-bold group-hover:translate-x-1 transition-transform">→</span>
+          </div>
+        </a>
+
+        <!-- KPI 3 -->
+        <div class="glass-card-3d rounded-3xl p-6 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Hạn chót Trong 3 Ngày</span>
+            <div class="w-9 h-9 rounded-xl bg-purple-50 text-purple-600 border border-purple-200/80 flex items-center justify-center font-bold text-sm shadow-xs">
+              📅
+            </div>
+          </div>
+          <div class="flex items-baseline gap-2">
+            <div class="text-3xl font-extrabold text-[#002D54] font-mono tracking-tight">07</div>
+            <span class="text-xs text-slate-500 font-medium">SLA Cục SHTT</span>
+          </div>
+          <div class="text-[11px] text-slate-500 flex items-center justify-between pt-2 border-t border-slate-100">
+            <span>3 đơn nộp, 4 bản giải trình</span>
+            <span class="text-[#0082B4] font-bold">→</span>
+          </div>
+        </div>
+
+        <!-- KPI 4 -->
+        <a href="finance.html" class="glass-card-3d rounded-3xl p-6 space-y-3 block group">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Hoa hồng Tích lũy T10</span>
+            <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-200/80 flex items-center justify-center font-bold text-sm shadow-xs">
+              💵
+            </div>
+          </div>
+          <div class="flex items-baseline gap-1">
+            <div class="text-2xl font-extrabold text-emerald-700 font-mono tracking-tight">38.450.000</div>
+            <span class="text-xs font-bold text-slate-500">VNĐ</span>
+          </div>
+          <div class="text-[11px] text-slate-500 flex items-center justify-between pt-2 border-t border-slate-100">
+            <span class="text-emerald-600 font-bold">Dòng tiền Cash-basis MISA</span>
+            <span class="text-emerald-700 font-bold group-hover:translate-x-1 transition-transform">→</span>
+          </div>
+        </a>
+
+      </div>
+
+      <!-- MAIN SPLIT WORKSPACE (ROW 3 - GENEROUS BREATHING ROOM) -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- LEFT 2 COLS: URGENT ACTIONS & MY ACTIVE CASES -->
+        <div class="lg:col-span-2 space-y-8">
+          
+          <!-- Urgent Task Matrix -->
+          <div class="glass-card-3d rounded-3xl p-6 space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-200/60">
+              <div class="flex items-center gap-2.5">
+                <span class="w-3 h-3 rounded-full bg-[#FF7A00] animate-ping"></span>
+                <h2 class="font-bold text-sm text-[#002D54]">Ma trận Tác vụ Khẩn cấp Cần Xử lý Ngay</h2>
+              </div>
+              <span class="text-[11px] font-mono text-[#0082B4] font-bold bg-blue-50 px-2.5 py-0.5 rounded-lg border border-blue-100">Sắp xếp theo hạn SLA</span>
+            </div>
+
+            <div class="space-y-3.5">
+              <!-- Urgent Task 1 -->
+              <div class="p-4 rounded-2xl bg-white/95 border-2 border-orange-300 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:border-[#FF7A00] transition">
+                <div class="flex items-start gap-3">
+                  <input type="checkbox" class="mt-1 w-4 h-4 rounded text-[#FF7A00] focus:ring-orange-400 border-slate-300 cursor-pointer" onclick="alert('Đã đánh dấu hoàn thành tác vụ!')" />
+                  <div class="space-y-1">
+                    <div class="flex items-center gap-2">
+                      <span class="text-[10px] font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-md border border-rose-200 font-mono">HẠN CHÓT: 17:00 HÔM NAY</span>
+                      <span class="text-[10px] text-slate-500 font-mono">Mã: ASL-2026-IP-0045</span>
+                    </div>
+                    <h4 class="font-bold text-xs text-[#002D54]">Nộp bản giải trình phản đối nhãn hiệu quốc tế "ASL GATEWAY"</h4>
+                    <p class="text-[11px] text-slate-500">Cục SHTT yêu cầu bổ sung chứng cứ sử dụng trước tại Việt Nam.</p>
+                  </div>
+                </div>
+                <a href="cases.html" class="px-4 py-2 btn-3d-navy text-white text-xs font-bold rounded-xl shadow-xs shrink-0 text-center">
+                  Xử lý ngay →
+                </a>
+              </div>
+
+              <!-- Task 2 -->
+              <div class="p-4 rounded-2xl bg-white/80 border border-slate-200/80 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-white transition">
+                <div class="flex items-start gap-3">
+                  <input type="checkbox" class="mt-1 w-4 h-4 rounded text-blue-600 focus:ring-blue-400 border-slate-300 cursor-pointer" onclick="alert('Đã hoàn thành!')" />
+                  <div class="space-y-1">
+                    <div class="flex items-center gap-2">
+                      <span class="text-[10px] font-bold text-[#0082B4] bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200 font-mono">HẠN: MAI 09:00</span>
+                      <span class="text-[10px] text-slate-500 font-mono">Mã: ASL-2026-CV-0019</span>
+                    </div>
+                    <h4 class="font-bold text-xs text-[#002D54]">Soạn bản tự khai tranh chấp ranh giới đất đai tại Quận 7, TP.HCM</h4>
+                    <p class="text-[11px] text-slate-500">Thân chủ: Bà Trần Thị Kim Chi • Đã trích lục xong bản đồ địa chính.</p>
+                  </div>
+                </div>
+                <a href="kanban.html" class="px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition shrink-0 text-center">
+                  Mở Task
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Active Cases Spotlight -->
+          <div class="glass-card-3d rounded-3xl p-6 space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-200/60">
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-[#0082B4]"></span>
+                <h2 class="font-bold text-sm text-[#002D54]">Vụ việc Tiêu biểu Đang Phụ trách (My Active Cases)</h2>
+              </div>
+              <a href="cases.html" class="text-xs text-[#0082B4] font-bold hover:underline">Xem tất cả 14 vụ việc →</a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <a href="cases.html" class="p-4 rounded-2xl bg-white border border-slate-200/70 shadow-xs space-y-3 block hover:border-[#0082B4] transition">
+                <div class="flex items-center justify-between">
+                  <span class="font-mono text-[10px] font-bold text-[#0082B4] bg-blue-50 px-2 py-0.5 rounded border border-blue-200">ASL-2026-IP-0045</span>
+                  <span class="text-[10px] font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">Giai đoạn 2/4</span>
+                </div>
+                <h4 class="font-bold text-xs text-[#002D54] line-clamp-1">Đăng ký Nhãn hiệu Độc quyền "ASL GATEWAY"</h4>
+                <p class="text-[11px] text-slate-500 truncate">Thân chủ: Cty CP Công nghệ ASL Gate</p>
+                <div class="space-y-1 pt-1">
+                  <div class="flex justify-between text-[11px]">
+                    <span class="text-slate-500">Tiến độ quy trình</span>
+                    <span class="font-bold text-[#002D54]">65%</span>
+                  </div>
+                  <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                    <div class="bg-gradient-to-r from-[#0082B4] to-cyan-400 h-2 rounded-full" style="width: 65%"></div>
+                  </div>
+                </div>
+              </a>
+
+              <a href="cases.html" class="p-4 rounded-2xl bg-white border border-slate-200/70 shadow-xs space-y-3 block hover:border-[#0082B4] transition">
+                <div class="flex items-center justify-between">
+                  <span class="font-mono text-[10px] font-bold text-purple-700 bg-purple-50 px-2 py-0.5 rounded border border-purple-200">ASL-2026-CV-0012</span>
+                  <span class="text-[10px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">Giai đoạn 3/5</span>
+                </div>
+                <h4 class="font-bold text-xs text-[#002D54] line-clamp-1">Tranh chấp Hợp đồng Thuê Mặt bằng Vincom</h4>
+                <p class="text-[11px] text-slate-500 truncate">Thân chủ: Tập đoàn F&B Golden Gate</p>
+                <div class="space-y-1 pt-1">
+                  <div class="flex justify-between text-[11px]">
+                    <span class="text-slate-500">Tiến độ quy trình</span>
+                    <span class="font-bold text-[#002D54]">40%</span>
+                  </div>
+                  <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                    <div class="bg-gradient-to-r from-purple-600 to-indigo-400 h-2 rounded-full" style="width: 40%"></div>
+                  </div>
+                </div>
+              </a>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT 1 COL: CALENDAR & AI INSIGHT -->
+        <div class="space-y-8">
+          
+          <!-- Legal Hearings Calendar -->
+          <div class="glass-card-3d rounded-3xl p-6 space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-200/60">
+              <div class="flex items-center gap-2">
+                <span class="text-base">⚖️</span>
+                <h3 class="font-bold text-xs text-[#002D54]">Lịch Tố tụng & Làm việc Ngoài</h3>
+              </div>
+              <span class="text-[10px] font-bold text-[#FF7A00] font-mono">Tuần 44</span>
+            </div>
+
+            <div class="space-y-3 text-xs">
+              <div class="p-3.5 rounded-2xl bg-gradient-to-r from-blue-50 to-white border border-blue-200/80 space-y-1">
+                <div class="flex items-center justify-between">
+                  <span class="font-bold text-[#002D54] text-xs">Phiên Hòa giải Tòa án Q.7</span>
+                  <span class="text-[10px] font-mono font-bold text-[#0082B4] bg-white px-2 py-0.5 rounded-full shadow-2xs">Thứ 5, 29/10</span>
+                </div>
+                <p class="text-[11px] text-slate-600">08:30 • TAND Quận 7 • Tranh chấp đất đai</p>
+              </div>
+
+              <div class="p-3.5 rounded-2xl bg-gradient-to-r from-orange-50 to-white border border-orange-200/80 space-y-1">
+                <div class="flex items-center justify-between">
+                  <span class="font-bold text-orange-950 text-xs">Làm việc trực tiếp Cục SHTT</span>
+                  <span class="text-[10px] font-mono font-bold text-[#FF7A00] bg-white px-2 py-0.5 rounded-full shadow-2xs">Thứ 6, 30/10</span>
+                </div>
+                <p class="text-[11px] text-slate-600">14:00 • Phòng Thẩm định Nhãn hiệu số 2</p>
+              </div>
+            </div>
+
+            <button onclick="alert('Đã gửi liên kết đồng bộ lịch tới email luatsu.truong@asllaw.vn!')" class="w-full py-2.5 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold rounded-xl border border-slate-200/80 shadow-2xs transition">
+              + Đồng bộ vào Google/Outlook Calendar
+            </button>
+          </div>
+
+          <!-- AI Assistant Spotlight -->
+          <div class="rounded-3xl p-6 bg-gradient-to-br from-[#002D54] via-[#003866] to-[#0082B4] text-white shadow-xl shadow-blue-950/20 space-y-4 relative overflow-hidden">
+            <div class="flex items-center gap-2">
+              <span class="w-7 h-7 rounded-lg bg-[#FF7A00] flex items-center justify-center text-xs font-bold shadow-md">AI</span>
+              <span class="text-xs font-bold text-cyan-200">Gợi ý Tối ưu Hôm Nay</span>
+            </div>
+            <p class="text-xs text-slate-100 leading-relaxed">
+              "Vụ việc <strong>ASL-2026-IP-0045</strong> đã được kế toán ghi nhận số tiền đợt 2 (60tr VNĐ). Bạn có thể tiến hành nộp dấu Cục SHTT ngay để hưởng hoa hồng đợt 2!"
+            </p>
+            <a href="accounting.html" class="block w-full py-2.5 bg-white text-[#002D54] rounded-xl text-xs font-extrabold hover:bg-cyan-50 transition text-center shadow-sm">
+              Kiểm tra Đối soát MISA →
+            </a>
+          </div>
+
+        </div>
+
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- AI DRAWER -->
+  <div id="ai-drawer" class="fixed right-0 top-16 bottom-0 w-96 bg-white/95 backdrop-blur-2xl border-l border-white/80 shadow-2xl flex flex-col z-50 transform translate-x-full transition-transform duration-300">
+    <div class="h-14 px-4 bg-gradient-to-r from-[#002D54] to-[#00477E] text-white flex items-center justify-between shrink-0 shadow-md">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#FF7A00] to-amber-400 flex items-center justify-center text-white font-black text-xs shadow-md">✨</div>
+        <span class="text-xs font-bold">ASL Legal AI Intelligence</span>
+      </div>
+      <button onclick="toggleAiDrawer()" class="p-1.5 rounded-lg text-slate-300 hover:text-white">✕</button>
+    </div>
+    <div class="flex-1 p-4 overflow-y-auto space-y-3 text-xs">
+      <div class="glass-card-3d p-3 rounded-2xl text-slate-700">
+        Chào Luật sư Trường! Bạn cần tra cứu thời hạn văn bản hay tình trạng đối soát nào?
+      </div>
+    </div>
+    <div class="p-3 border-t border-slate-200/70 bg-white">
+      <input type="text" placeholder="Hỏi AI trợ lý..." class="w-full p-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none" />
+    </div>
+  </div>
+
+  <script>
+    function toggleAiDrawer() {
+      const d = document.getElementById('ai-drawer');
+      d.classList.toggle('translate-x-full');
+    }
+  </script>
+</body>
+</html>

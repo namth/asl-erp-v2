@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <script>(function(){if(localStorage.getItem('asl_theme')==='dark'){document.documentElement.classList.add('dark');}else{document.documentElement.classList.remove('dark');}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASL LAW - Tạo Mẫu Quy Trình Mới (Create Workflow Template)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/layout.css?v=3.1">
+  <script src="../assets/layout.js?v=3.1" defer></script>
+</head>
+<body class="min-h-screen bg-[#F4F8FA] text-slate-800 flex">  <!-- Modular Shared Sidebar (Auto-mounted by layout.js) -->
+  <aside id="sidebar" class="fixed top-0 left-0 bottom-0 w-72 bg-white/95 backdrop-blur-xl z-40 transition-all duration-300 ease-in-out flex flex-col justify-between shadow-xl shadow-slate-900/5"></aside>
+
+  <!-- Main Container -->
+  <div id="main-container" class="flex-1 md:ml-72 flex flex-col min-h-screen transition-all duration-300 ease-in-out">
+
+    <!-- Top Bar with Rich Brand Gradient -->
+    <header class="header-gradient text-white h-20 px-6 flex items-center justify-between sticky top-0 z-30 shadow-md">
+      <div class="flex items-center gap-4">
+        <button onclick="toggleSidebar()" class="md:hidden p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <div>
+          <div class="text-xs text-cyan-200/90 font-medium flex items-center gap-1.5">
+            <a href="index.html" class="hover:underline">Mẫu Quy Trình</a>
+            <span>/</span>
+            <span class="text-white font-semibold">Tạo Mới Template</span>
+          </div>
+          <h1 class="text-lg font-bold text-white tracking-tight">Khởi Tạo Mẫu Quy Trình Nghiệp Vụ Chuẩn</h1>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition-colors">
+          &larr; Về Danh Sách Mẫu
+        </a>
+      </div>
+    </header>
+
+    <!-- Main Content Form -->
+    <main class="flex-1 p-6 md:p-8 max-w-none mx-auto w-full space-y-8">
+
+      <form onsubmit="event.preventDefault(); alert('Khởi tạo mẫu quy trình thành công! Mẫu đã sẵn sàng để gán cho các vụ việc mới.'); window.location.href='index.html';" class="space-y-8">
+
+        <div class="glass-card rounded-3xl p-6 md:p-8 space-y-6">
+          <div class="border-b border-slate-100 pb-3">
+            <h2 class="text-base font-bold text-[#002D54]">Thông Tin Định Danh Mẫu Quy Trình</h2>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-xs">
+            <div class="md:col-span-2">
+              <label class="block font-bold text-slate-700 mb-1">Tên Mẫu Quy Trình <span class="text-red-500">*</span></label>
+              <input type="text" required placeholder="Ví dụ: Tư Vấn Chuyển Nhượng Dự Án Bất Động Sản..." class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-sm font-semibold focus:border-[#0082B4] focus:outline-none">
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Lĩnh Vực Áp Dụng</label>
+              <select class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 focus:border-[#0082B4] font-semibold">
+                <option>Doanh Nghiệp & M&A</option>
+                <option>Bất Động Sản & Đất Đai</option>
+                <option>Sở Hữu Trí Tuệ (SHTT)</option>
+                <option>Tranh Chấp Tòa Án & Trọng Tài VIAC</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Số Lượng Giai Đoạn Mặc Định</label>
+              <select class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 focus:border-[#0082B4]">
+                <option>3 Stages</option>
+                <option selected>4 Stages (Chuẩn phổ biến)</option>
+                <option>5 Stages (Nâng cao)</option>
+                <option>6 Stages (M&A Chuyên sâu)</option>
+              </select>
+            </div>
+
+            <div class="md:col-span-2">
+              <label class="block font-bold text-slate-700 mb-1">Mô Tả Mục Tiêu & Căn Cứ Pháp Lý Của Mẫu</label>
+              <textarea rows="3" placeholder="Nhập các luật áp dụng, ví dụ: Luật Kinh doanh Bất động sản 2023, Luật Đầu tư 2020..." class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 focus:border-[#0082B4] focus:outline-none"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between pt-2">
+          <a href="index.html" class="px-5 py-2.5 rounded-xl border border-slate-300 text-slate-600 font-bold text-xs hover:bg-slate-100">
+            Hủy Bỏ
+          </a>
+          <button type="submit" class="px-6 py-2.5 rounded-xl bg-[#002D54] hover:bg-[#0082B4] text-white font-bold text-xs shadow-md">
+            Lưu & Chuyển Sang Canvas Kéo Thả
+          </button>
+        </div>
+
+      </form>
+
+    </main>
+
+  </div>
+
+</body>
+</html>

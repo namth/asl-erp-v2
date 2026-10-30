@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <script>(function(){if(localStorage.getItem('asl_theme')==='dark'){document.documentElement.classList.add('dark');}else{document.documentElement.classList.remove('dark');}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASL LAW - Thêm Mới Luật Sư / Nhân Sự</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/layout.css?v=3.1">
+  <script src="../assets/layout.js?v=3.1" defer></script>
+</head>
+<body class="min-h-screen bg-[#F4F8FA] text-slate-800 flex">  <!-- Modular Shared Sidebar (Auto-mounted by layout.js) -->
+  <aside id="sidebar" class="fixed top-0 left-0 bottom-0 w-72 bg-white/95 backdrop-blur-xl z-40 transition-all duration-300 ease-in-out flex flex-col justify-between shadow-xl shadow-slate-900/5"></aside>
+
+  <!-- Main Content Layout -->
+  <div id="main-content" class="ml-72 flex-1 flex flex-col min-h-screen transition-all duration-300 ease-in-out">
+    
+    <!-- Top Deep Brand Gradient Header -->
+    <header class="header-gradient text-white sticky top-0 z-30 shadow-md">
+      <div class="h-20 px-8 flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <a href="index.html" class="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-colors" title="Quay lại danh sách nhân sự">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+          </a>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded text-[10px] bg-cyan-500/30 text-cyan-300 font-bold border border-cyan-400/40">USER MANAGEMENT</span>
+            </div>
+            <h1 class="text-xl font-extrabold tracking-tight text-white">
+              Thêm Mới Luật Sư / Nhân Sự Hãng Luật ASL
+            </h1>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <a href="index.html" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-semibold transition-all">
+            Hủy Bỏ
+          </a>
+          <button type="submit" form="create-user-form" class="px-5 py-2 rounded-xl bg-gradient-to-r from-[#FF7A00] to-[#E66E00] text-white text-xs font-bold shadow-md shadow-orange-900/30 hover:scale-105 transition-all">
+            Lưu & Cấp Tài Khoản 2FA
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Workspace Form -->
+    <main class="p-8 max-w-none mx-auto w-full space-y-6">
+
+      <form id="create-user-form" action="index.html" method="get" class="space-y-6">
+
+        <div class="glass-card rounded-2xl p-6 border border-slate-200/80 bg-white space-y-5">
+          <h3 class="text-xs font-extrabold text-[#002D54] uppercase tracking-wider border-b border-slate-100 pb-3">
+            Thông Tin Cá Nhân & Chức Danh
+          </h3>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Họ và tên <span class="text-red-500">*</span></label>
+              <input type="text" placeholder="Ví dụ: LS. Hoàng Minh Trí" required class="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs text-slate-800 focus:outline-none focus:border-[#0082B4]">
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Email công vụ (@aslgate.com) <span class="text-red-500">*</span></label>
+              <input type="email" placeholder="tri.hm@aslgate.com" required class="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs text-slate-800 focus:outline-none focus:border-[#0082B4]">
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Số điện thoại di động</label>
+              <input type="tel" placeholder="0912 345 678" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs text-slate-800 focus:outline-none focus:border-[#0082B4]">
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Văn phòng làm việc</label>
+              <select class="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs text-slate-800 focus:outline-none focus:border-[#0082B4]">
+                <option selected>Trụ sở Hà Nội (ASL HQ)</option>
+                <option>Chi nhánh TP. Hồ Chí Minh</option>
+                <option>Văn phòng đại diện Singapore</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6 border border-slate-200/80 bg-white space-y-5">
+          <h3 class="text-xs font-extrabold text-[#002D54] uppercase tracking-wider border-b border-slate-100 pb-3">
+            Hành Nghề Luật Sư & Định Mức Hoa Hồng
+          </h3>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Số thẻ Luật sư / Chứng chỉ hành nghề</label>
+              <input type="text" placeholder="Ví dụ: 5892/HN-LS (Bộ Tư Pháp)" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs text-slate-800 focus:outline-none focus:border-[#0082B4]">
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Đoàn Luật sư trực thuộc</label>
+              <select class="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs text-slate-800 focus:outline-none focus:border-[#0082B4]">
+                <option selected>Đoàn Luật sư TP. Hà Nội</option>
+                <option>Đoàn Luật sư TP. Hồ Chí Minh</option>
+                <option>Khác / Chưa có thẻ (Paralegal / Intern)</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Vai trò hệ thống (RBAC) <span class="text-red-500">*</span></label>
+              <select required class="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs text-slate-800 focus:outline-none focus:border-[#0082B4]">
+                <option selected>Case Manager (Quản lý Vụ việc)</option>
+                <option>Senior Associate (Luật sư Thực thi cấp cao)</option>
+                <option>Junior Associate (Luật sư Thực thi)</option>
+                <option>Paralegal (Trợ lý Pháp lý)</option>
+                <option>Chief Accountant / Kế toán MISA</option>
+                <option>Managing Partner (Quản trị toàn quyền)</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Đơn giá giờ tiêu chuẩn (Billable Rate)</label>
+              <div class="relative">
+                <input type="number" value="3000000" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs text-slate-800 focus:outline-none focus:border-[#0082B4]">
+                <span class="absolute right-3 top-2 text-xs text-slate-400 font-mono">VNĐ / giờ</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-end gap-3 pt-2">
+          <a href="index.html" class="px-5 py-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 text-xs font-bold transition-colors">
+            Hủy Bỏ
+          </a>
+          <button type="submit" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#002D54] to-[#0082B4] text-white text-xs font-bold shadow-md shadow-cyan-950/20 hover:scale-105 transition-all">
+            Tạo Tài Khoản Nhân Sự
+          </button>
+        </div>
+
+      </form>
+
+    </main>
+
+  </div>
+
+</body>
+</html>

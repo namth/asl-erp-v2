@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <script>(function(){if(localStorage.getItem('asl_theme')==='dark'){document.documentElement.classList.add('dark');}else{document.documentElement.classList.remove('dark');}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASL LAW - Bàn Làm Việc Cá Nhân (Dashboard)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/layout.css?v=3.1">
+  <script src="../assets/layout.js?v=3.1" defer></script>
+</head>
+<body class="min-h-screen bg-[#F4F8FA] text-slate-800 flex">  <!-- Modular Shared Sidebar (Auto-mounted by layout.js) -->
+  <aside id="sidebar" class="fixed top-0 left-0 bottom-0 w-72 bg-white/95 backdrop-blur-xl z-40 transition-all duration-300 ease-in-out flex flex-col justify-between shadow-xl shadow-slate-900/5"></aside>
+
+  <!-- Main Container -->
+  <div id="main-container" class="flex-1 md:ml-72 flex flex-col min-h-screen transition-all duration-300 ease-in-out">
+
+    <!-- Top Bar with Rich Brand Gradient -->
+    <header class="header-gradient text-white h-20 px-6 flex items-center justify-between sticky top-0 z-30 shadow-md">
+      <div class="flex items-center gap-4">
+        <button onclick="toggleSidebar()" class="md:hidden p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <div>
+          <div class="text-xs text-cyan-200/90 font-medium flex items-center gap-1.5">
+            <a href="../index.html" class="hover:underline">ASL LAW</a>
+            <span>/</span>
+            <span class="text-white font-semibold">Bàn Làm Việc</span>
+          </div>
+          <h1 class="text-lg font-bold text-white tracking-tight">Bảng Điều Khiển Tổng Quan Cá Nhân</h1>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <!-- Search bar -->
+        <div class="hidden lg:flex items-center gap-2 bg-white/10 hover:bg-white/15 border border-white/20 rounded-xl px-3.5 py-1.5 text-xs text-white placeholder-cyan-200 backdrop-blur-md transition-all w-64 focus-within:w-80 focus-within:bg-white/20">
+          <svg class="w-4 h-4 text-cyan-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <input type="text" placeholder="Tìm kiếm vụ việc, MST, tài liệu..." class="bg-transparent border-none outline-none w-full text-white placeholder-cyan-100/60 text-xs">
+          <kbd class="px-1.5 py-0.5 rounded bg-white/20 text-[10px] text-cyan-100 font-mono">⌘K</kbd>
+        </div>
+
+        <!-- Quick AI Access Button -->
+        <a href="../ai-assistant/index.html" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-[#0082B4] hover:from-cyan-400 hover:to-cyan-600 text-white font-bold text-xs shadow-md shadow-cyan-950/30 flex items-center gap-2 border border-white/30 transition-transform hover:scale-105">
+          <span class="w-2 h-2 rounded-full bg-emerald-300 animate-pulse"></span>
+          <span>Trợ Lý AI</span>
+        </a>
+
+        <!-- Quick Action + Create Case -->
+        <a href="../cases/create.html" class="px-3.5 py-2 rounded-xl bg-[#FF7A00] hover:bg-[#E66E00] text-white font-bold text-xs shadow-md shadow-orange-950/20 flex items-center gap-1.5 transition-all">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+          <span>Tạo Vụ Việc</span>
+        </a>
+
+        <!-- User Profile -->
+        <div class="flex items-center gap-2 pl-2 border-l border-white/20">
+          <div class="w-8 h-8 rounded-full bg-[#FF7A00] text-white font-extrabold text-xs flex items-center justify-center ring-2 ring-white/50">
+            NA
+          </div>
+          <div class="hidden sm:block text-left text-xs leading-tight">
+            <div class="font-bold text-white">LS. Nguyễn Anh</div>
+            <div class="text-[10px] text-cyan-200">Managing Partner</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Area with Generous Spacing -->
+    <main class="flex-1 p-6 md:p-8 max-w-none mx-auto w-full space-y-8">
+
+      <!-- 4 KPI Metrics (Solid Bold Colors) -->
+      <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Metric 1: Hồ Sơ Thụ Lý (Solid Deep Navy) -->
+        <div class="rounded-2xl p-6 relative overflow-hidden bg-[#002D54] text-white shadow-lg shadow-[#002D54]/25 transition-all hover:-translate-y-1">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-cyan-200/90 uppercase tracking-wider">Hồ Sơ Đang Thụ Lý</span>
+            <span class="p-2 rounded-xl bg-white/15 text-white backdrop-blur-sm">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            </span>
+          </div>
+          <div class="text-3xl font-extrabold text-white mt-3">14 <span class="text-xs font-semibold text-cyan-200/80">vụ việc</span></div>
+          <div class="text-xs text-cyan-100/90 mt-2 flex items-center gap-1.5">
+            <span class="text-emerald-300 font-bold bg-white/10 px-2 py-0.5 rounded-md">↑ 2 vụ</span> so với tuần trước
+          </div>
+        </div>
+
+        <!-- Metric 2: Hạn Chót (Solid Alert Crimson) -->
+        <div class="rounded-2xl p-6 relative overflow-hidden bg-[#D9381E] text-white shadow-lg shadow-red-950/25 transition-all hover:-translate-y-1">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-red-100 uppercase tracking-wider flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-white animate-ping"></span>
+              Hạn Chót 17:00 Hôm Nay
+            </span>
+            <span class="p-2 rounded-xl bg-white/20 text-white backdrop-blur-sm">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </span>
+          </div>
+          <div class="text-3xl font-extrabold text-white mt-3">5 <span class="text-xs font-semibold text-red-100">nhiệm vụ khẩn</span></div>
+          <div class="text-xs text-red-100/90 mt-2 font-medium">Cần hoàn thành nộp đơn & phúc đáp</div>
+        </div>
+
+        <!-- Metric 3: Doanh Thu (Solid Emerald Green) -->
+        <div class="rounded-2xl p-6 relative overflow-hidden bg-[#047857] text-white shadow-lg shadow-emerald-950/25 transition-all hover:-translate-y-1">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-emerald-100 uppercase tracking-wider">Doanh Thu Thực Thu</span>
+            <span class="p-2 rounded-xl bg-white/15 text-white backdrop-blur-sm">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </span>
+          </div>
+          <div class="text-3xl font-extrabold text-white mt-3">1.42 <span class="text-sm font-semibold text-emerald-200">Tỷ VND</span></div>
+          <div class="text-xs text-emerald-100/90 mt-2 flex items-center gap-1.5">
+            <span class="text-white font-bold bg-white/20 px-2 py-0.5 rounded-md text-[10px]">100% Cash-basis</span> theo MISA
+          </div>
+        </div>
+
+        <!-- Metric 4: Tỷ Lệ (Solid ASL Cerulean) -->
+        <div class="rounded-2xl p-6 relative overflow-hidden bg-[#0082B4] text-white shadow-lg shadow-cyan-950/25 transition-all hover:-translate-y-1">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-cyan-100 uppercase tracking-wider">Tỷ Lệ Đạt Tiến Độ (SLA)</span>
+            <span class="p-2 rounded-xl bg-white/15 text-white backdrop-blur-sm">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </span>
+          </div>
+          <div class="text-3xl font-extrabold text-white mt-3">94.8%</div>
+          <div class="text-xs text-cyan-100/90 mt-2 flex items-center gap-1.5">
+            <span class="text-white font-bold bg-white/20 px-2 py-0.5 rounded-md text-[10px]">Không trễ hạn</span> phiên tòa nào
+          </div>
+        </div>
+      </section>
+
+      <!-- Grid 2 Columns: Urgent Tasks & Case Spotlight -->
+      <section class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- Left: Urgent Task Matrix (2 cols) -->
+        <div class="lg:col-span-2 glass-card rounded-3xl p-6 md:p-8 space-y-6">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+            <div>
+              <h2 class="text-lg font-bold text-[#002D54] flex items-center gap-2">
+                <span class="w-2.5 h-5 rounded-full bg-[#FF7A00]"></span>
+                <span>Ma Trận Nhiệm Vụ Khẩn Cần Xử Lý Trước 17:00</span>
+              </h2>
+              <p class="text-xs text-slate-400 mt-0.5">Xếp theo mức độ khẩn cấp và thời hạn đóng hồ sơ</p>
+            </div>
+            <a href="../tasks/index.html" class="text-xs font-bold text-[#0082B4] hover:underline flex items-center gap-1">
+              <span>Mở Bảng Kanban</span>
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+
+          <div class="space-y-3">
+            <!-- Task Item 1 -->
+            <div class="p-4 rounded-2xl bg-white border border-slate-200/80 hover:border-cyan-300 transition-all flex items-start justify-between gap-4 shadow-sm">
+              <div class="flex items-start gap-3">
+                <input type="checkbox" class="mt-1 w-4 h-4 rounded text-[#002D54] focus:ring-[#0082B4]">
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-red-100 text-red-700">HẠN 15:30</span>
+                    <a href="../cases/detail.html" class="text-xs font-bold text-slate-400 hover:text-[#002D54] mono">CASE-2026-089</a>
+                  </div>
+                  <h3 class="text-sm font-bold text-[#002D54] mt-1">Nộp Đơn Phản Tố Vụ Tranh Chấp Nhãn Hiệu ASL</h3>
+                  <p class="text-xs text-slate-500 mt-0.5">Cục Sở hữu Trí tuệ - Yêu cầu đóng dấu đỏ văn phòng đại diện trước 16:00.</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-2 flex-shrink-0">
+                <a href="../cases/detail.html" class="px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 font-bold text-xs hover:bg-[#002D54] hover:text-white transition-colors">
+                  Chi Tiết
+                </a>
+              </div>
+            </div>
+
+            <!-- Task Item 2 -->
+            <div class="p-4 rounded-2xl bg-white border border-slate-200/80 hover:border-cyan-300 transition-all flex items-start justify-between gap-4 shadow-sm">
+              <div class="flex items-start gap-3">
+                <input type="checkbox" class="mt-1 w-4 h-4 rounded text-[#002D54] focus:ring-[#0082B4]">
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-orange-100 text-orange-700">HẠN 17:00</span>
+                    <a href="../cases/detail.html" class="text-xs font-bold text-slate-400 hover:text-[#002D54] mono">CASE-2026-092</a>
+                  </div>
+                  <h3 class="text-sm font-bold text-[#002D54] mt-1">Hoàn thiện Dự Thảo Hợp Đồng M&A Dự Án Điện Mặt Trời</h3>
+                  <p class="text-xs text-slate-500 mt-0.5">Đối tác Foxconn yêu cầu bổ sung điều khoản cam kết ESG và giải quyết VIAC.</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-2 flex-shrink-0">
+                <a href="../ai-assistant/index.html" class="px-3 py-1.5 rounded-xl bg-cyan-50 text-[#0082B4] font-bold text-xs hover:bg-[#0082B4] hover:text-white transition-colors">
+                  Dùng AI Soạn
+                </a>
+              </div>
+            </div>
+
+            <!-- Task Item 3 -->
+            <div class="p-4 rounded-2xl bg-white border border-slate-200/80 hover:border-cyan-300 transition-all flex items-start justify-between gap-4 shadow-sm">
+              <div class="flex items-start gap-3">
+                <input type="checkbox" class="mt-1 w-4 h-4 rounded text-[#002D54] focus:ring-[#0082B4]">
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-amber-100 text-amber-700">ĐỢI KẾ TOÁN</span>
+                    <a href="../accounting/detail.html" class="text-xs font-bold text-slate-400 hover:text-[#002D54] mono">BILL-2026-044</a>
+                  </div>
+                  <h3 class="text-sm font-bold text-[#002D54] mt-1">Đối Soát Tiền Nộp Đợt 2 Khách Hàng Sao Nam</h3>
+                  <p class="text-xs text-slate-500 mt-0.5">Ủy nhiệm chi Vietcombank 60.000.000đ cần kế toán bấm duyệt để mở khóa Stage 3.</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-2 flex-shrink-0">
+                <a href="../accounting/index.html" class="px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 font-bold text-xs hover:bg-emerald-600 hover:text-white transition-colors">
+                  Đối Soát
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Legal Calendar & Hearings (1 col) -->
+        <div class="glass-card rounded-3xl p-6 md:p-8 space-y-5">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <h2 class="text-base font-bold text-[#002D54] flex items-center gap-2">
+              <span class="w-2.5 h-5 rounded-full bg-[#0082B4]"></span>
+              <span>Lịch Tố Tụng & Công Chứng</span>
+            </h2>
+            <span class="text-xs font-bold px-2 py-0.5 rounded bg-blue-100 text-[#002D54]">Tuần Này</span>
+          </div>
+
+          <div class="space-y-4">
+            <!-- Event 1 -->
+            <div class="flex items-start gap-3.5 p-3 rounded-2xl bg-white border border-slate-200/80">
+              <div class="w-12 h-12 rounded-xl bg-blue-50 text-[#002D54] flex flex-col items-center justify-center font-bold flex-shrink-0">
+                <span class="text-[10px] uppercase text-slate-400">T4</span>
+                <span class="text-base leading-none">28</span>
+              </div>
+              <div>
+                <div class="text-xs font-bold text-[#002D54]">Phiên Hòa Giải Tại TAND Q.1</div>
+                <div class="text-[11px] text-slate-500 mt-0.5">09:00 - 11:30 • Thẩm phán Lê Hồng</div>
+                <div class="text-[10px] text-[#0082B4] font-semibold mt-1">Vụ việc: Tranh chấp hợp đồng thuê VP</div>
+              </div>
+            </div>
+
+            <!-- Event 2 -->
+            <div class="flex items-start gap-3.5 p-3 rounded-2xl bg-white border border-slate-200/80">
+              <div class="w-12 h-12 rounded-xl bg-orange-50 text-[#FF7A00] flex flex-col items-center justify-center font-bold flex-shrink-0">
+                <span class="text-[10px] uppercase text-orange-400">T5</span>
+                <span class="text-base leading-none">29</span>
+              </div>
+              <div>
+                <div class="text-xs font-bold text-[#002D54]">Ký Hợp Đồng Công Chứng Chuyển Nhượng</div>
+                <div class="text-[11px] text-slate-500 mt-0.5">14:00 • Văn phòng Công chứng Hà Nội</div>
+                <div class="text-[10px] text-[#0082B4] font-semibold mt-1">Khách hàng: Tập đoàn Vinfast</div>
+              </div>
+            </div>
+
+            <!-- Event 3 -->
+            <div class="flex items-start gap-3.5 p-3 rounded-2xl bg-white border border-slate-200/80">
+              <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex flex-col items-center justify-center font-bold flex-shrink-0">
+                <span class="text-[10px] uppercase text-emerald-400">T6</span>
+                <span class="text-base leading-none">30</span>
+              </div>
+              <div>
+                <div class="text-xs font-bold text-[#002D54]">Họp Giao Ban Partner & Quyết Toán Tháng</div>
+                <div class="text-[11px] text-slate-500 mt-0.5">16:30 • Phòng Họp Trụ Sở Chính</div>
+                <div class="text-[10px] text-emerald-600 font-semibold mt-1">Duyệt bảng chia hoa hồng đợt 10</div>
+              </div>
+            </div>
+          </div>
+
+          <a href="../cases/index.html" class="block w-full text-center py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-colors">
+            Xem Toàn Bộ Lịch Vụ Việc &rarr;
+          </a>
+        </div>
+
+      </section>
+
+      <!-- Active Cases Spotlight Table -->
+      <section class="glass-card rounded-3xl p-6 md:p-8 space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+          <div>
+            <h2 class="text-lg font-bold text-[#002D54] flex items-center gap-2">
+              <span class="w-2.5 h-5 rounded-full bg-[#002D54]"></span>
+              <span>Hồ Sơ Vụ Việc Đang Thụ Lý Trọng Điểm</span>
+            </h2>
+            <p class="text-xs text-slate-400 mt-0.5">Tiến độ cập nhật theo thời gian thực kết nối hệ sinh thái ASL LAW</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <a href="../cases/index.html" class="px-4 py-2 rounded-xl bg-slate-100 text-[#002D54] font-bold text-xs hover:bg-slate-200 transition-colors flex items-center gap-1.5 shadow-xs">
+              <span>Xem Tất Cả Vụ Việc (42)</span>
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm border-collapse">
+            <thead>
+              <tr class="border-b border-slate-200 text-xs text-slate-400 font-bold uppercase tracking-wider">
+                <th class="py-3 px-4">Mã & Vụ Việc</th>
+                <th class="py-3 px-4">Khách Hàng</th>
+                <th class="py-3 px-4">Lĩnh Vực</th>
+                <th class="py-3 px-4">Giai Đoạn</th>
+                <th class="py-3 px-4">Nhân Sự Phụ Trách</th>
+                <th class="py-3 px-4 text-right">Thao Tác</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 font-medium">
+              <tr class="hover:bg-slate-50/60 transition-colors">
+                <td class="py-4 px-4">
+                  <a href="../cases/detail.html" class="font-bold text-[#002D54] hover:text-[#0082B4]">CASE-2026-089</a>
+                  <div class="text-xs text-slate-500">Tranh chấp bảo hộ nhãn hiệu phần mềm ASL</div>
+                </td>
+                <td class="py-4 px-4 text-xs font-semibold text-slate-700">Công ty CP Sao Nam</td>
+                <td class="py-4 px-4"><span class="px-2 py-0.5 rounded text-[11px] font-bold bg-purple-100 text-purple-800">Sở Hữu Trí Tuệ</span></td>
+                <td class="py-4 px-4">
+                  <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                    <span class="text-xs font-bold text-slate-700">Stage 2: Thẩm định</span>
+                  </div>
+                  <div class="text-[10px] text-amber-600 font-bold mt-0.5">Chờ đối soát mốc thu 2</div>
+                </td>
+                <td class="py-4 px-4 text-xs text-slate-600">LS. Mai Linh (CM)</td>
+                <td class="py-4 px-4 text-right">
+                  <a href="../cases/detail.html" class="w-8 h-8 rounded-lg inline-flex items-center justify-center text-slate-400 hover:text-[#0082B4] hover:bg-slate-100 transition-colors" title="Mở Workspace vụ việc">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                  </a>
+                </td>
+              </tr>
+
+              <tr class="hover:bg-slate-50/60 transition-colors">
+                <td class="py-4 px-4">
+                  <a href="../cases/detail.html" class="font-bold text-[#002D54] hover:text-[#0082B4]">CASE-2026-092</a>
+                  <div class="text-xs text-slate-500">Tư vấn sáp nhập và thẩm định pháp lý (M&A)</div>
+                </td>
+                <td class="py-4 px-4 text-xs font-semibold text-slate-700">Foxconn Energy VN</td>
+                <td class="py-4 px-4"><span class="px-2 py-0.5 rounded text-[11px] font-bold bg-blue-100 text-blue-800">Doanh Nghiệp / M&A</span></td>
+                <td class="py-4 px-4">
+                  <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                    <span class="text-xs font-bold text-slate-700">Stage 1: Tiếp nhận</span>
+                  </div>
+                  <div class="text-[10px] text-slate-400 mt-0.5">Hoàn tất 80% Due Diligence</div>
+                </td>
+                <td class="py-4 px-4 text-xs text-slate-600">LS. Nguyễn Anh (Partner)</td>
+                <td class="py-4 px-4 text-right">
+                  <a href="../cases/detail.html" class="w-8 h-8 rounded-lg inline-flex items-center justify-center text-slate-400 hover:text-[#0082B4] hover:bg-slate-100 transition-colors" title="Mở Workspace vụ việc">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+
+  </div>
+
+</body>
+</html>

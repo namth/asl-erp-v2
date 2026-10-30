@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <script>(function(){if(localStorage.getItem('asl_theme')==='dark'){document.documentElement.classList.add('dark');}else{document.documentElement.classList.remove('dark');}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASL LAW - Khởi Tạo Vụ Việc Mới (Create Case)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/layout.css?v=3.1">
+  <script src="../assets/layout.js?v=3.1" defer></script>
+</head>
+<body class="min-h-screen bg-[#F4F8FA] text-slate-800 flex">
+
+  <!-- Modular Shared Sidebar (Auto-mounted by layout.js) -->
+  <aside id="sidebar" class="fixed top-0 left-0 bottom-0 w-72 bg-white/95 backdrop-blur-xl z-40 transition-all duration-300 ease-in-out flex flex-col justify-between shadow-xl shadow-slate-900/5"></aside>
+
+  <!-- Main Container -->
+  <div id="main-container" class="flex-1 md:ml-72 flex flex-col min-h-screen transition-all duration-300 ease-in-out">
+
+    <!-- Top Bar with Rich Brand Gradient -->
+    <header class="header-gradient text-white h-20 px-6 flex items-center justify-between sticky top-0 z-30 shadow-md">
+      <div class="flex items-center gap-4">
+        <button onclick="toggleSidebar()" class="md:hidden p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white" title="Mở menu">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <div>
+          <div class="text-xs text-cyan-200/90 font-medium flex items-center gap-1.5">
+            <a href="index.html" class="hover:underline">Vụ Việc & Hồ Sơ</a>
+            <span>/</span>
+            <span class="text-white font-semibold">Tạo Mới Vụ Việc</span>
+          </div>
+          <h1 class="text-lg font-bold text-white tracking-tight">Khởi Tạo Hồ Sơ Vụ Việc Đa Lĩnh Vực</h1>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition-colors">
+          &larr; Quay Lại Danh Sách
+        </a>
+      </div>
+    </header>
+
+    <!-- Main Content Form -->
+    <main class="flex-1 p-6 md:p-8 max-w-none mx-auto w-full space-y-8">
+
+      <!-- Form Card -->
+      <form onsubmit="event.preventDefault(); alert('Khởi tạo vụ việc thành công! Đã kích hoạt các trường dữ liệu và phân bổ nhân sự.'); window.location.href='detail.html';" class="space-y-8">
+
+        <!-- Section 1: Case Type Selection Tabs (Từ qlcvaslgate-old) -->
+        <div class="glass-card rounded-3xl p-6 md:p-8 space-y-5">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+            <div>
+              <h2 class="text-base font-bold text-[#002D54] flex items-center gap-2">
+                <span class="w-2.5 h-5 rounded-full bg-[#FF7A00]"></span>
+                <span>1. Phân Loại Loại Hình Vụ Việc (Case Category)</span>
+              </h2>
+              <p class="text-xs text-slate-500 mt-0.5">Chọn lĩnh vực pháp lý để hệ thống tự động tải các trường dữ liệu đặc thù tương ứng</p>
+            </div>
+            
+            <!-- Trạng thái: Đã chốt vs Tiềm năng (Từ qlcvaslgate-old) -->
+            <div class="flex items-center gap-3 bg-slate-100 p-1 rounded-xl text-xs font-bold text-slate-700">
+              <label class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white shadow-sm cursor-pointer text-[#002D54]">
+                <input type="radio" name="tiem_nang" value="0" checked class="text-[#002D54]">
+                <span>Đã Chốt (Official Job)</span>
+              </label>
+              <label class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg cursor-pointer text-slate-600 hover:text-[#002D54]">
+                <input type="radio" name="tiem_nang" value="1" class="text-[#002D54]">
+                <span>Tiềm Năng (Lead)</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Category Selection Buttons -->
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+            <button type="button" onclick="selectCaseType('nhan_hieu')" id="tab-nhan_hieu" class="case-type-btn p-3 rounded-2xl border-2 border-[#002D54] bg-blue-50/60 text-[#002D54] font-extrabold text-xs flex flex-col items-center justify-center gap-2 shadow-sm transition-all">
+              <span class="text-xl"></span>
+              <span>Nhãn Hiệu</span>
+              <span class="text-[9px] font-semibold text-slate-500">Trademark</span>
+            </button>
+
+            <button type="button" onclick="selectCaseType('kieu_dang')" id="tab-kieu_dang" class="case-type-btn p-3 rounded-2xl border border-slate-200 hover:border-slate-300 bg-white text-slate-700 font-bold text-xs flex flex-col items-center justify-center gap-2 transition-all">
+              <span class="text-xl"></span>
+              <span>Kiểu Dáng</span>
+              <span class="text-[9px] font-semibold text-slate-400">Design</span>
+            </button>
+
+            <button type="button" onclick="selectCaseType('sang_che')" id="tab-sang_che" class="case-type-btn p-3 rounded-2xl border border-slate-200 hover:border-slate-300 bg-white text-slate-700 font-bold text-xs flex flex-col items-center justify-center gap-2 transition-all">
+              <span class="text-xl"></span>
+              <span>Sáng Chế</span>
+              <span class="text-[9px] font-semibold text-slate-400">Patent</span>
+            </button>
+
+            <button type="button" onclick="selectCaseType('dan_su')" id="tab-dan_su" class="case-type-btn p-3 rounded-2xl border border-slate-200 hover:border-slate-300 bg-white text-slate-700 font-bold text-xs flex flex-col items-center justify-center gap-2 transition-all">
+              <span class="text-xl"></span>
+              <span>Luật Dân Sự</span>
+              <span class="text-[9px] font-semibold text-slate-400">Civil & Dispute</span>
+            </button>
+
+            <button type="button" onclick="selectCaseType('doanh_nghiep')" id="tab-doanh_nghiep" class="case-type-btn p-3 rounded-2xl border border-slate-200 hover:border-slate-300 bg-white text-slate-700 font-bold text-xs flex flex-col items-center justify-center gap-2 transition-all">
+              <span class="text-xl"></span>
+              <span>FDI & M&A</span>
+              <span class="text-[9px] font-semibold text-slate-400">Corporate</span>
+            </button>
+
+            <button type="button" onclick="selectCaseType('other_ip')" id="tab-other_ip" class="case-type-btn p-3 rounded-2xl border border-slate-200 hover:border-slate-300 bg-white text-slate-700 font-bold text-xs flex flex-col items-center justify-center gap-2 transition-all">
+              <span class="text-xl"></span>
+              <span>Bản Quyền/Franchise</span>
+              <span class="text-[9px] font-semibold text-slate-400">Copyright</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Section 2: General Case & Client Information (Kế thừa từ custom_fields.json) -->
+        <div class="glass-card rounded-3xl p-6 md:p-8 space-y-6">
+          <div class="border-b border-slate-100 pb-3">
+            <h2 class="text-base font-bold text-[#002D54] flex items-center gap-2">
+              <span class="w-2.5 h-5 rounded-full bg-[#002D54]"></span>
+              <span>2. Thông Tin Chung & Khách Hàng (Common Fields)</span>
+            </h2>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-xs">
+            <!-- Tên công việc (job_name) -->
+            <div class="md:col-span-2 lg:col-span-3">
+              <label class="block font-bold text-slate-700 uppercase tracking-wider mb-1.5">Tên Hồ Sơ Vụ Việc / Tên Công Việc <span class="text-red-500">*</span></label>
+              <input type="text" id="job-title-input" required value="Đăng ký Nhãn hiệu 9OUTFIT tại Việt Nam & Quốc tế" placeholder="VD: Nhãn hiệu 9OUTFIT, Tranh chấp cổ đông Phúc Khang..." class="w-full px-4 py-2.5 rounded-xl bg-white border border-slate-200 text-sm focus:border-[#0082B4] focus:outline-none font-semibold">
+            </div>
+
+            <!-- Số REF của mình (our_ref) -->
+            <div>
+              <label class="block font-bold text-slate-700 uppercase tracking-wider mb-1.5">Số REF Của Mình (Our REF)</label>
+              <input type="text" value="ASL-2026-TM109" placeholder="Để trống sẽ tự sinh mã REF" class="w-full px-4 py-2 rounded-xl bg-slate-50 border border-slate-200 font-mono font-bold text-[#002D54]">
+              <span class="text-[10px] text-slate-400">Định dạng mã quản lý nội bộ</span>
+            </div>
+
+            <!-- Số REF đối tác (partner_ref) -->
+            <div>
+              <label class="block font-bold text-slate-700 uppercase tracking-wider mb-1.5">Số REF Của Đối Tác (Partner REF)</label>
+              <input type="text" value="REF-SNA-2026/VN" placeholder="Số REF hồ sơ của đối tác / thân chủ" class="w-full px-4 py-2 rounded-xl bg-white border border-slate-200 font-mono focus:border-[#0082B4]">
+            </div>
+
+            <!-- Khách hàng (customer) -->
+            <div>
+              <label class="block font-bold text-slate-700 uppercase tracking-wider mb-1.5">Khách Hàng / Thân Chủ <span class="text-red-500">*</span></label>
+              <div class="flex gap-2">
+                <select class="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 font-bold text-[#002D54] focus:border-[#0082B4]">
+                  <option selected>Công ty TNHH Thời Trang 9Outfit (MST: 0109923881)</option>
+                  <option>Công ty CP Công nghệ Sao Nam (MST: 0108998822)</option>
+                  <option>VinFast Trading & Production JSC</option>
+                  <option>Foxconn Energy Vietnam Co., Ltd</option>
+                </select>
+                <a href="../crm/create-lead.html" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold whitespace-nowrap flex items-center gap-1" title="Tạo khách hàng mới">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                  <span>Thêm</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- Quốc gia nộp (country) -->
+            <div>
+              <label class="block font-bold text-slate-700 uppercase tracking-wider mb-1.5">Quốc Gia Nộp / Thụ Lý <span class="text-red-500">*</span></label>
+              <select class="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 font-semibold focus:border-[#0082B4]">
+                <option selected>Việt Nam (Cục SHTT / Tòa Án)</option>
+                <option>Hoa Kỳ (USPTO)</option>
+                <option>Liên minh Châu Âu (EUIPO)</option>
+                <option>Nhật Bản (JPO)</option>
+                <option>Tổ chức WIPO (Thỏa ước/Nghị định thư Madrid)</option>
+                <option>Singapore (IPOS)</option>
+              </select>
+            </div>
+
+            <!-- Chi nhánh ASL LAW (agency) -->
+            <div>
+              <label class="block font-bold text-slate-700 uppercase tracking-wider mb-1.5">Chi Nhánh Thụ Lý (Agency) <span class="text-red-500">*</span></label>
+              <select class="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 font-semibold focus:border-[#0082B4]">
+                <option selected>Trụ Sở Hà Nội (Head Office)</option>
+                <option>Chi Nhánh TP. Hồ Chí Minh</option>
+                <option>Văn Phòng Đại Diện Singapore</option>
+              </select>
+            </div>
+
+            <!-- Độ khó công việc (level) -->
+            <div>
+              <label class="block font-bold text-slate-700 uppercase tracking-wider mb-1.5">Độ Khó Vụ Việc (Level)</label>
+              <select class="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 font-bold focus:border-[#0082B4]">
+                <option>Đơn Giản</option>
+                <option selected>Trung Bình</option>
+                <option>Khó</option>
+                <option>Đặc Biệt Phức Tạp (High Stakes)</option>
+              </select>
+            </div>
+
+            <!-- Link tài liệu OneDrive (link_onedrive) -->
+            <div class="md:col-span-2 lg:col-span-3">
+              <label class="block font-bold text-slate-700 uppercase tracking-wider mb-1.5">Link Thư Mục Hồ Sơ (OneDrive / SharePoint / Google Drive)</label>
+              <div class="relative">
+                <input type="url" value="https://asllaw-my.sharepoint.com/personal/cases/2026/ASL-2026-TM109" placeholder="Dán link OneDrive lưu trữ tài liệu vụ việc..." class="w-full pl-9 pr-4 py-2 rounded-xl bg-white border border-slate-200 font-mono text-xs text-blue-700 focus:border-[#0082B4]">
+                <svg class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 3: Dynamic Domain-Specific Fields (Tự động chuyển đổi theo loại vụ việc) -->
+        <div class="glass-card rounded-3xl p-6 md:p-8 space-y-6">
+          <div class="border-b border-slate-100 pb-3 flex items-center justify-between">
+            <h2 class="text-base font-bold text-[#002D54] flex items-center gap-2">
+              <span class="w-2.5 h-5 rounded-full bg-[#0082B4]"></span>
+              <span id="domain-section-title">3. Trường Dữ Liệu Đặc Thù: Nhãn Hiệu (Trademark Fields)</span>
+            </h2>
+            <span class="px-2.5 py-1 rounded-lg bg-blue-50 text-[#0082B4] font-mono text-xs font-bold" id="domain-badge">Lĩnh vực: SHTT / Nhãn hiệu</span>
+          </div>
+
+          <!-- ======================================================== -->
+          <!-- DYNAMIC PANEL 1: NHÃN HIỆU (Trademark)                   -->
+          <!-- ======================================================== -->
+          <div id="panel-nhan_hieu" class="domain-panel space-y-5">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 text-xs">
+              
+              <!-- Tên nhãn hiệu (ten_nhan_hieu) -->
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Tên Nhãn Hiệu (Brand Name) <span class="text-red-500">*</span></label>
+                <input type="text" value="9OUTFIT CASUAL WEAR" placeholder="Nhập tên chữ của nhãn hiệu..." class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 font-semibold focus:border-[#0082B4]">
+              </div>
+
+              <!-- Phân nhóm Nice (nhom) -->
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Phân Nhóm Quốc Tế Nice (Class) <span class="text-red-500">*</span></label>
+                <input type="text" value="Nhóm 25 (Quần áo, giày dép), Nhóm 35 (Bán lẻ thời trang)" placeholder="VD: Nhóm 25, 35..." class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 font-semibold focus:border-[#0082B4]">
+              </div>
+
+              <!-- Số lượng nhóm (so_luong_nhom) -->
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Số Lượng Nhóm Bảo Hộ</label>
+                <input type="number" value="2" min="1" max="45" class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 font-bold focus:border-[#0082B4]">
+              </div>
+
+              <!-- Số đơn (so_don) -->
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Số Đơn Cục SHTT (Application No.)</label>
+                <input type="text" value="4-2026-08991" placeholder="VD: 4-2026-12345" class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 font-mono font-semibold focus:border-[#0082B4]">
+              </div>
+
+              <!-- Ngày nộp đơn (ngay_nop_don) -->
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Ngày Nộp Đơn (Filing Date)</label>
+                <input type="date" value="2026-10-15" class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 focus:border-[#0082B4]">
+              </div>
+
+              <!-- Ngày ưu tiên -->
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Ngày Ưu Tiên (Priority Date)</label>
+                <input type="date" class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 focus:border-[#0082B4]">
+              </div>
+
+              <!-- Số văn bằng bảo hộ (so_bang) -->
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Số Bằng / Giấy Chứng Nhận</label>
+                <input type="text" placeholder="Chưa cấp hoặc nhập số bằng..." class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 font-mono focus:border-[#0082B4]">
+              </div>
+
+              <!-- Ngày cấp bằng (ngay_cap_bang) -->
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Ngày Cấp Bằng (Granting Date)</label>
+                <input type="date" class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 focus:border-[#0082B4]">
+              </div>
+
+              <!-- Upload mẫu nhãn hiệu / logo (logo) -->
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Mẫu Nhãn Hiệu / Logo (Image)</label>
+                <input type="file" accept="image/*" class="w-full text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-[#002D54] hover:file:bg-blue-100">
+              </div>
+            </div>
+          </div>
+
+          <!-- ======================================================== -->
+          <!-- DYNAMIC PANEL 2: KIỂU DÁNG CÔNG NGHIỆP (Design)         -->
+          <!-- ======================================================== -->
+          <div id="panel-kieu_dang" class="domain-panel hidden space-y-5">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 text-xs">
+              
+              <!-- Link tới bộ ảnh (bo_anh / kdang_pic) -->
+              <div class="md:col-span-2">
+                <label class="block font-bold text-slate-700 mb-1">Link Tới Bộ Ảnh / Phối Cảnh Kiểu Dáng (kdang_pic) <span class="text-red-500">*</span></label>
+                <input type="url" placeholder="Link OneDrive/Google Drive chứa bộ ảnh 6 hình chiếu và phối cảnh..." class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 font-mono focus:border-[#0082B4]">
+              </div>
+
+              <!-- Số lượng phương án (so_luong_phuong_an) -->
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Số Lượng Phương Án Kiểu Dáng</label>
+                <input type="number" value="1" min="1" class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 font-bold focus:border-[#0082B4]">
+              </div>
+
+              <!-- Phân loại Locarno -->
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Phân Loại Quốc Tế Locarno</label>
+                <input type="text" placeholder="VD: 06-01 (Bàn ghế), 12-08 (Phương tiện ô tô)..." class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 font-semibold focus:border-[#0082B4]">
+              </div>
+
+              <!-- Số đơn & Ngày nộp -->
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Số Đơn Kiểu Dáng</label>
+                <input type="text" placeholder="3-2026-00123" class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 font-mono focus:border-[#0082B4]">
+              </div>
+
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Ngày Nộp Đơn</label>
+                <input type="date" class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 focus:border-[#0082B4]">
+              </div>
+
+              <!-- Tác giả kiểu dáng -->
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Tác Giả Kiểu Dáng (Designer)</label>
+                <input type="text" placeholder="Họ và tên tác giả thiết kế..." class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 focus:border-[#0082B4]">
+              </div>
+
+              <!-- Bản mô tả của bộ ảnh (ban_mo_ta_cua_bo_anh) -->
+              <div class="md:col-span-2 lg:col-span-3">
+                <label class="block font-bold text-slate-700 mb-1">Bản Mô Tả Của Bộ Ảnh (kdang_info)</label>
+                <textarea rows="3" placeholder="Mô tả các góc chụp: Phối cảnh, hình chiếu bằng, cạnh trái, cạnh phải, mặt trước, mặt sau..." class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 focus:border-[#0082B4]"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- ======================================================== -->
+          <!-- DYNAMIC PANEL 3: SÁNG CHẾ & GIẢI PHÁP HỮU ÍCH (Patent)  -->
+          <!-- ======================================================== -->
+          <div id="panel-sang_che" class="domain-panel hidden space-y-5">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 text-xs">
+              
+              <!-- Link tới bản mô tả sáng chế (ban_mo_ta_sang_che / sche_info) -->
+              <div class="md:col-span-2">
+                <label class="block font-bold text-slate-700 mb-1">Link Tới Bản Mô Tả Sáng Chế (Patent Specification) <span class="text-red-500">*</span></label>
+                <input type="url" placeholder="Link file Word/PDF bản mô tả kỹ thuật sáng chế..." class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 font-mono focus:border-[#0082B4]">
+              </div>
+
+              <!-- Phân loại IPC -->
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Phân Loại Sáng Chế Quốc Tế (IPC Class)</label>
+                <input type="text" placeholder="VD: G06F 17/00, A61K 31/00..." class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 font-semibold focus:border-[#0082B4]">
+              </div>
+
+              <!-- Số lượng yêu cầu bảo hộ (so_luong_yeu_cau_bao_ho) -->
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Tổng Số Điểm Yêu Cầu Bảo Hộ (Total Claims)</label>
+                <input type="number" value="10" min="1" class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 font-bold focus:border-[#0082B4]">
+              </div>
+
+              <!-- Số lượng yêu cầu bảo hộ độc lập (so_luong_yeu_cau_bao_ho_doc_lap) -->
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Số Điểm Bảo Hộ Độc Lập (Independent Claims)</label>
+                <input type="number" value="2" min="1" class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 font-bold focus:border-[#0082B4]">
+              </div>
+
+              <!-- Số đơn PCT (nếu có) -->
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Số Đơn Quốc Tế PCT (Nếu vào pha quốc gia)</label>
+                <input type="text" placeholder="PCT/US2025/012345" class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 font-mono focus:border-[#0082B4]">
+              </div>
+
+              <!-- Số đơn Cục SHTT -->
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Số Đơn Sáng Chế (VN)</label>
+                <input type="text" placeholder="1-2026-00456" class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 font-mono focus:border-[#0082B4]">
+              </div>
+
+              <!-- Ngày nộp đơn & Yêu cầu xét nghiệm nội dung -->
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Ngày Nộp Đơn (Filing Date)</label>
+                <input type="date" class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 focus:border-[#0082B4]">
+              </div>
+
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Hạn Yêu Cầu Thẩm Định Nội Dung (XNND)</label>
+                <input type="date" class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 focus:border-[#0082B4]">
+              </div>
+            </div>
+          </div>
+
+          <!-- ======================================================== -->
+          <!-- DYNAMIC PANEL 4: LUẬT DÂN SỰ & TRANH TỤNG (Civil Law)    -->
+          <!-- ======================================================== -->
+          <div id="panel-dan_su" class="domain-panel hidden space-y-5">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 text-xs">
+              
+              <!-- Lĩnh vực tranh chấp -->
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Lĩnh Vực Tranh Chấp <span class="text-red-500">*</span></label>
+                <select class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 font-semibold focus:border-[#0082B4]">
+                  <option selected>Tranh Chấp Hợp Đồng Thương Mại & Mua Bán</option>
+                  <option>Tranh Chấp Quyền Sử Dụng Đất & Bất Động Sản</option>
+                  <option>Tranh Chấp Nội Bộ Doanh Nghiệp & Cổ Đông</option>
+                  <option>Tranh Chấp Hợp Đồng Lao Động & Bí Mật Kinh Doanh</option>
+                  <option>Thừa Kế, Hôn Nhân & Tài Sản Gia Đình</option>
+                </select>
+              </div>
+
+              <!-- Tư cách tố tụng -->
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Tư Cách Tố Tụng Của Thân Chủ <span class="text-red-500">*</span></label>
+                <select class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 font-bold text-[#002D54] focus:border-[#0082B4]">
+                  <option selected>Nguyên Đơn (Plaintiff)</option>
+                  <option>Bị Đơn (Defendant)</option>
+                  <option>Người Có Quyền Lợi, Nghĩa Vụ Liên Quan</option>
+                  <option>Bên Yêu Cầu Giải Quyết Việc Dân Sự</option>
+                </select>
+              </div>
+
+              <!-- Cơ quan giải quyết -->
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Cơ Quan Thụ Lý Giải Quyết <span class="text-red-500">*</span></label>
+                <input type="text" placeholder="VD: TAND TP. Hồ Chí Minh, TAND Quận Cầu Giấy, VIAC..." class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 font-semibold focus:border-[#0082B4]">
+              </div>
+
+              <!-- Số thụ lý vụ án -->
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Số Thụ Lý Vụ Án (Docket No.)</label>
+                <input type="text" placeholder="VD: 18/2026/TLST-KDTM" class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 font-mono font-bold text-[#002D54] focus:border-[#0082B4]">
+              </div>
+
+              <!-- Ngày thụ lý -->
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Ngày Thông Báo Thụ Lý</label>
+                <input type="date" class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 focus:border-[#0082B4]">
+              </div>
+
+              <!-- Thẩm phán chủ tọa / Thư ký Tòa -->
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Thẩm Phán Chủ Tọa & Thư Ký Tòa</label>
+                <input type="text" placeholder="Họ tên Thẩm phán, SĐT Thư ký phiên tòa..." class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 focus:border-[#0082B4]">
+              </div>
+
+              <!-- Giá trị tranh chấp -->
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Giá Trị Tranh Chấp (Dispute Amount)</label>
+                <input type="text" placeholder="VD: 45,000,000,000 VND" class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 font-bold text-red-700 focus:border-[#0082B4]">
+              </div>
+
+              <!-- Giai đoạn tố tụng -->
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Giai Đoạn Tố Tụng Hiện Tại</label>
+                <select class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 font-semibold focus:border-[#0082B4]">
+                  <option>Tiền Tố Tụng (Gửi Thư Cảnh Báo / Đàm Phán)</option>
+                  <option selected>Sơ Thẩm (First Instance)</option>
+                  <option>Phúc Thẩm (Appellate)</option>
+                  <option>Giám Đốc Thẩm / Tái Thẩm</option>
+                  <option>Thi Hành Án Dân Sự (Enforcement)</option>
+                </select>
+              </div>
+
+              <!-- Biện pháp khẩn cấp tạm thời (BPKCTT) -->
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Biện Pháp Khẩn Cấp Tạm Thời (BPKCTT)</label>
+                <select class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 font-semibold focus:border-[#0082B4]">
+                  <option selected>Không áp dụng</option>
+                  <option>Phong tỏa tài khoản ngân hàng</option>
+                  <option>Kê biên tài sản đang tranh chấp</option>
+                  <option>Cấm chuyển dịch quyền tài sản</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- ======================================================== -->
+          <!-- DYNAMIC PANEL 5: FDI, DOANH NGHIỆP & M&A                 -->
+          <!-- ======================================================== -->
+          <div id="panel-doanh_nghiep" class="domain-panel hidden space-y-5">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 text-xs">
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Loại Hình Giao Dịch Doanh Nghiệp</label>
+                <select class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 font-semibold focus:border-[#0082B4]">
+                  <option selected>Mua Bán & Sáp Nhập (M&A Deal)</option>
+                  <option>Cấp Mới Giấy Chứng Nhận Đăng Ký Đầu Tư (IRC)</option>
+                  <option>Thành Lập Doanh Nghiệp Có Vốn Nước Ngoài (FDI)</option>
+                  <option>Xin Giấy Phép Con Chuyên Ngành (Sub-license)</option>
+                  <option>Tái Cấu Trúc Tài Chính & Cổ Phần</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Mã Số Dự Án (IRC) / Mã Doanh Nghiệp (ERC)</label>
+                <input type="text" placeholder="VD: IRC-2026/099881..." class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 font-mono font-semibold focus:border-[#0082B4]">
+              </div>
+
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Tổng Vốn Đầu Tư / Giá Trị Thương Vụ (Deal Size)</label>
+                <input type="text" placeholder="VD: 5,000,000 USD (125 tỷ VND)..." class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 font-bold text-emerald-700 focus:border-[#0082B4]">
+              </div>
+
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Cơ Quan Cấp Phép Đầu Tư</label>
+                <input type="text" placeholder="VD: Sở Kế hoạch & Đầu tư, Ban Quản lý KCN..." class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 focus:border-[#0082B4]">
+              </div>
+
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Quốc Tịch Nhà Đầu Tư</label>
+                <input type="text" placeholder="VD: Nhật Bản, Hàn Quốc, Singapore, Hoa Kỳ..." class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 focus:border-[#0082B4]">
+              </div>
+
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Trạng Thái Thẩm Định Pháp Lý (Due Diligence)</label>
+                <select class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 font-semibold focus:border-[#0082B4]">
+                  <option>Đang thu thập hồ sơ (Data Room)</option>
+                  <option selected>Đang lập Báo cáo Thẩm định (Red Flag Report)</option>
+                  <option>Đã hoàn tất báo cáo & Chờ đàm phán SPA</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- ======================================================== -->
+          <!-- DYNAMIC PANEL 6: BẢN QUYỀN & FRANCHISE                   -->
+          <!-- ======================================================== -->
+          <div id="panel-other_ip" class="domain-panel hidden space-y-5">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 text-xs">
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Loại Hình Quyền Tác Giả / Nhượng Quyền</label>
+                <select class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 font-semibold focus:border-[#0082B4]">
+                  <option selected>Đăng Ký Quyền Tác Giả (Phần mềm / Mỹ thuật ứng dụng)</option>
+                  <option>Đăng Ký Hoạt Động Nhượng Quyền Thương Mại (Bộ Công Thương)</option>
+                  <option>Hợp Đồng Li-xăng Chuyển Giao Công Nghệ</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Tác Giả / Bên Nhượng Quyền (Franchisor)</label>
+                <input type="text" placeholder="Họ tên tác giả hoặc bên cấp quyền..." class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 focus:border-[#0082B4]">
+              </div>
+
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Bên Nhận Quyền (Franchisee / Licensee)</label>
+                <input type="text" placeholder="Tên bên nhận chuyển giao quyền..." class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 focus:border-[#0082B4]">
+              </div>
+
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Số Đăng Ký Bản Quyền / Nhượng Quyền</label>
+                <input type="text" placeholder="Số giấy chứng nhận Cục Bản quyền..." class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 font-mono focus:border-[#0082B4]">
+              </div>
+
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Phí Nhượng Quyền / Tỷ Lệ Royalty (%)</label>
+                <input type="text" placeholder="VD: 5% doanh thu thuần hàng quý..." class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 font-semibold focus:border-[#0082B4]">
+              </div>
+
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Thời Hạn Thỏa Thuận</label>
+                <input type="text" placeholder="VD: 05 năm (Gia hạn tự động)..." class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 focus:border-[#0082B4]">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 4: Multi-role Legal Team Assignment (Kế thừa từ qlcvaslgate-old) -->
+        <div class="glass-card rounded-3xl p-6 md:p-8 space-y-6">
+          <div class="border-b border-slate-100 pb-3">
+            <h2 class="text-base font-bold text-[#002D54] flex items-center gap-2">
+              <span class="w-2.5 h-5 rounded-full bg-[#0082B4]"></span>
+              <span>4. Phân Công Nhân Sự Chuyên Môn & Đối Tác (Team & Partners)</span>
+            </h2>
+            <p class="text-xs text-slate-500 mt-1">Cấu hình phân quyền đa tầng: Partner phụ trách, Quản lý vụ việc, Luật sư trực tiếp, Trợ lý và Đối tác nước ngoài</p>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 text-xs">
+            <!-- Partner phụ trách 1 & 2 (partner_1, partner_2) -->
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Partner Phụ Trách (Partner 1) <span class="text-red-500">*</span></label>
+              <select class="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 font-bold text-[#002D54] focus:border-[#0082B4]">
+                <option selected>LS. Nguyễn Anh (Managing Partner)</option>
+                <option>LS. Lê Hoàng Nam (Senior Partner)</option>
+              </select>
+              <span class="text-[10px] text-slate-400">Ký duyệt hồ sơ và duyệt thanh toán</span>
+            </div>
+
+            <!-- Quản lý vụ việc (manager / supervisor) -->
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Người Quản Lý Trực Tiếp (Manager) <span class="text-red-500">*</span></label>
+              <select class="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 font-semibold focus:border-[#0082B4]">
+                <option selected>LS. Trần Mai Linh</option>
+                <option>LS. Đỗ Quốc Tuấn</option>
+                <option>LS. Hoàng Gia Huy</option>
+              </select>
+              <span class="text-[10px] text-slate-400">Kiểm soát tiến độ công việc</span>
+            </div>
+
+            <!-- Luật sư thực hiện (member) -->
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Luật Sư Trực Tiếp (Member) <span class="text-red-500">*</span></label>
+              <select class="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 font-semibold focus:border-[#0082B4]">
+                <option selected>LS. Hoàng Gia Huy</option>
+                <option>LS. Phạm Thị Dung</option>
+                <option>LS. Lê Hoàng Minh</option>
+              </select>
+              <span class="text-[10px] text-slate-400">Soạn thảo văn bản và xử lý hồ sơ</span>
+            </div>
+
+            <!-- Đối tác nhận việc / Hãng luật nước ngoài (foreign_partner) -->
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Đối Tác Quốc Tế (Foreign Partner)</label>
+              <select class="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 focus:border-[#0082B4]">
+                <option selected>Không có (Nộp trực tiếp Việt Nam)</option>
+                <option>Baker McKenzie (Singapore Office)</option>
+                <option>Kim & Chang (Korea IP Firm)</option>
+                <option>TMI Associates (Tokyo Office)</option>
+              </select>
+              <span class="text-[10px] text-slate-400">Hãng luật liên kết tại nước ngoài</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 5: Financial & Contract Billing (Kế thừa từ custom_fields: Tài chính của công việc) -->
+        <div class="glass-card rounded-3xl p-6 md:p-8 space-y-6">
+          <div class="border-b border-slate-100 pb-3 flex items-center justify-between">
+            <div>
+              <h2 class="text-base font-bold text-[#002D54] flex items-center gap-2">
+                <span class="w-2.5 h-5 rounded-full bg-emerald-600"></span>
+                <span>5. Tài Chính & Các Đợt Thu Tiền (Cash In & Cash Out)</span>
+              </h2>
+              <p class="text-xs text-slate-500 mt-1">Quản lý tổng giá trị, số tiền đã thu, chi phí đối tác nước ngoài và các mốc thanh toán</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 text-xs">
+            <!-- Tổng tiền (total_value) -->
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Tổng Giá Trị Hợp Đồng (Total Value) <span class="text-red-500">*</span></label>
+              <input type="text" id="total_value" value="180,000,000" class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 font-mono font-bold text-emerald-700 focus:border-[#0082B4]">
+            </div>
+
+            <!-- Loại tiền tệ (currency) -->
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Loại Tiền Tệ (Currency)</label>
+              <select class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 font-bold text-[#002D54] focus:border-[#0082B4]">
+                <option selected>VND (Việt Nam Đồng)</option>
+                <option>USD (Đô la Mỹ)</option>
+                <option>EUR (Euro)</option>
+              </select>
+            </div>
+
+            <!-- Đã thanh toán (paid) -->
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Đã Thu Tạm Ứng (Paid)</label>
+              <input type="text" id="paid" value="72,000,000" class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 font-mono font-bold text-slate-700 focus:border-[#0082B4]">
+            </div>
+
+            <!-- Còn lại (remaining) -->
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Số Tiền Còn Nợ (Remaining)</label>
+              <input type="text" readonly value="108,000,000" class="w-full px-3.5 py-2 rounded-xl bg-slate-100 border border-slate-200 font-mono font-bold text-red-600">
+            </div>
+
+            <!-- Chi phí đối tác nước ngoài (total_cost) -->
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Chi Phí Hãng Luật Ngoài (Total Cost)</label>
+              <input type="text" value="0" placeholder="0" class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 font-mono focus:border-[#0082B4]">
+            </div>
+
+            <!-- Tạm ứng cho đối tác (advance_money) -->
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Tạm Ứng Cho Đối Tác Ngoài</label>
+              <input type="text" value="0" placeholder="0" class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 font-mono focus:border-[#0082B4]">
+            </div>
+
+            <!-- Ngày chốt hợp đồng (contract_sign_date) -->
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Ngày Ký HĐ Dịch Vụ</label>
+              <input type="date" value="2026-10-12" class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 focus:border-[#0082B4]">
+            </div>
+
+            <!-- Trạng thái thanh toán (payment_status) -->
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Trạng Thái Thanh Toán</label>
+              <select class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 font-bold focus:border-[#0082B4]">
+                <option>Chưa thanh toán</option>
+                <option selected>Đã thanh toán tạm ứng Đợt 1 (40%)</option>
+                <option>Đã thanh toán 70%</option>
+                <option>Đã thanh toán 100% (Tất toán)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 6: Notes & Mindful (Kế thừa từ mindful / note trong qlcvaslgate-old) -->
+        <div class="glass-card rounded-3xl p-6 md:p-8 space-y-6">
+          <div class="border-b border-slate-100 pb-3">
+            <h2 class="text-base font-bold text-[#002D54] flex items-center gap-2">
+              <span class="w-2.5 h-5 rounded-full bg-amber-500"></span>
+              <span>6. Nội Dung Chi Tiết & Lưu Ý Nghiệp Vụ (Notes & Mindful)</span>
+            </h2>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+            <!-- Nội dung chi tiết (note / post_content) -->
+            <div>
+              <label class="block font-bold text-slate-700 uppercase tracking-wider mb-1.5">Nội Dung Chi Tiết Hồ Sơ (Note)</label>
+              <textarea rows="4" placeholder="Nhập thông tin tóm tắt quá trình tiếp nhận, phạm vi yêu cầu của khách hàng..." class="w-full px-4 py-2.5 rounded-xl bg-white border border-slate-200 leading-relaxed focus:border-[#0082B4]">Khách hàng 9Outfit yêu cầu đăng ký độc quyền nhãn hiệu tại Việt Nam cho nhóm sản phẩm thời trang và thương mại điện tử. Cần tiến hành tra cứu sơ bộ trước khi nộp chính thức.</textarea>
+            </div>
+
+            <!-- Lưu ý công việc (mindful) -->
+            <div>
+              <label class="block font-bold text-red-700 uppercase tracking-wider mb-1.5 flex items-center gap-1">
+                <span> Lưu Ý Công Việc (Mindful - Cảnh Báo Cho Luật Sư)</span>
+              </label>
+              <textarea rows="4" placeholder="Nhập các rủi ro pháp lý, lưu ý đặc thù về thời hiệu, sở thích thân chủ..." class="w-full px-4 py-2.5 rounded-xl bg-red-50/50 border border-red-200 text-red-900 leading-relaxed focus:border-red-400">Khách hàng yêu cầu giữ bí mật tuyệt đối về kế hoạch mở rộng thị trường trước tháng 12/2026. Kiểm tra đối thủ 9Shop có dấu hiệu khiếu nại tương tự gây nhầm lẫn.</textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form Actions Footer -->
+        <div class="flex items-center justify-between pt-4">
+          <a href="index.html" class="px-5 py-2.5 rounded-xl border border-slate-300 text-slate-600 font-bold text-xs hover:bg-slate-100 transition-colors">
+            Hủy Bỏ
+          </a>
+          <div class="flex items-center gap-3">
+            <button type="submit" class="px-6 py-2.5 rounded-xl bg-[#002D54] hover:bg-[#0082B4] text-white font-bold text-xs shadow-md shadow-blue-950/20 transition-all flex items-center gap-2">
+              <svg class="w-4 h-4 text-cyan-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              <span>Lưu & Kích Hoạt Vụ Việc</span>
+            </button>
+          </div>
+        </div>
+
+      </form>
+
+    </main>
+
+  </div>
+
+  <script>
+    // Dynamic Case Type Selector
+    function selectCaseType(typeKey) {
+      // 1. Update button tabs style
+      document.querySelectorAll('.case-type-btn').forEach(btn => {
+        btn.classList.remove('border-2', 'border-[#002D54]', 'bg-blue-50/60', 'text-[#002D54]', 'font-extrabold', 'shadow-sm');
+        btn.classList.add('border', 'border-slate-200', 'bg-white', 'text-slate-700', 'font-bold');
+      });
+
+      const activeBtn = document.getElementById('tab-' + typeKey);
+      if (activeBtn) {
+        activeBtn.classList.remove('border', 'border-slate-200', 'bg-white', 'text-slate-700', 'font-bold');
+        activeBtn.classList.add('border-2', 'border-[#002D54]', 'bg-blue-50/60', 'text-[#002D54]', 'font-extrabold', 'shadow-sm');
+      }
+
+      // 2. Hide all dynamic domain panels, show selected panel
+      document.querySelectorAll('.domain-panel').forEach(panel => panel.classList.add('hidden'));
+      const activePanel = document.getElementById('panel-' + typeKey);
+      if (activePanel) {
+        activePanel.classList.remove('hidden');
+      }
+
+      // 3. Update titles and labels
+      const titleMap = {
+        'nhan_hieu': {
+          title: '3. Trường Dữ Liệu Đặc Thù: Nhãn Hiệu (Trademark Fields)',
+          badge: 'Lĩnh vực: SHTT / Nhãn hiệu',
+          suggestedTitle: 'Đăng ký Nhãn hiệu 9OUTFIT tại Việt Nam & Quốc tế'
+        },
+        'kieu_dang': {
+          title: '3. Trường Dữ Liệu Đặc Thù: Kiểu Dáng Công Nghiệp (Industrial Design)',
+          badge: 'Lĩnh vực: SHTT / Kiểu dáng',
+          suggestedTitle: 'Bảo hộ Kiểu dáng Công nghiệp Mũ Bảo Hiểm Khí Động Học'
+        },
+        'sang_che': {
+          title: '3. Trường Dữ Liệu Đặc Thù: Sáng Chế & Giải Pháp Hữu Ích (Patent)',
+          badge: 'Lĩnh vực: SHTT / Sáng chế',
+          suggestedTitle: 'Đăng ký Sáng chế Hệ Thống Tối Ưu Hóa Năng Lượng Foxconn'
+        },
+        'dan_su': {
+          title: '3. Trường Dữ Liệu Đặc Thù: Luật Dân Sự & Tranh Tụng Tòa Án (Litigation)',
+          badge: 'Lĩnh vực: Dân sự / Tranh tụng Tòa án',
+          suggestedTitle: 'Tranh chấp Hợp đồng Chuyển nhượng Cổ phần BĐS Phúc Khang'
+        },
+        'doanh_nghiep': {
+          title: '3. Trường Dữ Liệu Đặc Thù: Doanh Nghiệp, FDI & M&A (Corporate & Deals)',
+          badge: 'Lĩnh vực: Doanh nghiệp / FDI & M&A',
+          suggestedTitle: 'Tư vấn Thẩm định M&A Thaco Group - HAGL Agrico'
+        },
+        'other_ip': {
+          title: '3. Trường Dữ Liệu Đặc Thù: Bản Quyền Tác Giả & Franchise (Copyright)',
+          badge: 'Lĩnh vực: Bản quyền / Franchise',
+          suggestedTitle: 'Đăng ký Hoạt động Nhượng Quyền Thương Mại Chuỗi Highlands'
+        }
+      };
+
+      const meta = titleMap[typeKey];
+      if (meta) {
+        document.getElementById('domain-section-title').textContent = meta.title;
+        document.getElementById('domain-badge').textContent = meta.badge;
+      }
+    }
+  </script>
+
+</body>
+</html>
