@@ -38,9 +38,9 @@
     <form action="../dashboard/index.html" method="get" class="space-y-4">
 
       <div>
-        <label class="block text-xs font-bold text-slate-700 mb-1">Email công vụ (@aslgate.com)</label>
+        <label class="block text-xs font-bold text-slate-700 mb-1">Email công vụ (@asllaw.vn)</label>
         <div class="relative">
-          <input type="email" value="nam.h@aslgate.com" required class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 text-xs font-medium text-slate-800 focus:outline-none focus:border-[#0082B4] focus:bg-white transition-all">
+          <input type="email" placeholder="luatsu@asllaw.vn" required class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 text-xs font-medium text-slate-800 focus:outline-none focus:border-[#0082B4] focus:bg-white transition-all">
           <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"/></svg>
         </div>
       </div>
@@ -48,7 +48,7 @@
       <div>
         <label class="block text-xs font-bold text-slate-700 mb-1">Mật khẩu</label>
         <div class="relative">
-          <input type="password" value="••••••••••••" required class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 text-xs font-medium text-slate-800 focus:outline-none focus:border-[#0082B4] focus:bg-white transition-all">
+          <input type="password" placeholder="Nhập mật khẩu công vụ" required class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 text-xs font-medium text-slate-800 focus:outline-none focus:border-[#0082B4] focus:bg-white transition-all">
           <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
         </div>
       </div>
@@ -60,15 +60,16 @@
             <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
             Mã xác thực 2FA (TOTP)
           </span>
-          <span class="text-[10px] text-slate-400 font-mono">Google Authenticator</span>
+          <span class="text-[10px] text-slate-400 font-mono">Google Authenticator / FreeOTP</span>
         </div>
-        <input type="text" maxlength="6" value="842 190" required class="w-full px-3 py-2 rounded-lg border border-blue-300 text-center font-mono font-black text-base text-[#002D54] tracking-widest focus:outline-none focus:border-[#0082B4] bg-white">
+        <input type="text" maxlength="6" placeholder="6 chữ số" required class="w-full px-3 py-2 rounded-lg border border-blue-300 text-center font-mono font-black text-base text-[#002D54] tracking-widest focus:outline-none focus:border-[#0082B4] bg-white">
+        <p class="text-[11px] text-slate-500 leading-tight">Bắt buộc đối với Quản trị viên, Trưởng phòng và Kế toán theo DEC-02</p>
       </div>
 
       <div class="flex items-center justify-between text-xs text-slate-500">
         <label class="flex items-center gap-2 cursor-pointer">
           <input type="checkbox" checked class="w-3.5 h-3.5 rounded text-[#0082B4]">
-          <span>Ghi nhớ phiên đăng nhập (30 ngày)</span>
+          <span>Ghi nhớ phiên đăng nhập (7 ngày)</span>
         </label>
         <a href="#" class="font-bold text-[#0082B4] hover:underline">Quên mật khẩu?</a>
       </div>
@@ -79,34 +80,6 @@
       </button>
 
     </form>
-
-    <!-- SSO Single Sign-On Divider -->
-    <div class="relative flex py-1 items-center">
-      <div class="flex-grow border-t border-slate-200"></div>
-      <span class="flex-shrink mx-3 text-slate-400 text-[10px] uppercase font-bold tracking-wider">Hoặc đăng nhập nhanh</span>
-      <div class="flex-grow border-t border-slate-200"></div>
-    </div>
-
-    <!-- SSO Buttons -->
-    <div class="grid grid-cols-2 gap-3 text-xs">
-      <a href="../dashboard/index.html?role=admin" class="flex items-center justify-center gap-2 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold transition-colors">
-        <svg class="w-4 h-4" viewBox="0 0 24 24"><path fill="#EA4335" d="M12 5c1.56 0 2.97.55 4.09 1.45l3.07-3.07C17.3 1.62 14.83 1 12 1 7.42 1 3.56 3.63 1.71 7.43l3.66 2.84C6.26 7.48 8.87 5 12 5z"/><path fill="#4285F4" d="M23.49 12.27c0-.79-.07-1.54-.19-2.27H12v4.51h6.47c-.29 1.48-1.14 2.73-2.4 3.58l3.66 2.84c2.14-1.98 3.76-4.9 3.76-8.66z"/><path fill="#FBBC05" d="M5.37 14.73c-.24-.71-.37-1.47-.37-2.26s.13-1.55.37-2.26L1.71 7.37C.62 9.53 0 11.96 0 14.53s.62 5 1.71 7.16l3.66-2.84z"/><path fill="#34A853" d="M12 23c3.24 0 5.95-1.08 7.93-2.91l-3.66-2.84c-1.08.73-2.46 1.16-4.27 1.16-3.13 0-5.74-2.48-6.63-5.27L1.71 16c1.85 3.8 5.71 7 10.29 7z"/></svg>
-        <span>Google SSO</span>
-      </a>
-
-      <a href="../dashboard/index.html?role=admin" class="flex items-center justify-center gap-2 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold transition-colors">
-        <svg class="w-4 h-4" viewBox="0 0 24 24"><path fill="#F25022" d="M1 1h10v10H1z"/><path fill="#7FBA00" d="M13 1h10v10H13z"/><path fill="#00A4EF" d="M1 13h10v10H1z"/><path fill="#FFB900" d="M13 13h10v10H13z"/></svg>
-        <span>Microsoft 365</span>
-      </a>
-    </div>
-
-    <!-- Security Footer -->
-    <div class="text-center pt-2">
-      <a href="../index.html?role=admin" class="text-xs font-bold text-[#0082B4] hover:underline">
-        ← Quay lại Danh Mục Master Prototype
-      </a>
-    </div>
-
   </div>
 
 </body>

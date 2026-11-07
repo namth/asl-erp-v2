@@ -1,17 +1,38 @@
 {
   "id": "TASK-002",
   "title": "Chỉnh trang đăng nhập prototype theo DEC-02 và Bất biến #5",
-  "status": "draft",
-  "conversation_id": null,
+  "status": "accepted",
+  "conversation_id": "9e0701d3-9ad1-4e39-a912-c9eabba55eff",
   "history": [
     {
       "at": "2026-11-07T08:25:31",
       "status": "draft",
       "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-07T08:27:31",
+      "status": "assigned",
+      "note": "giao qua agy (gemini-3.8-flash-medium)"
+    },
+    {
+      "at": "2026-11-07T08:27:43",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-07T08:30:01",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-07T08:33:31",
+      "status": "accepted",
+      "note": "Claude nghiệm thu"
     }
   ],
   "locked_files": [
     "handoff/tasks/TASK-002-dang-nhap-totp-dec02/verify.sh",
     "tests/prototype/test_task_002_login_dec02.py"
-  ]
+  ],
+  "via": "agy"
 }
