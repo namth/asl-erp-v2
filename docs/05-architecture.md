@@ -93,6 +93,8 @@ flowchart LR
                 C_Next["nextjs:node20-alpine"]
                 C_FastAPI["fastapi:python3.11-slim"]
                 C_Celery["celery-worker"]
+                C_Beat["celery-beat"]
+                C_ClamAV["clamav (quét virus tệp tải lên)"]
                 C_PG["postgres:16-alpine"]
                 C_Neo4j["neo4j:5-community"]
                 C_Redis["redis:7-alpine"]
@@ -107,6 +109,10 @@ flowchart LR
         
         C_PG & C_Neo4j -. "Cron Backup hàng đêm" .-> BackupStorage
     end
+    subgraph Offsite["NGOÀI VĂN PHÒNG (DEC-08)"]
+        OffsiteCopy["Bản sao mã hoá hằng tuần (ổ cứng luân chuyển / cloud, khoá do Giám đốc giữ)"]
+    end
+    BackupStorage -. "Hằng tuần, mã hoá phía ASL" .-> OffsiteCopy
 
     subgraph Internet["INTERNET (CỔNG KẾT NỐI AN TOÀN)"]
         ExtBot["Máy chủ Telegram / Zalo / LLM Cloud"]
@@ -117,7 +123,19 @@ flowchart LR
 
 ### 3.1. Chiến lược Bảo mật Hạ tầng On-Premise
 - **Chặn toàn bộ Inbound từ Internet:** Máy chủ ERP vật lý được đặt trong dải IP nội bộ, không mở Port Forwarding ra ngoài Internet công cộng. Nhân sự truy cập từ bên ngoài văn phòng (khi đi tòa án hoặc gặp thân chủ) bắt buộc phải kết nối qua mạng riêng ảo **VPN nội bộ của ASL Law (WireGuard / OpenVPN)**.
+- **Deep-link trên điện thoại:** link trong tin Telegram/Zalo (`https://erp.asllaw.vn/...`) chỉ mở được khi điện thoại ở mạng văn phòng hoặc đã bật VPN. Cấp cấu hình WireGuard cho điện thoại của nhân sự nhận cảnh báo; tên miền `erp.asllaw.vn` phân giải qua DNS nội bộ/VPN, không công bố ra Internet.
 - **Kênh Outbound có kiểm soát:** Chỉ mở kết nối outbound HTTPS từ container FastAPI/Celery tới các IP/Domain định danh của Telegram Bot API, Zalo Developer API và Google Gemini/OpenAI API.
-- **Chính sách Sao lưu Dự phòng (Disaster Recovery & Backup):**
-  - Chạy script sao lưu tự động (Automated Backup Script) vào lúc 02:00 sáng mỗi ngày.
-  - Xuất bản `pg_dump` nén của PostgreSQL và snapshot của Neo4j, mã hóa bằng khóa AES-256 và đẩy sang ổ cứng mạng NAS biệt lập tại văn phòng.
+### 3.2. Sao lưu & khôi phục (DEC-08)
+
+| Chỉ số | Mục tiêu |
+| :--- | :--- |
+| **RPO** (dữ liệu tối đa có thể mất) | ≤ 24 giờ với bản NAS; ≤ 7 ngày nếu mất cả văn phòng và chỉ còn bản off-site |
+| **RTO** (thời gian dựng lại) | ≤ 8 giờ làm việc |
+
+- **Hằng đêm 02:00:** `pg_dump` (định dạng custom) của PostgreSQL, bản sao kho tài liệu (đã mã hoá sẵn), mã hoá AES-256 và đẩy sang NAS. Giữ 30 bản ngày + 12 bản tháng.
+- **Neo4j:** bản Community không sao lưu online. PostgreSQL là nguồn sự thật nên đồ thị **dựng lại được** bằng lệnh `rebuild-graph` (`06` §4); vẫn chạy `neo4j-admin database dump` trong cửa sổ dừng ngắn 02:00 để rút ngắn thời gian khôi phục.
+- **Hằng tuần:** bản mã hoá đưa ra ngoài văn phòng (ổ cứng luân chuyển giữ ở địa điểm khác, hoặc cloud — mã hoá phía ASL trước khi gửi). Khoá giải mã do Giám đốc giữ, có bản sao niêm phong.
+- **Hằng quý:** diễn tập khôi phục vào máy trống, kiểm tra số lượng bản ghi, tổng tiền sổ hoa hồng, chuỗi băm `audit_logs`; ghi biên bản.
+
+### 3.3. Đồng bộ dữ liệu kép PostgreSQL → Neo4j
+Theo outbox pattern ở `06` §4: thay đổi phân quyền ghi `outbox_events` trong cùng transaction; thu hồi quyền cập nhật Neo4j ngay trong request; job đối soát hằng đêm sửa lệch.

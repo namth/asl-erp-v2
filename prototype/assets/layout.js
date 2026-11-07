@@ -693,7 +693,66 @@
     }
   };
 
-  // 8. Tự động gắn kết (Mount) vào DOM khi trang tải
+  // 8. Tự động đồng bộ ?role= cho mọi link nội bộ trỏ tới .html
+  window.withRole = function(url, role = currentRole) {
+    if (!url) return url;
+    try {
+      const u = new URL(url, window.location.href);
+      u.searchParams.set('role', role);
+      if (!url.startsWith('http://') && !url.startsWith('https://')) {
+        const basePath = url.split(/[?#]/)[0];
+        const search = u.search;
+        const hash = u.hash || '';
+        return basePath + search + hash;
+      }
+      return u.toString();
+    } catch(e) {
+      const sep = url.includes('?') ? '&' : '?';
+      return `${url}${sep}role=${role}`;
+    }
+  };
+
+  function updateLinkRole(a, role = currentRole) {
+    if (!a || !a.getAttribute) return;
+    const rawHref = a.getAttribute('href');
+    if (!rawHref) return;
+    if (rawHref.startsWith('#') || rawHref.startsWith('javascript:') || rawHref.startsWith('mailto:') || rawHref.startsWith('tel:')) {
+      return;
+    }
+    if (rawHref.includes('${')) return;
+
+    try {
+      const url = new URL(rawHref, window.location.href);
+      if (url.origin && window.location.origin && window.location.origin !== 'null' && url.origin !== window.location.origin) {
+        return;
+      }
+      if (url.protocol.startsWith('http') && window.location.protocol.startsWith('http') && url.host !== window.location.host) {
+        return;
+      }
+      if (url.pathname.endsWith('.html')) {
+        a.setAttribute('href', window.withRole(rawHref, role));
+      }
+    } catch (err) {}
+  }
+
+  function syncRoleToLinks(role) {
+    try {
+      const links = document.querySelectorAll('a[href]');
+      links.forEach(function(a) {
+        updateLinkRole(a, role);
+      });
+    } catch (e) {}
+  }
+
+  // Đồng bộ ?role= ngay lúc người dùng bấm link (hỗ trợ cả link sinh động bằng template JS)
+  document.addEventListener('click', function(e) {
+    const a = e.target && e.target.closest && e.target.closest('a[href]');
+    if (a) {
+      updateLinkRole(a, currentRole);
+    }
+  });
+
+  // 9. Tự động gắn kết (Mount) vào DOM khi trang tải
   function initLayout() {
     const sidebar = document.getElementById('sidebar');
     if (sidebar) {
@@ -714,6 +773,9 @@
     // Tiêm nút Dark Mode toggle và kích hoạt Theme
     injectThemeToggle();
     initTheme();
+
+    // Đồng bộ ?role= cho các liên kết nội trang
+    syncRoleToLinks(currentRole);
 
     // Keyboard shortcut [ to toggle sidebar, D to toggle dark mode
     window.addEventListener('keydown', function(e) {
@@ -741,6 +803,7 @@
     renderHeaderHTML,
     applySidebarState,
     switchRole: window.switchRole,
+    withRole: window.withRole,
     getBasePath,
     getActiveMenuKey,
     toggleTheme: window.toggleTheme

@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/layout.css?v=3.1">
+  <link rel="stylesheet" href="assets/layout.css?v=3.3">
   <style>
     .gradient-header {
       background: linear-gradient(135deg, #002240 0%, #002D54 40%, #004D7A 80%, #0082B4 100%);
@@ -42,12 +42,12 @@
       </div>
 
       <div class="flex items-center gap-3">
-        <a href="dashboard/index.html" class="px-5 py-3 rounded-xl bg-white text-[#002D54] font-extrabold text-sm shadow-xl hover:bg-cyan-50 transition-all flex items-center gap-2">
+        <a href="dashboard/index.html?role=admin" class="px-5 py-3 rounded-xl bg-white text-[#002D54] font-extrabold text-sm shadow-xl hover:bg-cyan-50 transition-all flex items-center gap-2">
           <svg class="w-4 h-4 text-[#002D54]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
           <span>Vào Bảng Điều Khiển</span>
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
         </a>
-        <a href="ai-assistant/index.html" class="px-4 py-3 rounded-xl bg-[#0082B4] text-white font-bold text-sm shadow-lg hover:bg-cyan-600 transition-all flex items-center gap-2">
+        <a href="ai-assistant/index.html?role=admin" class="px-4 py-3 rounded-xl bg-[#0082B4] text-white font-bold text-sm shadow-lg hover:bg-cyan-600 transition-all flex items-center gap-2">
           <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
           <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8" y2="16"/><line x1="16" y1="16" x2="16" y2="16"/></svg>
           <span>Trợ Lý AI</span>
@@ -145,7 +145,7 @@
           </div>
           <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
             <span class="text-xs font-bold text-emerald-600">Độc Lập 100%</span>
-            <a href="ai-assistant/index.html" class="px-3.5 py-2 rounded-xl bg-[#002D54] text-white font-bold text-xs hover:bg-[#0082B4] transition-all">
+            <a href="ai-assistant/index.html?role=admin" class="px-3.5 py-2 rounded-xl bg-[#002D54] text-white font-bold text-xs hover:bg-[#0082B4] transition-all">
               Mở Màn Hình &rarr;
             </a>
           </div>
@@ -166,8 +166,8 @@
           <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
             <span class="text-xs text-slate-500">2 Màn hình</span>
             <div class="flex gap-2">
-              <a href="documents/index.html" class="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700 font-bold text-xs hover:bg-slate-200">Kho Tài Liệu</a>
-              <a href="documents/detail.html" class="px-3 py-1.5 rounded-lg bg-[#002D54] text-white font-bold text-xs hover:bg-[#0082B4]">Trình Ký</a>
+              <a href="documents/index.html?role=admin" class="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700 font-bold text-xs hover:bg-slate-200">Kho Tài Liệu</a>
+              <a href="documents/detail.html?role=admin" class="px-3 py-1.5 rounded-lg bg-[#002D54] text-white font-bold text-xs hover:bg-[#0082B4]">Trình Ký</a>
             </div>
           </div>
         </div>
@@ -186,7 +186,7 @@
           </div>
           <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
             <span class="text-xs text-slate-500">Kanban & Giờ Công</span>
-            <a href="tasks/index.html" class="px-3.5 py-2 rounded-xl bg-[#002D54] text-white font-bold text-xs hover:bg-[#0082B4] transition-all">
+            <a href="tasks/index.html?role=admin" class="px-3.5 py-2 rounded-xl bg-[#002D54] text-white font-bold text-xs hover:bg-[#0082B4] transition-all">
               Mở Màn Hình &rarr;
             </a>
           </div>
@@ -218,7 +218,7 @@
           <p class="text-xs text-slate-500">Tổng hợp 4 thẻ KPI 3D, Việc khẩn hạn chót 17:00, Hồ sơ trọng điểm và Lịch tố tụng.</p>
           <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
             <span class="text-xs text-slate-400">1 Trang Hub</span>
-            <a href="dashboard/index.html" class="px-3 py-1.5 rounded-lg bg-[#002D54] text-white font-bold text-xs hover:bg-[#0082B4]">Xem Dashboard &rarr;</a>
+            <a href="dashboard/index.html?role=admin" class="px-3 py-1.5 rounded-lg bg-[#002D54] text-white font-bold text-xs hover:bg-[#0082B4]">Xem Dashboard &rarr;</a>
           </div>
         </div>
 
@@ -231,10 +231,10 @@
           <h4 class="font-bold text-base text-[#002D54]">Hồ Sơ & Vụ Việc Pháp Lý (Cases)</h4>
           <p class="text-xs text-slate-500">Quản trị toàn diện vòng đời vụ việc, trường động JSONB, stepper và duyệt stage.</p>
           <div class="pt-3 border-t border-slate-100 grid grid-cols-2 gap-2">
-            <a href="cases/index.html" class="px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-700 font-bold text-xs text-center hover:bg-slate-200">Danh Sách</a>
-            <a href="cases/create.html" class="px-2.5 py-1.5 rounded-lg bg-emerald-600 text-white font-bold text-xs text-center hover:bg-emerald-700">Tạo Mới</a>
-            <a href="cases/detail.html" class="px-2.5 py-1.5 rounded-lg bg-[#002D54] text-white font-bold text-xs text-center hover:bg-[#0082B4]">Chi Tiết</a>
-            <a href="cases/edit.html" class="px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-700 font-bold text-xs text-center hover:bg-slate-200">Chỉnh Sửa</a>
+            <a href="cases/index.html?role=admin" class="px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-700 font-bold text-xs text-center hover:bg-slate-200">Danh Sách</a>
+            <a href="cases/create.html?role=admin" class="px-2.5 py-1.5 rounded-lg bg-emerald-600 text-white font-bold text-xs text-center hover:bg-emerald-700">Tạo Mới</a>
+            <a href="cases/detail.html?role=admin" class="px-2.5 py-1.5 rounded-lg bg-[#002D54] text-white font-bold text-xs text-center hover:bg-[#0082B4]">Chi Tiết</a>
+            <a href="cases/edit.html?role=admin" class="px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-700 font-bold text-xs text-center hover:bg-slate-200">Chỉnh Sửa</a>
           </div>
         </div>
 
@@ -247,10 +247,10 @@
           <h4 class="font-bold text-base text-[#002D54]">CRM & Đường Ống Cơ Hội</h4>
           <p class="text-xs text-slate-500">Pipeline cơ hội bán hàng, quản lý thân chủ doanh nghiệp, chuyển đổi thành Case.</p>
           <div class="pt-3 border-t border-slate-100 grid grid-cols-2 gap-2">
-            <a href="crm/index.html" class="px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-700 font-bold text-xs text-center hover:bg-slate-200">Pipeline / DS</a>
-            <a href="crm/create-lead.html" class="px-2.5 py-1.5 rounded-lg bg-emerald-600 text-white font-bold text-xs text-center hover:bg-emerald-700">Thêm Khách</a>
-            <a href="crm/detail.html" class="px-2.5 py-1.5 rounded-lg bg-[#002D54] text-white font-bold text-xs text-center hover:bg-[#0082B4]">Hồ Sơ 360°</a>
-            <a href="crm/edit.html" class="px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-700 font-bold text-xs text-center hover:bg-slate-200">Chỉnh Sửa</a>
+            <a href="crm/index.html?role=admin" class="px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-700 font-bold text-xs text-center hover:bg-slate-200">Pipeline / DS</a>
+            <a href="crm/create-lead.html?role=admin" class="px-2.5 py-1.5 rounded-lg bg-emerald-600 text-white font-bold text-xs text-center hover:bg-emerald-700">Thêm Khách</a>
+            <a href="crm/detail.html?role=admin" class="px-2.5 py-1.5 rounded-lg bg-[#002D54] text-white font-bold text-xs text-center hover:bg-[#0082B4]">Hồ Sơ 360°</a>
+            <a href="crm/edit.html?role=admin" class="px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-700 font-bold text-xs text-center hover:bg-slate-200">Chỉnh Sửa</a>
           </div>
         </div>
 
@@ -263,10 +263,10 @@
           <h4 class="font-bold text-base text-[#002D54]">Tác Vụ & Kanban Jira Board</h4>
           <p class="text-xs text-slate-500">4 cột phân quyền, cơ chế khóa phụ thuộc Task B chỉ mở khi Task A hoàn tất.</p>
           <div class="pt-3 border-t border-slate-100 grid grid-cols-4 gap-2">
-            <a href="tasks/index.html" class="px-2 py-1.5 rounded-lg bg-slate-100 text-slate-700 font-bold text-xs text-center hover:bg-slate-200">Kanban</a>
-            <a href="tasks/list.html" class="px-2 py-1.5 rounded-lg bg-cyan-100 text-cyan-900 font-bold text-xs text-center hover:bg-cyan-200">Danh Sách</a>
-            <a href="tasks/create.html" class="px-2 py-1.5 rounded-lg bg-emerald-600 text-white font-bold text-xs text-center hover:bg-emerald-700">Tạo Task</a>
-            <a href="tasks/detail.html" class="px-2 py-1.5 rounded-lg bg-[#002D54] text-white font-bold text-xs text-center hover:bg-[#0082B4]">Chi Tiết</a>
+            <a href="tasks/index.html?role=admin" class="px-2 py-1.5 rounded-lg bg-slate-100 text-slate-700 font-bold text-xs text-center hover:bg-slate-200">Kanban</a>
+            <a href="tasks/list.html?role=admin" class="px-2 py-1.5 rounded-lg bg-cyan-100 text-cyan-900 font-bold text-xs text-center hover:bg-cyan-200">Danh Sách</a>
+            <a href="tasks/create.html?role=admin" class="px-2 py-1.5 rounded-lg bg-emerald-600 text-white font-bold text-xs text-center hover:bg-emerald-700">Tạo Task</a>
+            <a href="tasks/detail.html?role=admin" class="px-2 py-1.5 rounded-lg bg-[#002D54] text-white font-bold text-xs text-center hover:bg-[#0082B4]">Chi Tiết</a>
           </div>
         </div>
 
@@ -279,10 +279,10 @@
           <h4 class="font-bold text-base text-[#002D54]">Trình Thiết Kế Quy Trình Mẫu</h4>
           <p class="text-xs text-slate-500">Kéo thả Stage, Cổng Approval Gate, rẽ nhánh điều kiện và trường động JSONB.</p>
           <div class="pt-3 border-t border-slate-100 grid grid-cols-2 gap-2">
-            <a href="workflows/index.html" class="px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-700 font-bold text-xs text-center hover:bg-slate-200">Studio Mẫu</a>
-            <a href="workflows/create.html" class="px-2.5 py-1.5 rounded-lg bg-emerald-600 text-white font-bold text-xs text-center hover:bg-emerald-700">Tạo Mẫu</a>
-            <a href="workflows/detail.html" class="px-2.5 py-1.5 rounded-lg bg-[#002D54] text-white font-bold text-xs text-center hover:bg-[#0082B4]">Chi Tiết</a>
-            <a href="workflows/edit.html" class="px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-700 font-bold text-xs text-center hover:bg-slate-200">Sửa Node</a>
+            <a href="workflows/index.html?role=admin" class="px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-700 font-bold text-xs text-center hover:bg-slate-200">Studio Mẫu</a>
+            <a href="workflows/create.html?role=admin" class="px-2.5 py-1.5 rounded-lg bg-emerald-600 text-white font-bold text-xs text-center hover:bg-emerald-700">Tạo Mẫu</a>
+            <a href="workflows/detail.html?role=admin" class="px-2.5 py-1.5 rounded-lg bg-[#002D54] text-white font-bold text-xs text-center hover:bg-[#0082B4]">Chi Tiết</a>
+            <a href="workflows/edit.html?role=admin" class="px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-700 font-bold text-xs text-center hover:bg-slate-200">Sửa Node</a>
           </div>
         </div>
 
@@ -295,9 +295,9 @@
           <h4 class="font-bold text-base text-[#002D54]">Bàn Làm Việc Kế Toán & Đối Soát</h4>
           <p class="text-xs text-slate-500">Inbox đối soát ủy nhiệm chi ngân hàng, nhập số HĐ/Mã GD, gỡ chặn vụ việc.</p>
           <div class="pt-3 border-t border-slate-100 grid grid-cols-2 gap-2">
-            <a href="accounting/index.html" class="px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-700 font-bold text-xs text-center hover:bg-slate-200">Inbox Thu Tiền</a>
-            <a href="accounting/create-invoice.html" class="px-2.5 py-1.5 rounded-lg bg-emerald-600 text-white font-bold text-xs text-center hover:bg-emerald-700">Lập Đề Nghị</a>
-            <a href="accounting/detail.html" class="col-span-2 px-2.5 py-1.5 rounded-lg bg-[#002D54] text-white font-bold text-xs text-center hover:bg-[#0082B4]">Xem Chi Tiết Chứng Từ & UNC</a>
+            <a href="accounting/index.html?role=admin" class="px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-700 font-bold text-xs text-center hover:bg-slate-200">Inbox Thu Tiền</a>
+            <a href="accounting/create-invoice.html?role=admin" class="px-2.5 py-1.5 rounded-lg bg-emerald-600 text-white font-bold text-xs text-center hover:bg-emerald-700">Lập Đề Nghị</a>
+            <a href="accounting/detail.html?role=admin" class="col-span-2 px-2.5 py-1.5 rounded-lg bg-[#002D54] text-white font-bold text-xs text-center hover:bg-[#0082B4]">Xem Chi Tiết Chứng Từ & UNC</a>
           </div>
         </div>
 
@@ -310,8 +310,8 @@
           <h4 class="font-bold text-base text-[#002D54]">Bảng Phân Bổ Hoa Hồng Thực Thu</h4>
           <p class="text-xs text-slate-500">Tự động chia hoa hồng 4 vai trò (Sales 10%, CM 15%, Supervisor 5%, Executor 20%).</p>
           <div class="pt-3 border-t border-slate-100 grid grid-cols-2 gap-2">
-            <a href="finance/index.html" class="px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-700 font-bold text-xs text-center hover:bg-slate-200">Bảng Tổng Hợp</a>
-            <a href="finance/detail.html" class="px-2.5 py-1.5 rounded-lg bg-[#002D54] text-white font-bold text-xs text-center hover:bg-[#0082B4]">Chi Tiết Quyết Toán</a>
+            <a href="finance/index.html?role=admin" class="px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-700 font-bold text-xs text-center hover:bg-slate-200">Bảng Tổng Hợp</a>
+            <a href="finance/detail.html?role=admin" class="px-2.5 py-1.5 rounded-lg bg-[#002D54] text-white font-bold text-xs text-center hover:bg-[#0082B4]">Chi Tiết Quyết Toán</a>
           </div>
         </div>
 
@@ -324,9 +324,9 @@
           <h4 class="font-bold text-base text-[#002D54]">Quản Lý Nhân Sự & Phân Quyền Vai Trò</h4>
           <p class="text-xs text-slate-500">Phân quyền đa tầng (Partner, Luật sư, Trợ lý, Kế toán), tỷ lệ chia thưởng, chứng chỉ.</p>
           <div class="pt-3 border-t border-slate-100 grid grid-cols-3 gap-2">
-            <a href="users/index.html" class="px-2 py-1.5 rounded-lg bg-slate-100 text-slate-700 font-bold text-xs text-center hover:bg-slate-200">Danh Sách</a>
-            <a href="users/create.html" class="px-2 py-1.5 rounded-lg bg-emerald-600 text-white font-bold text-xs text-center hover:bg-emerald-700">Thêm Mới</a>
-            <a href="users/detail.html" class="px-2 py-1.5 rounded-lg bg-[#002D54] text-white font-bold text-xs text-center hover:bg-[#0082B4]">Hồ Sơ</a>
+            <a href="users/index.html?role=admin" class="px-2 py-1.5 rounded-lg bg-slate-100 text-slate-700 font-bold text-xs text-center hover:bg-slate-200">Danh Sách</a>
+            <a href="users/create.html?role=admin" class="px-2 py-1.5 rounded-lg bg-emerald-600 text-white font-bold text-xs text-center hover:bg-emerald-700">Thêm Mới</a>
+            <a href="users/detail.html?role=admin" class="px-2 py-1.5 rounded-lg bg-[#002D54] text-white font-bold text-xs text-center hover:bg-[#0082B4]">Hồ Sơ</a>
           </div>
         </div>
 
@@ -340,7 +340,7 @@
           <p class="text-xs text-slate-500">Giao diện khách hàng tự tra cứu tiến độ vụ việc, xem mốc phí đã nộp và tải văn bản.</p>
           <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
             <span class="text-xs text-slate-400">Giao Diện Khách</span>
-            <a href="client-portal/index.html" class="px-3 py-1.5 rounded-lg bg-[#002D54] text-white font-bold text-xs hover:bg-[#0082B4]">Xem Portal &rarr;</a>
+            <a href="client-portal/index.html?role=admin" class="px-3 py-1.5 rounded-lg bg-[#002D54] text-white font-bold text-xs hover:bg-[#0082B4]">Xem Portal &rarr;</a>
           </div>
         </div>
 
@@ -354,7 +354,7 @@
           <p class="text-xs text-slate-500">Biểu đồ doanh thu chi nhánh, SLA giải quyết vụ việc, tỷ lệ thành công của luật sư.</p>
           <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
             <span class="text-xs text-slate-400">3 Biểu đồ trực quan</span>
-            <a href="reports/index.html" class="px-3 py-1.5 rounded-lg bg-[#002D54] text-white font-bold text-xs hover:bg-[#0082B4]">Mở Báo Cáo &rarr;</a>
+            <a href="reports/index.html?role=admin" class="px-3 py-1.5 rounded-lg bg-[#002D54] text-white font-bold text-xs hover:bg-[#0082B4]">Mở Báo Cáo &rarr;</a>
           </div>
         </div>
 
@@ -368,7 +368,7 @@
           <p class="text-xs text-slate-500">Cấu hình biểu phí chuẩn, kết nối MISA Open API, Zalo ZNS, Mailgun và phân nhánh.</p>
           <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
             <span class="text-xs text-slate-400">Tích hợp đa kênh</span>
-            <a href="settings/index.html" class="px-3 py-1.5 rounded-lg bg-[#002D54] text-white font-bold text-xs hover:bg-[#0082B4]">Cài Đặt &rarr;</a>
+            <a href="settings/index.html?role=admin" class="px-3 py-1.5 rounded-lg bg-[#002D54] text-white font-bold text-xs hover:bg-[#0082B4]">Cài Đặt &rarr;</a>
           </div>
         </div>
 
@@ -382,7 +382,7 @@
           <p class="text-xs text-slate-500">Bảng log mã hóa SHA-256 bất biến, kèm modal xem so sánh thay đổi dữ liệu JSON Diff.</p>
           <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
             <span class="text-xs text-slate-400">Kiểm toán dữ liệu</span>
-            <a href="audit-logs/index.html" class="px-3 py-1.5 rounded-lg bg-[#002D54] text-white font-bold text-xs hover:bg-[#0082B4]">Mở Nhật Ký &rarr;</a>
+            <a href="audit-logs/index.html?role=admin" class="px-3 py-1.5 rounded-lg bg-[#002D54] text-white font-bold text-xs hover:bg-[#0082B4]">Mở Nhật Ký &rarr;</a>
           </div>
         </div>
 
@@ -396,7 +396,7 @@
           <p class="text-xs text-slate-500">Xác thực tài khoản nội bộ, mã OTP 6 số, giao diện thẻ kính 3D đẳng cấp.</p>
           <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
             <span class="text-xs text-slate-400">Bảo mật đa tầng</span>
-            <a href="auth/login.html" class="px-3 py-1.5 rounded-lg bg-[#002D54] text-white font-bold text-xs hover:bg-[#0082B4]">Mở Đăng Nhập &rarr;</a>
+            <a href="auth/login.html?role=admin" class="px-3 py-1.5 rounded-lg bg-[#002D54] text-white font-bold text-xs hover:bg-[#0082B4]">Mở Đăng Nhập &rarr;</a>
           </div>
         </div>
 
@@ -432,91 +432,91 @@
               <td class="py-3 px-4">Phòng Chat Trợ Lý AI Chuyên Sâu, Soạn Thảo & Án Lệ</td>
               <td class="py-3 px-4 mono text-slate-400">ai-assistant/index.html</td>
               <td class="py-3 px-4 text-center"><span class="px-2 py-0.5 rounded bg-cyan-100 text-cyan-800 font-bold">Interactive</span></td>
-              <td class="py-3 px-4 text-right"><a href="ai-assistant/index.html" class="text-[#0082B4] font-bold hover:underline">Mở &rarr;</a></td>
+              <td class="py-3 px-4 text-right"><a href="ai-assistant/index.html?role=admin" class="text-[#0082B4] font-bold hover:underline">Mở &rarr;</a></td>
             </tr>
             <tr>
               <td class="py-3 px-4 font-bold text-[#002D54]">2. DMS Văn Bản</td>
               <td class="py-3 px-4">Kho Tài Liệu Pháp Lý, Lịch Sử Phiên Bản & Trình Ký Số</td>
               <td class="py-3 px-4 mono text-slate-400">documents/index.html</td>
               <td class="py-3 px-4 text-center"><span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold">Index + Detail</span></td>
-              <td class="py-3 px-4 text-right"><a href="documents/index.html" class="text-[#0082B4] font-bold hover:underline">Mở &rarr;</a></td>
+              <td class="py-3 px-4 text-right"><a href="documents/index.html?role=admin" class="text-[#0082B4] font-bold hover:underline">Mở &rarr;</a></td>
             </tr>
             <tr>
               <td class="py-3 px-4 font-bold text-[#002D54]">3. Quản Lý Tác Vụ & Giờ Công</td>
               <td class="py-3 px-4">Tác Vụ Kanban/List Tích Hợp Nhập Giờ Công Trực Tiếp (Thay Thế Timesheet)</td>
               <td class="py-3 px-4 mono text-slate-400">tasks/index.html</td>
               <td class="py-3 px-4 text-center"><span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold">Tích Hợp Sẵn</span></td>
-              <td class="py-3 px-4 text-right"><a href="tasks/index.html" class="text-[#0082B4] font-bold hover:underline">Mở &rarr;</a></td>
+              <td class="py-3 px-4 text-right"><a href="tasks/index.html?role=admin" class="text-[#0082B4] font-bold hover:underline">Mở &rarr;</a></td>
             </tr>
             <tr>
               <td class="py-3 px-4 font-bold text-[#002D54]">4. Quản Lý Vụ Việc</td>
               <td class="py-3 px-4">Hồ Sơ Vụ Việc (Danh sách, Tạo mới, Chi tiết Stepper, Chỉnh sửa)</td>
               <td class="py-3 px-4 mono text-slate-400">cases/*</td>
               <td class="py-3 px-4 text-center"><span class="px-2 py-0.5 rounded bg-indigo-100 text-indigo-800 font-bold">Full 4 Trang CRUD</span></td>
-              <td class="py-3 px-4 text-right"><a href="cases/index.html" class="text-[#0082B4] font-bold hover:underline">Mở &rarr;</a></td>
+              <td class="py-3 px-4 text-right"><a href="cases/index.html?role=admin" class="text-[#0082B4] font-bold hover:underline">Mở &rarr;</a></td>
             </tr>
             <tr>
               <td class="py-3 px-4 font-bold text-[#002D54]">5. CRM Khách Hàng</td>
               <td class="py-3 px-4">Quản Trị Cơ Hội Bán Hàng & Danh Bạ Thân Chủ Doanh Nghiệp</td>
               <td class="py-3 px-4 mono text-slate-400">crm/*</td>
               <td class="py-3 px-4 text-center"><span class="px-2 py-0.5 rounded bg-indigo-100 text-indigo-800 font-bold">Full 4 Trang CRUD</span></td>
-              <td class="py-3 px-4 text-right"><a href="crm/index.html" class="text-[#0082B4] font-bold hover:underline">Mở &rarr;</a></td>
+              <td class="py-3 px-4 text-right"><a href="crm/index.html?role=admin" class="text-[#0082B4] font-bold hover:underline">Mở &rarr;</a></td>
             </tr>
             <tr>
               <td class="py-3 px-4 font-bold text-[#002D54]">6. Tác Vụ Công Việc</td>
               <td class="py-3 px-4">Kanban & Jira Task Board Khóa Phụ Thuộc Task</td>
               <td class="py-3 px-4 mono text-slate-400">tasks/*</td>
               <td class="py-3 px-4 text-center"><span class="px-2 py-0.5 rounded bg-indigo-100 text-indigo-800 font-bold">Full 4 Trang (Kanban + List)</span></td>
-              <td class="py-3 px-4 text-right"><a href="tasks/index.html" class="text-[#0082B4] font-bold hover:underline">Mở &rarr;</a></td>
+              <td class="py-3 px-4 text-right"><a href="tasks/index.html?role=admin" class="text-[#0082B4] font-bold hover:underline">Mở &rarr;</a></td>
             </tr>
             <tr>
               <td class="py-3 px-4 font-bold text-[#002D54]">7. Nhân Sự & Phân Quyền</td>
               <td class="py-3 px-4">Danh Sách Luật Sư, Phân Quyền Đa Tầng & Hồ Sơ Năng Lực</td>
               <td class="py-3 px-4 mono text-slate-400">users/*</td>
               <td class="py-3 px-4 text-center"><span class="px-2 py-0.5 rounded bg-indigo-100 text-indigo-800 font-bold">Full 4 Trang (Kanban + List)</span></td>
-              <td class="py-3 px-4 text-right"><a href="users/index.html" class="text-[#0082B4] font-bold hover:underline">Mở &rarr;</a></td>
+              <td class="py-3 px-4 text-right"><a href="users/index.html?role=admin" class="text-[#0082B4] font-bold hover:underline">Mở &rarr;</a></td>
             </tr>
             <tr>
               <td class="py-3 px-4 font-bold text-[#002D54]">8. Cổng Khách Hàng</td>
               <td class="py-3 px-4">Client Portal: Thân Chủ Tự Tra Cứu Tiến Độ & Tải Kết Quả</td>
               <td class="py-3 px-4 mono text-slate-400">client-portal/index.html</td>
               <td class="py-3 px-4 text-center"><span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold">Ready</span></td>
-              <td class="py-3 px-4 text-right"><a href="client-portal/index.html" class="text-[#0082B4] font-bold hover:underline">Mở &rarr;</a></td>
+              <td class="py-3 px-4 text-right"><a href="client-portal/index.html?role=admin" class="text-[#0082B4] font-bold hover:underline">Mở &rarr;</a></td>
             </tr>
             <tr>
               <td class="py-3 px-4 font-bold text-[#002D54]">9. Báo Cáo BI</td>
               <td class="py-3 px-4">Báo Cáo Doanh Thu, Tỷ Lệ Thắng Kiện & SLA Xử Lý</td>
               <td class="py-3 px-4 mono text-slate-400">reports/index.html</td>
               <td class="py-3 px-4 text-center"><span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold">Ready</span></td>
-              <td class="py-3 px-4 text-right"><a href="reports/index.html" class="text-[#0082B4] font-bold hover:underline">Mở &rarr;</a></td>
+              <td class="py-3 px-4 text-right"><a href="reports/index.html?role=admin" class="text-[#0082B4] font-bold hover:underline">Mở &rarr;</a></td>
             </tr>
             <tr>
               <td class="py-3 px-4 font-bold text-[#002D54]">10. Kế Toán MISA</td>
               <td class="py-3 px-4">Inbox Đối Soát Thu Tiền, Lập Hóa Đơn & Xác Nhận UNC Ngân Hàng</td>
               <td class="py-3 px-4 mono text-slate-400">accounting/*</td>
               <td class="py-3 px-4 text-center"><span class="px-2 py-0.5 rounded bg-indigo-100 text-indigo-800 font-bold">Full 3 Trang</span></td>
-              <td class="py-3 px-4 text-right"><a href="accounting/index.html" class="text-[#0082B4] font-bold hover:underline">Mở &rarr;</a></td>
+              <td class="py-3 px-4 text-right"><a href="accounting/index.html?role=admin" class="text-[#0082B4] font-bold hover:underline">Mở &rarr;</a></td>
             </tr>
             <tr>
               <td class="py-3 px-4 font-bold text-[#002D54]">11. Sổ Cái Hoa Hồng</td>
               <td class="py-3 px-4">Sổ Cái Hoa Hồng Thực Thu (Cash-Basis) & Duyệt Phân Bổ 4 Vai Trò</td>
               <td class="py-3 px-4 mono text-slate-400">finance/*</td>
               <td class="py-3 px-4 text-center"><span class="px-2 py-0.5 rounded bg-indigo-100 text-indigo-800 font-bold">Full 2 Trang</span></td>
-              <td class="py-3 px-4 text-right"><a href="finance/index.html" class="text-[#0082B4] font-bold hover:underline">Mở &rarr;</a></td>
+              <td class="py-3 px-4 text-right"><a href="finance/index.html?role=admin" class="text-[#0082B4] font-bold hover:underline">Mở &rarr;</a></td>
             </tr>
             <tr>
               <td class="py-3 px-4 font-bold text-[#002D54]">12. Kiểm Toán Bất Biến</td>
               <td class="py-3 px-4">Nhật Ký Kiểm Toán Mã Hóa SHA-256 & Modal JSON Diff Trước/Sau</td>
               <td class="py-3 px-4 mono text-slate-400">audit-logs/index.html</td>
               <td class="py-3 px-4 text-center"><span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold">Ready</span></td>
-              <td class="py-3 px-4 text-right"><a href="audit-logs/index.html" class="text-[#0082B4] font-bold hover:underline">Mở &rarr;</a></td>
+              <td class="py-3 px-4 text-right"><a href="audit-logs/index.html?role=admin" class="text-[#0082B4] font-bold hover:underline">Mở &rarr;</a></td>
             </tr>
             <tr>
               <td class="py-3 px-4 font-bold text-[#002D54]">13. Cài Đặt Hệ Thống</td>
               <td class="py-3 px-4">Cấu Hình Kết Nối MISA API, Vietcombank Webhook, Zalo ZNS</td>
               <td class="py-3 px-4 mono text-slate-400">settings/index.html</td>
               <td class="py-3 px-4 text-center"><span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold">Ready</span></td>
-              <td class="py-3 px-4 text-right"><a href="settings/index.html" class="text-[#0082B4] font-bold hover:underline">Mở &rarr;</a></td>
+              <td class="py-3 px-4 text-right"><a href="settings/index.html?role=admin" class="text-[#0082B4] font-bold hover:underline">Mở &rarr;</a></td>
             </tr>
             <tr class="bg-sky-50/60">
               <td class="py-3 px-4 font-bold text-[#002D54]">14. Kiến Trúc Hệ Thống</td>
@@ -530,7 +530,7 @@
               <td class="py-3 px-4">Cổng Đăng Nhập Bảo Mật Cao 2FA TOTP & Google / Microsoft SSO</td>
               <td class="py-3 px-4 mono text-slate-400">auth/login.html</td>
               <td class="py-3 px-4 text-center"><span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold">Ready</span></td>
-              <td class="py-3 px-4 text-right"><a href="auth/login.html" class="text-[#0082B4] font-bold hover:underline">Mở &rarr;</a></td>
+              <td class="py-3 px-4 text-right"><a href="auth/login.html?role=admin" class="text-[#0082B4] font-bold hover:underline">Mở &rarr;</a></td>
             </tr>
           </tbody>
         </table>

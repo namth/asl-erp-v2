@@ -14,8 +14,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../assets/layout.css?v=3.1">
-  <script src="../assets/layout.js?v=3.1" defer></script>
+  <link rel="stylesheet" href="../assets/layout.css?v=3.3">
+  <script src="../assets/layout.js?v=3.3" defer></script>
 </head>
 <body class="min-h-screen bg-[#F4F8FA] text-slate-800 flex">  <!-- Modular Shared Sidebar (Auto-mounted by layout.js) -->
   <aside id="sidebar" class="fixed top-0 left-0 bottom-0 w-72 bg-white/95 backdrop-blur-xl z-40 transition-all duration-300 ease-in-out flex flex-col justify-between shadow-xl shadow-slate-900/5"></aside>
@@ -31,7 +31,7 @@
         </button>
         <div>
           <div class="text-xs text-cyan-200/90 font-medium flex items-center gap-1.5">
-            <a href="../index.html" class="hover:underline">ASL LAW</a>
+            <a href="../index.html?role=admin" class="hover:underline">ASL LAW</a>
             <span>/</span>
             <span class="text-white font-semibold">Bàn Làm Việc</span>
           </div>
@@ -48,13 +48,13 @@
         </div>
 
         <!-- Quick AI Access Button -->
-        <a href="../ai-assistant/index.html" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-[#0082B4] hover:from-cyan-400 hover:to-cyan-600 text-white font-bold text-xs shadow-md shadow-cyan-950/30 flex items-center gap-2 border border-white/30 transition-transform hover:scale-105">
+        <a href="../ai-assistant/index.html?role=admin" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-[#0082B4] hover:from-cyan-400 hover:to-cyan-600 text-white font-bold text-xs shadow-md shadow-cyan-950/30 flex items-center gap-2 border border-white/30 transition-transform hover:scale-105">
           <span class="w-2 h-2 rounded-full bg-emerald-300 animate-pulse"></span>
           <span>Trợ Lý AI</span>
         </a>
 
         <!-- Quick Action + Create Case -->
-        <a href="../cases/create.html" class="px-3.5 py-2 rounded-xl bg-[#FF7A00] hover:bg-[#E66E00] text-white font-bold text-xs shadow-md shadow-orange-950/20 flex items-center gap-1.5 transition-all">
+        <a href="../cases/create.html?role=admin" class="px-3.5 py-2 rounded-xl bg-[#FF7A00] hover:bg-[#E66E00] text-white font-bold text-xs shadow-md shadow-orange-950/20 flex items-center gap-1.5 transition-all">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
           <span>Tạo Vụ Việc</span>
         </a>
@@ -148,7 +148,7 @@
               </h2>
               <p class="text-xs text-slate-400 mt-0.5">Xếp theo mức độ khẩn cấp và thời hạn đóng hồ sơ</p>
             </div>
-            <a href="../tasks/index.html" class="text-xs font-bold text-[#0082B4] hover:underline flex items-center gap-1">
+            <a href="../tasks/index.html?role=admin" class="text-xs font-bold text-[#0082B4] hover:underline flex items-center gap-1">
               <span>Mở Bảng Kanban</span>
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
             </a>
@@ -162,14 +162,14 @@
                 <div>
                   <div class="flex items-center gap-2">
                     <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-red-100 text-red-700">HẠN 15:30</span>
-                    <a href="../cases/detail.html" class="text-xs font-bold text-slate-400 hover:text-[#002D54] mono">CASE-2026-089</a>
+                    <a href="../cases/detail.html?role=admin" class="text-xs font-bold text-slate-400 hover:text-[#002D54] mono">CASE-2026-089</a>
                   </div>
                   <h3 class="text-sm font-bold text-[#002D54] mt-1">Nộp Đơn Phản Tố Vụ Tranh Chấp Nhãn Hiệu ASL</h3>
                   <p class="text-xs text-slate-500 mt-0.5">Cục Sở hữu Trí tuệ - Yêu cầu đóng dấu đỏ văn phòng đại diện trước 16:00.</p>
                 </div>
               </div>
               <div class="flex items-center gap-2 flex-shrink-0">
-                <a href="../cases/detail.html" class="px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 font-bold text-xs hover:bg-[#002D54] hover:text-white transition-colors">
+                <a href="../cases/detail.html?role=admin" class="px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 font-bold text-xs hover:bg-[#002D54] hover:text-white transition-colors">
                   Chi Tiết
                 </a>
               </div>
@@ -182,14 +182,14 @@
                 <div>
                   <div class="flex items-center gap-2">
                     <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-orange-100 text-orange-700">HẠN 17:00</span>
-                    <a href="../cases/detail.html" class="text-xs font-bold text-slate-400 hover:text-[#002D54] mono">CASE-2026-092</a>
+                    <a href="../cases/detail.html?role=admin" class="text-xs font-bold text-slate-400 hover:text-[#002D54] mono">CASE-2026-092</a>
                   </div>
                   <h3 class="text-sm font-bold text-[#002D54] mt-1">Hoàn thiện Dự Thảo Hợp Đồng M&A Dự Án Điện Mặt Trời</h3>
                   <p class="text-xs text-slate-500 mt-0.5">Đối tác Foxconn yêu cầu bổ sung điều khoản cam kết ESG và giải quyết VIAC.</p>
                 </div>
               </div>
               <div class="flex items-center gap-2 flex-shrink-0">
-                <a href="../ai-assistant/index.html" class="px-3 py-1.5 rounded-xl bg-cyan-50 text-[#0082B4] font-bold text-xs hover:bg-[#0082B4] hover:text-white transition-colors">
+                <a href="../ai-assistant/index.html?role=admin" class="px-3 py-1.5 rounded-xl bg-cyan-50 text-[#0082B4] font-bold text-xs hover:bg-[#0082B4] hover:text-white transition-colors">
                   Dùng AI Soạn
                 </a>
               </div>
@@ -202,14 +202,14 @@
                 <div>
                   <div class="flex items-center gap-2">
                     <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-amber-100 text-amber-700">ĐỢI KẾ TOÁN</span>
-                    <a href="../accounting/detail.html" class="text-xs font-bold text-slate-400 hover:text-[#002D54] mono">BILL-2026-044</a>
+                    <a href="../accounting/detail.html?role=admin" class="text-xs font-bold text-slate-400 hover:text-[#002D54] mono">BILL-2026-044</a>
                   </div>
                   <h3 class="text-sm font-bold text-[#002D54] mt-1">Đối Soát Tiền Nộp Đợt 2 Khách Hàng Sao Nam</h3>
                   <p class="text-xs text-slate-500 mt-0.5">Ủy nhiệm chi Vietcombank 60.000.000đ cần kế toán bấm duyệt để mở khóa Stage 3.</p>
                 </div>
               </div>
               <div class="flex items-center gap-2 flex-shrink-0">
-                <a href="../accounting/index.html" class="px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 font-bold text-xs hover:bg-emerald-600 hover:text-white transition-colors">
+                <a href="../accounting/index.html?role=admin" class="px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 font-bold text-xs hover:bg-emerald-600 hover:text-white transition-colors">
                   Đối Soát
                 </a>
               </div>
@@ -268,7 +268,7 @@
             </div>
           </div>
 
-          <a href="../cases/index.html" class="block w-full text-center py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-colors">
+          <a href="../cases/index.html?role=admin" class="block w-full text-center py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-colors">
             Xem Toàn Bộ Lịch Vụ Việc &rarr;
           </a>
         </div>
@@ -286,7 +286,7 @@
             <p class="text-xs text-slate-400 mt-0.5">Tiến độ cập nhật theo thời gian thực kết nối hệ sinh thái ASL LAW</p>
           </div>
           <div class="flex items-center gap-2">
-            <a href="../cases/index.html" class="px-4 py-2 rounded-xl bg-slate-100 text-[#002D54] font-bold text-xs hover:bg-slate-200 transition-colors flex items-center gap-1.5 shadow-xs">
+            <a href="../cases/index.html?role=admin" class="px-4 py-2 rounded-xl bg-slate-100 text-[#002D54] font-bold text-xs hover:bg-slate-200 transition-colors flex items-center gap-1.5 shadow-xs">
               <span>Xem Tất Cả Vụ Việc (42)</span>
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
             </a>
@@ -308,7 +308,7 @@
             <tbody class="divide-y divide-slate-100 font-medium">
               <tr class="hover:bg-slate-50/60 transition-colors">
                 <td class="py-4 px-4">
-                  <a href="../cases/detail.html" class="font-bold text-[#002D54] hover:text-[#0082B4]">CASE-2026-089</a>
+                  <a href="../cases/detail.html?role=admin" class="font-bold text-[#002D54] hover:text-[#0082B4]">CASE-2026-089</a>
                   <div class="text-xs text-slate-500">Tranh chấp bảo hộ nhãn hiệu phần mềm ASL</div>
                 </td>
                 <td class="py-4 px-4 text-xs font-semibold text-slate-700">Công ty CP Sao Nam</td>
@@ -322,7 +322,7 @@
                 </td>
                 <td class="py-4 px-4 text-xs text-slate-600">LS. Mai Linh (CM)</td>
                 <td class="py-4 px-4 text-right">
-                  <a href="../cases/detail.html" class="w-8 h-8 rounded-lg inline-flex items-center justify-center text-slate-400 hover:text-[#0082B4] hover:bg-slate-100 transition-colors" title="Mở Workspace vụ việc">
+                  <a href="../cases/detail.html?role=admin" class="w-8 h-8 rounded-lg inline-flex items-center justify-center text-slate-400 hover:text-[#0082B4] hover:bg-slate-100 transition-colors" title="Mở Workspace vụ việc">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
                   </a>
                 </td>
@@ -330,7 +330,7 @@
 
               <tr class="hover:bg-slate-50/60 transition-colors">
                 <td class="py-4 px-4">
-                  <a href="../cases/detail.html" class="font-bold text-[#002D54] hover:text-[#0082B4]">CASE-2026-092</a>
+                  <a href="../cases/detail.html?role=admin" class="font-bold text-[#002D54] hover:text-[#0082B4]">CASE-2026-092</a>
                   <div class="text-xs text-slate-500">Tư vấn sáp nhập và thẩm định pháp lý (M&A)</div>
                 </td>
                 <td class="py-4 px-4 text-xs font-semibold text-slate-700">Foxconn Energy VN</td>
@@ -344,7 +344,7 @@
                 </td>
                 <td class="py-4 px-4 text-xs text-slate-600">LS. Nguyễn Anh (Partner)</td>
                 <td class="py-4 px-4 text-right">
-                  <a href="../cases/detail.html" class="w-8 h-8 rounded-lg inline-flex items-center justify-center text-slate-400 hover:text-[#0082B4] hover:bg-slate-100 transition-colors" title="Mở Workspace vụ việc">
+                  <a href="../cases/detail.html?role=admin" class="w-8 h-8 rounded-lg inline-flex items-center justify-center text-slate-400 hover:text-[#0082B4] hover:bg-slate-100 transition-colors" title="Mở Workspace vụ việc">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
                   </a>
                 </td>

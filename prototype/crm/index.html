@@ -14,8 +14,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../assets/layout.css?v=3.2">
-  <script src="../assets/layout.js?v=3.2" defer></script>
+  <link rel="stylesheet" href="../assets/layout.css?v=3.3">
+  <script src="../assets/layout.js?v=3.3" defer></script>
   <style>
     .pipeline-col {
       box-shadow: 0 1px 3px 0 rgba(0, 45, 84, 0.05);
@@ -58,7 +58,7 @@
         </button>
         <div class="min-w-0">
           <div class="text-[11px] text-cyan-200/90 font-medium flex items-center gap-1.5 truncate">
-            <a href="../index.html" class="hover:underline">ASL LAW</a>
+            <a href="../index.html?role=admin" class="hover:underline">ASL LAW</a>
             <span>/</span>
             <span class="text-cyan-200">CRM</span>
             <span>/</span>
@@ -71,18 +71,18 @@
       <div class="flex items-center gap-3">
         <!-- View Mode Switcher (Giống trang Quản lý tác vụ) -->
         <div class="flex items-center bg-white/10 p-1 rounded-xl border border-white/20 backdrop-blur-md">
-          <a href="index.html" class="px-3 py-1.5 rounded-lg bg-white text-[#002D54] font-extrabold text-xs shadow-md flex items-center gap-1.5 transition-all">
+          <a href="index.html?role=admin" class="px-3 py-1.5 rounded-lg bg-white text-[#002D54] font-extrabold text-xs shadow-md flex items-center gap-1.5 transition-all">
             <svg class="w-4 h-4 text-[#0082B4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"/></svg>
             <span>Bảng Phễu (Kanban)</span>
           </a>
-          <a href="list.html" class="px-3 py-1.5 rounded-lg text-white hover:text-cyan-200 font-bold text-xs flex items-center gap-1.5 transition-all">
+          <a href="list.html?role=admin" class="px-3 py-1.5 rounded-lg text-white hover:text-cyan-200 font-bold text-xs flex items-center gap-1.5 transition-all">
             <svg class="w-4 h-4 text-cyan-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
             <span>Dạng Danh Sách</span>
           </a>
         </div>
 
         <!-- Switch to Customers Directory Button -->
-        <a href="customers.html" class="px-3.5 py-2 rounded-xl bg-white/15 hover:bg-white/25 border border-white/20 text-white font-bold text-xs flex items-center gap-1.5 transition-all">
+        <a href="customers.html?role=admin" class="px-3.5 py-2 rounded-xl bg-white/15 hover:bg-white/25 border border-white/20 text-white font-bold text-xs flex items-center gap-1.5 transition-all">
           <svg class="w-4 h-4 text-cyan-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
           <span>Danh Bạ Khách Hàng</span>
         </a>
@@ -115,7 +115,7 @@
           </div>
 
           <!-- Cơ hội mới CTA Button (Brand Orange, Plus Icon with clean label) -->
-          <a href="create-lead.html" class="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-[#FF7A00] hover:bg-[#E66E00] text-white font-bold text-xs shadow-md shadow-orange-950/20 transition-all whitespace-nowrap flex-shrink-0">
+          <a href="create-lead.html?role=admin" class="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-[#FF7A00] hover:bg-[#E66E00] text-white font-bold text-xs shadow-md shadow-orange-950/20 transition-all whitespace-nowrap flex-shrink-0">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
             <span>Cơ hội mới</span>
           </a>
@@ -233,7 +233,7 @@
             </div>
           </div>
 
-          <a href="create-lead.html?stage=moi-tiep-nhan" class="w-full py-2.5 rounded-xl border border-dashed border-slate-300 hover:border-slate-500 text-slate-600 hover:text-slate-900 text-xs font-bold text-center block transition-colors bg-white/50 hover:bg-white dark:bg-slate-800/40 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800">
+          <a href="create-lead.html?stage=moi-tiep-nhan&role=admin" class="w-full py-2.5 rounded-xl border border-dashed border-slate-300 hover:border-slate-500 text-slate-600 hover:text-slate-900 text-xs font-bold text-center block transition-colors bg-white/50 hover:bg-white dark:bg-slate-800/40 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800">
             Thêm cơ hội vào cột này
           </a>
         </div>
@@ -287,7 +287,7 @@
             </div>
           </div>
 
-          <a href="create-lead.html?stage=dang-tu-van" class="w-full py-2.5 rounded-xl border border-dashed border-blue-300 hover:border-blue-500 text-blue-700 hover:text-blue-900 text-xs font-bold text-center block transition-colors bg-white/50 hover:bg-white dark:bg-slate-800/40 dark:border-slate-700 dark:text-cyan-300 dark:hover:bg-slate-800">
+          <a href="create-lead.html?stage=dang-tu-van&role=admin" class="w-full py-2.5 rounded-xl border border-dashed border-blue-300 hover:border-blue-500 text-blue-700 hover:text-blue-900 text-xs font-bold text-center block transition-colors bg-white/50 hover:bg-white dark:bg-slate-800/40 dark:border-slate-700 dark:text-cyan-300 dark:hover:bg-slate-800">
             Thêm cơ hội vào cột này
           </a>
         </div>
@@ -323,7 +323,7 @@
             </div>
           </div>
 
-          <a href="create-lead.html?stage=da-gui-bao-gia" class="w-full py-2.5 rounded-xl border border-dashed border-amber-300 hover:border-amber-500 text-amber-800 hover:text-amber-900 text-xs font-bold text-center block transition-colors bg-white/50 hover:bg-white dark:bg-slate-800/40 dark:border-slate-700 dark:text-amber-300 dark:hover:bg-slate-800">
+          <a href="create-lead.html?stage=da-gui-bao-gia&role=admin" class="w-full py-2.5 rounded-xl border border-dashed border-amber-300 hover:border-amber-500 text-amber-800 hover:text-amber-900 text-xs font-bold text-center block transition-colors bg-white/50 hover:bg-white dark:bg-slate-800/40 dark:border-slate-700 dark:text-amber-300 dark:hover:bg-slate-800">
             Thêm cơ hội vào cột này
           </a>
         </div>
@@ -359,7 +359,7 @@
 
               <!-- 1-Click Convert to Case CTA Button (Brand ASL Cerulean) -->
               <div class="won-action-box pt-2">
-                <a href="../cases/create.html?lead=SaoViet&title=Kiểu+dáng+công+nghiệp+bao+bì&val=38000000" class="w-full py-2.5 px-3 rounded-xl bg-[#002D54] hover:bg-[#0082B4] text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-md">
+                <a href="../cases/create.html?lead=SaoViet&title=Kiểu+dáng+công+nghiệp+bao+bì&val=38000000&role=admin" class="w-full py-2.5 px-3 rounded-xl bg-[#002D54] hover:bg-[#0082B4] text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-md">
                   <svg class="w-3.5 h-3.5 text-cyan-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                   <span>Tạo vụ việc chính thức</span>
                 </a>

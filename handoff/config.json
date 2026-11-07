@@ -1,0 +1,18 @@
+{
+  "protected_paths": [
+    "docs/",
+    "CONTEXT.md",
+    "CLAUDE.md",
+    "qlcvaslgate-old/"
+  ],
+  "agy_model": "gemini-3.8-flash-medium",
+  "agy_fallback_models": [
+    "gemini-3.8-flash-high",
+    "gemini-3.8-flash-low"
+  ],
+  "agy_timeout": "60m",
+  "test_paths": [
+    "tests/",
+    "prototype/"
+  ]
+}

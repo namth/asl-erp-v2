@@ -13,9 +13,14 @@ qlcvasl-v2/
 │   │   │   │   ├── page.tsx      # SCR-02: Personal Dashboard
 │   │   │   │   ├── crm/          # SCR-03, SCR-04, SCR-05: Khách hàng & Cơ hội
 │   │   │   │   ├── cases/        # SCR-07, SCR-08, SCR-09: Vụ việc & Kanban
+│   │   │   │   ├── approvals/    # SCR-16: Duyệt nhanh
+│   │   │   │   ├── documents/    # SCR-17: Tài liệu vụ việc
 │   │   │   │   ├── accounting/   # SCR-11: Bàn làm việc Kế toán MISA
 │   │   │   │   ├── finance/      # SCR-12: Thu tiền & Bảng hoa hồng
-│   │   │   │   └── admin/        # SCR-06, SCR-13: Workflow Builder & Audit Logs
+│   │   │   │   ├── reports/      # SCR-18: Báo cáo
+│   │   │   │   ├── operations/   # SCR-15: Văn phòng số
+│   │   │   │   ├── settings/     # SCR-20: Cài đặt
+│   │   │   │   └── admin/        # SCR-06, SCR-13, SCR-19: Workflow, Audit Logs, Người dùng
 │   │   │   └── api/              # Proxy / Next.js internal endpoints nếu cần
 │   │   ├── components/           # UI Components tái sử dụng
 │   │   │   ├── ui/               # Shadcn UI primitives (Button, Dialog, Table...)
@@ -41,23 +46,29 @@ qlcvasl-v2/
 │   │   │       ├── finance.py
 │   │   │       └── ai_agent.py
 │   │   ├── core/                 # Cấu hình config, security, JWT, Redis client
-│   │   ├── guards/               # Middleware kiểm tra Need-to-know qua Neo4j
+│   │   ├── guards/               # verify_need_to_know() + access_policy.py (bảng chính sách, 06 §3.3)
 │   │   ├── models/               # SQLAlchemy 2.0 ORM Models
 │   │   ├── schemas/              # Pydantic v2 DTOs (Request / Response validation)
 │   │   ├── services/             # Business Logic (Commission, Workflow, MISA)
 │   │   ├── repositories/         # Tương tác PostgreSQL & Neo4j Cypher queries
-│   │   └── workers/              # Celery tasks (Quét deadline, gửi Telegram/Zalo)
+│   │   ├── workers/              # Celery tasks (quét hạn, gửi thông báo, graph_sync, kiểm tra chuỗi audit)
+│   │   └── legacy/               # ETL chuyển dữ liệu hệ thống cũ (DEC-05)
+│   ├── tests/                    # Pytest — test do trưởng phòng viết, khoá theo task
 │   ├── alembic/                  # Database Migrations scripts
 │   ├── requirements.txt          # Python dependencies
 │   └── main.py                   # Điểm khởi chạy FastAPI ASGI application
 │
 ├── docker/                       # Cấu hình triển khai On-Premise
-│   ├── docker-compose.yml        # Orchestration toàn bộ 7 containers
+│   ├── docker-compose.yml        # Orchestration 9 containers (05 §3)
 │   ├── Dockerfile.frontend
 │   ├── Dockerfile.backend
 │   └── nginx/nginx.conf          # Cấu hình Reverse Proxy & SSL
 │
-├── docs/                         # Bộ 13 tài liệu kiến trúc chuẩn mực
+├── ops/                          # Script sao lưu, khôi phục, runbook cutover (DEC-08)
+├── handoff/                      # Giao việc Claude ↔ Antigravity (brief, test khoá, báo cáo)
+├── prototype/                    # Prototype HTML tĩnh tham chiếu giao diện
+├── tests/prototype/              # Test quy ước prototype
+├── docs/                         # Bộ tài liệu 01–14 (14 = sổ quyết định)
 └── CONTEXT.md                    # Root Context tóm tắt hệ thống cho AI Agent
 ```
 

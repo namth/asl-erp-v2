@@ -7,7 +7,7 @@
 ## 1. THÔNG TIN CỐT LÕI (CORE IDENTITY)
 - **Tên dự án:** ERP ASL LAW (Hệ thống Quản trị Doanh nghiệp Luật Toàn diện).
 - **Khách hàng / Chủ quản:** Hãng luật ASL LAW.
-- **Phạm vi hệ thống:** **Internal Enterprise ERP** dành cho đội ngũ nội bộ (Managing Partner, Supervisor, Case Manager, Lawyer, Assistant, Accountant, Sales). Kiến trúc chuẩn bị sẵn sàng module mở rộng Cổng Khách hàng (Client Portal) ở Phase 2.
+- **Phạm vi hệ thống:** **Internal Enterprise ERP** dành cho đội ngũ nội bộ với **4 vai trò hệ thống** — Quản trị viên, Quản lý (gồm Giám đốc và Trưởng phòng), Kế toán, Luật sư (DEC-01). Kiến trúc chuẩn bị sẵn sàng module mở rộng Cổng Khách hàng (Client Portal) ở Phase 2.
 - **Hạ tầng triển khai:** **Máy chủ vật lý nội bộ văn phòng (On-Premise Server tại ASL Law)** qua cụm Container Docker Compose. Mọi dữ liệu hồ sơ thân chủ được lưu trữ an toàn tại chỗ, sao lưu định kỳ vào NAS nội bộ.
 
 ---
@@ -24,18 +24,18 @@
 ---
 
 ## 3. CÁC QUY TẮC NGHIỆP VỤ & NGUYÊN TẮC BẤT BIẾN (INVARIANTS)
-1. **Khung cứng Tuyệt đối (Strict Governance Workflow):**
-   - Mọi Vụ việc khi chạy phải tuân thủ 100% theo Workflow Template đã được Admin cấu hình. Tuyệt đối không cho phép luật sư tự ý thêm/bớt stage ngoài chuẩn hóa.
+1. **Quy trình có kiểm soát (Governed Workflow — DEC-07):**
+   - Mọi Vụ việc chạy theo Workflow Template (có phiên bản) do Admin cấu hình, ở một trong hai chế độ: **Khung cứng** (`STRICT`, không thêm/bớt stage/task) hoặc **Linh hoạt** (`FLEXIBLE`, được đề xuất thêm nhưng phải được Quản lý phê duyệt và ghi audit). Không có thay đổi nào ngoài template mà không qua phê duyệt.
 2. **Bảo mật "Need-to-know" phân cấp qua Đồ thị Neo4j:**
    - Nhân sự chỉ được xem Vụ việc nếu được phân công trực tiếp (`:ASSIGNED_TO`) hoặc là Leader quản lý ban đó (`:LEADS`).
-   - Kế toán chỉ xem thông tin tài chính/thu tiền; Sales chỉ xem tiến độ thu tiền; không ai được xem tài liệu tranh tụng trái thẩm quyền.
+   - Giám đốc xem mọi vụ việc. Kế toán chỉ xem phần tài chính/thu tiền; người mang khách về chỉ xem tiến độ; Quản trị viên không đọc hồ sơ thân chủ; không ai được xem tài liệu tranh tụng trái thẩm quyền (bảng chính sách `06` §3.3).
 3. **Quy trình Phối hợp Kế toán MISA (Human-in-the-Loop):**
    - Hệ thống tự động phát Tác vụ Tài chính vào hòm thư Kế toán trên ERP khi vụ việc chạm mốc thu tiền.
    - Kế toán kiểm tra dòng tiền thực tế trên MISA bên ngoài -> Bấm "Xác nhận đã thu tiền" kèm số hóa đơn và mã GD ngân hàng trên ERP -> Hệ thống tự động mở khóa quy trình kỹ thuật cho luật sư.
 4. **Chiết tính Hoa hồng theo Dòng tiền Thực thu (Cash-basis):**
-   - Kích hoạt tính và phân bổ hoa hồng ngay lập tức khi Kế toán xác nhận Milestone đã thu tiền thành công. Phân bổ minh bạch cho Sales, Quản lý và Luật sư thực hiện task.
+   - Tính và phân bổ hoa hồng ngay khi Kế toán xác nhận **mỗi khoản tiền thực về** (kể cả thu một phần — DEC-06). Phân bổ cho người mang khách về, Quản lý vụ việc và Luật sư thực hiện; không đảo hoa hồng khi hoàn tiền (công thức `12` §3).
 5. **Xác thực Nội bộ Độc lập:**
-   - Quản lý tài khoản và mật khẩu nội bộ độc lập trong ERP (băm Argon2id), thu hồi quyền và đăng xuất tức thì qua Redis Blocklist.
+   - Chỉ tài khoản nội bộ trong ERP (băm Argon2id), **không SSO**; mã TOTP bắt buộc với Quản trị viên, Quản lý, Kế toán (DEC-02); thu hồi quyền và đăng xuất tức thì qua Redis Blocklist + `tokens_valid_after`.
 6. **Nhật ký Kiểm toán Bất biến (Immutable Audit Logs):**
    - Bảng `audit_logs` chỉ cho phép `INSERT` và `SELECT`. Tuyệt đối không được phép `UPDATE` hay `DELETE`.
 
@@ -45,7 +45,7 @@
 Khi cần tham chiếu sâu bất kỳ khía cạnh nào, hãy đọc file tài liệu tương ứng:
 - [01-overview.md](file:///Users/namtran/Local%20Sites/qlcvasl-v2/docs/01-overview.md): Mục tiêu, nỗi đau cốt lõi, đối tượng sử dụng và phạm vi dự án.
 - [02-modules-and-features.md](file:///Users/namtran/Local%20Sites/qlcvasl-v2/docs/02-modules-and-features.md): Chi tiết 8 phân hệ nghiệp vụ & Ma trận phân quyền chi tiết (RBAC).
-- [03-screens-and-ui.md](file:///Users/namtran/Local%20Sites/qlcvasl-v2/docs/03-screens-and-ui.md): Bảng kiểm kê 15 màn hình (SCR-01 đến SCR-15), 4 trạng thái UI, Stitch design prompts.
+- [03-screens-and-ui.md](file:///Users/namtran/Local%20Sites/qlcvasl-v2/docs/03-screens-and-ui.md): Bảng kiểm kê 20 màn hình (SCR-01 đến SCR-20), 4 trạng thái UI, Stitch design prompts.
 - [04-user-flows.md](file:///Users/namtran/Local%20Sites/qlcvasl-v2/docs/04-user-flows.md): Luồng di chuyển chi tiết: Lead-to-Case, Kanban Task, MISA Flow, Cash-basis Commission.
 - [05-architecture.md](file:///Users/namtran/Local%20Sites/qlcvasl-v2/docs/05-architecture.md): Sơ đồ kiến trúc tổng thể, hạ tầng On-Premise, mạng nội bộ và backup NAS.
 - [06-database-schema.md](file:///Users/namtran/Local%20Sites/qlcvasl-v2/docs/06-database-schema.md): Sơ đồ ERD PostgreSQL, cấu trúc các bảng và mô hình đồ thị Neo4j kèm Cypher queries.
@@ -53,7 +53,8 @@ Khi cần tham chiếu sâu bất kỳ khía cạnh nào, hãy đọc file tài 
 - [08-integrations.md](file:///Users/namtran/Local%20Sites/qlcvasl-v2/docs/08-integrations.md): Tích hợp MISA Human-in-the-Loop, Telegram Bot, Zalo OA, Gemini AI và NAS Storage.
 - [09-conventions.md](file:///Users/namtran/Local%20Sites/qlcvasl-v2/docs/09-conventions.md): Quy chuẩn Monorepo, cấu trúc thư mục, Naming Conventions, Zustand/TanStack Query.
 - [10-env-and-security.md](file:///Users/namtran/Local%20Sites/qlcvasl-v2/docs/10-env-and-security.md): Danh sách biến môi trường `.env.example` và chính sách bảo mật đa tầng.
-- [11-tasks.md](file:///Users/namtran/Local%20Sites/qlcvasl-v2/docs/11-tasks.md): 6 Milestones và danh sách 15 Tickets/Tasks chi tiết kèm Tiêu chuẩn Nghiệm thu (DoD).
+- [11-tasks.md](file:///Users/namtran/Local%20Sites/qlcvasl-v2/docs/11-tasks.md): 8 Milestones (M0–M7) và 27 Tasks chi tiết kèm Tiêu chuẩn Nghiệm thu (DoD).
 - [12-business-rules.md](file:///Users/namtran/Local%20Sites/qlcvasl-v2/docs/12-business-rules.md): Máy trạng thái (State Machines), Ràng buộc chuyển trạng thái, Công thức hoa hồng & Quy tắc Floorplan.
-- [13-test-cases-and-qa.md](file:///Users/namtran/Local%20Sites/qlcvasl-v2/docs/13-test-cases-and-qa.md): Ma trận 19 Test Cases kiểm thử tự động và tiêu chuẩn bàn giao QA.
+- [13-test-cases-and-qa.md](file:///Users/namtran/Local%20Sites/qlcvasl-v2/docs/13-test-cases-and-qa.md): Ma trận test cases theo phân hệ kiểm thử tự động và tiêu chuẩn bàn giao QA.
+- [14-decisions.md](file:///Users/namtran/Local%20Sites/qlcvasl-v2/docs/14-decisions.md): **Sổ quyết định sản phẩm (DEC-xx)** — ghi đè mọi chỗ mâu thuẫn trong 01–13 cho tới khi các doc đó được cập nhật.
 - [docs/features/virtual-office-floorplan.md](file:///Users/namtran/Local%20Sites/qlcvasl-v2/docs/features/virtual-office-floorplan.md): Đặc tả chi tiết tính năng FEAT-01: Văn phòng số trực quan (Virtual Office Floorplan SCR-15).

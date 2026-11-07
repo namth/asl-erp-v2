@@ -4,7 +4,7 @@
 - **Mã tính năng:** `FEAT-01`
 - **Mã màn hình:** `SCR-15`
 - **Tên màn hình:** Văn Phòng Số Trực Quan (Virtual Office Floorplan)
-- **Mục tiêu:** Cung cấp cho Ban Giám đốc (Managing Partner) và Trưởng phòng (Supervisor) một "Trung tâm Chỉ huy Trực quan (Visual War Room)" mô phỏng căn phòng làm việc 2.5D của từng phòng ban trong hãng luật ASL LAW. Hệ thống hiển thị đầy đủ bàn ghế, nhân sự đang ngồi làm việc, chỉ số công việc theo thời gian thực (real-time), tự động nhận diện ai đang bận, ai đang rảnh rỗi nghỉ ngơi, và ai đang mang hồ sơ đứng xếp hàng trước bàn Trưởng phòng để chờ ký duyệt.
+- **Mục tiêu:** Cung cấp cho Giám đốc và Trưởng phòng (cùng vai trò `MANAGER` — DEC-01) một "Trung tâm Chỉ huy Trực quan (Visual War Room)" mô phỏng căn phòng làm việc 2.5D của từng phòng ban trong hãng luật ASL LAW. Hệ thống hiển thị đầy đủ bàn ghế, nhân sự đang ngồi làm việc, chỉ số công việc theo thời gian thực (real-time), tự động nhận diện ai đang bận, ai đang rảnh rỗi nghỉ ngơi, và ai đang mang hồ sơ đứng xếp hàng trước bàn Trưởng phòng để chờ ký duyệt.
 - **Giá trị mang lại:**
   - Nắm bắt tức thì tải trọng công việc (Workload Distribution) của từng phòng ban trong 3 giây mà không cần đọc báo cáo phức tạp.
   - Xóa bỏ điểm nghẽn phê duyệt (Approval Bottlenecks): Nhìn thấy ngay hàng đợi trước bàn Trưởng phòng để ký duyệt điện tử 1 chạm.
@@ -87,7 +87,7 @@ A modern 2.5D isometric digital office floorplan dashboard for a prestigious law
   MATCH (u:User {id: $user_id})-[:LEADS]->(d:Department {id: $dept_id})
   RETURN count(d) > 0 AS is_leader
   ```
-- Giám đốc (Managing Partner) có nhãn `[:HAS_ROLE]->(:Role {name: 'MANAGING_PARTNER'})` có quyền truy cập tất cả phòng ban.
+- Giám đốc là `(:User {system_role: 'MANAGER', is_executive: true})`, truy cập được tất cả phòng ban. Truy vấn chuẩn ở `06` §3.4.
 
 ---
 
@@ -195,7 +195,7 @@ A modern 2.5D isometric digital office floorplan dashboard for a prestigious law
 
 | Mã test | Tên ca kiểm thử | Điều kiện kiểm tra | Kết quả mong đợi |
 | :--- | :--- | :--- | :--- |
-| **TC-FL-01** | Tải danh sách phòng ban cho Giám đốc | User có role `MANAGING_PARTNER` | Dropdown hiển thị đủ 4 phòng ban, chuyển phòng mượt mà. |
+| **TC-FL-01** | Tải danh sách phòng ban cho Giám đốc | User `MANAGER` có `is_executive = true` | Dropdown hiển thị đủ 4 phòng ban, chuyển phòng mượt mà. |
 | **TC-FL-02** | Phân quyền Leader phòng ban | User là Trưởng phòng SHTT | Mặc định chỉ mở phòng SHTT, không xem được phòng Tranh tụng. |
 | **TC-FL-03** | Hiển thị huy hiệu task trên đầu nhân sự | Nhân sự có 3 task In Progress, 2 task Todo | Icon sấm sét hiển thị `3`, icon đồng hồ cát hiển thị `2`. |
 | **TC-FL-04** | Nhận diện nhân sự rảnh rỗi | Nhân sự có 0 task In Progress | Hiển thị huy hiệu `☕ Đang nghỉ ngơi` màu xanh ngọc. |

@@ -2,23 +2,32 @@
 
 ## 1. BẢNG KIỂM KÊ MÀN HÌNH (SCREEN INVENTORY TABLE)
 
-| Mã màn hình | Tên màn hình | Đối tượng sử dụng | Design Status | Code Status | Đường dẫn file mã nguồn dự kiến | Tiêu chuẩn Nghiệm thu (DoD) |
-| :--- | :--- | :--- | :---: | :---: | :--- | :--- |
-| **SCR-01** | Đăng nhập Hệ thống | Mọi nhân sự | Ready | Pending | `frontend/src/app/(auth)/login/page.tsx` | Nhập Email & Mật khẩu nội bộ, xác thực JWT, nhớ phiên, hiển thị lỗi khi sai mật khẩu. |
-| **SCR-02** | Bảng điều khiển Cá nhân (Personal Dashboard) | Mọi nhân sự | **Prototype Ready** | Pending | `frontend/src/app/(dashboard)/page.tsx` | Hiển thị tóm tắt công việc cá nhân, deadline 3 ngày tới, thông báo mới nhất, bộ đếm vụ việc. Đã có trong `storybook.html`. |
-| **SCR-03** | Quản lý Khách hàng & Hồ sơ CRM | Sales, Partner, Lawyer | Ready | Pending | `frontend/src/app/(dashboard)/crm/clients/page.tsx` | Danh sách khách hàng kèm phân trang, tìm kiếm MST/Tên, phân loại nhóm, timeline tương tác. |
-| **SCR-04** | Chi tiết Khách hàng (Client Detail View) | Sales, Partner, Lawyer | Ready | Pending | `frontend/src/app/(dashboard)/crm/clients/[id]/page.tsx` | Chi tiết thông tin liên hệ, lịch sử cuộc gọi/email, danh sách vụ việc lịch sử của khách hàng. |
-| **SCR-05** | Đường ống Cơ hội (Opportunities Pipeline) | Sales, Partner | Ready | Pending | `frontend/src/app/(dashboard)/crm/opportunities/page.tsx` | Kanban pipeline theo giai đoạn tiếp cận, ước lượng giá trị, nút 1 chạm chuyển đổi thành Case. |
-| **SCR-06** | Trình Thiết kế Quy trình (Workflow Builder) | Super Admin | **Prototype Ready** | Pending | `frontend/src/app/(dashboard)/admin/workflows/page.tsx` | Kéo thả Stage, cấu hình Task mặc định, phân nhánh điều kiện, cấu hình Approval Gate & Dynamic Fields. Đã có trong `storybook.html`. |
-| **SCR-07** | Danh sách Vụ việc Pháp lý (Case List) | Partner, Supervisor, Lawyer | Ready | Pending | `frontend/src/app/(dashboard)/cases/page.tsx` | Bảng dữ liệu lọc theo Need-to-know, bộ lọc Lĩnh vực/Trạng thái/Luật sư phụ trách, nút tạo Case mới. |
-| **SCR-08** | Không gian Làm việc Vụ việc (Case Workspace) | Partner, Supervisor, Lawyer | **Prototype Ready** | Pending | `frontend/src/app/(dashboard)/cases/[id]/page.tsx` | Header tiến độ, render form trường động JSONB, cây văn bản đính kèm, lịch sử chuyển stage. Đã có trong `storybook.html`. |
-| **SCR-09** | Bảng Tác vụ Lai (Kanban & Jira View) | Supervisor, Lawyer, Assistant | **Prototype Ready** | Pending | `frontend/src/app/(dashboard)/cases/[id]/tasks/page.tsx` | Chuyển đổi Kanban/List view, kéo thả cập nhật trạng thái, kiểm tra Task Dependency chặn hoàn thành. Đã có trong `storybook.html`. |
-| **SCR-10** | Hộp thoại Phê duyệt Cổng (Approval Modal) | Supervisor, Partner | **Prototype Ready** | Pending | `frontend/src/components/cases/ApprovalModal.tsx` | Hiển thị hồ sơ cần duyệt, nút Chấp thuận / Trả về kèm lý do bằng văn bản, ký duyệt điện tử nội bộ. Đã có trong `storybook.html`. |
-| **SCR-11** | Bàn làm việc Kế toán (MISA Accounting Inbox) | Accountant, Partner | **Prototype Ready** | Pending | `frontend/src/app/(dashboard)/accounting/inbox/page.tsx` | Danh sách tác vụ thu tiền/xuất hóa đơn đang chờ, form nhập Số HĐ/Mã GD ngân hàng, nút Xác nhận. Đã có trong `storybook.html`. |
-| **SCR-12** | Quản lý Đợt thu & Hoa hồng (Billing & Commissions) | Partner, Accountant, Sales | **Prototype Ready** | Pending | `frontend/src/app/(dashboard)/finance/commissions/page.tsx` | Bảng kê đợt thu theo vụ việc, bảng phân bổ hoa hồng thực thu (Cash-basis) theo nhân sự từng tháng. Đã có trong `storybook.html`. |
-| **SCR-13** | Nhật ký Kiểm toán (System Audit Logs) | Super Admin | Ready | Pending | `frontend/src/app/(dashboard)/admin/audit-logs/page.tsx` | Bảng log bất biến, lọc theo Actor/Target/Thời gian, hiển thị chi tiết diff dữ liệu trước/sau khi sửa. |
-| **SCR-14** | Khung Trợ lý AI (AI Assistant Drawer) | Mọi nhân sự | Ready | Pending | `frontend/src/components/ai/AiChatDrawer.tsx` | Drawer trượt từ cạnh phải, chat tra cứu vụ việc/task/deadline, phản hồi có kèm liên kết điều hướng. |
-| **SCR-15** | Văn Phòng Số Trực Quan (Virtual Office Floorplan) | Managing Partner, Supervisor | **Ready (Spec)** | Pending | `frontend/src/app/(dashboard)/operations/floorplan/page.tsx` | Mô phỏng 2.5D bàn ghế nhân sự phòng ban, chỉ số task đang làm/chờ/nghỉ ngơi, xếp hàng trước bàn Trưởng phòng duyệt hồ sơ, Side Drawer & WebSockets real-time. |
+Cột "Vai trò" dùng 4 vai trò hệ thống (DEC-01). Cột "Prototype" là trang tham chiếu trong `prototype/` (mở kèm `?role=`). Mã `SCR-xx` chỉ dùng trong tài liệu, **không** hiển thị trên giao diện.
+
+| Mã | Tên màn hình | Vai trò | Prototype | Code Status | Đường dẫn mã nguồn dự kiến | Tiêu chuẩn Nghiệm thu (DoD) |
+| :--- | :--- | :--- | :--- | :---: | :--- | :--- |
+| **SCR-01** | Đăng nhập & xác thực 2FA | Mọi nhân sự | `auth/login.html` (cần sửa theo DEC-02) | Pending | `frontend/src/app/(auth)/login/page.tsx` | Email + mật khẩu nội bộ; bước TOTP chỉ hiện khi tài khoản bật 2FA; buộc đổi mật khẩu khi `must_reset_password`; khoá tạm sau 5 lần sai; **không** có SSO. |
+| **SCR-02** | Bàn làm việc cá nhân | Mọi nhân sự | `dashboard/index.html` | Pending | `frontend/src/app/(dashboard)/page.tsx` | Việc của tôi, hạn 3 ngày tới, thông báo mới, bộ đếm vụ việc — nội dung khác nhau theo vai trò. |
+| **SCR-03** | Danh sách khách hàng | Quản lý, Luật sư, Kế toán (xem) | `crm/customers.html`, `crm/list.html` | Pending | `frontend/src/app/(dashboard)/crm/clients/page.tsx` | Phân trang, tìm theo tên/MST, lọc nhóm; tạo mới chặn trùng MST/CCCD; cảnh báo xung đột lợi ích. |
+| **SCR-04** | Chi tiết khách hàng | Quản lý, Luật sư | `crm/detail.html`, `crm/edit.html` | Pending | `frontend/src/app/(dashboard)/crm/clients/[id]/page.tsx` | Thông tin liên hệ, dòng thời gian tương tác, danh sách vụ việc (chỉ hiện vụ việc người xem có quyền). |
+| **SCR-05** | Pipeline cơ hội | Quản lý, Luật sư | `crm/index.html`, `crm/create-lead.html` | Pending | `frontend/src/app/(dashboard)/crm/opportunities/page.tsx` | Kanban theo giai đoạn, giá trị dự kiến, người mang khách về; nút chuyển đổi chỉ bật khi `WON`. |
+| **SCR-06** | Trình thiết kế quy trình | Quản trị viên | `workflows/*.html` | Pending | `frontend/src/app/(dashboard)/admin/workflows/page.tsx` | Chọn chế độ Khung cứng/Linh hoạt; stage, task mẫu (SLA ngày làm việc, trọng số, task kích hoạt đợt thu), phụ thuộc, cổng duyệt, trường động; phát hành phiên bản. |
+| **SCR-07** | Danh sách vụ việc | Quản lý, Luật sư, Kế toán (phạm vi `progress`) | `cases/index.html`, `cases/create.html` | Pending | `frontend/src/app/(dashboard)/cases/page.tsx` | Chỉ liệt kê vụ việc trong phạm vi Need-to-know; lọc lĩnh vực/trạng thái/người phụ trách. |
+| **SCR-08** | Không gian vụ việc | Quản lý, Luật sư được gán; Kế toán chỉ thấy tab tài chính | `cases/detail.html`, `cases/edit.html` | Pending | `frontend/src/app/(dashboard)/cases/[id]/page.tsx` | Header tiến độ + cờ chặn stage, trường động, tài liệu, lịch sử stage; ẩn mọi hành động chuyên môn với Kế toán. |
+| **SCR-09** | Bảng tác vụ Kanban/Danh sách | Quản lý, Luật sư | `tasks/index.html`, `tasks/list.html`, `tasks/detail.html`, `tasks/create.html` | Pending | `frontend/src/app/(dashboard)/cases/[id]/tasks/page.tsx` | Kéo thả có guard phụ thuộc; task bổ sung có nhãn riêng; nút "Đề xuất bổ sung" chỉ hiện với template Linh hoạt. |
+| **SCR-10** | Hộp thoại phê duyệt | Quản lý, Luật sư là Supervisor/Case Manager | (trong `cases/detail.html`, `approvals/index.html`) | Pending | `frontend/src/components/cases/approval-modal.tsx` | Duyệt / trả về kèm lý do bắt buộc; dùng chung cho task, cổng giai đoạn, yêu cầu bổ sung. |
+| **SCR-11** | Bàn làm việc Kế toán | Kế toán | `accounting/index.html`, `accounting/detail.html`, `accounting/create-invoice.html` | Pending | `frontend/src/app/(dashboard)/accounting/inbox/page.tsx` | Đợt thu chờ xác nhận; nhập số HĐ, mã GD ngân hàng, số tiền thực về; hỗ trợ thu một phần; chặn bấm đúp. |
+| **SCR-12** | Đợt thu & sổ hoa hồng | Quản lý, Kế toán, Luật sư (của mình) | `finance/index.html`, `finance/detail.html` | Pending | `frontend/src/app/(dashboard)/finance/commissions/page.tsx` | Đợt thu theo vụ việc, sổ hoa hồng theo nhân sự/kỳ, quỹ thực hiện đang dồn. |
+| **SCR-13** | Nhật ký kiểm toán | Quản trị viên | `audit-logs/index.html` | Pending | `frontend/src/app/(dashboard)/admin/audit-logs/page.tsx` | Lọc Actor/Hành động/Đối tượng/Thời gian, xem diff trước/sau, trạng thái chuỗi băm toàn vẹn. |
+| **SCR-14** | Trợ lý AI | Mọi nhân sự | `ai-assistant/index.html` | Pending | `frontend/src/components/ai/ai-chat-drawer.tsx` | Drawer cạnh phải; câu trả lời có link điều hướng; chỉ trả dữ liệu trong phạm vi người hỏi. |
+| **SCR-15** | Văn phòng số trực quan | Quản lý | `operations/floorplan.html` | Pending | `frontend/src/app/(dashboard)/operations/floorplan/page.tsx` | Xem `features/virtual-office-floorplan.md`. |
+| **SCR-16** | Duyệt nhanh | Quản lý, Luật sư là Supervisor/Case Manager | `approvals/index.html` | Pending | `frontend/src/app/(dashboard)/approvals/page.tsx` | Hàng đợi `approval_requests` đang chờ người xem duyệt, lọc theo loại; mở SCR-10. |
+| **SCR-17** | Tài liệu vụ việc | Theo `02` Phân hệ 9 | `documents/index.html`, `documents/detail.html`, `documents/create.html` | Pending | `frontend/src/app/(dashboard)/documents/page.tsx` | Cây 4 thư mục, phiên bản, trạng thái quét virus; tải xuống ghi audit. |
+| **SCR-18** | Báo cáo & thống kê | Quản lý, Kế toán, Luật sư (của mình) | `reports/index.html` | Pending | `frontend/src/app/(dashboard)/reports/page.tsx` | Báo cáo theo `02` Phân hệ 10; xuất Excel. |
+| **SCR-19** | Người dùng & phòng ban | Quản trị viên (Quản lý chỉ xem) | `users/*.html` | Pending | `frontend/src/app/(dashboard)/admin/users/page.tsx` | Tạo/khoá tài khoản (thu hồi mọi phiên ngay), gán phòng ban, đặt Giám đốc/Trưởng phòng, reset 2FA có ghi audit. |
+| **SCR-20** | Cài đặt | Quản trị viên; mục "Tài khoản của tôi" cho mọi người | `settings/index.html` | Pending | `frontend/src/app/(dashboard)/settings/page.tsx` | Ngày nghỉ lễ, mặc định tỷ lệ hoa hồng theo loại vụ việc, kênh thông báo; cá nhân: đổi mật khẩu, bật 2FA, liên kết Telegram. |
+
+**Ngoài Phase 1 (DEC-04):** `timesheet/*.html` (Chấm công) và `client-portal/index.html` (Cổng khách hàng) — giữ file, ẩn khỏi menu.
 
 ---
 
@@ -55,6 +64,13 @@ flowchart TD
     SCR15 -- "Click hồ sơ chờ duyệt" --> SCR10
     SCR15 -- "Giao việc nhanh" --> SCR09
 
+    SCR02 --> SCR16["SCR-16: Duyệt nhanh"]
+    SCR16 --> SCR10
+    SCR08 --> SCR17["SCR-17: Tài liệu vụ việc"]
+    SCR02 --> SCR18["SCR-18: Báo cáo"]
+    NavAdmin --> SCR19["SCR-19: Người dùng & phòng ban"]
+    NavAdmin --> SCR20["SCR-20: Cài đặt"]
+
     SCR02 -. "Mở mọi lúc" .-> SCR14["SCR-14: Trợ lý AI Drawer"]
 ```
 
@@ -67,10 +83,11 @@ flowchart TD
   - Nút Quick Action `+`: Tạo nhanh Khách hàng mới, Cơ hội mới, hoặc Ghi chú.
   - Chuông thông báo (Notification Center): Bắt sự kiện thời gian thực qua WebSockets/SSE.
   - Nút kích hoạt Trợ lý ảo AI (Biểu tượng Sparkle mở Drawer cạnh phải).
-  - Menu người dùng: Ảnh đại diện, Tên hiển thị, Vai trò hiện tại, Đổi mật khẩu, Đăng xuất.
-- **Collapsible Sidebar:**
-  - Mục chính: Bàn làm việc (Dashboard), Khách hàng (CRM), Vụ việc & Tác vụ (Cases), Tài chính & Kế toán (Finance/MISA), Báo cáo & Thống kê.
-  - Mục Quản trị (Dành riêng cho Super Admin): Workflow Builder, Quản lý Nhân sự & Phòng ban, Nhật ký Kiểm toán (Audit Logs).
+  - Menu người dùng: Ảnh đại diện, Tên hiển thị, Vai trò hiện tại, Đổi mật khẩu, Bảo mật 2FA, Đăng xuất.
+- **Collapsible Sidebar:** menu khác nhau theo 4 vai trò (DEC-01); chỉ hiện mục người dùng có quyền.
+  - Mục chính: Bàn làm việc, Duyệt nhanh, Khách hàng & Cơ hội, Vụ việc & Tác vụ, Tài liệu, Tài chính & Kế toán, Báo cáo, Văn phòng số (Quản lý).
+  - Mục Quản trị (Quản trị viên): Workflow Builder, Người dùng & Phòng ban, Cài đặt, Nhật ký Kiểm toán.
+  - Header luôn hiển thị **đúng người đang đăng nhập** và vai trò của họ.
   - Có thể thu nhỏ (Collapsed icon-only mode) để mở rộng diện tích màn hình làm việc hồ sơ.
 
 ---
@@ -93,14 +110,21 @@ flowchart TD
 
 ---
 
+### Tiêu chuẩn khả dụng & hiển thị
+- Đạt **WCAG 2.1 AA** ở cả Light và Dark mode: chữ thường ≥ 4.5:1, chữ lớn ≥ 3:1 — áp dụng cả chữ nhỏ 10–12px (nhãn nhóm menu, đơn vị tiền, huy hiệu).
+- Bố cục dùng được ở **375px, 1024px, 1440px**: không cuộn ngang trang; bảng rộng cuộn trong khung riêng; trên điện thoại sidebar đóng mặc định.
+- Giao diện ẩn hoàn toàn (không chỉ vô hiệu hoá) các hành động người dùng không có quyền.
+
+---
+
 ## 5. QUY TẮC FORM VALIDATION
 - Mọi form nhập liệu đều phải được validate 2 lớp: Phía Client bằng **Zod Schema (React Hook Form)** và Phía Server bằng **Pydantic v2 Schema (FastAPI)**.
 - Các quy tắc bắt buộc:
   - Mã số thuế (MST Doanh nghiệp): Đúng 10 hoặc 13 chữ số, kiểm tra định dạng chuẩn Việt Nam.
-  - CCCD/Hộ chiếu: Kiểm tra độ dài 9-12 ký tự, không chứa ký tự đặc biệt.
+  - CCCD: đúng 12 chữ số. Hộ chiếu: 8–9 ký tự chữ và số. Không chứa ký tự đặc biệt.
   - Số điện thoại: Định dạng số điện thoại Việt Nam chuẩn (bắt đầu bằng 03, 05, 07, 08, 09...).
   - Địa chỉ Email: Kiểm tra định dạng RFC 5322.
-  - Giá trị hợp đồng & Tỷ lệ hoa hồng: Số tiền > 0; Tỷ lệ hoa hồng nằm trong khoảng từ `0.00%` đến `100.00%`, tổng các tỷ lệ thành phần không vượt quá 100%.
+  - Giá trị hợp đồng & Tỷ lệ hoa hồng: Số tiền > 0, tối đa 2 chữ số thập phân, xử lý bằng `Decimal` (không dùng `number` của JS cho phép tính tiền); Tỷ lệ hoa hồng từ `0.00%` đến `100.00%`, tổng các tỷ lệ thành phần không vượt quá 100%; tổng các đợt thu không vượt giá trị hợp đồng.
 
 ---
 

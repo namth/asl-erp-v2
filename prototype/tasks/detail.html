@@ -14,8 +14,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../assets/layout.css?v=3.1">
-  <script src="../assets/layout.js?v=3.1" defer></script>
+  <link rel="stylesheet" href="../assets/layout.css?v=3.3">
+  <script src="../assets/layout.js?v=3.3" defer></script>
 </head>
 <body class="min-h-screen bg-[#F4F8FA] text-slate-800 flex">  <!-- Modular Shared Sidebar (Auto-mounted by layout.js) -->
   <aside id="sidebar" class="fixed top-0 left-0 bottom-0 w-72 bg-white/95 backdrop-blur-xl z-40 transition-all duration-300 ease-in-out flex flex-col justify-between shadow-xl shadow-slate-900/5"></aside>
@@ -31,7 +31,7 @@
         </button>
         <div>
           <div class="text-xs text-cyan-200/90 font-medium flex items-center gap-1.5">
-            <a href="index.html" class="hover:underline">Quản Lý Tác Vụ</a>
+            <a href="index.html?role=admin" class="hover:underline">Quản Lý Tác Vụ</a>
             <span>/</span>
             <span class="text-white font-semibold">TASK-102</span>
           </div>
@@ -40,7 +40,7 @@
       </div>
 
       <div class="flex items-center gap-3">
-        <a href="index.html" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition-colors">
+        <a href="index.html?role=admin" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition-colors">
           &larr; Về Kanban
         </a>
       </div>
@@ -59,16 +59,16 @@
             </div>
             <h2 class="text-xl font-bold text-[#002D54] mt-1">TASK-102: Soạn Dự Thảo Đơn Khiếu Nại Hành Vi Xâm Phạm Nhãn Hiệu</h2>
             <div class="text-xs text-slate-500 mt-1">
-              Thuộc vụ việc: <a href="../cases/detail.html" class="font-bold text-[#0082B4] underline">CASE-2026-089 (Tranh chấp Nhãn hiệu ASL)</a>
+              Thuộc vụ việc: <a href="../cases/detail.html?role=admin" class="font-bold text-[#0082B4] underline">CASE-2026-089 (Tranh chấp Nhãn hiệu ASL)</a>
             </div>
           </div>
 
           <div class="flex items-center gap-2">
-            <a href="../ai-assistant/index.html" class="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-[#0082B4] hover:from-cyan-400 text-white font-bold text-xs shadow-md flex items-center gap-2">
+            <a href="../ai-assistant/index.html?role=admin" class="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-[#0082B4] hover:from-cyan-400 text-white font-bold text-xs shadow-md flex items-center gap-2">
               <span class="w-2 h-2 rounded-full bg-emerald-300 animate-pulse"></span>
               <span>Dùng Trợ Lý AI Soạn</span>
             </a>
-            <button onclick="alert('Đã gửi yêu cầu phê duyệt sang Partner!'); window.location.href='index.html';" class="px-4 py-2 rounded-xl bg-[#002D54] hover:bg-[#0082B4] text-white font-bold text-xs shadow-md">
+            <button onclick="alert('Đã gửi yêu cầu phê duyệt sang Partner!'); window.location.href=withRole('index.html');" class="px-4 py-2 rounded-xl bg-[#002D54] hover:bg-[#0082B4] text-white font-bold text-xs shadow-md">
               Chuyển Duyệt (Review)
             </button>
           </div>

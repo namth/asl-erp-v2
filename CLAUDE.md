@@ -26,7 +26,7 @@ Khi bắt đầu code thật, theo đúng cấu trúc monorepo trong `docs/09-co
 
 - Mỗi trang: Tailwind CDN (`darkMode: 'class'`), font Plus Jakarta Sans + JetBrains Mono, nạp `../assets/layout.css?v=X` và `../assets/layout.js?v=X` (defer). Tăng `?v=` khi sửa assets dùng chung.
 - Sidebar được `layout.js` tự mount vào `<aside id="sidebar">`; không viết sidebar cứng trong trang.
-- 4 vai trò: `admin`, `manager`, `accountant`, `attorney`. Mọi link nội bộ phải giữ tham số `?role=` để sidebar không đổi khi chuyển trang.
+- 4 vai trò hệ thống (DEC-01): `admin`, `manager` (gồm cả Giám đốc — khác nhau ở phạm vi phòng ban, không phải vai trò), `accountant`, `attorney`. Mọi link nội bộ phải giữ tham số `?role=` để sidebar không đổi khi chuyển trang.
 - Mỗi màn hình có đủ 4 trạng thái UI: Empty, Skeleton loading, Success, Validation error (xem `docs/03-screens-and-ui.md`).
 - Giao diện là "product-ready": **không** để mã đặc tả (`SCR-xx`, `TSK-xx`) trong text hiển thị, không để dòng hướng dẫn/demo, không có nút trùng chức năng trên cùng trang.
 - Icon dùng SVG kiểu Lucide, không dùng emoji trong nút/nhãn (trừ huy hiệu trạng thái đã định nghĩa trong spec như `☕ Đang nghỉ ngơi`).
@@ -49,7 +49,7 @@ python3 scripts/check-prototype.py            # thêm --strict để soát cả 
 - API theo hợp đồng `docs/07-api-contracts.md` (`/api/v1`, mã lỗi đã định nghĩa). Đổi hợp đồng → cập nhật doc trong cùng thay đổi.
 - Mọi endpoint đọc/ghi vụ việc phải đi qua guard `verify_need_to_know()` (Neo4j).
 - `audit_logs` chỉ INSERT/SELECT — không bao giờ viết code/migration UPDATE hoặc DELETE bảng này.
-- Không thêm task/stage ngoài Workflow Template (Strict Governance).
+- Không thêm task/stage ngoài Workflow Template trừ khi template ở chế độ `FLEXIBLE` **và** yêu cầu bổ sung đã được phê duyệt (DEC-07).
 - Hoa hồng tính theo tiền thực thu, dùng `Decimal`, khớp đến từng đồng (TC-FIN-01/02).
 - Server state dùng TanStack Query; Zustand chỉ cho UI state. Không lưu dữ liệu nghiệp vụ vào localStorage.
 - Mỗi task trong `docs/11-tasks.md` có "Lệnh xác minh tự động" — chạy nó trước khi báo xong.
@@ -60,8 +60,16 @@ python3 scripts/check-prototype.py            # thêm --strict để soát cả 
 - Không đọc, in ra hay commit file bí mật: `.env*`, `qlcvaslgate-old/datacenter/secret.php`, thông tin FTP hosting.
 - Chỉ tạo `.env.example` với giá trị giả, theo mẫu trong `docs/10-env-and-security.md`.
 
+## Mô hình phân vai Claude ↔ Antigravity
+
+- **Claude Code = Trưởng phòng / Giám đốc sản phẩm:** phân tích, thiết kế kiến trúc, viết đặc tả, viết test, giao việc, nghiệm thu, giữ `docs/`.
+- **Antigravity (Gemini) = Kỹ sư thực thi:** viết code sản phẩm theo `brief.md`. Luật ở `.agents/rules/`, quy trình là skill `.agents/skills/thuc-hien-task/`, hook khoá test ở `.agents/hooks.json`. Claude gọi nó qua Antigravity CLI `agy` (chạy ngầm).
+- Giao thức & vòng đời task: `handoff/README.md`, công cụ `scripts/handoff.py`.
+- Hạng mục code sản phẩm → mặc định giao qua `/giao-viec`, nghiệm thu qua `/nghiem-thu`. Claude chỉ tự code khi người dùng yêu cầu rõ, hoặc với việc nhỏ (sửa docs, script nội bộ, test).
+- Test trong `tests.lock` thuộc về Claude; Antigravity không được sửa.
+
 ## Cách làm việc
 
 - Trả lời và viết tài liệu bằng tiếng Việt.
-- Trước khi sửa một module, đọc doc liên quan trong `docs/` (bảng map ở CONTEXT.md mục 4).
+- Trước khi sửa một module, đọc doc liên quan trong `docs/` (bảng map ở CONTEXT.md mục 4) **và** `docs/14-decisions.md` — quyết định ở đó thắng khi mâu thuẫn.
 - Khi thay đổi nghiệp vụ/UI làm lệch tài liệu, cập nhật doc tương ứng luôn, không để docs và prototype lệch nhau.

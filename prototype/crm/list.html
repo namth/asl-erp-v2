@@ -14,8 +14,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../assets/layout.css?v=3.1">
-  <script src="../assets/layout.js?v=3.1" defer></script>
+  <link rel="stylesheet" href="../assets/layout.css?v=3.3">
+  <script src="../assets/layout.js?v=3.3" defer></script>
 </head>
 <body class="min-h-screen bg-[#F4F8FA] text-slate-800 flex overflow-x-hidden w-full">
 
@@ -33,7 +33,7 @@
         </button>
         <div class="min-w-0">
           <div class="text-[11px] text-cyan-200/90 font-medium flex items-center gap-1.5 truncate">
-            <a href="../index.html" class="hover:underline">ASL LAW</a>
+            <a href="../index.html?role=admin" class="hover:underline">ASL LAW</a>
             <span>/</span>
             <span class="text-cyan-200">CRM</span>
             <span>/</span>
@@ -46,18 +46,18 @@
       <div class="flex items-center gap-3">
         <!-- View Mode Switcher (Giống trang Quản lý tác vụ) -->
         <div class="flex items-center bg-white/10 p-1 rounded-xl border border-white/20 backdrop-blur-md">
-          <a href="index.html" class="px-3 py-1.5 rounded-lg text-white hover:text-cyan-200 font-bold text-xs flex items-center gap-1.5 transition-all">
+          <a href="index.html?role=admin" class="px-3 py-1.5 rounded-lg text-white hover:text-cyan-200 font-bold text-xs flex items-center gap-1.5 transition-all">
             <svg class="w-4 h-4 text-cyan-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"/></svg>
             <span>Bảng Phễu (Kanban)</span>
           </a>
-          <a href="list.html" class="px-3 py-1.5 rounded-lg bg-white text-[#002D54] font-extrabold text-xs shadow-md flex items-center gap-1.5 transition-all">
+          <a href="list.html?role=admin" class="px-3 py-1.5 rounded-lg bg-white text-[#002D54] font-extrabold text-xs shadow-md flex items-center gap-1.5 transition-all">
             <svg class="w-4 h-4 text-[#0082B4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
             <span>Dạng Danh Sách</span>
           </a>
         </div>
 
         <!-- Switch to Customers Directory Button -->
-        <a href="customers.html" class="px-3.5 py-2 rounded-xl bg-white/15 hover:bg-white/25 border border-white/20 text-white font-bold text-xs flex items-center gap-1.5 transition-all">
+        <a href="customers.html?role=admin" class="px-3.5 py-2 rounded-xl bg-white/15 hover:bg-white/25 border border-white/20 text-white font-bold text-xs flex items-center gap-1.5 transition-all">
           <svg class="w-4 h-4 text-cyan-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
           <span>Danh Bạ Khách Hàng</span>
         </a>
@@ -161,7 +161,7 @@
               <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
               <span>Xuất Excel</span>
             </button>
-            <a href="create-lead.html" class="px-3.5 py-2 rounded-xl bg-[#FF7A00] hover:bg-[#E66E00] text-white font-bold text-xs shadow-md shadow-orange-950/20 flex items-center gap-1.5 transition-all">
+            <a href="create-lead.html?role=admin" class="px-3.5 py-2 rounded-xl bg-[#FF7A00] hover:bg-[#E66E00] text-white font-bold text-xs shadow-md shadow-orange-950/20 flex items-center gap-1.5 transition-all">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
               <span>Cơ hội mới</span>
             </a>
@@ -234,11 +234,11 @@
                     <button onclick="event.stopPropagation(); toggleRowDetail('detail-opp-1', this)" class="btn-chevron p-1 rounded-lg hover:bg-slate-200 text-slate-400 hover:text-slate-800 transition-colors" title="Sổ chi tiết cơ hội">
                       <svg class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
                     </button>
-                    <a href="detail.html?id=opp-1" class="hover:underline font-extrabold text-[#002D54]">OPP-2026-001</a>
+                    <a href="detail.html?id=opp-1&role=admin" class="hover:underline font-extrabold text-[#002D54]">OPP-2026-001</a>
                   </div>
                 </td>
                 <td class="py-4 px-4">
-                  <a href="detail.html?id=opp-1" class="font-bold text-sm text-[#002D54] hover:text-[#0082B4] block leading-snug">Đăng ký nhãn hiệu 'SaoFood'</a>
+                  <a href="detail.html?id=opp-1&role=admin" class="font-bold text-sm text-[#002D54] hover:text-[#0082B4] block leading-snug">Đăng ký nhãn hiệu 'SaoFood'</a>
                   <div class="text-[11px] text-slate-400 mt-0.5">Tư vấn tra cứu & nộp đơn bảo hộ nhóm 29, 30</div>
                 </td>
                 <td class="py-4 px-4">
@@ -282,7 +282,7 @@
                         <span class="w-2.5 h-4 rounded bg-[#0082B4]"></span>
                         <span class="text-xs font-bold text-[#002D54] uppercase tracking-wider">Thông Tin Thân Chủ & Nhật Ký Tiếp Cận • OPP-2026-001</span>
                       </div>
-                      <a href="../cases/create.html?lead=SaoViet&title=Đăng+ký+nhãn+hiệu+SaoFood&val=45000000" class="text-xs font-bold text-[#FF7A00] hover:underline flex items-center gap-1">
+                      <a href="../cases/create.html?lead=SaoViet&title=Đăng+ký+nhãn+hiệu+SaoFood&val=45000000&role=admin" class="text-xs font-bold text-[#FF7A00] hover:underline flex items-center gap-1">
                         <span>Chuyển Đổi Một Chạm Thành Vụ Việc Chính Thức</span> &rarr;
                       </a>
                     </div>
@@ -315,11 +315,11 @@
                     <button onclick="event.stopPropagation(); toggleRowDetail('detail-opp-2', this)" class="btn-chevron p-1 rounded-lg hover:bg-slate-200 text-slate-400 hover:text-slate-800 transition-colors" title="Sổ chi tiết cơ hội">
                       <svg class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
                     </button>
-                    <a href="detail.html?id=opp-2" class="hover:underline font-extrabold text-[#002D54]">OPP-2026-002</a>
+                    <a href="detail.html?id=opp-2&role=admin" class="hover:underline font-extrabold text-[#002D54]">OPP-2026-002</a>
                   </div>
                 </td>
                 <td class="py-4 px-4">
-                  <a href="detail.html?id=opp-2" class="font-bold text-sm text-[#002D54] hover:text-[#0082B4] block leading-snug">Tư vấn ly hôn đơn phương</a>
+                  <a href="detail.html?id=opp-2&role=admin" class="font-bold text-sm text-[#002D54] hover:text-[#0082B4] block leading-snug">Tư vấn ly hôn đơn phương</a>
                   <div class="text-[11px] text-slate-400 mt-0.5">Tư vấn phân chia tài sản & quyền nuôi dưỡng con chung</div>
                 </td>
                 <td class="py-4 px-4">
@@ -363,7 +363,7 @@
                         <span class="w-2.5 h-4 rounded bg-[#0082B4]"></span>
                         <span class="text-xs font-bold text-[#002D54] uppercase tracking-wider">Thông Tin Thân Chủ & Nhật Ký Tiếp Cận • OPP-2026-002</span>
                       </div>
-                      <a href="../cases/create.html?lead=DoMaiPhuong&title=Tư+vấn+ly+hôn&val=30000000" class="text-xs font-bold text-[#FF7A00] hover:underline flex items-center gap-1">
+                      <a href="../cases/create.html?lead=DoMaiPhuong&title=Tư+vấn+ly+hôn&val=30000000&role=admin" class="text-xs font-bold text-[#FF7A00] hover:underline flex items-center gap-1">
                         <span>Chuyển Đổi Một Chạm Thành Vụ Việc Chính Thức</span> &rarr;
                       </a>
                     </div>
@@ -396,11 +396,11 @@
                     <button onclick="event.stopPropagation(); toggleRowDetail('detail-opp-3', this)" class="btn-chevron p-1 rounded-lg hover:bg-slate-200 text-slate-400 hover:text-slate-800 transition-colors" title="Sổ chi tiết cơ hội">
                       <svg class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
                     </button>
-                    <a href="detail.html?id=opp-3" class="hover:underline font-extrabold text-[#002D54]">OPP-2026-003</a>
+                    <a href="detail.html?id=opp-3&role=admin" class="hover:underline font-extrabold text-[#002D54]">OPP-2026-003</a>
                   </div>
                 </td>
                 <td class="py-4 px-4">
-                  <a href="detail.html?id=opp-3" class="font-bold text-sm text-[#002D54] hover:text-[#0082B4] block leading-snug">Tranh chấp đất đai Thủ Đức</a>
+                  <a href="detail.html?id=opp-3&role=admin" class="font-bold text-sm text-[#002D54] hover:text-[#0082B4] block leading-snug">Tranh chấp đất đai Thủ Đức</a>
                   <div class="text-[11px] text-slate-400 mt-0.5">Khởi kiện hủy sổ đỏ và yêu cầu bồi thường thiệt hại</div>
                 </td>
                 <td class="py-4 px-4">
@@ -444,7 +444,7 @@
                         <span class="w-2.5 h-4 rounded bg-[#0082B4]"></span>
                         <span class="text-xs font-bold text-[#002D54] uppercase tracking-wider">Thông Tin Thân Chủ & Nhật Ký Tiếp Cận • OPP-2026-003</span>
                       </div>
-                      <a href="../cases/create.html?lead=PhamDucThang&title=Tranh+chấp+đất+đai&val=120000000" class="text-xs font-bold text-[#FF7A00] hover:underline flex items-center gap-1">
+                      <a href="../cases/create.html?lead=PhamDucThang&title=Tranh+chấp+đất+đai&val=120000000&role=admin" class="text-xs font-bold text-[#FF7A00] hover:underline flex items-center gap-1">
                         <span>Chuyển Đổi Một Chạm Thành Vụ Việc Chính Thức</span> &rarr;
                       </a>
                     </div>
@@ -477,11 +477,11 @@
                     <button onclick="event.stopPropagation(); toggleRowDetail('detail-opp-4', this)" class="btn-chevron p-1 rounded-lg hover:bg-slate-200 text-slate-400 hover:text-slate-800 transition-colors" title="Sổ chi tiết cơ hội">
                       <svg class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
                     </button>
-                    <a href="detail.html?id=opp-4" class="hover:underline font-extrabold text-[#002D54]">OPP-2026-004</a>
+                    <a href="detail.html?id=opp-4&role=admin" class="hover:underline font-extrabold text-[#002D54]">OPP-2026-004</a>
                   </div>
                 </td>
                 <td class="py-4 px-4">
-                  <a href="detail.html?id=opp-4" class="font-bold text-sm text-[#002D54] hover:text-[#0082B4] block leading-snug">Rà soát hợp đồng M&A</a>
+                  <a href="detail.html?id=opp-4&role=admin" class="font-bold text-sm text-[#002D54] hover:text-[#0082B4] block leading-snug">Rà soát hợp đồng M&A</a>
                   <div class="text-[11px] text-slate-400 mt-0.5">Thẩm định pháp lý LDD & tư vấn đàm phán hợp đồng chuyển nhượng vốn</div>
                 </td>
                 <td class="py-4 px-4">
@@ -525,7 +525,7 @@
                         <span class="w-2.5 h-4 rounded bg-[#0082B4]"></span>
                         <span class="text-xs font-bold text-[#002D54] uppercase tracking-wider">Thông Tin Thân Chủ & Nhật Ký Tiếp Cận • OPP-2026-004</span>
                       </div>
-                      <a href="../cases/create.html?lead=HoangLong&title=Rà+soát+hợp+đồng+MNA&val=480000000" class="text-xs font-bold text-[#FF7A00] hover:underline flex items-center gap-1">
+                      <a href="../cases/create.html?lead=HoangLong&title=Rà+soát+hợp+đồng+MNA&val=480000000&role=admin" class="text-xs font-bold text-[#FF7A00] hover:underline flex items-center gap-1">
                         <span>Chuyển Đổi Một Chạm Thành Vụ Việc Chính Thức</span> &rarr;
                       </a>
                     </div>
@@ -558,11 +558,11 @@
                     <button onclick="event.stopPropagation(); toggleRowDetail('detail-opp-5', this)" class="btn-chevron p-1 rounded-lg hover:bg-slate-200 text-slate-400 hover:text-slate-800 transition-colors" title="Sổ chi tiết cơ hội">
                       <svg class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
                     </button>
-                    <a href="detail.html?id=opp-5" class="hover:underline font-extrabold text-[#002D54]">OPP-2026-005</a>
+                    <a href="detail.html?id=opp-5&role=admin" class="hover:underline font-extrabold text-[#002D54]">OPP-2026-005</a>
                   </div>
                 </td>
                 <td class="py-4 px-4">
-                  <a href="detail.html?id=opp-5" class="font-bold text-sm text-[#002D54] hover:text-[#0082B4] block leading-snug">Đăng ký sáng chế thiết bị IoT</a>
+                  <a href="detail.html?id=opp-5&role=admin" class="font-bold text-sm text-[#002D54] hover:text-[#0082B4] block leading-snug">Đăng ký sáng chế thiết bị IoT</a>
                   <div class="text-[11px] text-slate-400 mt-0.5">Soạn thảo bản mô tả sáng chế & nộp đơn bảo hộ độc quyền tại Việt Nam</div>
                 </td>
                 <td class="py-4 px-4">
@@ -606,7 +606,7 @@
                         <span class="w-2.5 h-4 rounded bg-[#0082B4]"></span>
                         <span class="text-xs font-bold text-[#002D54] uppercase tracking-wider">Thông Tin Thân Chủ & Nhật Ký Tiếp Cận • OPP-2026-005</span>
                       </div>
-                      <a href="../cases/create.html?lead=MinhPhat&title=Đăng+ký+sáng+chế+IoT&val=160000000" class="text-xs font-bold text-[#FF7A00] hover:underline flex items-center gap-1">
+                      <a href="../cases/create.html?lead=MinhPhat&title=Đăng+ký+sáng+chế+IoT&val=160000000&role=admin" class="text-xs font-bold text-[#FF7A00] hover:underline flex items-center gap-1">
                         <span>Chuyển Đổi Một Chạm Thành Vụ Việc Chính Thức</span> &rarr;
                       </a>
                     </div>
@@ -639,11 +639,11 @@
                     <button onclick="event.stopPropagation(); toggleRowDetail('detail-opp-6', this)" class="btn-chevron p-1 rounded-lg hover:bg-slate-200 text-slate-400 hover:text-slate-800 transition-colors" title="Sổ chi tiết cơ hội">
                       <svg class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
                     </button>
-                    <a href="detail.html?id=opp-6" class="hover:underline font-extrabold text-[#002D54]">OPP-2026-006</a>
+                    <a href="detail.html?id=opp-6&role=admin" class="hover:underline font-extrabold text-[#002D54]">OPP-2026-006</a>
                   </div>
                 </td>
                 <td class="py-4 px-4">
-                  <a href="detail.html?id=opp-6" class="font-bold text-sm text-[#002D54] hover:text-[#0082B4] block leading-snug">Tư vấn tái cấu trúc Doanh nghiệp FDI Foxconn</a>
+                  <a href="detail.html?id=opp-6&role=admin" class="font-bold text-sm text-[#002D54] hover:text-[#0082B4] block leading-snug">Tư vấn tái cấu trúc Doanh nghiệp FDI Foxconn</a>
                   <div class="text-[11px] text-slate-400 mt-0.5">Tư vấn điều lệ nội bộ & tái cơ cấu dòng vốn đầu tư nước ngoài tại Bắc Giang</div>
                 </td>
                 <td class="py-4 px-4">
@@ -687,7 +687,7 @@
                         <span class="w-2.5 h-4 rounded bg-[#0082B4]"></span>
                         <span class="text-xs font-bold text-[#002D54] uppercase tracking-wider">Thông Tin Thân Chủ & Nhật Ký Tiếp Cận • OPP-2026-006</span>
                       </div>
-                      <a href="../cases/create.html?lead=Foxconn&title=Tái+cấu+trúc+doanh+nghiệp+FDI&val=550000000" class="text-xs font-bold text-[#FF7A00] hover:underline flex items-center gap-1">
+                      <a href="../cases/create.html?lead=Foxconn&title=Tái+cấu+trúc+doanh+nghiệp+FDI&val=550000000&role=admin" class="text-xs font-bold text-[#FF7A00] hover:underline flex items-center gap-1">
                         <span>Chuyển Đổi Một Chạm Thành Vụ Việc Chính Thức</span> &rarr;
                       </a>
                     </div>
@@ -720,11 +720,11 @@
                     <button onclick="event.stopPropagation(); toggleRowDetail('detail-opp-7', this)" class="btn-chevron p-1 rounded-lg hover:bg-slate-200 text-slate-400 hover:text-slate-800 transition-colors" title="Sổ chi tiết cơ hội">
                       <svg class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
                     </button>
-                    <a href="detail.html?id=opp-7" class="hover:underline font-extrabold text-emerald-700">OPP-2026-007</a>
+                    <a href="detail.html?id=opp-7&role=admin" class="hover:underline font-extrabold text-emerald-700">OPP-2026-007</a>
                   </div>
                 </td>
                 <td class="py-4 px-4">
-                  <a href="detail.html?id=opp-7" class="font-bold text-sm text-[#002D54] hover:text-[#0082B4] block leading-snug">Kiểu dáng công nghiệp bao bì</a>
+                  <a href="detail.html?id=opp-7&role=admin" class="font-bold text-sm text-[#002D54] hover:text-[#0082B4] block leading-snug">Kiểu dáng công nghiệp bao bì</a>
                   <div class="text-[11px] text-slate-400 mt-0.5">Đăng ký độc quyền kiểu dáng công nghiệp bao bì nhựa sinh học</div>
                 </td>
                 <td class="py-4 px-4">
@@ -768,7 +768,7 @@
                         <span class="w-2.5 h-4 rounded bg-emerald-500"></span>
                         <span class="text-xs font-bold text-[#002D54] uppercase tracking-wider">Thông Tin Thân Chủ & Ký Kết Hợp Đồng • OPP-2026-007</span>
                       </div>
-                      <a href="../cases/create.html?lead=SaoViet&title=Kiểu+dáng+công+nghiệp+bao+bì&val=38000000" class="px-3 py-1.5 rounded-xl bg-[#002D54] hover:bg-[#0082B4] text-white font-bold text-xs flex items-center gap-1.5 shadow-sm">
+                      <a href="../cases/create.html?lead=SaoViet&title=Kiểu+dáng+công+nghiệp+bao+bì&val=38000000&role=admin" class="px-3 py-1.5 rounded-xl bg-[#002D54] hover:bg-[#0082B4] text-white font-bold text-xs flex items-center gap-1.5 shadow-sm">
                         <svg class="w-3.5 h-3.5 text-cyan-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                         <span>Tạo Vụ Việc Chính Thức Một Chạm</span>
                       </a>

@@ -1,0 +1,3 @@
+3e0bca31d3657e85497617d921fad66557c2ba07f33a6977163145cb5068d4f5  handoff/tasks/TASK-001-don-dep-prototype/verify.sh
+7a67f96f116c7db26ab9fb06acf4f07cad03725d88fd993acad522363d860158  tests/prototype/test_task_001_cleanup.py
+409b9c6c76e741be084c087c4e6b2c6897d57106dd45832ad9ced69c28b638fc  scripts/check-prototype.py

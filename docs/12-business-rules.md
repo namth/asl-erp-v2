@@ -1,126 +1,197 @@
 # 12. QUY TẮC NGHIỆP VỤ & MÁY TRẠNG THÁI (BUSINESS RULES & STATE MACHINES)
 
+> Cập nhật 30/10/2026 theo `14-decisions.md` (DEC-01, DEC-06, DEC-07) và báo cáo QA 30/10 (B1–B7). Mã lỗi tham chiếu `07` §1.3.
+
 ## 1. HỆ THỐNG MÁY TRẠNG THÁI (STATE MACHINES)
 
-### 1.1. Máy Trạng thái Cơ hội Kinh doanh (Opportunity State Machine)
+Mọi chuyển trạng thái không có trong sơ đồ → `409 INVALID_STATE_TRANSITION`. Mọi chuyển trạng thái ghi `audit_logs`.
+
+### 1.1. Cơ hội kinh doanh (Opportunity)
 
 ```mermaid
 stateDiagram-v2
     [*] --> NEW_LEAD: Tiếp nhận thông tin thân chủ
     NEW_LEAD --> PROPOSAL_SENT: Gửi đề xuất dịch vụ & báo giá
-    PROPOSAL_SENT --> NEGOTIATION: Đàm phán điều khoản hợp đồng
-    NEGOTIATION --> WON: Khách hàng ký hợp đồng dịch vụ
-    NEGOTIATION --> LOST: Khách hàng từ chối / Không phù hợp
-    PROPOSAL_SENT --> LOST: Hết hạn báo giá / Hủy nhu cầu
-    
-    WON --> [*]: Kích hoạt nút chuyển đổi 1-chạm tạo Case mới
-    LOST --> [*]: Lưu trữ phục vụ thống kê tỷ lệ chuyển đổi
+    PROPOSAL_SENT --> NEGOTIATION: Đàm phán điều khoản
+    NEGOTIATION --> WON: Khách hàng ký hợp đồng
+    NEW_LEAD --> LOST: Không phù hợp
+    PROPOSAL_SENT --> LOST: Hết hạn báo giá / Huỷ nhu cầu
+    NEGOTIATION --> LOST: Khách từ chối
+    WON --> [*]: Chuyển đổi 1-chạm tạo vụ việc (một lần duy nhất)
+    LOST --> [*]: Lưu thống kê (bắt buộc lost_reason)
 ```
 
-### 1.2. Máy Trạng thái Vụ việc (Case State Machine)
+### 1.2. Vụ việc (Case) — vòng đời
+
+Trạng thái **vòng đời** nằm ở `cases.status`. Việc vụ việc đang chờ duyệt hay chờ thu tiền là trạng thái của **stage hiện tại** (§1.3), nên một vụ việc không bao giờ phải chọn giữa "chờ duyệt" và "chờ tiền".
 
 ```mermaid
 stateDiagram-v2
-    [*] --> INITIALIZING: Khởi tạo từ CRM
-    INITIALIZING --> ACTIVE: Gán đủ nhân sự chuyên môn & áp dụng Workflow Template
-    
-    ACTIVE --> WAITING_APPROVAL: Chạm Cổng Phê duyệt (Approval Gate)
-    WAITING_APPROVAL --> ACTIVE: Supervisor / Partner ký duyệt văn bản
-    WAITING_APPROVAL --> ACTIVE: Trả về yêu cầu sửa đổi (Rejected with notes)
-    
-    ACTIVE --> WAITING_PAYMENT: Chạm mốc thu tiền liên kết Milestone
-    WAITING_PAYMENT --> ACTIVE: Kế toán bấm "Xác nhận đã thu tiền từ MISA"
-    
-    ACTIVE --> CLOSED: Hoàn tất 100% các Stages & tất toán công nợ
+    [*] --> INITIALIZING: Chuyển đổi từ CRM / Quản lý tạo
+    INITIALIZING --> ACTIVE: Có 1 CASE_MANAGER và ≥1 EXECUTOR
+    ACTIVE --> PAUSED: Quản lý tạm dừng (bắt buộc lý do)
+    PAUSED --> ACTIVE: Quản lý tiếp tục
+    ACTIVE --> CLOSED: Mọi stage COMPLETED và mọi đợt thu PAID_CONFIRMED/CANCELLED
+    INITIALIZING --> TERMINATED: Huỷ hợp đồng
+    ACTIVE --> TERMINATED: Huỷ hợp đồng
+    PAUSED --> TERMINATED: Huỷ hợp đồng
     CLOSED --> [*]
+    TERMINATED --> [*]
 ```
 
-### 1.3. Máy Trạng thái Tác vụ Con (Task State Machine)
+- `TERMINATED` (DEC-06): bắt buộc `termination_reason`; mọi đợt thu chưa `PAID_CONFIRMED` chuyển `CANCELLED`; task chưa xong giữ nguyên để tra cứu; **không** đảo hoa hồng đã ghi nhận — hoàn tiền xử lý ngoài hệ thống.
+- `PAUSED`: không task nào được đổi trạng thái; cảnh báo SLA tạm ngưng.
+- Vụ việc `is_legacy` (DEC-05) giữ trạng thái gốc từ hệ thống cũ và không chuyển trạng thái được.
+
+### 1.3. Giai đoạn (Case Stage)
 
 ```mermaid
 stateDiagram-v2
-    [*] --> TODO: Tự động sinh từ Workflow Template
-    
-    TODO --> IN_PROGRESS: [Guard: Mọi Task tiên quyết đã COMPLETED]
-    IN_PROGRESS --> WAITING_APPROVAL: Luật sư hoàn thành dự thảo & gửi duyệt
-    
-    WAITING_APPROVAL --> COMPLETED: Quản lý / Supervisor chấp thuận
-    WAITING_APPROVAL --> IN_PROGRESS: Quản lý từ chối / Yêu cầu sửa đổi
-    
-    COMPLETED --> [*]: Mở khóa các Task phụ thuộc tiếp theo
+    [*] --> LOCKED: Khởi tạo (trừ stage đầu)
+    [*] --> ACTIVE: Stage đầu tiên khi vụ việc ACTIVE
+    LOCKED --> WAITING_PAYMENT: Stage trước COMPLETED, đợt thu chặn chưa PAID_CONFIRMED
+    LOCKED --> ACTIVE: Stage trước COMPLETED, không bị chặn tiền
+    WAITING_PAYMENT --> ACTIVE: Đợt thu chặn chuyển PAID_CONFIRMED
+    ACTIVE --> WAITING_APPROVAL: Mọi task COMPLETED, stage requires_approval
+    ACTIVE --> COMPLETED: Mọi task COMPLETED, không cần duyệt
+    WAITING_APPROVAL --> COMPLETED: Được phê duyệt
+    WAITING_APPROVAL --> ACTIVE: Bị trả về (bắt buộc lý do)
+    COMPLETED --> [*]
 ```
 
-### 1.4. Máy Trạng thái Đợt thanh toán (Milestone State Machine)
+### 1.4. Tác vụ (Task)
 
 ```mermaid
 stateDiagram-v2
-    [*] --> PENDING: Khởi tạo theo lộ trình hợp đồng
-    PENDING --> INVOICED: Hệ thống phát tác vụ tài chính vào hòm thư Kế toán
-    INVOICED --> PAID_CONFIRMED: Kế toán nhập số HĐ & mã GD ngân hàng MISA
-    PAID_CONFIRMED --> [*]: Tự động kích hoạt tính hoa hồng & giải phóng quy trình
+    [*] --> TODO: Sinh từ template, hoặc từ yêu cầu bổ sung đã duyệt
+    TODO --> IN_PROGRESS: [Guard §2.1 phụ thuộc, §2.3 stage ACTIVE]
+    IN_PROGRESS --> WAITING_APPROVAL: Gửi duyệt (requires_approval)
+    IN_PROGRESS --> COMPLETED: Hoàn thành (không cần duyệt)
+    WAITING_APPROVAL --> COMPLETED: Được duyệt
+    WAITING_APPROVAL --> IN_PROGRESS: Bị trả về (bắt buộc lý do)
+    COMPLETED --> [*]: Mở khoá task phụ thuộc; nếu là task kích hoạt → đợt thu AWAITING_PAYMENT
+```
+
+### 1.5. Đợt thanh toán (Billing Milestone) — DEC-06
+
+```mermaid
+stateDiagram-v2
+    [*] --> PENDING: Tạo theo lộ trình hợp đồng
+    PENDING --> AWAITING_PAYMENT: Task kích hoạt COMPLETED, hoặc Quản lý/Case Manager yêu cầu thu
+    AWAITING_PAYMENT --> PARTIALLY_PAID: Kế toán xác nhận, tổng thực thu < số phải thu
+    PARTIALLY_PAID --> PARTIALLY_PAID: Xác nhận thêm, vẫn chưa đủ
+    AWAITING_PAYMENT --> PAID_CONFIRMED: Tổng thực thu ≥ số phải thu
+    PARTIALLY_PAID --> PAID_CONFIRMED: Tổng thực thu ≥ số phải thu
+    PENDING --> CANCELLED: Huỷ (vụ việc TERMINATED hoặc Quản lý huỷ, bắt buộc lý do)
+    AWAITING_PAYMENT --> CANCELLED: Huỷ
+    PARTIALLY_PAID --> CANCELLED: Huỷ phần còn lại
+    PAID_CONFIRMED --> [*]: Mở khoá stage bị chặn
+    CANCELLED --> [*]
+```
+
+- Mỗi lần xác nhận là một dòng `misa_transactions`; **mỗi lần** đều kích hoạt tính hoa hồng trên số tiền của lần đó (§3).
+- Chuyển sang `AWAITING_PAYMENT` phát tác vụ vào hòm thư Kế toán và thông báo.
+- Đợt "tạm ứng khi ký hợp đồng" không có task kích hoạt: chuyển `AWAITING_PAYMENT` ngay khi vụ việc `ACTIVE`.
+
+### 1.6. Yêu cầu bổ sung quy trình (Workflow Change Request) — DEC-07
+
+```mermaid
+stateDiagram-v2
+    [*] --> PENDING: Người được gán vào vụ việc FLEXIBLE gửi đề xuất + lý do
+    PENDING --> APPROVED: Quản lý phụ trách duyệt → tạo task/stage is_ad_hoc
+    PENDING --> REJECTED: Quản lý từ chối (bắt buộc lý do)
+    PENDING --> CANCELLED: Người gửi rút lại
+    APPROVED --> [*]
+    REJECTED --> [*]
+    CANCELLED --> [*]
 ```
 
 ---
 
 ## 2. CÁC RÀNG BUỘC CHUYỂN TRẠNG THÁI (TRANSITION GUARDS)
 
-### 2.1. Ràng buộc Phụ thuộc Tác vụ (Task Dependency Guard)
-- **Điều kiện:** Một tác vụ $T_{child}$ có quan hệ phụ thuộc vào tập hợp các tác vụ tiên quyết $\{T_{p1}, T_{p2}, ...\}$ trong bảng `case_task_dependencies`.
-- **Quy tắc:**
-  - $T_{child}$ **NGHIÊM CẤM** chuyển trạng thái từ `TODO` sang `IN_PROGRESS` hoặc `COMPLETED` nếu tồn tại ít nhất một $T_{pi}$ có trạng thái khác `COMPLETED`.
-  - Nếu người dùng cố tình cập nhật, API chặn lại và trả về lỗi: `PREREQUISITE_TASK_NOT_COMPLETED`.
+### 2.1. Phụ thuộc tác vụ
+Task $T$ phụ thuộc tập $\{T_{p1}, T_{p2}, …\}$ trong `case_task_dependencies`. $T$ **không** được chuyển sang `IN_PROGRESS` hoặc `COMPLETED` nếu tồn tại $T_{pi}$ khác `COMPLETED` → `422 PREREQUISITE_TASK_NOT_COMPLETED`, `details.prerequisite_task_ids` liệt kê các task còn thiếu.
 
-### 2.2. Ràng buộc Cổng Phê duyệt Giai đoạn (Approval Gate Guard)
-- **Điều kiện:** Giai đoạn $S_k$ được gắn cờ `requires_approval = TRUE`.
-- **Quy tắc:**
-  - Vụ việc không được phép chuyển từ Giai đoạn $S_k$ sang Giai đoạn $S_{k+1}$ nếu chưa có bản ghi phê duyệt hợp lệ được ký bởi người dùng có vai trò tối thiểu là `SUPERVISOR` hoặc `CASE_MANAGER` phụ trách vụ việc đó.
+### 2.2. Phê duyệt (task, cổng giai đoạn, yêu cầu bổ sung)
+| Loại | Người được duyệt |
+| :--- | :--- |
+| Task | `CASE_MANAGER` của vụ việc, hoặc Quản lý trong phạm vi |
+| Cổng giai đoạn | `SUPERVISOR` của vụ việc; vụ việc không có Supervisor → Quản lý trong phạm vi |
+| Yêu cầu bổ sung | Quản lý trong phạm vi (Giám đốc hoặc Trưởng phòng của phòng ban vụ việc) |
 
-### 2.3. Ràng buộc Tạm khóa Chờ Kế toán (MISA Payment Gate Guard)
-- **Điều kiện:** Giai đoạn tiếp theo yêu cầu phải hoàn tất thu tiền Đợt $M_x$ (Ví dụ: Đợt nộp phí nhà nước).
-- **Quy tắc:**
-  - Hệ thống tự động khóa trạng thái của Case ở mức `WAITING_PAYMENT`.
-  - Toàn bộ các thao tác nộp đơn hoặc chuyển tiếp chuyên môn bị phong tỏa cho đến khi Kế toán viên bấm **"Xác nhận đã thu tiền/Đã xuất hóa đơn"** thành công trên giao diện ERP.
+Không ai được duyệt yêu cầu do chính mình gửi → `403 APPROVAL_NOT_ALLOWED`. Trả về bắt buộc có lý do.
 
----
+### 2.3. Khoá chờ thu tiền
+Stage có `blocking_milestone_id` ở trạng thái `WAITING_PAYMENT` cho tới khi đợt thu đó `PAID_CONFIRMED`. Trong thời gian này mọi task của stage bị chặn đổi trạng thái → `409 STAGE_LOCKED`. **Thu một phần không mở khoá.**
 
-## 3. CÔNG THỨC CHIẾT TÍNH HOA HỒNG DÒNG TIỀN THỰC THU (CASH-BASIS COMMISSION RULES)
+### 2.4. Quy trình có kiểm soát (DEC-07)
+- Không endpoint nào tạo trực tiếp task/stage trong vụ việc đang chạy.
+- Vụ việc `STRICT`: gửi yêu cầu bổ sung → `403 STRICT_GOVERNANCE_VIOLATION`.
+- Vụ việc `FLEXIBLE`: task/stage chỉ sinh ra khi yêu cầu bổ sung `APPROVED`; có `is_ad_hoc = true` và liên kết yêu cầu.
+- Vụ việc gắn với phiên bản template lúc khởi tạo; phát hành phiên bản mới không thay đổi vụ việc đang chạy.
 
-### 3.1. Nguyên tắc Kích hoạt (Activation Trigger)
-- Chỉ kích hoạt tính và ghi nhận hoa hồng khi và chỉ khi:
-  $$\text{milestone.status} = \text{'PAID\_CONFIRMED'}$$
-- Số tiền dùng làm căn cứ tính hoa hồng là **Số tiền thực tế tiền về tài khoản ngân hàng** ($A_{\text{actual}}$) do Kế toán ghi nhận, không dựa trên giá trị dự kiến.
+### 2.5. Phân công
+- `case_tasks.assigned_to` phải là người đang được phân công vào vụ việc.
+- Gỡ phân công người còn task `IN_PROGRESS`/`WAITING_APPROVAL` → bắt buộc chuyển giao task trước.
+- Gỡ phân công / khoá tài khoản thu hồi quyền **ngay lập tức** (`06` §4).
 
-### 3.2. Công thức Phân bổ Cụ thể
-Cho một đợt thanh toán có số tiền thực thu là $A_{\text{actual}}$:
-
-1. **Hoa hồng Kinh doanh (Sales Commission):**
-   $$C_{\text{sales}} = A_{\text{actual}} \times R_{\text{sales}}\%$$
-   *(Dành cho chuyên viên Sales được gán vào Opportunity khởi tạo vụ việc)*.
-
-2. **Hoa hồng Quản lý Vụ việc (Management Commission):**
-   $$C_{\text{mgmt}} = A_{\text{actual}} \times R_{\text{mgmt}}\%$$
-   *(Được chia theo tỷ lệ thỏa thuận giữa Supervisor và Case Manager phụ trách)*.
-
-3. **Hoa hồng Thực hiện Chuyên môn (Execution Commission):**
-   $$C_{\text{exec}} = A_{\text{actual}} \times R_{\text{exec}}\%$$
-   - Số tiền này được phân bổ cho các Luật sư / Trợ lý đã hoàn thành các tác vụ kỹ thuật gắn liền với Đợt thu tiền này:
-   $$C_{\text{task\_}i} = C_{\text{exec}} \times \frac{W_i}{\sum W}$$
-   *(Trong đó $W_i$ là hệ số trọng số độ phức tạp của Task $i$: Cơ bản = 1, Trung bình = 2, Phức tạp = 3, Rất phức tạp = 4)*.
-
-4. **Quy tắc Làm tròn (Rounding Rule):**
-   - Áp dụng làm tròn số nguyên tiền Việt Nam Đồng (VNĐ) theo chuẩn Banker's Rounding (Half to Even), đảm bảo tổng các khoản hoa hồng thành phần không bao giờ vượt quá tỷ lệ quỹ hoa hồng tối đa được duyệt của vụ việc.
+### 2.6. Vụ việc lịch sử (DEC-05)
+Vụ việc `is_legacy = true` chỉ đọc: mọi thao tác ghi → `409 LEGACY_CASE_READ_ONLY`.
 
 ---
 
-## 4. QUY TẮC TOÀN VẸN DỮ LIỆU & XỬ LÝ GÓC KHUẤT (EDGE CASES)
+## 3. CHIẾT TÍNH HOA HỒNG THEO DÒNG TIỀN THỰC THU (DEC-06)
 
-### 4.1. Quy tắc Ngăn ngừa Xung đột Lợi ích (Conflict of Interest Prevention)
-- Khi Sales nhập thông tin thân chủ mới hoặc tạo Vụ việc mới, hệ thống tự động kiểm tra trên Đồ thị Neo4j:
-  - Nếu Tên thân chủ hoặc Mã số thuế trùng khớp với "Bên đối tụng / Bên bị khiếu nại" trong một vụ việc đang có hiệu lực (`ACTIVE`) của ASL Law -> Hệ thống phát cảnh báo đỏ tức thì cho Managing Partner: *"Cảnh báo Xung đột Lợi ích: Khách hàng này đang là bên đối nghịch trong Vụ việc XYZ"*.
+### 3.1. Kích hoạt
+- Mỗi lần Kế toán xác nhận một khoản tiền về (`misa_transactions`), với số tiền thực về $A$ của **lần đó** — kể cả thu một phần hoặc thu thừa.
+- Tính trong cùng transaction với việc ghi xác nhận; lỗi ở bất kỳ bước nào → rollback toàn bộ.
+- Tỷ lệ lấy từ `commission_policies` của vụ việc; chính sách **bị khoá** từ lần xác nhận đầu tiên.
 
-### 4.2. Xử lý Trôi Hạn chót (Statute of Limitations SLA Escalation)
-- Nếu một Task còn 24 giờ trước thời hạn (Due Date) mà vẫn ở trạng thái `TODO` hoặc `IN_PROGRESS`: Bắn cảnh báo cấp 1 tới Người thực hiện qua Telegram/Zalo.
-- Nếu Task quá hạn (Overdue) quá 4 giờ: Bắn cảnh báo cấp 2 (Escalation) trực tiếp tới `CASE_MANAGER` và `SUPERVISOR` để can thiệp kịp thời, tránh tổn thất pháp lý cho khách hàng.
+### 3.2. Công thức
+Với $R_o, R_m, R_e$ là tỷ lệ phát triển thị trường, quản lý, thực hiện; $s$ là phần của Supervisor trong quỹ quản lý:
+
+1. **Phát triển thị trường:** $C_o = A \times R_o\%$ → người mang khách về (`opportunities.originator_id`). Vụ việc không có người mang khách về → không phân bổ khoản này.
+2. **Quản lý:** $C_m = A \times R_m\%$; Supervisor nhận $C_m \times s\%$, Case Manager nhận phần còn lại. Không có Supervisor → Case Manager nhận toàn bộ.
+3. **Thực hiện:** quỹ $F = A \times R_e\% + D$, trong đó $D$ là tổng quỹ đang dồn chưa dùng (§3.3).
+   - **Task đủ điều kiện** = task `COMPLETED` của vụ việc **chưa từng được phân bổ** quỹ thực hiện.
+   - $C_{task_i} = F \times \dfrac{W_i}{\sum W}$, $W_i$ = `complexity_weight` (1 cơ bản · 2 trung bình · 3 phức tạp · 4 rất phức tạp); trả cho người được giao task lúc hoàn thành.
+
+### 3.3. Dồn quỹ thực hiện (đề xuất mặc định — câu hỏi mở Q2 trong `14`)
+- Không có task đủ điều kiện ($\sum W = 0$, VD đợt tạm ứng khi ký): toàn bộ $F$ ghi vào `commission_carry_forwards`, **không** chia cho ai, không chia cho 0.
+- Lần xác nhận kế tiếp có task đủ điều kiện dùng hết quỹ đang dồn.
+- Vụ việc `CLOSED`/`TERMINATED` mà còn quỹ dồn: phân bổ theo trọng số cho **mọi** task `COMPLETED` của vụ việc; không có task nào → quỹ không phân bổ, báo cáo cho Quản lý.
+
+### 3.4. Làm tròn — khớp từng đồng
+1. Tính mọi giá trị bằng `Decimal`, không làm tròn trung gian.
+2. Mỗi khoản quỹ ($C_o$, phần Supervisor, phần Case Manager, $F$) **làm tròn xuống** đến đồng.
+3. Chia $F$ cho các task: làm tròn xuống từng phần, phần dư $r = F - \sum \lfloor C_{task_i} \rfloor$ (đồng) chia mỗi task 1 đồng theo **phần lẻ lớn nhất**; hoà nhau thì ưu tiên task hoàn thành sớm hơn, rồi theo `id`.
+4. Bất biến: $\sum$ hoa hồng của một lần xác nhận $\le \lfloor A \times (R_o + R_m + R_e)\% \rfloor + D$, và $\sum C_{task_i} = F$ chính xác.
+
+**Ví dụ:** $A$ = 33.333.333đ, $R_e$ = 8% → $F$ = 2.666.666đ; 3 task trọng số bằng nhau → 888.888,67đ mỗi task → làm tròn xuống 888.888đ × 3 = 2.666.664đ, dư 2đ → task 1 và 2 nhận 888.889đ, task 3 nhận 888.888đ.
+
+### 3.5. Không đảo hoa hồng
+Hoàn tiền, huỷ hợp đồng, thu thừa được trả lại: **không** sinh bút toán đảo trong hệ thống (DEC-06). `commission_transactions` chỉ thêm mới; chỉ `payout_status` được đổi `ACCUMULATED → DISBURSED` khi chi lương.
+
+### 3.6. Hoa hồng lịch sử
+Dữ liệu chuyển từ hệ thống cũ nhập nguyên số đã ghi nhận, `source = 'LEGACY'`, không tính lại.
+
+---
+
+## 4. QUY TẮC TOÀN VẸN DỮ LIỆU & GÓC KHUẤT
+
+### 4.1. Xung đột lợi ích
+- Khi tạo khách hàng hoặc thêm bên liên quan vào vụ việc, đối chiếu `normalized_name` và MST/hash CCCD với các bên `OPPOSING` của vụ việc `INITIALIZING`/`ACTIVE`/`PAUSED` (Cypher ở `06` §3.5).
+- Trùng → **không chặn**, trả `warnings: [{code: "CONFLICT_OF_INTEREST", …}]`, thông báo cho Giám đốc và Trưởng phòng của phòng ban liên quan, ghi audit.
+
+### 4.2. Hạn chót & leo thang (SLA)
+- Hạn task tính theo **ngày làm việc** (thứ Hai–Sáu, trừ ngày trong bảng `holidays`, gồm Tết âm lịch).
+- Còn ≤ 24 giờ làm việc mà task ở `TODO`/`IN_PROGRESS`: cảnh báo cấp 1 tới người thực hiện.
+- Quá hạn > 4 giờ: cảnh báo cấp 2 tới `CASE_MANAGER` và `SUPERVISOR` của vụ việc.
+- Mỗi (task, cấp, kênh) gửi **tối đa một lần** (`notification_deliveries.dedupe_key`). Vụ việc `PAUSED` không cảnh báo.
+
+### 4.3. Tin nhắn ra dịch vụ ngoài (DEC-03)
+Telegram/Zalo/Email chỉ chứa: mã vụ việc, tên task, hạn chót, deep-link. Không chứa tên khách hàng, tên vụ việc, tên nhãn hiệu/tài sản, số tiền, nội dung tài liệu.
 
 ---
 
@@ -143,6 +214,7 @@ Cho một đợt thanh toán có số tiền thực thu là $A_{\text{actual}}$:
   - Avatar của nhân sự tự động biến mất khỏi hàng đợi và quay trở lại ngồi tại bàn làm việc cá nhân của mình.
 
 ### BR-FLOOR-04: Phân Quyền Giám Sát Need-to-Know Trực Quan
-- **Giám đốc điều hành (Managing Partner):** Có quyền chuyển đổi xem căn phòng làm việc của tất cả các phòng ban trong hãng luật.
-- **Trưởng ban (Supervisor / Leader):** Chỉ có quyền truy cập và điều hành căn phòng của phòng ban mình phụ trách theo quan hệ Neo4j `(:User)-[:LEADS]->(:Department)`. Bất kỳ truy cập chéo phòng ban nào sẽ bị chặn với mã `403 Forbidden`.
+- **Giám đốc** (`MANAGER` có `is_executive`): xem và điều hành căn phòng của mọi phòng ban.
+- **Trưởng phòng** (`MANAGER` có cạnh `(:User)-[:LEADS]->(:Department)`): chỉ phòng ban mình quản lý. Truy cập chéo phòng ban bị chặn với `403 NEED_TO_KNOW_DENIED`.
+- Vai trò khác không truy cập được màn hình này.
 

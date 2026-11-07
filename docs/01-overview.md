@@ -12,12 +12,12 @@
 1. **Phân mảnh thông tin & rủi ro bảo mật:** Hồ sơ vụ việc, hợp đồng, trao đổi với khách hàng nằm phân tán ở email cá nhân, Zalo và tài liệu giấy, gây khó khăn cho việc kiểm soát quyền truy cập và bảo vệ bí mật luật sư - thân chủ (Attorney-Client Privilege).
 2. **Quy trình chuyên môn phức tạp & thiếu chuẩn hóa:** Các phân ngành luật (Sở hữu trí tuệ, M&A, Tranh chấp đất đai, Tố tụng dân sự...) có biểu mẫu, giai đoạn và điều kiện pháp lý hoàn toàn khác nhau. Việc thiếu một Workflow Engine chuẩn mực khiến các luật sư dễ bỏ sót hạn chót (statute of limitations / deadlines) hoặc thiếu chữ ký duyệt từ cấp trên.
 3. **Điểm nghẽn liên phòng ban với Kế toán:** Phần mềm kế toán MISA của hãng luật hoạt động độc lập không có API mở, dẫn đến việc xác nhận tiền về và mở khóa các giai đoạn kỹ thuật (nộp đơn, tranh tụng) phụ thuộc hoàn toàn vào trao đổi miệng hoặc chat thủ công, dễ gây chậm trễ.
-4. **Tính hoa hồng phức tạp & thủ công:** Việc phân bổ tỷ lệ doanh thu theo nhiều vai trò (Sales mang vụ việc, Luật sư phụ trách/giám sát, Luật sư trực tiếp thực hiện từng task) trên từng đợt thanh toán thực tế tốn nhiều ngày công kế toán vào cuối mỗi kỳ và dễ xảy ra sai sót, tranh chấp quyền lợi.
+4. **Tính hoa hồng phức tạp & thủ công:** Việc phân bổ tỷ lệ doanh thu theo nhiều vai trò (người mang khách về, Luật sư phụ trách/giám sát, Luật sư trực tiếp thực hiện từng task) trên từng đợt thanh toán thực tế tốn nhiều ngày công kế toán vào cuối mỗi kỳ và dễ xảy ra sai sót, tranh chấp quyền lợi.
 
 ---
 
 ## 3. MỤC TIÊU CHIẾN LƯỢC (PROJECT OBJECTIVES)
-- **Chuẩn hóa quy trình pháp lý 100% (Strict Governance):** Mọi vụ việc vận hành đúng theo khung mẫu quy trình nghiệp vụ đã được chuẩn hóa, có kiểm soát cổng phê duyệt (Approval Gates) và ràng buộc phụ thuộc (Task Dependencies).
+- **Chuẩn hóa quy trình pháp lý có kiểm soát (Governed Workflow):** Mọi vụ việc chạy theo quy trình mẫu đã chuẩn hóa (chế độ Khung cứng hoặc Linh hoạt), có cổng phê duyệt (Approval Gates), ràng buộc phụ thuộc (Task Dependencies); mọi bổ sung ngoài mẫu đều phải được phê duyệt.
 - **Tự động hóa liên phòng ban (Human-in-the-Loop Integration):** Tự động phát sinh tác vụ thu tiền cho Kế toán trên ERP; Kế toán chỉ cần xác nhận 1 chạm sau khi kiểm tra MISA để giải phóng quy trình cho các Luật sư tiếp tục làm việc.
 - **Minh bạch tài chính & hoa hồng theo dòng tiền thực (Cash-basis):** Mỗi đồng tiền thực thu từ khách hàng được tự động tính toán và ghi nhận hoa hồng chính xác tức thời cho từng nhân sự tham gia.
 - **Kiểm soát bảo mật theo cấu trúc đồ thị (Graph RBAC & Need-to-know):** Chỉ nhân sự được gán vào vụ việc hoặc phụ trách phòng ban tương ứng mới được tiếp cận hồ sơ vụ việc; toàn bộ hành vi truy cập và chỉnh sửa được lưu vết Audit Log tuyệt đối không thể xóa sửa.
@@ -26,31 +26,50 @@
 ---
 
 ## 4. ĐỐI TƯỢNG SỬ DỤNG HỆ THỐNG (TARGET AUDIENCE & ACTORS)
-Hệ thống ERP ASL LAW trong giai đoạn này là **Internal Enterprise ERP**, phục vụ toàn bộ đội ngũ nhân sự nội bộ của hãng luật, được chuẩn bị sẵn kiến trúc phân tầng để mở rộng Cổng Khách Hàng (Client Portal) ở giai đoạn tiếp theo:
+Hệ thống ERP ASL LAW trong giai đoạn này là **Internal Enterprise ERP** cho đội ngũ nội bộ, chuẩn bị sẵn kiến trúc để mở Cổng Khách Hàng (Client Portal) ở Phase 2.
 
-| Vai trò (Role) | Ký hiệu | Mô tả trách nhiệm & Phạm vi sử dụng |
+### 4.1. Vai trò hệ thống (4 vai trò — DEC-01)
+
+| Vai trò | Mã | Ai dùng | Phạm vi |
+| :--- | :--- | :--- | :--- |
+| **Quản trị viên** | `ADMIN` | IT / quản trị hệ thống | Cấu hình hệ thống, workflow template, người dùng & phòng ban, nhật ký kiểm toán. Không đọc nội dung chuyên môn vụ việc nếu không được phân công. |
+| **Quản lý** | `MANAGER` | **Giám đốc** (`is_executive`, phạm vi mọi phòng ban) và **Trưởng phòng/Trưởng ban** (phạm vi phòng ban mình quản lý) | Điều hành vụ việc, phân công, phê duyệt cổng và yêu cầu bổ sung, cấu hình tỷ lệ hoa hồng, báo cáo, Văn phòng số. |
+| **Kế toán** | `ACCOUNTANT` | Kế toán nghiệp vụ | Đợt thu, xác nhận thu tiền sau khi đối soát MISA, sổ hoa hồng, báo cáo thu chi. Không xem tài liệu chuyên môn. |
+| **Luật sư** | `ATTORNEY` | Luật sư, chuyên viên, trợ lý pháp lý | Thực hiện vụ việc/task được giao, quản lý khách hàng & cơ hội (CRM), Trợ lý AI. |
+
+Giám đốc và Trưởng phòng **cùng vai trò `MANAGER`**; khác nhau ở phạm vi phòng ban (dữ liệu phân quyền), không phải vai trò riêng.
+
+### 4.2. Vai trò trong vụ việc
+
+Khi được phân công vào một vụ việc, người dùng có thêm vai trò **trong vụ việc đó**:
+
+| Vai trò trong vụ việc | Mã | Trách nhiệm |
 | :--- | :--- | :--- |
-| **Super Admin / Managing Partner** | `ADMIN` / `PARTNER` | Ban Giám đốc & Quản trị viên tối cao: Cấu hình hệ thống, tạo Workflow Templates, phê duyệt chiết khấu/hoa hồng đặc biệt, xem toàn bộ báo cáo doanh thu & giám sát toàn diện mọi vụ việc. |
-| **Luật sư Giám sát / Trưởng phòng** | `SUPERVISOR` | Trưởng ban chuyên môn (Dân sự, SHTT, Doanh nghiệp...): Giám sát toàn bộ vụ việc thuộc ban mình quản lý, phân công nhân sự, phê duyệt các văn bản pháp lý tại Cổng duyệt (Approval Gate). |
-| **Luật sư Quản lý Vụ việc** | `CASE_MANAGER` | Luật sư chủ trì chịu trách nhiệm chính về vụ việc cụ thể: Điều phối tiến độ, phân chia tác vụ (Task) cho thành viên, kiểm tra chất lượng hồ sơ trước khi trình duyệt. |
-| **Luật sư Thực hiện / Thành viên** | `EXECUTOR` | Luật sư trực tiếp soạn thảo văn bản, nộp đơn, tham gia tranh tụng; cập nhật tiến độ công việc trên Kanban/Jira hybrid board. |
-| **Trợ lý Pháp lý / Paralegal** | `ASSISTANT` | Hỗ trợ soạn thảo biểu mẫu, liên hệ thu thập giấy tờ từ khách hàng, theo dõi lịch hẹn và hạn chót. |
-| **Kế toán Nghiệp vụ** | `ACCOUNTANT` | Tiếp nhận tác vụ tài chính tự động phát sinh từ vụ việc, đối chiếu dòng tiền trên MISA, bấm xác nhận thu tiền/xuất hóa đơn trên ERP và kiểm tra bảng tính hoa hồng. |
-| **Chuyên viên Kinh doanh / Sales / BD** | `SALES` | Tiếp nhận Lead, quản lý cơ hội kinh doanh trên CRM, thương thảo báo giá, kích hoạt nút chuyển đổi Cơ hội thành Vụ việc chính thức. |
+| Luật sư Giám sát | `SUPERVISOR` | Giám sát chuyên môn, phê duyệt cổng giai đoạn |
+| Luật sư Quản lý vụ việc | `CASE_MANAGER` | Điều phối tiến độ, phân chia task, duyệt task, đề xuất đợt thu |
+| Luật sư Thực hiện | `EXECUTOR` | Soạn thảo, nộp đơn, tranh tụng; cập nhật task |
+| Trợ lý | `ASSISTANT` | Hỗ trợ biểu mẫu, thu thập giấy tờ, theo dõi hạn |
+
+**Người mang khách về** (`originator`) là người dùng bất kỳ được ghi trên cơ hội kinh doanh; hưởng hoa hồng phát triển thị trường và được xem tiến độ thu tiền của vụ việc đó. Không có vai trò Sales riêng.
 
 ---
 
 ## 5. PHẠM VI DỰ ÁN (SCOPE OF WORK)
 - **Trong phạm vi (In-Scope - Phase 1):**
-  - Quản lý CRM & Chuyển đổi Cơ hội thành Vụ việc (Module 1).
-  - Trình thiết kế quy trình động No-code/Low-code & Dynamic Form Fields (Module 2).
-  - Không gian làm việc vụ việc (Case Workspace) & Quản lý tác vụ Kanban/Jira hybrid (Module 3).
-  - Lộ trình thanh toán (Milestones) & Cơ chế tính hoa hồng tự động theo dòng tiền thực thu (Module 4).
-  - Quy trình phối hợp Kế toán MISA & Cảnh báo đa kênh Web/Telegram/Zalo (Module 5).
-  - Hệ thống phân quyền đồ thị Neo4j kết hợp RBAC & Audit Log bất biến (Module 6).
-  - Trợ lý ảo AI tra cứu Metadata & Cảnh báo deadline (Module 7).
-  - Triển khai On-Premise qua Docker Compose tại văn phòng ASL Law.
-- **Ngoài phạm vi (Out-of-Scope - Dành cho Phase 2):**
-  - Cổng Khách hàng (Client Portal) cho thân chủ tự đăng nhập tra cứu.
-  - Phân tích RAG đọc sâu tài liệu hợp đồng PDF/DOCX bằng Vector Database.
-  - Tích hợp 2 chiều tự động (Direct API) với MISA (do giới hạn từ phía phần mềm MISA).
+  - Quản lý CRM & Chuyển đổi Cơ hội thành Vụ việc (Phân hệ 1).
+  - Trình thiết kế quy trình động, hai chế độ Khung cứng / Linh hoạt có phê duyệt (Phân hệ 2).
+  - Không gian làm việc vụ việc & Quản lý tác vụ Kanban/Jira hybrid (Phân hệ 3).
+  - Lộ trình thanh toán & Hoa hồng theo dòng tiền thực thu (Phân hệ 4).
+  - Phối hợp Kế toán MISA & Cảnh báo đa kênh Web/Telegram/Zalo (Phân hệ 5).
+  - Phân quyền đồ thị Neo4j, Audit Log bất biến, đăng nhập nội bộ + 2FA (Phân hệ 6).
+  - Trợ lý ảo AI tra cứu Metadata & Cảnh báo deadline, có tối thiểu hoá dữ liệu gửi ra cloud (Phân hệ 7).
+  - Văn phòng số trực quan (Phân hệ 8).
+  - **Tài liệu vụ việc**: kho tài liệu, phiên bản, lưu mã hoá trên NAS (Phân hệ 9 — DEC-04).
+  - **Báo cáo & thống kê** (Phân hệ 10 — DEC-04).
+  - **Chuyển toàn bộ dữ liệu** từ hệ thống WordPress cũ (DEC-05).
+  - Triển khai On-Premise qua Docker Compose, sao lưu NAS + bản mã hoá off-site (DEC-08).
+- **Ngoài phạm vi (Out-of-Scope - Phase 2):**
+  - Cổng Khách hàng (Client Portal).
+  - Chấm công (Timesheet).
+  - Phân tích RAG đọc sâu tài liệu hợp đồng bằng Vector Database.
+  - Tích hợp 2 chiều tự động (Direct API) với MISA.

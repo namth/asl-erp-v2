@@ -14,8 +14,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../assets/layout.css?v=3.1">
-  <script src="../assets/layout.js?v=3.1" defer></script>
+  <link rel="stylesheet" href="../assets/layout.css?v=3.3">
+  <script src="../assets/layout.js?v=3.3" defer></script>
 </head>
 <body class="min-h-screen bg-[#F4F8FA] text-slate-800 flex">
 
@@ -33,7 +33,7 @@
         </button>
         <div>
           <div class="text-xs text-cyan-200/90 font-medium flex items-center gap-1.5">
-            <a href="index.html" class="hover:underline">Kế Toán & Hóa Đơn</a>
+            <a href="index.html?role=admin" class="hover:underline">Kế Toán & Hóa Đơn</a>
             <span>/</span>
             <span class="text-white font-semibold">Tạo Task Thu / Chi</span>
           </div>
@@ -42,7 +42,7 @@
       </div>
 
       <div class="flex items-center gap-3">
-        <a href="index.html" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition-colors">
+        <a href="index.html?role=admin" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition-colors">
           &larr; Về Bàn Kế Toán
         </a>
       </div>
@@ -164,7 +164,7 @@
         </div>
 
         <div class="flex items-center justify-between pt-2">
-          <a href="index.html" class="px-5 py-2.5 rounded-xl border border-slate-300 text-slate-600 font-bold text-xs hover:bg-slate-100">
+          <a href="index.html?role=admin" class="px-5 py-2.5 rounded-xl border border-slate-300 text-slate-600 font-bold text-xs hover:bg-slate-100">
             Hủy Bỏ
           </a>
           <button type="submit" id="btn-submit-task" class="px-6 py-2.5 rounded-xl bg-[#002D54] hover:bg-[#0082B4] text-white font-bold text-xs shadow-md transition-colors flex items-center gap-2">
@@ -224,7 +224,7 @@
       } else {
         alert(`<svg class="w-3.5 h-3.5 inline-block text-emerald-500 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> ĐÃ TẠO TASK CHI TIỀN & GỬI GIÁM ĐỐC PHÊ DUYỆT!\n\n• Nội dung: ${title}\n• Số tiền chi: ${amount} đ\n• Quy trình tiếp theo:\n  1. Giám đốc (LS. Nguyễn Anh) phê duyệt yêu cầu.\n  2. Chuyển sang Kế toán thực hiện chi tiền và bấm nút "Đã Chi".`);
       }
-      window.location.href = 'index.html';
+      window.location.href = withRole('index.html');
     }
   </script>
 

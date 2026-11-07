@@ -14,8 +14,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../assets/layout.css?v=3.1">
-  <script src="../assets/layout.js?v=3.1" defer></script>
+  <link rel="stylesheet" href="../assets/layout.css?v=3.3">
+  <script src="../assets/layout.js?v=3.3" defer></script>
 </head>
 <body class="min-h-screen bg-[#F4F8FA] text-slate-800 flex overflow-x-hidden w-full">
 
@@ -33,7 +33,7 @@
         </button>
         <div class="min-w-0">
           <div class="text-[11px] text-cyan-200/90 font-medium flex items-center gap-1.5 truncate">
-            <a href="../index.html" class="hover:underline">ASL LAW</a>
+            <a href="../index.html?role=admin" class="hover:underline">ASL LAW</a>
             <span>/</span>
             <span class="text-white font-semibold">Vụ Việc & Hồ Sơ</span>
           </div>
@@ -43,13 +43,13 @@
 
       <div class="flex items-center gap-2 sm:gap-3 flex-wrap sm:flex-nowrap">
         <!-- Create Case Button -->
-        <a href="create.html" class="px-3 sm:px-3.5 py-2 rounded-xl bg-[#FF7A00] hover:bg-[#E66E00] text-white font-bold text-xs shadow-md shadow-orange-950/20 flex items-center gap-1.5 transition-all whitespace-nowrap">
+        <a href="create.html?role=admin" class="px-3 sm:px-3.5 py-2 rounded-xl bg-[#FF7A00] hover:bg-[#E66E00] text-white font-bold text-xs shadow-md shadow-orange-950/20 flex items-center gap-1.5 transition-all whitespace-nowrap">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
           <span>Tạo Vụ Việc Mới</span>
         </a>
 
         <!-- AI Assistant Direct Link -->
-        <a href="../ai-assistant/index.html" class="px-3 py-2 rounded-xl bg-white/15 hover:bg-white/25 border border-white/20 text-white font-bold text-xs flex items-center gap-1.5 transition-all whitespace-nowrap">
+        <a href="../ai-assistant/index.html?role=admin" class="px-3 py-2 rounded-xl bg-white/15 hover:bg-white/25 border border-white/20 text-white font-bold text-xs flex items-center gap-1.5 transition-all whitespace-nowrap">
           <span class="w-2 h-2 rounded-full bg-cyan-300 animate-pulse"></span>
           <span class="hidden sm:inline">Trợ Lý AI</span>
         </a>
@@ -231,11 +231,11 @@
                     <button onclick="event.stopPropagation(); toggleRowDetail('detail-tm109', this)" class="btn-chevron p-1 rounded-lg hover:bg-slate-200 text-slate-400 hover:text-slate-800 transition-colors" title="Sổ quy trình & chi tiết vụ việc">
                       <svg class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
                     </button>
-                    <a href="detail.html" class="hover:underline font-extrabold text-[#002D54]">ASL-2026-TM109</a>
+                    <a href="detail.html?role=admin" class="hover:underline font-extrabold text-[#002D54]">ASL-2026-TM109</a>
                   </div>
                 </td>
                 <td class="py-4 px-4">
-                  <a href="detail.html" class="font-bold text-sm text-[#002D54] hover:text-[#0082B4] block leading-snug">Đăng ký Nhãn hiệu 9OUTFIT tại Việt Nam & Quốc tế</a>
+                  <a href="detail.html?role=admin" class="font-bold text-sm text-[#002D54] hover:text-[#0082B4] block leading-snug">Đăng ký Nhãn hiệu 9OUTFIT tại Việt Nam & Quốc tế</a>
                 </td>
                 <td class="py-4 px-4">
                   <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-blue-50 text-[#002D54] border border-blue-200/80">
@@ -277,7 +277,7 @@
                         <span class="w-2.5 h-4 rounded bg-[#0082B4]"></span>
                         <span class="text-xs font-bold text-[#002D54] uppercase tracking-wider">Thông Số & Quy Trình Vụ Việc • ASL-2026-TM109</span>
                       </div>
-                      <a href="detail.html" class="text-xs font-bold text-[#0082B4] hover:underline flex items-center gap-1">
+                      <a href="detail.html?role=admin" class="text-xs font-bold text-[#0082B4] hover:underline flex items-center gap-1">
                         <span>Mở Toàn Diện Workspace</span> &rarr;
                       </a>
                     </div>
@@ -404,8 +404,8 @@
                             </a>
                           </div>
                           <div class="pt-1 flex items-center gap-2">
-                            <a href="edit.html" class="px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-bold">Sửa vụ việc</a>
-                            <a href="detail.html" class="px-2.5 py-1 rounded bg-[#002D54] hover:bg-[#0082B4] text-white text-[10px] font-bold">Vào Workspace</a>
+                            <a href="edit.html?role=admin" class="px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-bold">Sửa vụ việc</a>
+                            <a href="detail.html?role=admin" class="px-2.5 py-1 rounded bg-[#002D54] hover:bg-[#0082B4] text-white text-[10px] font-bold">Vào Workspace</a>
                           </div>
                         </div>
                       </div>
@@ -423,11 +423,11 @@
                     <button onclick="event.stopPropagation(); toggleRowDetail('detail-pat04', this)" class="btn-chevron p-1 rounded-lg hover:bg-slate-200 text-slate-400 hover:text-slate-800 transition-colors" title="Sổ quy trình & chi tiết vụ việc">
                       <svg class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
                     </button>
-                    <a href="detail.html" class="hover:underline font-extrabold text-[#002D54]">ASL-2026-PAT04</a>
+                    <a href="detail.html?role=admin" class="hover:underline font-extrabold text-[#002D54]">ASL-2026-PAT04</a>
                   </div>
                 </td>
                 <td class="py-4 px-4">
-                  <a href="detail.html" class="font-bold text-sm text-[#002D54] hover:text-[#0082B4] block leading-snug">Hệ Thống Tối Ưu Hóa Năng Lượng Foxconn Smart Factory</a>
+                  <a href="detail.html?role=admin" class="font-bold text-sm text-[#002D54] hover:text-[#0082B4] block leading-snug">Hệ Thống Tối Ưu Hóa Năng Lượng Foxconn Smart Factory</a>
                 </td>
                 <td class="py-4 px-4">
                   <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-purple-50 text-purple-900 border border-purple-200/80">
@@ -469,7 +469,7 @@
                         <span class="w-2.5 h-4 rounded bg-purple-600"></span>
                         <span class="text-xs font-bold text-[#002D54] uppercase tracking-wider">Thông Số & Quy Trình Vụ Việc • ASL-2026-PAT04</span>
                       </div>
-                      <a href="detail.html" class="text-xs font-bold text-[#0082B4] hover:underline flex items-center gap-1">
+                      <a href="detail.html?role=admin" class="text-xs font-bold text-[#0082B4] hover:underline flex items-center gap-1">
                         <span>Mở Toàn Diện Workspace</span> &rarr;
                       </a>
                     </div>
@@ -590,8 +590,8 @@
                             <span class="font-mono text-[10px] text-blue-700"><span class="inline-flex items-center gap-1"><svg class="w-3 h-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/></svg><span>Ban_mo_ta_ky_thuat_v3.docx</span></span></span>
                           </div>
                           <div class="pt-1 flex items-center gap-2">
-                            <a href="edit.html" class="px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-bold">Sửa vụ việc</a>
-                            <a href="detail.html" class="px-2.5 py-1 rounded bg-[#002D54] hover:bg-[#0082B4] text-white text-[10px] font-bold">Vào Workspace</a>
+                            <a href="edit.html?role=admin" class="px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-bold">Sửa vụ việc</a>
+                            <a href="detail.html?role=admin" class="px-2.5 py-1 rounded bg-[#002D54] hover:bg-[#0082B4] text-white text-[10px] font-bold">Vào Workspace</a>
                           </div>
                         </div>
                       </div>
@@ -609,11 +609,11 @@
                     <button onclick="event.stopPropagation(); toggleRowDetail('detail-des02', this)" class="btn-chevron p-1 rounded-lg hover:bg-slate-200 text-slate-400 hover:text-slate-800 transition-colors" title="Sổ quy trình & chi tiết vụ việc">
                       <svg class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
                     </button>
-                    <a href="detail.html" class="hover:underline font-extrabold text-[#002D54]">ASL-2026-DES02</a>
+                    <a href="detail.html?role=admin" class="hover:underline font-extrabold text-[#002D54]">ASL-2026-DES02</a>
                   </div>
                 </td>
                 <td class="py-4 px-4">
-                  <a href="detail.html" class="font-bold text-sm text-[#002D54] hover:text-[#0082B4] block leading-snug">Kiểu Dáng Công Nghiệp Mũ Bảo Hiểm Khí Động Học An Gia</a>
+                  <a href="detail.html?role=admin" class="font-bold text-sm text-[#002D54] hover:text-[#0082B4] block leading-snug">Kiểu Dáng Công Nghiệp Mũ Bảo Hiểm Khí Động Học An Gia</a>
                 </td>
                 <td class="py-4 px-4">
                   <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-cyan-50 text-cyan-900 border border-cyan-200/80">
@@ -655,7 +655,7 @@
                         <span class="w-2.5 h-4 rounded bg-cyan-600"></span>
                         <span class="text-xs font-bold text-[#002D54] uppercase tracking-wider">Thông Số & Quy Trình Vụ Việc • ASL-2026-DES02</span>
                       </div>
-                      <a href="detail.html" class="text-xs font-bold text-[#0082B4] hover:underline flex items-center gap-1">
+                      <a href="detail.html?role=admin" class="text-xs font-bold text-[#0082B4] hover:underline flex items-center gap-1">
                         <span>Mở Toàn Diện Workspace</span> &rarr;
                       </a>
                     </div>
@@ -777,8 +777,8 @@
                             </a>
                           </div>
                           <div class="pt-1 flex items-center gap-2">
-                            <a href="edit.html" class="px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-bold">Sửa vụ việc</a>
-                            <a href="detail.html" class="px-2.5 py-1 rounded bg-[#002D54] hover:bg-[#0082B4] text-white text-[10px] font-bold">Vào Workspace</a>
+                            <a href="edit.html?role=admin" class="px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-bold">Sửa vụ việc</a>
+                            <a href="detail.html?role=admin" class="px-2.5 py-1 rounded bg-[#002D54] hover:bg-[#0082B4] text-white text-[10px] font-bold">Vào Workspace</a>
                           </div>
                         </div>
                       </div>
@@ -796,11 +796,11 @@
                     <button onclick="event.stopPropagation(); toggleRowDetail('detail-lit03', this)" class="btn-chevron p-1 rounded-lg hover:bg-slate-200 text-slate-400 hover:text-slate-800 transition-colors" title="Sổ quy trình & chi tiết vụ việc">
                       <svg class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
                     </button>
-                    <a href="detail.html" class="hover:underline font-extrabold text-red-700">ASL-2026-LIT03</a>
+                    <a href="detail.html?role=admin" class="hover:underline font-extrabold text-red-700">ASL-2026-LIT03</a>
                   </div>
                 </td>
                 <td class="py-4 px-4">
-                  <a href="detail.html" class="font-bold text-sm text-[#002D54] hover:text-[#0082B4] block leading-snug">Tranh Chấp Cổ Đông Sáng Lập Bất Động Sản Phúc Khang</a>
+                  <a href="detail.html?role=admin" class="font-bold text-sm text-[#002D54] hover:text-[#0082B4] block leading-snug">Tranh Chấp Cổ Đông Sáng Lập Bất Động Sản Phúc Khang</a>
                 </td>
                 <td class="py-4 px-4">
                   <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-rose-50 text-rose-900 border border-rose-200/80">
@@ -842,7 +842,7 @@
                         <span class="w-2.5 h-4 rounded bg-red-600"></span>
                         <span class="text-xs font-bold text-[#002D54] uppercase tracking-wider">Thông Số & Quy Trình Vụ Việc • ASL-2026-LIT03</span>
                       </div>
-                      <a href="detail.html" class="text-xs font-bold text-[#0082B4] hover:underline flex items-center gap-1">
+                      <a href="detail.html?role=admin" class="text-xs font-bold text-[#0082B4] hover:underline flex items-center gap-1">
                         <span>Mở Toàn Diện Workspace</span> &rarr;
                       </a>
                     </div>
@@ -962,8 +962,8 @@
                             <span class="text-amber-800 font-bold text-[10px]">Đã phong tỏa tài khoản ngân hàng</span>
                           </div>
                           <div class="pt-1 flex items-center gap-2">
-                            <a href="edit.html" class="px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-bold">Sửa vụ việc</a>
-                            <a href="detail.html" class="px-2.5 py-1 rounded bg-[#002D54] hover:bg-[#0082B4] text-white text-[10px] font-bold">Vào Workspace</a>
+                            <a href="edit.html?role=admin" class="px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-bold">Sửa vụ việc</a>
+                            <a href="detail.html?role=admin" class="px-2.5 py-1 rounded bg-[#002D54] hover:bg-[#0082B4] text-white text-[10px] font-bold">Vào Workspace</a>
                           </div>
                         </div>
                       </div>
@@ -981,11 +981,11 @@
                     <button onclick="event.stopPropagation(); toggleRowDetail('detail-mna01', this)" class="btn-chevron p-1 rounded-lg hover:bg-slate-200 text-slate-400 hover:text-slate-800 transition-colors" title="Sổ quy trình & chi tiết vụ việc">
                       <svg class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
                     </button>
-                    <a href="detail.html" class="hover:underline font-extrabold text-emerald-700">ASL-2026-MNA01</a>
+                    <a href="detail.html?role=admin" class="hover:underline font-extrabold text-emerald-700">ASL-2026-MNA01</a>
                   </div>
                 </td>
                 <td class="py-4 px-4">
-                  <a href="detail.html" class="font-bold text-sm text-[#002D54] hover:text-[#0082B4] block leading-snug">Tư Vấn M&A Thâu Tóm & Tái Cấu Trúc HAGL Agrico</a>
+                  <a href="detail.html?role=admin" class="font-bold text-sm text-[#002D54] hover:text-[#0082B4] block leading-snug">Tư Vấn M&A Thâu Tóm & Tái Cấu Trúc HAGL Agrico</a>
                 </td>
                 <td class="py-4 px-4">
                   <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-emerald-50 text-emerald-900 border border-emerald-200/80">
@@ -1027,7 +1027,7 @@
                         <span class="w-2.5 h-4 rounded bg-emerald-600"></span>
                         <span class="text-xs font-bold text-[#002D54] uppercase tracking-wider">Thông Số & Quy Trình Vụ Việc • ASL-2026-MNA01</span>
                       </div>
-                      <a href="detail.html" class="text-xs font-bold text-[#0082B4] hover:underline flex items-center gap-1">
+                      <a href="detail.html?role=admin" class="text-xs font-bold text-[#0082B4] hover:underline flex items-center gap-1">
                         <span>Mở Toàn Diện Workspace</span> &rarr;
                       </a>
                     </div>
@@ -1149,8 +1149,8 @@
                             </a>
                           </div>
                           <div class="pt-1 flex items-center gap-2">
-                            <a href="edit.html" class="px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-bold">Sửa vụ việc</a>
-                            <a href="detail.html" class="px-2.5 py-1 rounded bg-[#002D54] hover:bg-[#0082B4] text-white text-[10px] font-bold">Vào Workspace</a>
+                            <a href="edit.html?role=admin" class="px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-bold">Sửa vụ việc</a>
+                            <a href="detail.html?role=admin" class="px-2.5 py-1 rounded bg-[#002D54] hover:bg-[#0082B4] text-white text-[10px] font-bold">Vào Workspace</a>
                           </div>
                         </div>
                       </div>

@@ -4,7 +4,7 @@
   <script>(function(){if(localStorage.getItem('asl_theme')==='dark'){document.documentElement.classList.add('dark');}else{document.documentElement.classList.remove('dark');}})();</script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ASL LAW - Văn Phòng Số Trực Quan 2.5D (Virtual Office Floorplan SCR-15)</title>
+  <title>ASL LAW - Văn Phòng Số Trực Quan 2.5D (Virtual Office Floorplan)</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -14,8 +14,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../assets/layout.css?v=3.2">
-  <script src="../assets/layout.js?v=3.2" defer></script>
+  <link rel="stylesheet" href="../assets/layout.css?v=3.3">
+  <script src="../assets/layout.js?v=3.3" defer></script>
   <style>
     /* 2.5D Isometric Floor Grid */
     .floor-grid-canvas {
@@ -110,7 +110,7 @@
           <div class="text-xs text-cyan-200/90 font-medium flex items-center gap-1.5">
             <span>Giám Sát &amp; Điều Hành</span>
             <span>/</span>
-            <span class="text-white font-semibold">SCR-15: Văn Phòng Số Trực Quan</span>
+            <span class="text-white font-semibold">Văn Phòng Số Trực Quan</span>
           </div>
           <h1 class="text-lg font-bold text-white tracking-tight flex items-center gap-2">
             <span>Trung Tâm Chỉ Huy Phòng Ban (Virtual War Room 2.5D)</span>
@@ -152,7 +152,7 @@
         </div>
 
         <!-- Quick AI Assistance -->
-        <a href="../ai-assistant/index.html" class="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-cyan-200 transition-colors border border-white/15" title="Hỏi Trợ lý AI về Tải trọng phòng ban">
+        <a href="../ai-assistant/index.html?role=admin" class="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-cyan-200 transition-colors border border-white/15" title="Hỏi Trợ lý AI về Tải trọng phòng ban">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
         </a>
       </div>
@@ -254,7 +254,7 @@
         <p class="text-xs text-slate-500 dark:text-slate-400 max-w-md mx-auto">
           Hiện tại phòng ban được chọn chưa được gán nhân sự hoặc đang trong kỳ nghỉ lễ. Bạn có thể thêm nhân sự từ màn hình Quản lý người dùng.
         </p>
-        <a href="../users/index.html" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#002D54] hover:bg-[#0082B4] text-white font-bold text-xs shadow-md">
+        <a href="../users/index.html?role=admin" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#002D54] hover:bg-[#0082B4] text-white font-bold text-xs shadow-md">
           <span>+ Phân công Nhân sự vào Phòng</span>
         </a>
       </section>
@@ -370,7 +370,7 @@
           <span>Nhắn Tin / Nhắc Nhở</span>
         </button>
       </div>
-      <a href="../users/detail.html" class="w-full py-2 rounded-xl border border-slate-300 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-xs text-center block transition-colors">
+      <a href="../users/detail.html?role=admin" class="w-full py-2 rounded-xl border border-slate-300 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-xs text-center block transition-colors">
         Xem Hồ Sơ 360° &amp; KPIs Cá Nhân &rarr;
       </a>
     </div>

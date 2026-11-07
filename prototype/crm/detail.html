@@ -14,8 +14,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../assets/layout.css?v=3.2">
-  <script src="../assets/layout.js?v=3.2" defer></script>
+  <link rel="stylesheet" href="../assets/layout.css?v=3.3">
+  <script src="../assets/layout.js?v=3.3" defer></script>
 </head>
 <body class="min-h-screen bg-[#F4F8FA] dark:bg-slate-950 text-slate-800 dark:text-slate-100 flex selection:bg-[#0082B4] selection:text-white">
 
@@ -33,7 +33,7 @@
         </button>
         <div>
           <div class="text-xs text-cyan-200/90 font-medium flex items-center gap-1.5">
-            <a href="index.html" class="hover:underline">CRM &amp; Khách Hàng</a>
+            <a href="index.html?role=admin" class="hover:underline">CRM &amp; Khách Hàng</a>
             <span>/</span>
             <span class="text-white font-semibold">Hồ Sơ 360°</span>
           </div>
@@ -42,12 +42,12 @@
       </div>
 
       <div class="flex items-center gap-3">
-        <a href="../cases/create.html" class="px-3.5 py-2 rounded-xl bg-[#FF7A00] hover:bg-[#E66E00] text-white font-bold text-xs shadow-md shadow-orange-950/20 flex items-center gap-1.5 transition-all">
+        <a href="../cases/create.html?role=admin" class="px-3.5 py-2 rounded-xl bg-[#FF7A00] hover:bg-[#E66E00] text-white font-bold text-xs shadow-md shadow-orange-950/20 flex items-center gap-1.5 transition-all">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
           <span>Mở Vụ Việc Cho Khách</span>
         </a>
 
-        <a href="edit.html" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs flex items-center gap-1.5 transition-colors border border-white/15">
+        <a href="edit.html?role=admin" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs flex items-center gap-1.5 transition-colors border border-white/15">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
           <span>Sửa Thông Tin</span>
         </a>
@@ -101,12 +101,12 @@
             <div>
               <div class="flex items-center gap-2">
                 <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-blue-100 dark:bg-sky-950 text-blue-800 dark:text-sky-300">Đang Thụ Lý</span>
-                <a href="../cases/detail.html" class="font-mono font-bold text-xs text-[#002D54] dark:text-cyan-300 hover:underline">CASE-2026-089</a>
+                <a href="../cases/detail.html?role=admin" class="font-mono font-bold text-xs text-[#002D54] dark:text-cyan-300 hover:underline">CASE-2026-089</a>
               </div>
               <h4 class="font-bold text-sm text-[#002D54] dark:text-white mt-1">Tranh chấp bảo hộ nhãn hiệu ASL và đối thủ</h4>
               <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Stage 2: Thẩm định nội dung • CM: LS. Mai Linh • Đợt 2: 54M đang đối soát</p>
             </div>
-            <a href="../cases/detail.html" class="px-4 py-2 rounded-xl bg-[#002D54] hover:bg-[#0082B4] text-white font-bold text-xs whitespace-nowrap">
+            <a href="../cases/detail.html?role=admin" class="px-4 py-2 rounded-xl bg-[#002D54] hover:bg-[#0082B4] text-white font-bold text-xs whitespace-nowrap">
               Mở Case Workspace &rarr;
             </a>
           </div>
@@ -161,7 +161,7 @@
                 <div class="font-bold text-amber-900 dark:text-amber-300">Đề Nghị Thu Phí: BILL-2026-044</div>
                 <div class="text-slate-500 dark:text-slate-400">Đợt 2: 54,000,000 đ • UNC Vietcombank đang đối soát</div>
               </div>
-              <a href="../accounting/detail.html" class="px-2.5 py-1 rounded-lg bg-[#002D54] hover:bg-[#0082B4] text-white text-[10px] font-bold transition-colors">
+              <a href="../accounting/detail.html?role=admin" class="px-2.5 py-1 rounded-lg bg-[#002D54] hover:bg-[#0082B4] text-white text-[10px] font-bold transition-colors">
                 Đối Soát
               </a>
             </div>

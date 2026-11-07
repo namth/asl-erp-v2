@@ -5,21 +5,22 @@
 ```mermaid
 sequenceDiagram
     autonumber
-    actor Sales as Chuyên viên Sales
+    actor Sales as Luật sư / Người mang khách về
     actor Client as Khách hàng
     participant CRM as Phân hệ CRM
     participant CaseMod as Phân hệ Vụ việc (Module 3)
-    actor Partner as Managing Partner / Supervisor
+    actor Partner as Quản lý (Giám đốc / Trưởng phòng)
 
     Sales->>CRM: Nhập thông tin Khách hàng & Cơ hội (SCR-03, SCR-05)
+    CRM-->>Sales: Cảnh báo nếu trùng bên đối tụng của vụ việc đang hiệu lực (xung đột lợi ích)
     Sales->>Client: Tư vấn, gửi đề xuất dịch vụ & báo giá
     Client-->>Sales: Ký hợp đồng dịch vụ pháp lý & chuyển tiền tạm ứng
     Sales->>CRM: Chuyển trạng thái Cơ hội sang "Đã ký hợp đồng" (Won)
     Sales->>CRM: Bấm nút "Chuyển đổi thành Vụ việc chính thức"
-    CRM->>CaseMod: Tự động khởi tạo Case mới kèm tổng giá trị hợp đồng
+    CRM->>CaseMod: Tạo Case INITIALIZING: mã ASL-YYYY-XX-NNNN, phiên bản template, lộ trình đợt thu, tỷ lệ hoa hồng mặc định
     CaseMod->>Partner: Bắn thông báo có Vụ việc mới cần phân công nhân sự
     Partner->>CaseMod: Gán Supervisor, Case Manager, Executor, Assistant (SCR-07)
-    CaseMod-->>Partner: Khởi tạo xong Workspace vụ việc với đầy đủ vai trò
+    CaseMod-->>Partner: Đủ 1 Case Manager + ≥1 Executor → vụ việc ACTIVE, đợt tạm ứng chuyển sang chờ thu
 ```
 
 ---
@@ -29,8 +30,8 @@ sequenceDiagram
 ```mermaid
 flowchart TD
     StartCase([Khởi tạo Vụ việc mới]) --> SelectType[Chọn Phân ngành Pháp lý - Matter Type]
-    SelectType --> FetchTemplate[(Lấy Workflow Template tương ứng)]
-    FetchTemplate --> ApplyStrict[Áp dụng Nguyên tắc Khung cứng - Strict Governance]
+    SelectType --> FetchTemplate[(Lấy phiên bản Workflow Template đang phát hành)]
+    FetchTemplate --> ApplyStrict[Ghi chế độ quy trình: Khung cứng STRICT / Linh hoạt FLEXIBLE]
     
     ApplyStrict --> InitStages[Tạo danh sách các Giai đoạn - Stages tuần tự]
     InitStages --> InitTasks[Tạo danh sách Tác vụ con - Tasks mặc định]
@@ -46,7 +47,7 @@ flowchart TD
 
 1. **Truy cập:** Luật sư phụ trách (`EXECUTOR`) truy cập vào **SCR-09 (Bảng tác vụ Kanban)** của vụ việc.
 2. **Kiểm tra Ràng buộc Tiên quyết (Pre-condition Guard):**
-   - Nếu Luật sư muốn kéo Task B từ `Chưa bắt đầu` sang `Đang làm`, hệ thống tự động kiểm tra bảng `TaskDependencies`.
+   - Nếu Luật sư muốn kéo Task B từ `Chưa bắt đầu` sang `Đang làm`, hệ thống kiểm tra `case_task_dependencies` và trạng thái stage (stage chờ duyệt/chờ thu tiền thì bị khoá).
    - Nếu Task A tiên quyết chưa đạt trạng thái `Đã hoàn thành`, hệ thống từ chối hành động và hiển thị cảnh báo: *"Không thể bắt đầu Task B. Bạn phải hoàn tất và được nghiệm thu Task A trước!"*.
 3. **Thực hiện & Đính kèm Văn bản:**
    - Luật sư thực hiện công việc, tải tài liệu dự thảo (.docx, .pdf) lên mục Tệp đính kèm.
@@ -55,7 +56,8 @@ flowchart TD
    - `CASE_MANAGER` hoặc `SUPERVISOR` nhận thông báo chuông.
    - Truy cập **SCR-10 (Modal Phê duyệt)** để đọc tài liệu:
      - Nếu *Chấp thuận*: Task chuyển thành `Đã hoàn thành`, giải phóng các Task phụ thuộc tiếp theo.
-     - Nếu *Từ chối / Yêu cầu sửa*: Nhập phản hồi lý do, Task quay về trạng thái `Đang làm`.
+     - Nếu *Từ chối / Yêu cầu sửa*: Nhập phản hồi lý do (bắt buộc), Task quay về trạng thái `Đang làm`.
+     - Người duyệt không được là người gửi duyệt.
 
 ---
 
@@ -80,9 +82,14 @@ sequenceDiagram
     Note over Accountant,MISA: Khách hàng đã chuyển khoản thành công & đã xuất hóa đơn trên MISA
     
     Accountant->>CaseEngine: Truy cập SCR-11, bấm "Xác nhận đã thu tiền/Đã xuất HĐ"
-    Accountant->>CaseEngine: Nhập Mã GD Ngân hàng & Số Hóa đơn MISA
-    CaseEngine->>CaseEngine: Mở khóa (UNBLOCK) cho Luật sư tiếp tục quy trình
-    CaseEngine->>Notify: Bắn thông báo cho Luật sư "Tiền đã về, tiếp tục nộp đơn!"
+    Accountant->>CaseEngine: Nhập Mã GD Ngân hàng, Số Hóa đơn MISA, số tiền thực về
+    CaseEngine->>CaseEngine: Tính hoa hồng trên số tiền lần này
+    alt Tổng thực thu < số phải thu
+        CaseEngine->>CaseEngine: Đợt thu PARTIALLY_PAID, giai đoạn vẫn khoá
+    else Đã thu đủ
+        CaseEngine->>CaseEngine: Đợt thu PAID_CONFIRMED, mở khóa (UNBLOCK) giai đoạn tiếp theo
+    end
+    CaseEngine->>Notify: Thông báo Luật sư (chỉ mã vụ việc + link): giai đoạn đã mở khoá
 ```
 
 ---
@@ -91,14 +98,14 @@ sequenceDiagram
 
 ```mermaid
 flowchart TD
-    AcctConfirm[Kế toán xác nhận Milestone đã thu X triệu VNĐ] --> TriggerEngine[Kích hoạt Động cơ Tính Hoa hồng]
+    AcctConfirm[Kế toán xác nhận một khoản thực về X VNĐ - có thể là thu một phần] --> TriggerEngine[Kích hoạt Động cơ Tính Hoa hồng]
     
     TriggerEngine --> FetchSchema[(Đọc Commission Schema của Vụ việc)]
-    FetchSchema --> CalcSales["Tính hoa hồng Sales: (X triệu * % Sales)"]
+    FetchSchema --> CalcSales["Hoa hồng phát triển thị trường: X * R_o% → người mang khách về"]
     FetchSchema --> CalcSuper["Tính hoa hồng Quản lý: (X triệu * % Supervisor/Manager)"]
-    FetchSchema --> CalcExec["Tính hoa hồng Thực hiện: (X triệu * % Phân bổ cho các Task hoàn tất trong đợt)"]
+    FetchSchema --> CalcExec["Quỹ thực hiện: X * R_e% + quỹ đang dồn → chia theo trọng số task COMPLETED chưa phân bổ; không có task thì dồn sang lần sau"]
     
-    CalcSales --> GenTx1[Tạo Giao dịch Hoa hồng: Sales Person]
+    CalcSales --> GenTx1[Tạo Giao dịch Hoa hồng: Người mang khách về]
     CalcSuper --> GenTx2[Tạo Giao dịch Hoa hồng: Manager / Supervisor]
     CalcExec --> GenTx3[Tạo Giao dịch Hoa hồng: Các Luật sư thực hiện task]
     
@@ -111,12 +118,48 @@ flowchart TD
 ## 6. LUỒNG 6: CẢNH BÁO ĐA KÊNH & TRỢ LÝ ẢO AI (ALERTS & AI ASSISTANT)
 
 1. **Quét định kỳ (Background Scanner):**
-   - Celery Worker chạy ngầm mỗi 30 phút, quét bảng `CaseTasks` và `Cases`.
-   - Tìm kiếm các Task có `due_date - now() <= 24 hours` hoặc đã quá hạn mà chưa `COMPLETED`.
+   - Celery Beat kích hoạt worker mỗi 30 phút, quét `case_tasks` của vụ việc `ACTIVE`.
+   - Tìm Task còn ≤ 24 giờ làm việc tới `due_at` hoặc đã quá hạn mà chưa `COMPLETED` (quy tắc leo thang ở `12` §4.2).
 2. **Đẩy cảnh báo 1 chiều kèm Deep-link:**
    - Hệ thống tạo bản ghi thông báo nội bộ và đẩy qua WebSockets tới chuông trên Web App.
    - Gửi tin nhắn tự động qua **Telegram Bot** và **Zalo OA**:
-     - *Nội dung:* `"[CẢNH BÁO HẠN CHÓT] Task 'Nộp bản giải trình SHTT' cho vụ việc ASL-2026-09 sẽ hết hạn trong 4 giờ nữa. Bấm vào liên kết sau để xử lý: https://erp.asllaw.vn/cases/102/tasks/504"`
+     - *Nội dung (tối thiểu hoá — DEC-03):* `"[HẠN CHÓT] ASL-2026-TM-0045 · Nộp bản giải trình · hạn 17:00 28/10 (còn 4 giờ). Xử lý: https://erp.asllaw.vn/cases/8f3a…/tasks/t402"` — không có tên khách hàng hay tên vụ việc.
 3. **Tương tác qua Trợ lý AI (SCR-14):**
    - Luật sư mở khung AI Chat Drawer, gõ câu hỏi: *"Hôm nay tôi có những task nào cần hoàn thành trước 17h?"*.
-   - Trợ lý AI thực thi Tool Calling `get_user_tasks(user_id, deadline_before="2026-10-27T17:00:00")`, định dạng câu trả lời ngắn gọn kèm link điều hướng trực tiếp tới từng task.
+   - Trợ lý AI thực thi Tool Calling `get_urgent_tasks(days_ahead=0)` trong phạm vi quyền của người hỏi; dữ liệu định danh khách hàng được thay bằng mã giả trước khi gửi lên LLM; câu trả lời kèm link điều hướng tới từng task.
+
+---
+
+## 7. LUỒNG 7: BỔ SUNG TASK NGOÀI QUY TRÌNH MẪU (WORKFLOW CHANGE REQUEST — DEC-07)
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Lawyer as Luật sư được gán
+    participant Engine as Động cơ Quy trình
+    actor Manager as Quản lý phụ trách
+    Lawyer->>Engine: Đề xuất bổ sung task/stage + lý do (VD: Tòa yêu cầu bổ sung bản dịch)
+    alt Template STRICT
+        Engine-->>Lawyer: Từ chối 403 STRICT_GOVERNANCE_VIOLATION
+    else Template FLEXIBLE
+        Engine->>Manager: Tạo yêu cầu duyệt, thông báo
+        alt Chấp thuận
+            Manager->>Engine: APPROVE
+            Engine->>Engine: Tạo task/stage is_ad_hoc, ghi audit
+            Engine-->>Lawyer: Task mới xuất hiện trên Kanban với nhãn "Bổ sung"
+        else Từ chối
+            Manager->>Engine: REJECT + lý do
+            Engine-->>Lawyer: Thông báo lý do từ chối
+        end
+    end
+```
+
+---
+
+## 8. LUỒNG 8: ĐĂNG NHẬP & XÁC THỰC 2 LỚP (DEC-02)
+
+1. Nhập email + mật khẩu nội bộ.
+2. Tài khoản chuyển từ hệ thống cũ (`must_reset_password`) → bắt buộc đặt mật khẩu mới trước khi vào hệ thống.
+3. Vai trò Quản trị viên / Quản lý / Kế toán chưa bật 2FA → bắt buộc quét mã QR bằng ứng dụng xác thực, nhập mã 6 số để kích hoạt, lưu 10 mã khôi phục.
+4. Tài khoản đã bật 2FA → nhập mã 6 số (hoặc mã khôi phục).
+5. Sai mật khẩu/mã quá 5 lần trong 15 phút → khoá 30 phút, thông báo Quản trị viên.

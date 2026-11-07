@@ -14,8 +14,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../assets/layout.css?v=3.1">
-  <script src="../assets/layout.js?v=3.1" defer></script>
+  <link rel="stylesheet" href="../assets/layout.css?v=3.3">
+  <script src="../assets/layout.js?v=3.3" defer></script>
 </head>
 <body class="min-h-screen bg-[#F4F8FA] text-slate-800 flex">
 
@@ -33,7 +33,7 @@
         </button>
         <div>
           <div class="text-xs text-cyan-200/90 font-medium flex items-center gap-1.5">
-            <a href="../index.html" class="hover:underline">ASL LAW</a>
+            <a href="../index.html?role=admin" class="hover:underline">ASL LAW</a>
             <span>/</span>
             <span class="text-white font-semibold">Kế Toán & Đối Soát Thu Chi</span>
           </div>
@@ -43,12 +43,12 @@
 
       <div class="flex items-center gap-3">
         <!-- Create Financial Task Button -->
-        <a href="create-invoice.html" class="px-3.5 py-2 rounded-xl bg-[#FF7A00] hover:bg-[#E66E00] text-white font-bold text-xs shadow-md shadow-orange-950/20 flex items-center gap-1.5 transition-all">
+        <a href="create-invoice.html?role=admin" class="px-3.5 py-2 rounded-xl bg-[#FF7A00] hover:bg-[#E66E00] text-white font-bold text-xs shadow-md shadow-orange-950/20 flex items-center gap-1.5 transition-all">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
           <span>Tạo Task Thu / Chi Mới</span>
         </a>
 
-        <a href="../finance/index.html" class="px-3.5 py-2 rounded-xl bg-white/15 hover:bg-white/25 border border-white/20 text-white font-bold text-xs flex items-center gap-1.5 transition-all">
+        <a href="../finance/index.html?role=admin" class="px-3.5 py-2 rounded-xl bg-white/15 hover:bg-white/25 border border-white/20 text-white font-bold text-xs flex items-center gap-1.5 transition-all">
           <svg class="w-4 h-4 text-cyan-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
           <span>Bảng Hoa Hồng Thực Thu</span>
         </a>
@@ -191,8 +191,9 @@
             <button onclick="filterAccountingTab('WAIT_DIRECTOR', this)" class="acc-tab px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-colors">
               Đang Chờ Giám Đốc Duyệt (2)
             </button>
-            <button onclick="filterAccountingTab('COMPLETED', this)" class="acc-tab px-4 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold text-xs transition-colors">
-              ✓ Đã Hoàn Tất (3)
+            <button onclick="filterAccountingTab('COMPLETED', this)" class="acc-tab px-4 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold text-xs transition-colors flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              <span>Đã Hoàn Tất (3)</span>
             </button>
           </div>
 
@@ -234,7 +235,7 @@
                     <button onclick="event.stopPropagation(); toggleAccDetail('acc-detail-1', this)" class="btn-chevron p-1 rounded-lg hover:bg-slate-200 text-slate-400 hover:text-slate-800 transition-colors" title="Sổ chi tiết đối soát">
                       <svg class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
                     </button>
-                    <a href="detail.html" class="hover:underline font-extrabold text-[#002D54]">TASK-THU-109</a>
+                    <a href="detail.html?role=admin" class="hover:underline font-extrabold text-[#002D54]">TASK-THU-109</a>
                   </div>
                 </td>
                 <td class="py-4 px-4">
@@ -246,7 +247,7 @@
                 <td class="py-4 px-4">
                   <div class="font-bold text-sm text-[#002D54]">Thu phí Đợt 2: Thẩm định & Nộp đơn Cục SHTT</div>
                   <div class="text-[11px] text-slate-500 mt-0.5">
-                    Vụ việc: <a href="../cases/detail.html" class="font-bold text-[#0082B4] hover:underline">ASL-2026-TM109 (Nhãn hiệu 9Outfit)</a>
+                    Vụ việc: <a href="../cases/detail.html?role=admin" class="font-bold text-[#0082B4] hover:underline">ASL-2026-TM109 (Nhãn hiệu 9Outfit)</a>
                   </div>
                 </td>
                 <td class="py-4 px-4">
@@ -286,7 +287,7 @@
                         <span class="w-2.5 h-4 rounded bg-[#0082B4]"></span>
                         <span class="text-xs font-bold text-[#002D54] uppercase tracking-wider">Chi Tiết Phê Duyệt & Xuất Hóa Đơn Khoản Thu • TASK-THU-109</span>
                       </div>
-                      <a href="detail.html" class="text-xs font-bold text-[#0082B4] hover:underline">Xem Chứng Từ Đầy Đủ &rarr;</a>
+                      <a href="detail.html?role=admin" class="text-xs font-bold text-[#0082B4] hover:underline">Xem Chứng Từ Đầy Đủ &rarr;</a>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
                       <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
@@ -320,7 +321,7 @@
                     <button onclick="event.stopPropagation(); toggleAccDetail('acc-detail-2', this)" class="btn-chevron p-1 rounded-lg hover:bg-slate-200 text-slate-400 hover:text-slate-800 transition-colors" title="Sổ chi tiết khoản chi">
                       <svg class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
                     </button>
-                    <a href="detail.html" class="hover:underline font-extrabold text-[#D9381E]">TASK-CHI-204</a>
+                    <a href="detail.html?role=admin" class="hover:underline font-extrabold text-[#D9381E]">TASK-CHI-204</a>
                   </div>
                 </td>
                 <td class="py-4 px-4">
@@ -332,7 +333,7 @@
                 <td class="py-4 px-4">
                   <div class="font-bold text-sm text-[#002D54]">Chi nộp tiền tạm ứng án phí sơ thẩm TAND TP.HCM</div>
                   <div class="text-[11px] text-slate-500 mt-0.5">
-                    Vụ việc: <a href="../cases/detail.html" class="font-bold text-[#0082B4] hover:underline">ASL-2026-LIT03 (Tranh chấp BĐS Phúc Khang)</a>
+                    Vụ việc: <a href="../cases/detail.html?role=admin" class="font-bold text-[#0082B4] hover:underline">ASL-2026-LIT03 (Tranh chấp BĐS Phúc Khang)</a>
                   </div>
                 </td>
                 <td class="py-4 px-4">
@@ -406,7 +407,7 @@
                     <button onclick="event.stopPropagation(); toggleAccDetail('acc-detail-3', this)" class="btn-chevron p-1 rounded-lg hover:bg-slate-200 text-slate-400 hover:text-slate-800 transition-colors" title="Sổ chi tiết đối soát">
                       <svg class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
                     </button>
-                    <a href="detail.html" class="hover:underline font-extrabold text-[#002D54]">TASK-THU-112</a>
+                    <a href="detail.html?role=admin" class="hover:underline font-extrabold text-[#002D54]">TASK-THU-112</a>
                   </div>
                 </td>
                 <td class="py-4 px-4">
@@ -418,7 +419,7 @@
                 <td class="py-4 px-4">
                   <div class="font-bold text-sm text-[#002D54]">Thu phí Đợt 1 (50%): Dịch vụ Sáng chế Foxconn Smart Factory</div>
                   <div class="text-[11px] text-slate-500 mt-0.5">
-                    Vụ việc: <a href="../cases/detail.html" class="font-bold text-[#0082B4] hover:underline">ASL-2026-PAT04 (Sáng chế Foxconn)</a>
+                    Vụ việc: <a href="../cases/detail.html?role=admin" class="font-bold text-[#0082B4] hover:underline">ASL-2026-PAT04 (Sáng chế Foxconn)</a>
                   </div>
                 </td>
                 <td class="py-4 px-4">
@@ -468,7 +469,7 @@
                     <button onclick="event.stopPropagation(); toggleAccDetail('acc-detail-4', this)" class="btn-chevron p-1 rounded-lg hover:bg-slate-200 text-slate-400 hover:text-slate-800 transition-colors" title="Sổ chi tiết khoản chi">
                       <svg class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
                     </button>
-                    <a href="detail.html" class="hover:underline font-extrabold text-[#D9381E]">TASK-CHI-208</a>
+                    <a href="detail.html?role=admin" class="hover:underline font-extrabold text-[#D9381E]">TASK-CHI-208</a>
                   </div>
                 </td>
                 <td class="py-4 px-4">
@@ -480,7 +481,7 @@
                 <td class="py-4 px-4">
                   <div class="font-bold text-sm text-[#002D54]">Chi nộp lệ phí đăng ký Quốc tế Madrid (WIPO)</div>
                   <div class="text-[11px] text-slate-500 mt-0.5">
-                    Vụ việc: <a href="../cases/detail.html" class="font-bold text-[#0082B4] hover:underline">ASL-2026-TM109 (Nhãn hiệu 9Outfit)</a>
+                    Vụ việc: <a href="../cases/detail.html?role=admin" class="font-bold text-[#0082B4] hover:underline">ASL-2026-TM109 (Nhãn hiệu 9Outfit)</a>
                   </div>
                 </td>
                 <td class="py-4 px-4">
@@ -530,7 +531,7 @@
                     <button onclick="event.stopPropagation(); toggleAccDetail('acc-detail-5', this)" class="btn-chevron p-1 rounded-lg hover:bg-slate-200 text-slate-400 hover:text-slate-800 transition-colors">
                       <svg class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
                     </button>
-                    <a href="detail.html" class="hover:underline font-extrabold text-[#002D54]">TASK-THU-115</a>
+                    <a href="detail.html?role=admin" class="hover:underline font-extrabold text-[#002D54]">TASK-THU-115</a>
                   </div>
                 </td>
                 <td class="py-4 px-4">
@@ -542,7 +543,7 @@
                 <td class="py-4 px-4">
                   <div class="font-bold text-sm text-[#002D54]">Thu phí Đợt 2: Công bố đơn & Cấp bằng Kiểu dáng An Gia</div>
                   <div class="text-[11px] text-slate-500 mt-0.5">
-                    Vụ việc: <a href="../cases/detail.html" class="font-bold text-[#0082B4] hover:underline">ASL-2026-DES02 (Kiểu dáng Mũ bảo hiểm)</a>
+                    Vụ việc: <a href="../cases/detail.html?role=admin" class="font-bold text-[#0082B4] hover:underline">ASL-2026-DES02 (Kiểu dáng Mũ bảo hiểm)</a>
                   </div>
                 </td>
                 <td class="py-4 px-4">
@@ -592,7 +593,7 @@
                     <button onclick="event.stopPropagation(); toggleAccDetail('acc-detail-6', this)" class="btn-chevron p-1 rounded-lg hover:bg-slate-200 text-slate-400 hover:text-slate-800 transition-colors">
                       <svg class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
                     </button>
-                    <a href="detail.html" class="hover:underline font-extrabold text-[#D9381E]">TASK-CHI-210</a>
+                    <a href="detail.html?role=admin" class="hover:underline font-extrabold text-[#D9381E]">TASK-CHI-210</a>
                   </div>
                 </td>
                 <td class="py-4 px-4">
@@ -604,7 +605,7 @@
                 <td class="py-4 px-4">
                   <div class="font-bold text-sm text-[#002D54]">Chi tạm ứng công tác phí & sao lục hồ sơ thẩm định LDD tại Gia Lai</div>
                   <div class="text-[11px] text-slate-500 mt-0.5">
-                    Vụ việc: <a href="../cases/detail.html" class="font-bold text-[#0082B4] hover:underline">ASL-2026-MNA01 (M&A HAGL Agrico)</a>
+                    Vụ việc: <a href="../cases/detail.html?role=admin" class="font-bold text-[#0082B4] hover:underline">ASL-2026-MNA01 (M&A HAGL Agrico)</a>
                   </div>
                 </td>
                 <td class="py-4 px-4">
@@ -747,7 +748,7 @@
                     <button onclick="event.stopPropagation(); toggleAccDetail('acc-detail-9', this)" class="btn-chevron p-1 rounded-lg hover:bg-slate-200 text-slate-400">
                       <svg class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
                     </button>
-                    <a href="detail.html" class="hover:underline">TASK-THU-101</a>
+                    <a href="detail.html?role=admin" class="hover:underline">TASK-THU-101</a>
                   </div>
                 </td>
                 <td class="py-4 px-4">
@@ -771,7 +772,7 @@
                       <div class="text-[11px] font-bold text-emerald-800">✓ Đã xuất HĐ & Đã thu</div>
                       <a href="https://meinvoice.vn/tra-cuu/HD-2026-0089" target="_blank" class="text-[10px] font-mono text-[#0082B4] underline block truncate max-w-[200px]">https://meinvoice.vn/tra-cuu/HD-2026-0089</a>
                     </div>
-                    <a href="detail.html" class="px-2.5 py-1 rounded-lg bg-white border border-emerald-300 text-emerald-800 font-bold text-[10px]">Xem HĐ</a>
+                    <a href="detail.html?role=admin" class="px-2.5 py-1 rounded-lg bg-white border border-emerald-300 text-emerald-800 font-bold text-[10px]">Xem HĐ</a>
                   </div>
                 </td>
               </tr>
@@ -790,7 +791,7 @@
                     <button onclick="event.stopPropagation(); toggleAccDetail('acc-detail-10', this)" class="btn-chevron p-1 rounded-lg hover:bg-slate-200 text-slate-400">
                       <svg class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
                     </button>
-                    <a href="detail.html" class="hover:underline">TASK-CHI-198</a>
+                    <a href="detail.html?role=admin" class="hover:underline">TASK-CHI-198</a>
                   </div>
                 </td>
                 <td class="py-4 px-4">

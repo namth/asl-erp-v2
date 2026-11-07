@@ -1,0 +1,59 @@
+{
+  "id": "TASK-001",
+  "title": "Dọn quy ước prototype: mã đặc tả, emoji trong nút, giữ ?role= trên mọi link",
+  "status": "accepted",
+  "conversation_id": "cf42de84-cbd4-4106-9b51-8e57c8a8f8a7",
+  "history": [
+    {
+      "at": "2026-10-30T23:19:33",
+      "status": "draft",
+      "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-10-30T23:57:52",
+      "status": "assigned",
+      "note": "giao thủ công (clipboard)"
+    },
+    {
+      "at": "2026-10-31T00:18:51",
+      "status": "assigned",
+      "note": "giao qua agy (gemini-3.8-flash-high)"
+    },
+    {
+      "at": "2026-10-31T00:19:09",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-10-31T00:27:57",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-10-31T00:30:19",
+      "status": "changes_requested",
+      "note": "Claude yêu cầu sửa"
+    },
+    {
+      "at": "2026-10-31T07:25:16",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-10-31T07:28:20",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-10-31T07:29:39",
+      "status": "accepted",
+      "note": "Claude nghiệm thu"
+    }
+  ],
+  "locked_files": [
+    "handoff/tasks/TASK-001-don-dep-prototype/verify.sh",
+    "tests/prototype/test_task_001_cleanup.py",
+    "scripts/check-prototype.py"
+  ],
+  "via": "agy"
+}
