@@ -1,0 +1,17 @@
+{
+  "id": "TASK-002",
+  "title": "Chỉnh trang đăng nhập prototype theo DEC-02 và Bất biến #5",
+  "status": "draft",
+  "conversation_id": null,
+  "history": [
+    {
+      "at": "2026-11-07T08:25:31",
+      "status": "draft",
+      "note": "Claude tạo task"
+    }
+  ],
+  "locked_files": [
+    "handoff/tasks/TASK-002-dang-nhap-totp-dec02/verify.sh",
+    "tests/prototype/test_task_002_login_dec02.py"
+  ]
+}

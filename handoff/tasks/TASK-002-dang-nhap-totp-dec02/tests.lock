@@ -1,0 +1,2 @@
+a973a561d76487d322b990048edeb912438564e5f3642a96bd52e9cedf2fc163  handoff/tasks/TASK-002-dang-nhap-totp-dec02/verify.sh
+49cb963a2290b0b1a8290178adaeebd2d8fbbc50c3533086c79d5fa73f5ea835  tests/prototype/test_task_002_login_dec02.py
