@@ -418,7 +418,7 @@
         },
         {
           title: 'Tài Chính & Kế Toán',
-          items: [itemFinance, itemAccounting, itemPortal]
+          items: [itemFinance, itemAccounting]
         },
         {
           title: 'Quản Trị & Điều Hành',

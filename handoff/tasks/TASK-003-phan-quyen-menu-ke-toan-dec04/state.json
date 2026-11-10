@@ -1,16 +1,37 @@
 {
   "id": "TASK-003",
   "title": "Ẩn hành động chuyên môn với Kế toán; ẩn Chấm công & Cổng KH khỏi menu (DEC-04)",
-  "status": "draft",
-  "conversation_id": null,
+  "status": "accepted",
+  "conversation_id": "66bb4f9b-6ad9-498b-9381-50fb62a0a61a",
   "history": [
     {
       "at": "2026-11-10T18:01:35",
       "status": "draft",
       "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-10T18:04:14",
+      "status": "assigned",
+      "note": "giao qua agy (gemini-3.8-flash-medium)"
+    },
+    {
+      "at": "2026-11-10T18:04:26",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-10T18:07:48",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-10T18:08:26",
+      "status": "accepted",
+      "note": "Claude nghiệm thu"
     }
   ],
   "locked_files": [
     "handoff/tasks/TASK-003-phan-quyen-menu-ke-toan-dec04/verify.sh"
-  ]
+  ],
+  "via": "agy"
 }

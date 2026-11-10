@@ -60,7 +60,7 @@
         </a>
 
         <!-- Edit Case Button -->
-        <a href="edit.html?role=admin" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs flex items-center gap-1.5 transition-colors">
+        <a href="edit.html?role=admin" data-role-hide="accountant" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs flex items-center gap-1.5 transition-colors">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
           <span>Chỉnh Sửa</span>
         </a>
@@ -99,7 +99,7 @@
           </div>
 
           <div class="flex items-center gap-2.5">
-            <button onclick="openApprovalModal()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-[#002D54] to-[#0082B4] text-white font-bold text-xs shadow-md hover:shadow-cyan-900/30 flex items-center gap-1.5 transition-all">
+            <button onclick="openApprovalModal()" data-role-hide="accountant" class="px-4 py-2 rounded-xl bg-gradient-to-r from-[#002D54] to-[#0082B4] text-white font-bold text-xs shadow-md hover:shadow-cyan-900/30 flex items-center gap-1.5 transition-all">
               <svg class="w-4 h-4 text-cyan-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
               <span>Trình Phê Duyệt</span>
             </button>
@@ -583,6 +583,35 @@
 
     function openApprovalModal() {
       alert("PHÊ DUYỆT VỤ VIỆC (GATE APPROVAL)\n\n• Vụ việc: ASL-2026-TM109\n• Hồ sơ cần duyệt: Tờ khai đăng ký & Ý kiến phản hồi hình thức\n• Thẩm quyền: Partner Nguyễn Anh\n\nBạn có muốn Chấp thuận Ký duyệt điện tử không?");
+    }
+
+    // Đồng bộ quyền thao tác chuyên môn theo vai trò (DEC-01 & Bất biến #2)
+    function syncRoleDetailActions() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const role = urlParams.get('role') || localStorage.getItem('asl_user_role') || 'admin';
+      if (role === 'accountant') {
+        // DEC-01 & Bất biến #2: Kế toán không có thẩm quyền chỉnh sửa vụ việc hay phê duyệt chuyên môn pháp lý
+        document.querySelectorAll('a[href*="edit.html"], button[onclick*="openApprovalModal"], [data-role-hide~="accountant"]').forEach(el => {
+          el.style.display = 'none'; // hide nút chỉnh sửa (edit.html) và nút trình phê duyệt (openApprovalModal)
+        });
+      }
+
+      // Bảo toàn ?role=... trên các đường link trong trang
+      document.querySelectorAll('a[href]').forEach(a => {
+        try {
+          const href = a.getAttribute('href');
+          if (href && !href.startsWith('http') && !href.startsWith('#') && !href.startsWith('javascript:')) {
+            const cleanHref = href.split('?')[0];
+            a.setAttribute('href', cleanHref + '?role=' + role);
+          }
+        } catch(e) {}
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', syncRoleDetailActions);
+    } else {
+      syncRoleDetailActions();
     }
   </script>
 
