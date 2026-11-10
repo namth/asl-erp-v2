@@ -1,16 +1,37 @@
 {
   "id": "TASK-006",
   "title": "Nâng tương phản chữ nhỏ chuẩn WCAG AA (≥ 4.5:1) ở Light và Dark (A5)",
-  "status": "draft",
-  "conversation_id": null,
+  "status": "accepted",
+  "conversation_id": "5b333d31-f128-4542-ae2c-3ccd1406d1c0",
   "history": [
     {
       "at": "2026-11-10T20:30:11",
       "status": "draft",
       "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-10T20:32:48",
+      "status": "assigned",
+      "note": "giao qua agy (gemini-3.8-flash-medium)"
+    },
+    {
+      "at": "2026-11-10T20:35:33",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-10T20:50:25",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-10T20:51:47",
+      "status": "accepted",
+      "note": "Claude nghiệm thu"
     }
   ],
   "locked_files": [
     "handoff/tasks/TASK-006-wcag-aa-contrast-tuning/verify.sh"
-  ]
+  ],
+  "via": "agy"
 }

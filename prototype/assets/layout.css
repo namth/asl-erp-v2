@@ -308,8 +308,13 @@ body.dark #sidebar .border-b {
   border-color: #1E293B !important;
 }
 
+/* WCAG AA Contrast Engineering (Ratio >= 4.5:1 for Normal/Small Text) */
 html.dark .nav-section-title {
-  color: #64748B !important;
+  color: #94A3B8 !important;
+}
+
+html.dark #sidebar-role-selector .text-slate-600 {
+  color: #94A3B8 !important;
 }
 
 html.dark .nav-item {
