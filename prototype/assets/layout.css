@@ -918,4 +918,68 @@ html.dark span[class*="from-[#002D54]"] {
   box-shadow: 0 0 10px rgba(56, 189, 248, 0.3) !important;
 }
 
+/* ==============================================================================
+   21. MOBILE RESPONSIVE SIDEBAR OFF-CANVAS & BACKDROP OVERLAY (< 768px)
+   ============================================================================== */
+@media (max-width: 767px) {
+  #sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 280px !important;
+    max-width: 85vw !important;
+    transform: translateX(-100%);
+    -webkit-transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease !important;
+    z-index: 50 !important;
+    box-shadow: none;
+  }
+
+  #sidebar.sidebar-mobile-open,
+  #sidebar.translate-x-0 {
+    transform: translateX(0) !important;
+    -webkit-transform: translateX(0) !important;
+    box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.4) !important;
+  }
+
+  #sidebar.-translate-x-full {
+    transform: translateX(-100%) !important;
+    -webkit-transform: translateX(-100%) !important;
+  }
+
+  #main-container {
+    margin-left: 0 !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    overflow-x: hidden !important;
+  }
+
+  /* Mobile backdrop overlay */
+  .sidebar-backdrop {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 45;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    cursor: pointer;
+  }
+
+  .sidebar-backdrop.active,
+  .sidebar-backdrop.show {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+/* Responsive & Overflow-x protection (375px mobile, 1024px tablet, 1440px desktop) */
+html, body, #main-container {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
 

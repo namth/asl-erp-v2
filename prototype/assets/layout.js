@@ -212,7 +212,7 @@
       default:
         return {
           name: 'LS. Nam Trần',
-          title: 'Quản Trị Viên Cấp Cao',
+          title: 'Quản Trị Viên',
           avatarText: 'NV',
           badgeText: 'Quản Trị Viên'
         };
@@ -609,8 +609,94 @@
     `;
   }
 
-  // 6. Quản lý trạng thái Thu gọn / Mở rộng Sidebar
+  // 5b. Đồng bộ thông tin profile người dùng trong Header theo vai trò (Role-based Header Profile)
+  function syncHeaderProfile(role = currentRole) {
+    const roleInfo = getRoleInfo(role);
+    // header profile sync via getRoleInfo: Nam Trần, Nguyễn Anh, Thu Trang, Gia Huy
+    document.querySelectorAll('header').forEach(header => {
+      const profileContainer = header.querySelector('[class*="border-l"]');
+      if (profileContainer) {
+        // Cập nhật Avatar (khối tròn/vuông hiển thị chữ viết tắt vai trò: NV, NA, TT, GH)
+        const avatarEl = profileContainer.querySelector('.rounded-full, .rounded-xl, [class*="rounded"]');
+        if (avatarEl) {
+          avatarEl.textContent = roleInfo.avatarText;
+        }
+
+        // Cập nhật Tên và Chức danh người dùng
+        const textWrapper = profileContainer.querySelector('.text-left, .leading-tight, [class*="leading-"]') || profileContainer;
+        if (textWrapper) {
+          const nameEl = textWrapper.querySelector('.font-bold, [class*="font-bold"], .font-semibold');
+          if (nameEl) {
+            nameEl.textContent = roleInfo.name;
+          }
+          const titleEl = textWrapper.querySelector('.text-\\[10px\\], [class*="text-[10px]"], .text-cyan-200, [class*="text-cyan"], [class*="text-slate"], .text-xs:not(.font-bold)');
+          if (titleEl && titleEl !== nameEl) {
+            titleEl.textContent = roleInfo.title || roleInfo.badgeText;
+          }
+        }
+      }
+    });
+  }
+
+  // 6. Quản lý trạng thái Thu gọn / Mở rộng Sidebar & Mobile Off-canvas
   let isCollapsed = localStorage.getItem('asl_sidebar_collapsed') === 'true';
+  let isMobileSidebarOpen = false;
+
+  function getOrCreateBackdrop() {
+    let backdrop = document.getElementById('sidebar-backdrop');
+    if (!backdrop) {
+      backdrop = document.createElement('div');
+      backdrop.id = 'sidebar-backdrop';
+      backdrop.className = 'sidebar-backdrop';
+      backdrop.setAttribute('aria-hidden', 'true');
+      backdrop.title = 'Bấm để đóng menu';
+      backdrop.addEventListener('click', function() {
+        closeMobileSidebar();
+      });
+      document.body.appendChild(backdrop);
+    }
+    return backdrop;
+  }
+
+  function openMobileSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const backdrop = getOrCreateBackdrop();
+    if (sidebar) {
+      sidebar.classList.add('sidebar-mobile-open');
+      sidebar.classList.remove('-translate-x-full');
+      sidebar.classList.add('w-72');
+      sidebar.classList.remove('w-20');
+
+      const logoFull = document.getElementById('sidebar-logo-full');
+      const logoCollapsed = document.getElementById('sidebar-logo-collapsed');
+      const roleSelector = document.getElementById('sidebar-role-selector');
+      const navTexts = document.querySelectorAll('.nav-text');
+      const sectionHeaders = document.querySelectorAll('.nav-section-title');
+
+      if (logoFull) logoFull.classList.remove('hidden');
+      if (logoCollapsed) logoCollapsed.classList.add('hidden');
+      if (roleSelector) roleSelector.classList.remove('hidden');
+      navTexts.forEach(el => el.classList.remove('hidden'));
+      sectionHeaders.forEach(el => el.classList.remove('hidden'));
+    }
+    if (backdrop) {
+      backdrop.classList.add('active');
+    }
+    isMobileSidebarOpen = true;
+  }
+
+  function closeMobileSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const backdrop = document.getElementById('sidebar-backdrop');
+    if (sidebar) {
+      sidebar.classList.remove('sidebar-mobile-open');
+      sidebar.classList.add('-translate-x-full');
+    }
+    if (backdrop) {
+      backdrop.classList.remove('active');
+    }
+    isMobileSidebarOpen = false;
+  }
 
   function applySidebarState(collapsed) {
     const sidebar = document.getElementById('sidebar');
@@ -624,6 +710,39 @@
     const badgeCounts = document.querySelectorAll('.nav-badge');
 
     if (!sidebar || !main) return;
+
+    const isMobile = window.innerWidth < 768;
+
+    if (isMobile) {
+      // Trên mobile (<768px): sidebar mặc định đóng off-canvas ngoài màn hình (-translate-x-full)
+      if (!isMobileSidebarOpen) {
+        sidebar.classList.add('-translate-x-full');
+        sidebar.classList.remove('sidebar-mobile-open');
+      }
+      sidebar.classList.remove('w-20');
+      sidebar.classList.add('w-72');
+      main.classList.remove('md:ml-20', 'md:ml-72');
+
+      const sidebarHeader = sidebar.querySelector('.sidebar-header-gradient');
+      if (sidebarHeader) {
+        sidebarHeader.classList.add('px-5', 'justify-between');
+        sidebarHeader.classList.remove('px-2', 'justify-center');
+      }
+
+      if (logoFull) logoFull.classList.remove('hidden');
+      if (logoCollapsed) logoCollapsed.classList.add('hidden');
+      if (collapseBtn) collapseBtn.classList.add('hidden');
+      if (roleSelector) roleSelector.classList.remove('hidden');
+
+      navTexts.forEach(el => el.classList.remove('hidden'));
+      sectionHeaders.forEach(el => el.classList.remove('hidden'));
+      badgeCounts.forEach(el => el.classList.remove('hidden'));
+      return;
+    }
+
+    // Trên desktop (>=768px): đảm bảo đóng mobile backdrop & gỡ class mobile
+    closeMobileSidebar();
+    sidebar.classList.remove('-translate-x-full', 'sidebar-mobile-open');
 
     const sidebarHeader = sidebar.querySelector('.sidebar-header-gradient');
 
@@ -669,15 +788,24 @@
   }
 
   window.toggleSidebar = function() {
-    isCollapsed = !isCollapsed;
-    localStorage.setItem('asl_sidebar_collapsed', isCollapsed);
-    applySidebarState(isCollapsed);
+    if (window.innerWidth < 768) {
+      if (isMobileSidebarOpen) {
+        closeMobileSidebar();
+      } else {
+        openMobileSidebar();
+      }
+    } else {
+      isCollapsed = !isCollapsed;
+      localStorage.setItem('asl_sidebar_collapsed', isCollapsed);
+      applySidebarState(isCollapsed);
+    }
   };
 
   // 7. Chuyển đổi vai trò người dùng (Dynamic Role Switcher)
   window.switchRole = function(newRole) {
     currentRole = newRole;
     localStorage.setItem('asl_user_role', newRole);
+    syncHeaderProfile(newRole);
     // Cập nhật lại URL với tham số ?role=... và điều hướng để giữ chắc vai trò khi chuyển trang
     try {
       const url = new URL(window.location.href);
@@ -768,7 +896,12 @@
       modularHeader.outerHTML = renderHeaderHTML({ title, section, breadcrumb });
     }
 
+    // Khởi tạo backdrop và thiết lập trạng thái sidebar (mặc định đóng ngoài màn hình trên mobile)
+    getOrCreateBackdrop();
     applySidebarState(isCollapsed);
+
+    // Đồng bộ thông tin profile người dùng ở header theo vai trò hiện tại
+    syncHeaderProfile(currentRole);
 
     // Tiêm nút Dark Mode toggle và kích hoạt Theme
     injectThemeToggle();
@@ -777,12 +910,36 @@
     // Đồng bộ ?role= cho các liên kết nội trang
     syncRoleToLinks(currentRole);
 
-    // Keyboard shortcut [ to toggle sidebar, D to toggle dark mode
+    // Tự động đóng sidebar trên mobile khi bấm vào link menu điều hướng
+    document.addEventListener('click', function(e) {
+      if (window.innerWidth < 768 && isMobileSidebarOpen) {
+        const sidebar = document.getElementById('sidebar');
+        if (sidebar && sidebar.contains(e.target) && e.target.closest('a')) {
+          closeMobileSidebar();
+        }
+      }
+    });
+
+    // Lắng nghe thay đổi kích thước màn hình để tự động đồng bộ layout giữa mobile và desktop
+    window.addEventListener('resize', function() {
+      if (window.innerWidth >= 768) {
+        closeMobileSidebar();
+        applySidebarState(isCollapsed);
+      } else {
+        if (!isMobileSidebarOpen) {
+          closeMobileSidebar();
+        }
+      }
+    });
+
+    // Keyboard shortcut [ to toggle sidebar, D to toggle dark mode, Escape to close mobile sidebar
     window.addEventListener('keydown', function(e) {
       const tag = document.activeElement.tagName.toLowerCase();
       if (['input', 'textarea', 'select'].includes(tag)) return;
 
-      if (e.key === '[') {
+      if (e.key === 'Escape' && isMobileSidebarOpen) {
+        closeMobileSidebar();
+      } else if (e.key === '[') {
         window.toggleSidebar();
       } else if (e.key === 'd' || e.key === 'D') {
         window.toggleTheme();
@@ -801,6 +958,9 @@
   window.ASL_LAYOUT = {
     renderSidebarHTML,
     renderHeaderHTML,
+    syncHeaderProfile,
+    openMobileSidebar,
+    closeMobileSidebar,
     applySidebarState,
     switchRole: window.switchRole,
     withRole: window.withRole,
