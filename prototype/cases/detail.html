@@ -110,17 +110,26 @@
         </div>
 
         <!-- Box States Header Label -->
-        <div class="flex items-center justify-between">
+        <div class="flex flex-wrap lg:flex-nowrap items-center justify-between gap-3">
           <div>
-            <h3 class="text-sm font-extrabold text-[#002D54] flex items-center gap-2">
-              <span class="w-2.5 h-2.5 rounded-full bg-[#0082B4]"></span>
-              <span>Quy Trình Trạng Thái Vụ Việc (Case Lifecycle States)</span>
-            </h3>
+            <div class="flex items-center gap-2 flex-wrap">
+              <h3 class="text-sm font-extrabold text-[#002D54] flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-[#0082B4]"></span>
+                <span>Quy Trình Trạng Thái Vụ Việc (Case Lifecycle States)</span>
+              </h3>
+              <span class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold text-[10px] border border-emerald-300">Quy trình Linh hoạt (FLEXIBLE — DEC-07)</span>
+            </div>
             <p class="text-xs text-slate-400 mt-0.5">Tiến trình xét nghiệm và cấp văn bằng bảo hộ chuẩn Cục SHTT (Bấm vào trạng thái để kiểm tra hoặc cập nhật)</p>
           </div>
-          <span class="text-[11px] font-semibold text-slate-500 bg-slate-100 px-3 py-1 rounded-full border border-slate-200">
-            Trạng thái hiện tại: <strong id="current-state-text" class="text-[#0082B4]">Formality Acceptance</strong>
-          </span>
+          <div class="flex items-center gap-2 flex-wrap">
+            <button onclick="proposeFlexibleTask()" class="px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 font-bold text-xs flex items-center gap-1.5 shadow-sm transition-all">
+              <svg class="w-3.5 h-3.5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+              <span>+ Đề xuất tác vụ bổ sung (Chế độ Linh hoạt)</span>
+            </button>
+            <span class="text-[11px] font-semibold text-slate-500 bg-slate-100 px-3 py-1 rounded-full border border-slate-200">
+              Trạng thái: <strong id="current-state-text" class="text-[#0082B4]">Formality Acceptance</strong>
+            </span>
+          </div>
         </div>
 
         <!-- 9 Specific Case States (Theo đúng ảnh đính kèm của Cục SHTT) -->
@@ -583,6 +592,10 @@
 
     function openApprovalModal() {
       alert("PHÊ DUYỆT VỤ VIỆC (GATE APPROVAL)\n\n• Vụ việc: ASL-2026-TM109\n• Hồ sơ cần duyệt: Tờ khai đăng ký & Ý kiến phản hồi hình thức\n• Thẩm quyền: Partner Nguyễn Anh\n\nBạn có muốn Chấp thuận Ký duyệt điện tử không?");
+    }
+
+    function proposeFlexibleTask() {
+      alert("ĐỀ XUẤT TÁC VỤ BỔ SUNG (CHẾ ĐỘ LINH HOẠT - DEC-07)\n\n• Vụ việc: ASL-2026-TM109 (Chế độ FLEXIBLE)\n• Đề xuất bởi: Luật sư phụ trách\n\nĐề xuất bổ sung tác vụ mới sẽ được chuyển tới Hòm thư phê duyệt của Quản lý và ghi nhận Audit log bất biến theo DEC-07.");
     }
 
     // Đồng bộ quyền thao tác chuyên môn theo vai trò (DEC-01 & Bất biến #2)

@@ -1,13 +1,33 @@
 {
   "id": "TASK-007",
   "title": "Màn hình quy trình Linh hoạt (DEC-07) và Thu tiền từng phần Kế toán (DEC-06) (A7)",
-  "status": "draft",
+  "status": "accepted",
   "conversation_id": null,
   "history": [
     {
       "at": "2026-11-10T20:30:18",
       "status": "draft",
       "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-10T20:35:07",
+      "status": "assigned",
+      "note": "giao thủ công (clipboard)"
+    },
+    {
+      "at": "2026-11-10T20:35:11",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-10T20:37:21",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-10T20:37:26",
+      "status": "accepted",
+      "note": "Claude nghiệm thu"
     }
   ],
   "locked_files": [
