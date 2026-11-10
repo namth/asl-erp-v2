@@ -1,0 +1,16 @@
+{
+  "id": "TASK-007",
+  "title": "Màn hình quy trình Linh hoạt (DEC-07) và Thu tiền từng phần Kế toán (DEC-06) (A7)",
+  "status": "draft",
+  "conversation_id": null,
+  "history": [
+    {
+      "at": "2026-11-10T20:30:18",
+      "status": "draft",
+      "note": "Claude tạo task"
+    }
+  ],
+  "locked_files": [
+    "handoff/tasks/TASK-007-flexible-workflow-and-partial-payment/verify.sh"
+  ]
+}

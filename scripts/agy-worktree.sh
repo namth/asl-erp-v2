@@ -32,7 +32,11 @@ case "$HOST" in
     SSH_KEY="$HOME/.ssh/id_macbook_agy"
     REMOTE_REPO="~/agy-farm/qlcvasl-v2"
     REMOTE_WT_BASE="~/agy-farm/worktrees"
-    REMOTE_AGY_HOME="\$HOME/.agy-worker"
+    if [ "${AGY_ACCOUNT:-1}" = "1" ]; then
+      REMOTE_AGY_HOME="\$HOME/.agy-worker"
+    else
+      REMOTE_AGY_HOME="\$HOME/.agy-worker${AGY_ACCOUNT}"
+    fi
     GIT_REMOTE="macbook"
     ;;
   *) die "AGY_HOST không biết: $HOST" ;;

@@ -1,0 +1,16 @@
+{
+  "id": "TASK-006",
+  "title": "Nâng tương phản chữ nhỏ chuẩn WCAG AA (≥ 4.5:1) ở Light và Dark (A5)",
+  "status": "draft",
+  "conversation_id": null,
+  "history": [
+    {
+      "at": "2026-11-10T20:30:11",
+      "status": "draft",
+      "note": "Claude tạo task"
+    }
+  ],
+  "locked_files": [
+    "handoff/tasks/TASK-006-wcag-aa-contrast-tuning/verify.sh"
+  ]
+}
