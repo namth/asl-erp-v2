@@ -1,16 +1,37 @@
 {
   "id": "TASK-005",
   "title": "Bộ thành phần 4 trạng thái UI dùng chung cho toàn bộ prototype (A3)",
-  "status": "draft",
-  "conversation_id": null,
+  "status": "accepted",
+  "conversation_id": "630203ec-50b5-4e33-803c-47b19a772c17",
   "history": [
     {
       "at": "2026-11-10T20:24:23",
       "status": "draft",
       "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-10T20:27:07",
+      "status": "assigned",
+      "note": "giao qua agy (gemini-3.8-flash-medium)"
+    },
+    {
+      "at": "2026-11-10T20:27:33",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-10T20:32:17",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-10T20:33:44",
+      "status": "accepted",
+      "note": "Claude nghiệm thu"
     }
   ],
   "locked_files": [
     "handoff/tasks/TASK-005-4-state-ui-components/verify.sh"
-  ]
+  ],
+  "via": "agy"
 }
