@@ -945,7 +945,441 @@
         window.toggleTheme();
       }
     });
+
+    // Khởi tạo dock điều khiển xem trước 4 trạng thái UI dùng chung (A3)
+    init4StateDock();
   }
+
+  // ==============================================================================
+  // 10. BỘ THÀNH PHẦN 4 TRẠNG THÁI UI DÙNG CHUNG CHO TOÀN BỘ PROTOTYPE (A3)
+  // Empty State, Loading / Skeleton State, Success Toast, Error & Validation State
+  // Kèm Interactive State Preview Dock (#asl-state-dock)
+  // ==============================================================================
+
+  // --- 10.1 Empty State Component ---
+  function renderEmptyState(options = {}) {
+    const title = options.title || 'Chưa có dữ liệu';
+    const description = options.description || 'Hiện tại chưa có bản ghi nào được ghi nhận trong danh mục này.';
+    const icon = options.icon || `
+      <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>
+      </svg>`;
+    const actionText = options.actionText;
+    const actionUrl = options.actionUrl || '#';
+    const actionClick = options.actionClick || '';
+
+    const actionHtml = actionText ? `
+      <a href="${actionUrl}" ${actionClick ? `onclick="${actionClick}"` : ''} class="asl-empty-btn">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+        </svg>
+        <span>${actionText}</span>
+      </a>
+    ` : '';
+
+    return `
+      <div class="asl-empty-state empty-state">
+        <div class="asl-empty-icon">
+          ${icon}
+        </div>
+        <h3 class="asl-empty-title">${title}</h3>
+        <p class="asl-empty-desc">${description}</p>
+        ${actionHtml}
+      </div>
+    `;
+  }
+
+  // --- 10.2 Skeleton Loading Component (Shimmer Animation) ---
+  function renderSkeleton(options = {}) {
+    const rows = options.rows || 4;
+    const type = options.type || 'table';
+
+    if (type === 'card') {
+      let cardsHtml = '';
+      for (let i = 0; i < rows; i++) {
+        cardsHtml += `
+          <div class="glass-card p-5 rounded-2xl space-y-4">
+            <div class="flex items-center gap-3">
+              <div class="asl-skeleton asl-skeleton-circle w-10 h-10"></div>
+              <div class="flex-1 space-y-1.5">
+                <div class="asl-skeleton asl-skeleton-title h-4 w-2/3"></div>
+                <div class="asl-skeleton asl-skeleton-text h-3 w-1/3"></div>
+              </div>
+            </div>
+            <div class="space-y-2 pt-2">
+              <div class="asl-skeleton asl-skeleton-text h-3.5 w-full"></div>
+              <div class="asl-skeleton asl-skeleton-text h-3.5 w-5/6"></div>
+              <div class="asl-skeleton asl-skeleton-text h-3.5 w-4/6"></div>
+            </div>
+            <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+              <div class="asl-skeleton h-6 w-20 rounded-md"></div>
+              <div class="asl-skeleton h-6 w-16 rounded-md"></div>
+            </div>
+          </div>
+        `;
+      }
+      return `<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">${cardsHtml}</div>`;
+    }
+
+    // Default: Bảng danh sách Skeleton Shimmer
+    let rowsHtml = '';
+    for (let i = 0; i < rows; i++) {
+      rowsHtml += `
+        <tr class="border-b border-slate-100 dark:border-slate-800">
+          <td class="p-4"><div class="asl-skeleton h-4 w-6 rounded"></div></td>
+          <td class="p-4">
+            <div class="flex items-center gap-3">
+              <div class="asl-skeleton asl-skeleton-circle w-8 h-8"></div>
+              <div class="space-y-1.5 flex-1">
+                <div class="asl-skeleton h-3.5 w-3/4 rounded"></div>
+                <div class="asl-skeleton h-2.5 w-1/2 rounded"></div>
+              </div>
+            </div>
+          </td>
+          <td class="p-4"><div class="asl-skeleton h-4 w-28 rounded"></div></td>
+          <td class="p-4"><div class="asl-skeleton h-6 w-20 rounded-full"></div></td>
+          <td class="p-4"><div class="asl-skeleton h-4 w-24 rounded"></div></td>
+          <td class="p-4 text-right"><div class="asl-skeleton h-8 w-16 rounded-xl ml-auto"></div></td>
+        </tr>
+      `;
+    }
+
+    return `
+      <div class="glass-card rounded-2xl overflow-hidden p-1 shadow-sm">
+        <div class="p-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+          <div class="asl-skeleton h-5 w-48 rounded-lg"></div>
+          <div class="flex items-center gap-2">
+            <div class="asl-skeleton h-8 w-24 rounded-xl"></div>
+            <div class="asl-skeleton h-8 w-8 rounded-xl"></div>
+          </div>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
+                <th class="p-4"><div class="asl-skeleton h-3.5 w-4 rounded"></div></th>
+                <th class="p-4"><div class="asl-skeleton h-3.5 w-24 rounded"></div></th>
+                <th class="p-4"><div class="asl-skeleton h-3.5 w-20 rounded"></div></th>
+                <th class="p-4"><div class="asl-skeleton h-3.5 w-16 rounded"></div></th>
+                <th class="p-4"><div class="asl-skeleton h-3.5 w-20 rounded"></div></th>
+                <th class="p-4 text-right"><div class="asl-skeleton h-3.5 w-12 rounded ml-auto"></div></th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rowsHtml}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  }
+
+  // --- 10.3 Toast Success / Notification Component ---
+  function showToast(message, type = 'success') {
+    let container = document.getElementById('asl-toast-container');
+    if (!container) {
+      container = document.createElement('div');
+      container.id = 'asl-toast-container';
+      container.className = 'asl-toast-container';
+      document.body.appendChild(container);
+    }
+
+    const toast = document.createElement('div');
+    const typeClass = type === 'error' ? 'asl-toast-error' : (type === 'info' ? 'asl-toast-info' : 'asl-toast-success');
+    toast.className = `asl-toast notification-toast ${typeClass}`;
+
+    let iconSvg = '';
+    if (type === 'error') {
+      iconSvg = `<svg class="w-5 h-5 text-red-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`;
+    } else if (type === 'info') {
+      iconSvg = `<svg class="w-5 h-5 text-cyan-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`;
+    } else {
+      iconSvg = `<svg class="w-5 h-5 text-emerald-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`;
+    }
+
+    toast.innerHTML = `
+      ${iconSvg}
+      <div class="flex-1 leading-snug">${message}</div>
+      <button type="button" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors ml-1 p-1 cursor-pointer" onclick="this.parentElement.remove()">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    `;
+
+    container.appendChild(toast);
+
+    setTimeout(() => {
+      toast.classList.add('toast-hiding');
+      setTimeout(() => {
+        if (toast.parentElement) toast.remove();
+      }, 300);
+    }, 3000);
+
+    return toast;
+  }
+
+  // --- 10.4 Error State & Form Field Error Validation Component ---
+  function renderErrorState(options = {}) {
+    const message = options.message || 'Đã có lỗi xảy ra trong quá trình xử lý dữ liệu. Vui lòng thử lại sau.';
+    const retryFn = options.retryFn || 'window.location.reload()';
+
+    return `
+      <div class="asl-error-state error-state">
+        <div class="asl-error-icon">
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+          </svg>
+        </div>
+        <h3 class="text-base font-bold text-red-600 dark:text-red-400 mb-1">Không thể tải thông tin</h3>
+        <p class="text-sm text-slate-600 dark:text-slate-300 max-w-md mb-4">${message}</p>
+        <button type="button" onclick="${retryFn}" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs shadow-md shadow-red-500/20 transition-all cursor-pointer">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+          <span>Thử lại</span>
+        </button>
+      </div>
+    `;
+  }
+
+  function showFieldError(input, msg) {
+    const el = typeof input === 'string' ? document.querySelector(input) : input;
+    if (!el) return;
+
+    el.classList.add('asl-input-invalid', 'input-invalid', 'input-error');
+    el.style.borderColor = '#EF4444';
+
+    let next = el.nextElementSibling;
+    if (next && (next.classList.contains('asl-field-error') || next.classList.contains('field-error'))) {
+      const span = next.querySelector('span');
+      if (span) {
+        span.textContent = msg;
+      } else {
+        next.textContent = msg;
+      }
+    } else {
+      const errorEl = document.createElement('div');
+      errorEl.className = 'asl-field-error field-error input-error text-red-500 text-xs mt-1 flex items-center gap-1 font-semibold';
+      errorEl.innerHTML = `
+        <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <span>${msg}</span>
+      `;
+      el.parentNode.insertBefore(errorEl, el.nextSibling);
+    }
+
+    const clearOnInput = function() {
+      clearFieldError(el);
+      el.removeEventListener('input', clearOnInput);
+      el.removeEventListener('change', clearOnInput);
+    };
+    el.addEventListener('input', clearOnInput);
+    el.addEventListener('change', clearOnInput);
+  }
+
+  function clearFieldError(input) {
+    const el = typeof input === 'string' ? document.querySelector(input) : input;
+    if (!el) return;
+    el.classList.remove('asl-input-invalid', 'input-invalid', 'input-error');
+    el.style.borderColor = '';
+    const next = el.nextElementSibling;
+    if (next && (next.classList.contains('asl-field-error') || next.classList.contains('field-error'))) {
+      next.remove();
+    }
+  }
+
+  // --- 10.5 Interactive State Preview Dock & Simulator (#asl-state-dock) ---
+  let previewSavedTarget = null;
+  let previewSavedHTML = null;
+
+  function getPreviewTarget() {
+    const main = document.querySelector('main');
+    if (!main) return document.getElementById('main-container') || document.body;
+    const candidate = main.querySelector('.overflow-x-auto, table, .grid-cols-1, .grid-cols-2, .grid-cols-3, .kanban-cards-container, .space-y-6, .glass-card');
+    return candidate || main;
+  }
+
+  function resetStatePreview() {
+    if (previewSavedTarget && previewSavedHTML !== null) {
+      previewSavedTarget.innerHTML = previewSavedHTML;
+      previewSavedTarget = null;
+      previewSavedHTML = null;
+    }
+    document.querySelectorAll('.asl-dock-btn').forEach(btn => btn.classList.remove('active'));
+    const normalBtn = document.getElementById('asl-btn-dock-normal');
+    if (normalBtn) normalBtn.classList.add('active');
+    showToast('Đã khôi phục trạng thái giao diện bình thường', 'info');
+  }
+
+  function previewEmptyState() {
+    const target = getPreviewTarget();
+    if (!target) return;
+    if (!previewSavedTarget) {
+      previewSavedTarget = target;
+      previewSavedHTML = target.innerHTML;
+    }
+    document.querySelectorAll('.asl-dock-btn').forEach(btn => btn.classList.remove('active'));
+    const btn = document.getElementById('asl-btn-dock-empty');
+    if (btn) btn.classList.add('active');
+
+    target.innerHTML = renderEmptyState({
+      title: 'Chưa có bản ghi nào trên trang',
+      description: 'Hệ thống chưa ghi nhận bản ghi nào tại danh mục này. Bấm "Bình thường" trên Dock để khôi phục giao diện mẫu.',
+      actionText: 'Tạo mới bản ghi',
+      actionClick: 'window.ASL_4STATES.resetPreview()'
+    });
+  }
+
+  function previewLoadingState() {
+    const target = getPreviewTarget();
+    if (!target) return;
+    if (!previewSavedTarget) {
+      previewSavedTarget = target;
+      previewSavedHTML = target.innerHTML;
+    }
+    document.querySelectorAll('.asl-dock-btn').forEach(btn => btn.classList.remove('active'));
+    const btn = document.getElementById('asl-btn-dock-loading');
+    if (btn) btn.classList.add('active');
+
+    target.innerHTML = renderSkeleton({ rows: 5, type: 'table' });
+  }
+
+  function previewToastState() {
+    showToast('Thao tác lưu dữ liệu đã được xử lý thành công trên hệ thống ASL LAW!', 'success');
+  }
+
+  function previewErrorState() {
+    const target = getPreviewTarget();
+    if (!target) return;
+    if (!previewSavedTarget) {
+      previewSavedTarget = target;
+      previewSavedHTML = target.innerHTML;
+    }
+    document.querySelectorAll('.asl-dock-btn').forEach(btn => btn.classList.remove('active'));
+    const btn = document.getElementById('asl-btn-dock-error');
+    if (btn) btn.classList.add('active');
+
+    target.innerHTML = renderErrorState({
+      message: 'Không thể kết nối với máy chủ ASL LAW ERP. Máy chủ trả về mã lỗi 500. Vui lòng bấm thử lại bên dưới hoặc bấm nút Bình thường.',
+      retryFn: 'window.ASL_4STATES.resetPreview()'
+    });
+  }
+
+  function toggleStatePreviewDock(expanded) {
+    const exp = document.getElementById('asl-dock-expanded');
+    const col = document.getElementById('asl-dock-collapsed');
+    if (exp && col) {
+      if (expanded) {
+        exp.classList.remove('hidden');
+        col.classList.add('hidden');
+        col.classList.remove('flex');
+      } else {
+        exp.classList.add('hidden');
+        col.classList.remove('hidden');
+        col.classList.add('flex');
+      }
+    }
+  }
+
+  function init4StateDock() {
+    if (document.getElementById('asl-state-dock')) return;
+
+    const dock = document.createElement('div');
+    dock.id = 'asl-state-dock';
+    dock.className = 'asl-state-dock state-dock';
+
+    dock.innerHTML = `
+      <div id="asl-dock-expanded" class="flex items-center gap-1.5 flex-wrap">
+        <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400 mr-1 flex items-center gap-1">
+          <span class="w-2 h-2 rounded-full bg-cyan-500 animate-pulse"></span>
+          <span>4 Trạng thái:</span>
+        </span>
+        <button type="button" id="asl-btn-dock-normal" class="asl-dock-btn active" onclick="window.ASL_4STATES.resetPreview()" title="Khôi phục trạng thái ban đầu">
+          <span>✨ Bình thường</span>
+        </button>
+        <button type="button" id="asl-btn-dock-empty" class="asl-dock-btn" onclick="window.ASL_4STATES.previewEmpty()" title="Xem thử trạng thái Trống">
+          <span>📭 Trống (Empty)</span>
+        </button>
+        <button type="button" id="asl-btn-dock-loading" class="asl-dock-btn" onclick="window.ASL_4STATES.previewLoading()" title="Xem thử trạng thái Đang tải Skeleton">
+          <span>⏳ Đang tải (Loading)</span>
+        </button>
+        <button type="button" id="asl-btn-dock-toast" class="asl-dock-btn" onclick="window.ASL_4STATES.previewToast()" title="Bắn Toast thông báo thành công">
+          <span>🔔 Thông báo Toast</span>
+        </button>
+        <button type="button" id="asl-btn-dock-error" class="asl-dock-btn" onclick="window.ASL_4STATES.previewError()" title="Xem thử trạng thái Báo lỗi">
+          <span>⚠️ Báo lỗi (Error)</span>
+        </button>
+        <button type="button" class="p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors ml-1 cursor-pointer" onclick="window.toggleStatePreviewDock(false)" title="Thu nhỏ dock">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+      </div>
+      <div id="asl-dock-collapsed" class="hidden items-center">
+        <button type="button" class="asl-dock-btn" onclick="window.toggleStatePreviewDock(true)" title="Mở rộng bảng thử 4 trạng thái UI">
+          <span class="w-2 h-2 rounded-full bg-cyan-500 animate-pulse"></span>
+          <span>⚡ Thử 4 trạng thái</span>
+        </button>
+      </div>
+    `;
+
+    document.body.appendChild(dock);
+  }
+
+  // Gắn các hàm tiện ích toàn cục
+  window.renderEmptyState = renderEmptyState;
+  window.showEmptyState = renderEmptyState;
+  window.emptyStateHTML = renderEmptyState;
+
+  window.renderSkeleton = renderSkeleton;
+  window.showLoadingState = renderSkeleton;
+  window.skeletonHTML = renderSkeleton;
+
+  window.showToast = showToast;
+  window.showNotification = showToast;
+  window.toastHTML = showToast;
+
+  window.renderErrorState = renderErrorState;
+  window.errorStateHTML = renderErrorState;
+  window.showFieldError = showFieldError;
+  window.clearFieldError = clearFieldError;
+
+  window.init4StateDock = init4StateDock;
+  window.toggleStatePreviewDock = toggleStatePreviewDock;
+  window.toggleStatePreview = toggleStatePreviewDock;
+  window.preview4States = {
+    empty: previewEmptyState,
+    loading: previewLoadingState,
+    toast: previewToastState,
+    error: previewErrorState,
+    reset: resetStatePreview
+  };
+  window.stateSimulator = window.preview4States;
+
+  window.ASL_4STATES = {
+    empty: renderEmptyState,
+    renderEmptyState: renderEmptyState,
+    showEmptyState: renderEmptyState,
+    emptyStateHTML: renderEmptyState,
+
+    loading: renderSkeleton,
+    renderSkeleton: renderSkeleton,
+    showLoadingState: renderSkeleton,
+    skeletonHTML: renderSkeleton,
+
+    toast: showToast,
+    showToast: showToast,
+    showNotification: showToast,
+    toastHTML: showToast,
+
+    error: renderErrorState,
+    renderErrorState: renderErrorState,
+    errorStateHTML: renderErrorState,
+    showFieldError: showFieldError,
+    clearFieldError: clearFieldError,
+
+    initDock: init4StateDock,
+    init4StateDock: init4StateDock,
+    resetPreview: resetStatePreview,
+    previewEmpty: previewEmptyState,
+    previewLoading: previewLoadingState,
+    previewToast: previewToastState,
+    previewError: previewErrorState
+  };
 
   // Khởi động khi DOM sẵn sàng
   if (document.readyState === 'loading') {
@@ -966,7 +1400,8 @@
     withRole: window.withRole,
     getBasePath,
     getActiveMenuKey,
-    toggleTheme: window.toggleTheme
+    toggleTheme: window.toggleTheme,
+    ASL_4STATES: window.ASL_4STATES
   };
 
 })();
