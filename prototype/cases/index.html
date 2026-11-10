@@ -43,7 +43,7 @@
 
       <div class="flex items-center gap-2 sm:gap-3 flex-wrap sm:flex-nowrap">
         <!-- Create Case Button -->
-        <a href="create.html?role=admin" class="px-3 sm:px-3.5 py-2 rounded-xl bg-[#FF7A00] hover:bg-[#E66E00] text-white font-bold text-xs shadow-md shadow-orange-950/20 flex items-center gap-1.5 transition-all whitespace-nowrap">
+        <a href="create.html?role=admin" data-role-hide="accountant" class="px-3 sm:px-3.5 py-2 rounded-xl bg-[#FF7A00] hover:bg-[#E66E00] text-white font-bold text-xs shadow-md shadow-orange-950/20 flex items-center gap-1.5 transition-all whitespace-nowrap">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
           <span>Tạo Vụ Việc Mới</span>
         </a>
@@ -1291,6 +1291,13 @@
       detailTds.forEach(td => {
         td.setAttribute('colspan', isAdmin ? '8' : '6');
       });
+
+      // DEC-01 & Bất biến #2: Kế toán chỉ quản lý đợt thu/tài chính, ẩn nút Tạo Vụ Việc Mới
+      if (role === 'accountant') {
+        document.querySelectorAll('a[href*="create.html"], [data-role-hide~="accountant"]').forEach(el => {
+          el.style.display = 'none'; // hide nút tạo vụ việc mới (create.html)
+        });
+      }
 
       // Bảo toàn ?role=... trên các đường link trong trang
       document.querySelectorAll('a[href="detail.html"], a[href="edit.html"], a[href="create.html"]').forEach(a => {
