@@ -1,0 +1,16 @@
+{
+  "id": "TASK-004",
+  "title": "Header đúng vai trò, sidebar đóng mặc định trên mobile & responsive 375/1024/1440 (A2)",
+  "status": "draft",
+  "conversation_id": null,
+  "history": [
+    {
+      "at": "2026-11-10T19:32:04",
+      "status": "draft",
+      "note": "Claude tạo task"
+    }
+  ],
+  "locked_files": [
+    "handoff/tasks/TASK-004-header-responsive-mobile-sidebar/verify.sh"
+  ]
+}
