@@ -1,0 +1,16 @@
+{
+  "id": "TASK-005",
+  "title": "Bộ thành phần 4 trạng thái UI dùng chung cho toàn bộ prototype (A3)",
+  "status": "draft",
+  "conversation_id": null,
+  "history": [
+    {
+      "at": "2026-11-10T20:24:23",
+      "status": "draft",
+      "note": "Claude tạo task"
+    }
+  ],
+  "locked_files": [
+    "handoff/tasks/TASK-005-4-state-ui-components/verify.sh"
+  ]
+}
