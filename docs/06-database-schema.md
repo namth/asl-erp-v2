@@ -178,6 +178,12 @@ Dòng thời gian tương tác (SCR-04).
 | `name` | `VARCHAR(150)` | NOT NULL | Đăng ký nhãn hiệu, Tranh chấp đất đai… |
 | `code` | `VARCHAR(4)` | UNIQUE, NOT NULL, CHECK `^[A-Z]{2,4}$` | Dùng trong mã vụ việc (`TM`, `LD`, `MA`) |
 | `custom_fields_schema` | `JSONB` | DEFAULT `'[]'` | Định nghĩa trường động |
+| `default_originator_rate` | `NUMERIC(5,2)` | NOT NULL, DEFAULT `0`, CHECK `0..100` | Mặc định cho `commission_policies.originator_rate` khi chuyển đổi |
+| `default_management_rate` | `NUMERIC(5,2)` | NOT NULL, DEFAULT `0`, CHECK `0..100` | |
+| `default_supervisor_share_pct` | `NUMERIC(5,2)` | NOT NULL, DEFAULT `50`, CHECK `0..100` | |
+| `default_execution_rate` | `NUMERIC(5,2)` | NOT NULL, DEFAULT `0`, CHECK `0..100` | |
+
+CHECK: `default_originator_rate + default_management_rate + default_execution_rate <= 100`. Thêm bằng `backend/alembic/versions/003_matter_type_commission_defaults.sql` (idempotent, `ADD COLUMN IF NOT EXISTS`) và revision Alembic chạy file đó (TSK-05).
 
 #### `workflow_templates`
 | Cột | Kiểu | Ràng buộc | Mô tả |
@@ -507,7 +513,7 @@ Phân vùng theo tháng (`PARTITION BY RANGE (created_at)`).
 | `ip_address` | `INET` | NULL | Bắt buộc khi `actor_type = 'USER'` (CHECK) |
 | `user_agent` | `TEXT` | NULL | |
 | `prev_hash` | `CHAR(64)` | NOT NULL | Băm của dòng trước — chuỗi chứng thực toàn vẹn |
-| `row_hash` | `CHAR(64)` | NOT NULL | `sha256(prev_hash ‖ canonical_json(dòng))`; ghi tuần tự bằng `pg_advisory_xact_lock` |
+| `row_hash` | `CHAR(64)` | NOT NULL | `sha256(prev_hash ‖ canonical_json(dòng))`; ghi tuần tự bằng `pg_advisory_xact_lock`; "dòng trước" là dòng có `id` lớn nhất (không theo `created_at` — `now()` là giờ bắt đầu transaction nên có thể lệch thứ tự khi ghi đồng thời) |
 
 **Bất biến:** `asl_app` chỉ có `INSERT, SELECT`; thêm trigger `BEFORE UPDATE OR DELETE … RAISE EXCEPTION` để chặn cả khi lỡ cấp quyền. Job hằng đêm kiểm tra chuỗi băm và cảnh báo nếu đứt.
 

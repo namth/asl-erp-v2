@@ -1,0 +1,6 @@
+a243d59c75b66ec535c61042c31dfb75583cdf84cf049af234bf28ecb2119711  handoff/tasks/TASK-017-giao-dien-2fa-bao-mat/verify.sh
+51e7393be4ce43e3d35037471af98f1b4f3b62974d573cb9818d6ebdd8b594aa  frontend/tests/two-factor/use-two-factor.test.ts
+6c3ff600466b44cf9859d575f29a31d18450e89abed6649ba0d93003781cb6b4  frontend/tests/two-factor/two-factor-setup.test.tsx
+a37e18684c9df1bf038d387d9604cac9478174f10a1054406935d60a74162063  frontend/tests/two-factor/login-2fa.test.tsx
+2697c50209671ef903d865c5b74750286aeeac56c2c2f01ecbe8761f710f3035  frontend/tests/two-factor/security-page.test.tsx
+bdd4c05e74b1ac307fa7e2742acb6ad81c01ac6aa0d696690aa52992e2b8e7d1  frontend/tests/two-factor/conventions.test.ts

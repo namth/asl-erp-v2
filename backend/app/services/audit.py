@@ -35,7 +35,7 @@ def log_audit_event(
         cur.execute("SELECT pg_advisory_xact_lock(742189);")
 
         # Get latest prev_hash
-        cur.execute("SELECT row_hash FROM audit_logs ORDER BY created_at DESC, id DESC LIMIT 1;")
+        cur.execute("SELECT row_hash FROM audit_logs ORDER BY id DESC LIMIT 1;")
         row = cur.fetchone()
         prev_hash = row[0] if row else GENESIS_HASH
 
@@ -103,7 +103,7 @@ def verify_audit_chain(
         if from_id is not None:
             query += " WHERE id >= %s"
             params.append(from_id)
-        query += " ORDER BY created_at ASC, id ASC;"
+        query += " ORDER BY id ASC;"
         cur.execute(query, params)
         rows = cur.fetchall()
 

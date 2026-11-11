@@ -59,6 +59,7 @@
 | `FORBIDDEN_ROLE` | 403 | Vai trò hệ thống không được dùng chức năng này |
 | `NEED_TO_KNOW_DENIED` | 403 | Không thuộc phạm vi vụ việc (ghi `ACCESS_DENIED` vào audit) |
 | `NOT_FOUND` | 404 | Không tồn tại |
+| `DUPLICATE_EMAIL` | 409 | Email người dùng đã tồn tại |
 | `DUPLICATE_TAX_CODE` | 409 | MST đã tồn tại |
 | `DUPLICATE_IDENTITY_NO` | 409 | CCCD/hộ chiếu đã tồn tại |
 | `OPPORTUNITY_NOT_WON` | 409 | Chuyển đổi khi cơ hội chưa `WON` |
@@ -67,6 +68,14 @@
 | `INVALID_STATE_TRANSITION` | 409 | Chuyển trạng thái không có trong máy trạng thái (`12` §1) |
 | `PREREQUISITE_TASK_NOT_COMPLETED` | 422 | Vi phạm phụ thuộc task (`12` §2.1) |
 | `STAGE_LOCKED` | 409 | Stage đang `LOCKED`/`WAITING_APPROVAL`/`WAITING_PAYMENT` |
+| `ACTIVE_TEMPLATE_EXISTS` | 409 | Loại vụ việc đã có template đang hoạt động |
+| `DRAFT_VERSION_EXISTS` | 409 | Template đã có một phiên bản `DRAFT` |
+| `VERSION_NOT_DRAFT` | 409 | Sửa phiên bản đã phát hành/ngừng |
+| `DEPENDENCY_CYCLE` | 422 | Phụ thuộc task tạo chu trình (khi phát hành) |
+| `INVALID_DEPENDENCY` | 422 | Task phụ thuộc task ở stage sau |
+| `ASSIGNEE_HAS_OPEN_TASKS` | 409 | Gỡ phân công người còn task `IN_PROGRESS`/`WAITING_APPROVAL` |
+| `ASSIGNEE_NOT_IN_CASE` | 422 | Giao task cho người không được phân công vào vụ việc |
+| `CASE_PAUSED` | 409 | Đổi trạng thái task khi vụ việc `PAUSED` |
 | `STRICT_GOVERNANCE_VIOLATION` | 403 | Thêm task/stage vào vụ việc template `STRICT` |
 | `CHANGE_REQUEST_REQUIRED` | 403 | Thêm task/stage trực tiếp vào vụ việc `FLEXIBLE` mà không qua yêu cầu đã duyệt |
 | `APPROVAL_NOT_ALLOWED` | 403 | Người duyệt không đủ thẩm quyền, hoặc tự duyệt yêu cầu của mình |
@@ -100,7 +109,7 @@ Cột "Milestone" theo lộ trình `11`. Endpoint M1–M2 có đặc tả chi ti
 | Khách hàng | `GET/POST /crm/clients` · `GET/PATCH /crm/clients/{id}` · `GET/POST /crm/clients/{id}/interactions` | MANAGER, ATTORNEY (ACCOUNTANT xem) | M2 |
 | Cơ hội | `GET/POST /crm/opportunities` · `PATCH /crm/opportunities/{id}` · `POST /crm/opportunities/{id}/convert` | MANAGER, ATTORNEY | M2 |
 | Xung đột lợi ích | `POST /crm/conflict-check` | MANAGER, ATTORNEY | M2 |
-| Workflow | `GET/POST /workflows/templates` · `POST /workflows/templates/{id}/versions` · `PUT /workflows/versions/{id}` · `POST /workflows/versions/{id}/publish` | ADMIN (MANAGER xem) | M3 |
+| Workflow | `GET/POST/PATCH /workflows/templates` · `GET/POST /workflows/templates/{id}/versions` · `GET/PUT /workflows/versions/{id}` · `POST /workflows/versions/{id}/publish` · `PUT /workflows/matter-types/{id}/custom-fields` (§3.3a) | ADMIN (MANAGER xem) | M3 |
 | Vụ việc | `GET/POST /cases` · `GET/PATCH /cases/{id}` · `POST /cases/{id}/status` | `progress` (danh sách) · `professional` | M3 |
 | Phân công | `GET/PUT /cases/{id}/assignments` | MANAGER trong phạm vi | M3 |
 | Các bên | `GET/POST /cases/{id}/parties` | `professional` | M3 |
@@ -191,6 +200,41 @@ Khoá tài khoản: `is_active = false`, `tokens_valid_after = NOW()`, gỡ các
 ```
 Mọi user phải có `system_role = MANAGER`. Đồng bộ cạnh `:LEADS`.
 
+### 3.2a. Nhật ký kiểm toán (ADMIN — SCR-13)
+
+#### `GET /api/v1/audit-logs`
+Tham số: `actor_id`, `actor_type` (`USER`|`SYSTEM`), `action`, `entity_name`, `entity_id`, `from`, `to` (ISO 8601, lọc `created_at`), `page`, `limit` (mặc định 50, tối đa 200). Sắp xếp mới nhất trước; `meta` phân trang như §1.2.
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": 1042,
+      "created_at": "2026-11-11T09:12:03.120Z",
+      "actor_type": "USER",
+      "actor": { "id": "c1f8a29e-…", "full_name": "Nguyễn Văn Trường", "email": "truong.nv@asllaw.vn" },
+      "action": "USER_DEACTIVATED",
+      "entity_name": "users",
+      "entity_id": "5f0c…",
+      "before_state": { "is_active": true },
+      "after_state": { "is_active": false, "reason": "Nghỉ việc" },
+      "ip_address": "10.0.0.12",
+      "user_agent": "Mozilla/5.0 …",
+      "row_hash": "9b1d…"
+    }
+  ],
+  "meta": { "page": 1, "limit": 50, "total_records": 1042, "total_pages": 21 }
+}
+```
+`actor` là `null` khi `actor_type = SYSTEM` hoặc người dùng đã bị xoá liên kết. Chỉ đọc — không có endpoint sửa/xoá.
+
+#### `GET /api/v1/audit-logs/integrity`
+Kết quả lần kiểm chuỗi băm gần nhất (job hằng đêm) — `?recheck=true` chạy kiểm ngay (giới hạn 1 lần/5 phút, vượt → `429 RATE_LIMITED`).
+```json
+{ "success": true, "data": { "status": "OK", "checked_rows": 1042, "verified_at": "2026-11-11T02:00:04Z", "first_broken_id": null } }
+```
+`status`: `OK` | `BROKEN` (kèm `first_broken_id`) | `NEVER_CHECKED`.
+
 ### 3.3. Khách hàng & cơ hội
 
 #### `POST /api/v1/crm/clients`
@@ -245,7 +289,65 @@ Header bắt buộc: `Idempotency-Key`.
 }
 ```
 
-### 3.4. Vụ việc & task (M3 — tóm tắt hợp đồng)
+### 3.3a. Trình thiết kế quy trình (M3 — TSK-06, SCR-06)
+Quyền: ghi chỉ `ADMIN`; đọc `ADMIN`, `MANAGER`. Template **bất biến sau khi phát hành** — mọi chỉnh sửa diễn ra trên một phiên bản `DRAFT`.
+
+| Method & Path | Việc |
+| :--- | :--- |
+| `GET /workflows/templates?matter_type_id=` | Danh sách template kèm `published_version_no`, `draft_version_id` |
+| `POST /workflows/templates` `{matter_type_id, name, mode}` | Tạo template + phiên bản 1 `DRAFT` rỗng. Loại vụ việc đã có template active → `409 ACTIVE_TEMPLATE_EXISTS` |
+| `PATCH /workflows/templates/{id}` `{name?, mode?, is_active?}` | `mode` chỉ áp cho vụ việc tạo **sau** lần phát hành kế tiếp (vụ việc cũ giữ chế độ đã sao chép) |
+| `GET /workflows/templates/{id}/versions` | Lịch sử phiên bản (`version_no`, `status`, `published_at`, `published_by`) |
+| `POST /workflows/templates/{id}/versions` | Tạo `DRAFT` mới sao chép từ bản `PUBLISHED` mới nhất. Đã có `DRAFT` → `409 DRAFT_VERSION_EXISTS` |
+| `GET /workflows/versions/{id}` | Cây đầy đủ (mẫu dưới) |
+| `PUT /workflows/versions/{id}` | Thay **toàn bộ** cây của bản `DRAFT`; bản khác `DRAFT` → `409 VERSION_NOT_DRAFT` |
+| `POST /workflows/versions/{id}/publish` | Kiểm tra rồi phát hành; bản `PUBLISHED` cũ → `RETIRED`; audit `WORKFLOW_PUBLISHED` |
+| `PUT /workflows/matter-types/{id}/custom-fields` `{fields: […]}` | Trường động của loại vụ việc (`matter_types.custom_fields_schema`) |
+| `GET/PUT /settings/holidays?year=` `{year, days: [{date, name}]}` | Ngày nghỉ lễ dùng tính SLA ngày làm việc |
+
+Cây phiên bản (`GET` trả về, `PUT` gửi lên cùng dạng; `key` là định danh do client đặt, ổn định trong một lần lưu, dùng để nối phụ thuộc):
+```json
+{
+  "id": "…", "template_id": "…", "version_no": 2, "status": "DRAFT", "mode": "STRICT",
+  "stages": [
+    { "key": "s1", "name": "Tiếp nhận & thẩm định", "order_index": 1, "requires_approval": true,
+      "tasks": [
+        { "key": "t1", "title": "Tra cứu nhãn hiệu", "description": null, "default_case_role": "EXECUTOR",
+          "sla_business_days": 3, "complexity_weight": 2, "requires_approval": true,
+          "triggers_milestone_order": null, "depends_on": [] },
+        { "key": "t2", "title": "Gửi báo cáo tra cứu", "default_case_role": "CASE_MANAGER",
+          "sla_business_days": 1, "complexity_weight": 1, "requires_approval": false,
+          "triggers_milestone_order": 1, "depends_on": ["t1"] }
+      ] }
+  ]
+}
+```
+- Kiểm tra khi `PUT` (422 `VALIDATION_ERROR` kèm `details.fields`): `order_index` liên tục từ 1; `key` duy nhất; `sla_business_days > 0`; `complexity_weight` 1–4; `depends_on` chỉ trỏ tới `key` có trong bản; không tự phụ thuộc; `triggers_milestone_order` ≥ 1 và không trùng.
+- Kiểm tra khi `publish`: có ≥ 1 stage, mỗi stage ≥ 1 task; đồ thị phụ thuộc không có chu trình → `422 DEPENDENCY_CYCLE` (`details.cycle`: danh sách `key`); task không phụ thuộc task ở **stage sau** → `422 INVALID_DEPENDENCY`.
+- Trường động: `{key, label, type: text|number|date|select|boolean, required, options?}`; `key` dạng `snake_case` duy nhất; `select` bắt buộc `options` ≥ 1.
+
+### 3.4. Vụ việc & task (M3 — TSK-07, TSK-08, TSK-19)
+
+Quy tắc trạng thái, phụ thuộc, khoá tiền, phê duyệt, phân công theo `12` §1.2–1.4, §2.1–2.6. Mọi route `/cases/{id}/…` đi qua `verify_need_to_know` với phạm vi ghi trong bảng; ghi qua `verify_csrf`; vụ việc `is_legacy` → ghi bị `409 LEGACY_CASE_READ_ONLY`.
+
+| Method & Path | Phạm vi | Việc |
+| :--- | :--- | :--- |
+| `GET /cases?q=&status=&department_id=&mine=true&page=` | `progress` | Danh sách vụ việc **người xem có quyền**: `id, case_code, title, client_name, status, workflow_mode, current_stage {name, status}, progress_pct, due_at_nearest, my_role_in_case` + `meta` |
+| `GET /cases/{id}` | `professional` (`?view=progress` cho phạm vi `progress`) | Mẫu dưới |
+| `POST /cases/{id}/status` `{status, reason?}` | `professional` (Quản lý) | `ACTIVE`/`PAUSED`/`TERMINATED`/`CLOSED` theo `12` §1.2; `PAUSED`, `TERMINATED` bắt buộc `reason` |
+| `GET /cases/{id}/stages` | `professional` | `[{id, name, order_index, status, requires_approval, blocking_milestone {id, name, status}?, task_counts {todo, in_progress, waiting_approval, completed}}]` |
+| `GET/PUT /cases/{id}/assignments` `{assignments: [{user_id, role_in_case}]}` | Quản lý trong phạm vi | Thay toàn bộ; đúng 1 `CASE_MANAGER`, ≤ 1 `SUPERVISOR`; gỡ người còn task dở → `409 ASSIGNEE_HAS_OPEN_TASKS` (`details.task_ids`) |
+| `GET /cases/{id}/tasks?stage_id=&status=&assigned_to=` | `professional` | `[{id, stage_id, title, status, assigned_to {id, full_name}?, due_at, sla_business_days, complexity_weight, requires_approval, is_ad_hoc, depends_on: [task_id], blocked_by: [task_id chưa COMPLETED]}]` |
+| `PATCH /cases/{id}/tasks/{taskId}` `{assigned_to?, due_at?, description?}` | `professional` | `assigned_to` phải đang được phân công vào vụ việc (`422 ASSIGNEE_NOT_IN_CASE`) |
+| `PATCH /cases/{id}/tasks/{taskId}/status` | `professional` | Mẫu dưới |
+| `GET/POST /cases/{id}/tasks/{taskId}/comments` `{body}` | `professional` | Mới nhất trước; `body` 1–5000 ký tự |
+| `GET /cases/{id}/change-requests` · `POST` (mẫu dưới) | `professional` | Danh sách yêu cầu bổ sung kèm trạng thái |
+| `GET /approvals?status=PENDING&type=` | người có thẩm quyền | Hàng chờ duyệt **của người xem** (`12` §2.2): `[{id, type: TASK|STAGE_GATE|CHANGE_REQUEST, case {id, case_code, title}, subject {id, title}, requested_by {id, full_name}, requested_at, note}]` |
+| `POST /approvals/{id}/decide` | người có thẩm quyền | Mẫu dưới |
+| `GET /me/tasks?status=&due=overdue|today|week&page=` | của chính mình | Task được giao cho người xem trên mọi vụ việc (Bàn làm việc — SCR-02): `[{id, title, status, due_at, is_overdue, case {id, case_code, title}, stage {name, status}, blocked_by_count}]` + `meta` + `summary {todo, in_progress, waiting_approval, overdue}` |
+| `GET/PUT /settings/commission-defaults` | ADMIN (MANAGER xem) | Tỷ lệ mặc định theo loại vụ việc (`matter_types.default_*`): `[{matter_type_id, name, code, default_originator_rate, default_management_rate, default_supervisor_share_pct, default_execution_rate}]`; `PUT` gửi cùng dạng, tổng 3 tỷ lệ ≤ 100 (`422 COMMISSION_RATES_EXCEED_100`); chỉ áp cho vụ việc chuyển đổi **sau** khi lưu |
+
+Mã lỗi thêm: `ASSIGNEE_HAS_OPEN_TASKS` (409), `ASSIGNEE_NOT_IN_CASE` (422), `CASE_PAUSED` (409 — đổi trạng thái task khi vụ việc `PAUSED`).
 
 #### `GET /api/v1/cases/{id}` — phạm vi `professional`
 ```json
@@ -338,6 +440,15 @@ Header bắt buộc: `Idempotency-Key`.
 - Hoa hồng tính trên `received_amount` của **lần này** (`12` §3). Đợt chỉ `PAID_CONFIRMED` và mở khoá stage khi `received_total >= amount`.
 - Thu thừa: ghi nhận, `warnings` có `OVERPAYMENT` kèm số dư.
 - Lỗi: `MILESTONE_NOT_AWAITING_PAYMENT`, `DUPLICATE_BANK_REF`, `IDEMPOTENCY_KEY_REUSED`.
+
+#### `GET /api/v1/accounting/inbox?status=AWAITING_PAYMENT,PARTIALLY_PAID&q=&page=` (ACCOUNTANT)
+Hàng chờ đợt thu cần đối soát (phạm vi `finance`): `[{milestone_id, case {id, case_code, title, client_name}, name, amount, received_total, remaining, status, awaiting_since, payments: [{received_amount, misa_invoice_no, bank_ref_code, confirmed_at, confirmed_by {full_name}}]}]` + `meta`. Tiền là chuỗi.
+
+#### `GET /api/v1/finance/commissions?case_id=&user_id=&from=&to=&page=`
+Sổ hoa hồng (`commission_transactions`, chỉ đọc): `[{id, case {case_code}, milestone {name}, user {id, full_name}, role_type: ORIGINATOR|SUPERVISOR|CASE_MANAGER|EXECUTOR, task {title}?, base_amount, rate_pct, amount, created_at, disbursed_at?}]` + `meta` + `summary: {total_amount, by_role: {…}}`. `MANAGER`, `ACCOUNTANT` xem trong phạm vi; `ATTORNEY` chỉ nhận dòng của chính mình (tham số `user_id` khác bị bỏ qua). `GET /finance/commissions/export` cùng tham số → tệp `.xlsx`.
+
+#### `GET /api/v1/cases/{id}/milestones` · `GET/PUT /cases/{id}/commission-policy` (phạm vi `finance`)
+Đợt thu của vụ việc (`[{id, order_index, name, amount, received_total, status, triggered_by_task {title}?}]`) và chính sách hoa hồng (`{originator_rate, management_rate, supervisor_share_pct, execution_rate, locked_at}`); `PUT` chỉ Quản lý, trước lần thu đầu (`409 COMMISSION_POLICY_LOCKED`), tổng ≤ 100 (`422 COMMISSION_RATES_EXCEED_100`).
 
 ### 3.6. Trợ lý AI
 

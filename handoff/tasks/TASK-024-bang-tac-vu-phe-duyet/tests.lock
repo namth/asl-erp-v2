@@ -1,0 +1,8 @@
+3e047d34cad61b3dd2421d02d4c078850ab7897e131de41913d09aeff6073d32  handoff/tasks/TASK-024-bang-tac-vu-phe-duyet/verify.sh
+bb31a0ab89d1c8c4bad657c4bbd3f42e699cba2ddc86e3a777a46fb8e21febf8  frontend/tests/tasks/task-state.test.ts
+25fe42af8813d6bbc9b4da325f24cd1b9cee05ab303c09ad4ba5707c52ebb21e  frontend/tests/tasks/use-tasks.test.ts
+5315ec0c9762462f64e8908d77a72752cfba790bf8d7046eaa0a54dff8d43e89  frontend/tests/tasks/tasks-page.test.tsx
+f0fb12c7be6b3f18654e59e96b90b1d2668946469e9a5f5649a1d5c430b21008  frontend/tests/tasks/task-detail.test.tsx
+678005d15582ed9ac5db87027a44b1b5cad03a308568ef622bfc63f86529f98e  frontend/tests/tasks/change-requests.test.tsx
+ce0c2b67b9fd31919b57c4a47afe57a01ac02434cd42e3e169c642007232f948  frontend/tests/tasks/approvals-page.test.tsx
+1dcbcc2fd34b062a9572ea2edfc3f872e940d5069e6d64287869c0d04c989bc3  frontend/tests/tasks/conventions.test.ts

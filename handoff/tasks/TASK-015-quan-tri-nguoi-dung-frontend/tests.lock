@@ -1,0 +1,7 @@
+689cb0b4d71d6a7c111de47bf4b3845fc49d5186d1bc4c137b234ab3ea5a041a  handoff/tasks/TASK-015-quan-tri-nguoi-dung-frontend/verify.sh
+78ed652ee1eef1efd903180595f9f93865bd343c98104d79f0f8229cd929ea3b  frontend/tests/admin/use-admin.test.ts
+d860312313ddd07e7d7394518a9752ec1486c5a82fbc7a1ac5980aa46f7d4bc1  frontend/tests/admin/users-page.test.tsx
+cc41ec86adfe659ab3e71c7640d3bbd4d168f42191f186720eae1deee7569451  frontend/tests/admin/user-create.test.tsx
+2879fe44a266a61d97edc6f0da8aa3e4d75ef0e7f0da34ca17f98e5911e24e7f  frontend/tests/admin/user-detail-page.test.tsx
+5317e85836a3d9e12e59c10174771594a20073f108bad3ef9145f9cba9b428b3  frontend/tests/admin/departments-page.test.tsx
+0bd6dd833e0e178de6a9010ab55fca6bba6ee8189a0304593e0cefbebe561a15  frontend/tests/admin/conventions.test.ts

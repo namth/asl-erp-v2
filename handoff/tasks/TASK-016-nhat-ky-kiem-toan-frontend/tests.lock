@@ -1,0 +1,6 @@
+16c2fc82d04e1368bc6d648bf711d2e72ca443fe9b86295b004f45f04f924d02  handoff/tasks/TASK-016-nhat-ky-kiem-toan-frontend/verify.sh
+3267c7df22d7a65331f77c9683f7887c0c7f8b9dae36cbb30f3391e9b6b09002  frontend/tests/audit/use-audit-logs.test.ts
+b039f3b3025d529a1a8a540e9fdc9c1eae1553c9d4ebcbfc4eb11a52f229cdec  frontend/tests/audit/audit-page.test.tsx
+0a59b3d16819cd9a705f882db53f71abbb74f451b53f8016be5fd0d11d311eb9  frontend/tests/audit/audit-diff.test.tsx
+17a9b4824d3f88c89e361b7deb59be682d98f4dc6c87e63a7c8360f3547e4e52  frontend/tests/audit/audit-integrity.test.tsx
+e1eb396ac5fe1f866da7a78b39fb0f6d9079b0e03c90ee0689f93756e8ef3896  frontend/tests/audit/conventions.test.ts

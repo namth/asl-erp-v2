@@ -1,0 +1,64 @@
+{
+  "id": "TASK-024",
+  "title": "Bảng tác vụ, yêu cầu bổ sung & hàng chờ duyệt (SCR-09, SCR-10, SCR-16)",
+  "status": "accepted",
+  "conversation_id": "b5fd9697-ebec-4fc8-a3c4-3be7233605bb",
+  "history": [
+    {
+      "at": "2026-11-11T16:39:41",
+      "status": "draft",
+      "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-11T16:47:35",
+      "status": "tests_assigned",
+      "note": "giao viết test chéo cho agy2"
+    },
+    {
+      "at": "2026-11-11T16:57:27",
+      "status": "tests_ready",
+      "note": "test chéo đã khoá (7 file), verify đỏ đúng chờ code"
+    },
+    {
+      "at": "2026-11-11T16:57:36",
+      "status": "assigned",
+      "note": "giao code qua agy cho agy3 (model mặc định)"
+    },
+    {
+      "at": "2026-11-11T16:57:50",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-11T17:19:06",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-11T17:19:12",
+      "status": "accepted",
+      "note": "LOW: không nghiệm thu chéo bằng agent — cổng tự động (orchestrate.py gate) trước khi merge"
+    }
+  ],
+  "agents": {
+    "coder": {
+      "account": "agy3",
+      "conversation_id": "b5fd9697-ebec-4fc8-a3c4-3be7233605bb"
+    },
+    "tester": {
+      "account": "agy2",
+      "conversation_id": "6454c8ec-663b-4e82-9645-eeb76ca7217d"
+    }
+  },
+  "locked_files": [
+    "handoff/tasks/TASK-024-bang-tac-vu-phe-duyet/verify.sh",
+    "frontend/tests/tasks/task-state.test.ts",
+    "frontend/tests/tasks/use-tasks.test.ts",
+    "frontend/tests/tasks/tasks-page.test.tsx",
+    "frontend/tests/tasks/task-detail.test.tsx",
+    "frontend/tests/tasks/change-requests.test.tsx",
+    "frontend/tests/tasks/approvals-page.test.tsx",
+    "frontend/tests/tasks/conventions.test.ts"
+  ],
+  "via": "agy"
+}
