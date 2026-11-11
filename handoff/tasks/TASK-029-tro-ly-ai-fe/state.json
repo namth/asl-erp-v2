@@ -1,0 +1,73 @@
+{
+  "id": "TASK-029",
+  "title": "Trợ lý AI dạng ngăn kéo (SCR-14)",
+  "status": "accepted",
+  "conversation_id": "f0d5e8b1-4844-4b52-83fb-12d56a0f436a",
+  "history": [
+    {
+      "at": "2026-11-11T19:11:23",
+      "status": "draft",
+      "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-11T19:13:41",
+      "status": "tests_assigned",
+      "note": "giao viết test chéo cho agy2"
+    },
+    {
+      "at": "2026-11-11T19:26:14",
+      "status": "tests_ready",
+      "note": "test chéo đã khoá (6 file), verify đỏ đúng chờ code"
+    },
+    {
+      "at": "2026-11-11T19:31:10",
+      "status": "assigned",
+      "note": "giao code qua agy cho agy3 (model mặc định)"
+    },
+    {
+      "at": "2026-11-11T19:31:34",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-11T20:11:15",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-11T20:15:23",
+      "status": "in_review",
+      "note": "giao nghiệm thu chéo cho agy2"
+    },
+    {
+      "at": "2026-11-11T20:18:40",
+      "status": "accepted",
+      "note": "nghiệm thu chéo đạt bởi agy2 (LOW)"
+    }
+  ],
+  "agents": {
+    "coder": {
+      "account": "agy3",
+      "conversation_id": "f0d5e8b1-4844-4b52-83fb-12d56a0f436a"
+    },
+    "tester": {
+      "account": "agy2",
+      "conversation_id": "bd6d3c08-2d61-4b64-827d-698cd9ceb045"
+    },
+    "reviewer": {
+      "account": "agy2",
+      "conversation_id": "157f4d3d-e16c-4949-aae2-d920afe77195"
+    }
+  },
+  "locked_files": [
+    "handoff/tasks/TASK-029-tro-ly-ai-fe/verify.sh",
+    "frontend/tests/ai/declarations.d.ts",
+    "frontend/tests/ai/ai-links.test.ts",
+    "frontend/tests/ai/ai-drawer-store.test.ts",
+    "frontend/tests/ai/use-ai-chat.test.tsx",
+    "frontend/tests/ai/ai-chat-drawer.test.tsx",
+    "frontend/tests/ai/conventions.test.ts"
+  ],
+  "via": "agy",
+  "review_fingerprint": "c0f533eaebb4a9b276dcef8bf904c056bd344f61f1ff2d5218ca8673186acc78"
+}

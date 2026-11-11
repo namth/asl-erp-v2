@@ -1,0 +1,73 @@
+{
+  "id": "TASK-021",
+  "title": "Backend trình thiết kế quy trình, phiên bản & ngày nghỉ (TSK-06)",
+  "status": "accepted",
+  "conversation_id": "1e50f066-0a55-414a-b6ed-2807eff3f9b7",
+  "history": [
+    {
+      "at": "2026-11-11T16:05:41",
+      "status": "draft",
+      "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-11T16:05:52",
+      "status": "tests_assigned",
+      "note": "giao viết test chéo cho agy2"
+    },
+    {
+      "at": "2026-11-11T16:14:24",
+      "status": "tests_ready",
+      "note": "test chéo đã khoá (1 file), verify đỏ đúng chờ code"
+    },
+    {
+      "at": "2026-11-11T17:42:45",
+      "status": "assigned",
+      "note": "giao code qua agy cho agy1 (gemini-3.8-flash-high)"
+    },
+    {
+      "at": "2026-11-11T17:43:11",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-11T19:17:14",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-11T19:43:32",
+      "status": "changes_requested",
+      "note": "Claude yêu cầu sửa"
+    },
+    {
+      "at": "2026-11-11T19:43:51",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-11T22:34:03",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-11T23:24:25",
+      "status": "accepted",
+      "note": "Claude nghiệm thu"
+    }
+  ],
+  "agents": {
+    "coder": {
+      "account": "agy1",
+      "conversation_id": "1e50f066-0a55-414a-b6ed-2807eff3f9b7"
+    },
+    "tester": {
+      "account": "agy2",
+      "conversation_id": "4c8c096f-ae0a-4880-9804-95b70c2c2969"
+    }
+  },
+  "locked_files": [
+    "handoff/tasks/TASK-021-thiet-ke-quy-trinh-backend-tsk06/verify.sh",
+    "backend/tests/test_workflow_builder.py"
+  ],
+  "via": "agy"
+}

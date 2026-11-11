@@ -1,0 +1,5 @@
+fdb7ae5ab4dc4fdd387ccbfd3ed7f860fadadf28113914a77e8ddcc3d4664fd7  handoff/tasks/TASK-028-van-phong-so-fe/verify.sh
+9c080ca0ba86adab96f5a846dc4f19460c766143466c98a983df12fffc874962  frontend/tests/floorplan/floorplan-lib.test.ts
+d2ef1fb9f7485df11b4a2fcf08498a6c6239a556d666a5545c15fb797e3407fc  frontend/tests/floorplan/use-floorplan.test.ts
+bb0b03a8d23576c4203703e7fa146bc152755215c9c1a535b19fcffebfb1c703  frontend/tests/floorplan/floorplan-page.test.tsx
+0b21f1c27794ba3cb126bbc7a8995964c998a1838417cca0e62f4132577bce9c  frontend/tests/floorplan/conventions.test.ts
