@@ -88,9 +88,18 @@ def create_test_client(conn, name: str = "Khách Hàng Task Flow") -> dict:
     return {"id": client_id, "name": name}
 
 
+def _free_matter_type_code(conn) -> str:
+    """Mã loại vụ việc ngẫu nhiên 4 chữ A–Z chưa có trong DB (DB test dùng chung tích luỹ dữ liệu)."""
+    import secrets, string
+    while True:
+        code = "".join(secrets.choice(string.ascii_uppercase) for _ in range(4))
+        if conn.execute("SELECT 1 FROM matter_types WHERE code = %s", (code,)).fetchone() is None:
+            return code
+
+
 def create_test_matter_type(conn, department_id: str, code: str | None = None, name: str = "Đăng ký bản quyền") -> dict:
     mt_id = str(uuid.uuid4())
-    mt_code = code or ("T" + uuid.uuid4().hex[:3].upper().translate(str.maketrans("0123456789", "GHIJKLMNOP")))
+    mt_code = code or _free_matter_type_code(conn)
     conn.execute(
         """INSERT INTO matter_types (id, department_id, name, code, custom_fields_schema)
            VALUES (%s, %s, %s, %s, '[]')""",
@@ -111,15 +120,17 @@ def create_test_case(
     is_legacy: bool = False,
     matter_code: str = "CR",
     title: str = "Vụ việc bản quyền task flow",
+    created_by: str | None = None,
 ) -> dict:
+    created_by = created_by or create_test_user(conn, "MANAGER")["id"]
     case_id = str(uuid.uuid4())
     case_code = f"ASL-2026-{matter_code[:3]}-{uuid.uuid4().hex[:4].upper()}"
     conn.execute(
         """INSERT INTO cases (id, case_code, title, client_id, matter_type_id, department_id,
-                              workflow_mode, contract_value, status, is_legacy, custom_data)
-           VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, '{}')""",
+                              workflow_mode, contract_value, status, is_legacy, custom_data, created_by)
+           VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, '{}', %s)""",
         (case_id, case_code, title, client_id, matter_type_id, department_id,
-         workflow_mode, contract_value, status, is_legacy),
+         workflow_mode, contract_value, status, is_legacy, created_by),
     )
     return {
         "id": case_id,
