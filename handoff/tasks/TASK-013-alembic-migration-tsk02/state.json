@@ -1,0 +1,17 @@
+{
+  "id": "TASK-013",
+  "title": "Alembic migration, hai user DB & bảng bất biến (TSK-02)",
+  "status": "draft",
+  "conversation_id": null,
+  "history": [
+    {
+      "at": "2026-11-11T12:14:04",
+      "status": "draft",
+      "note": "Claude tạo task"
+    }
+  ],
+  "locked_files": [
+    "handoff/tasks/TASK-013-alembic-migration-tsk02/verify.sh",
+    "tests/infra/test_task_013_migrations.py"
+  ]
+}

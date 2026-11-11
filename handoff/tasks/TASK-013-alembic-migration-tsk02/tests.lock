@@ -1,0 +1,2 @@
+5ebb5587fadaa83ec04c47d49fdfd6486ec7423607986d7fdb091e02ec1d6b87  handoff/tasks/TASK-013-alembic-migration-tsk02/verify.sh
+3f0cb0d6a2c1c00bea52396c0eba63592d3c84511132a55090239d01c3137176  tests/infra/test_task_013_migrations.py
