@@ -1,0 +1,58 @@
+{
+  "id": "TASK-018",
+  "title": "Backend khách hàng & hồ sơ chi tiết (TSK-04)",
+  "status": "accepted",
+  "conversation_id": "c37f5739-8231-4a78-a9df-3c51a722794d",
+  "history": [
+    {
+      "at": "2026-11-11T14:09:21",
+      "status": "draft",
+      "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-11T14:09:41",
+      "status": "tests_assigned",
+      "note": "giao viết test chéo cho agy3"
+    },
+    {
+      "at": "2026-11-11T14:28:30",
+      "status": "tests_ready",
+      "note": "test chéo đã khoá (1 file), verify đỏ đúng chờ code"
+    },
+    {
+      "at": "2026-11-11T19:17:50",
+      "status": "assigned",
+      "note": "giao code qua agy cho agy1 (model mặc định)"
+    },
+    {
+      "at": "2026-11-11T19:18:17",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-11T20:29:43",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-11T22:10:14",
+      "status": "accepted",
+      "note": "Claude nghiệm thu"
+    }
+  ],
+  "agents": {
+    "coder": {
+      "account": "agy1",
+      "conversation_id": "c37f5739-8231-4a78-a9df-3c51a722794d"
+    },
+    "tester": {
+      "account": "agy3",
+      "conversation_id": "e97bb783-5eae-4036-9a31-70af919692f9"
+    }
+  },
+  "via": "agy",
+  "locked_files": [
+    "handoff/tasks/TASK-018-khach-hang-backend-tsk04/verify.sh",
+    "backend/tests/test_crm_clients.py"
+  ]
+}
