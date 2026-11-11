@@ -335,55 +335,49 @@ def test_rebuild_graph_dry_run_option():
     )
 
 
-def test_rebuild_graph_matches_postgresql_seed_and_is_idempotent():
-    """rebuild_graph trên DB seed: số nút/cạnh khớp dữ liệu PostgreSQL; chạy 2 lần cho cùng kết quả."""
-    # Chạy lần 1: rebuild graph
+_GRAPH_COUNT_NAMES = ("nút User", "nút Department", "cạnh :LEADS", "cạnh :MEMBER_OF", "cạnh :ASSIGNED_TO")
+
+
+def _rebuild_and_count() -> tuple[tuple, tuple]:
     cmd = [sys.executable, "-m", "backend.app.scripts.rebuild_graph"]
-    res1 = subprocess.run(cmd, capture_output=True, text=True)
-    assert res1.returncode == 0, f"rebuild_graph lần 1 thất bại:\nstdout: {res1.stdout}\nstderr: {res1.stderr}"
-
-    # Lấy số liệu từ PostgreSQL
+    res = subprocess.run(cmd, capture_output=True, text=True)
+    assert res.returncode == 0, f"rebuild_graph thất bại:\nstdout: {res.stdout}\nstderr: {res.stderr}"
     with db() as conn:
-        pg_users = conn.execute("SELECT count(*) FROM users").fetchone()[0]
-        pg_depts = conn.execute("SELECT count(*) FROM departments").fetchone()[0]
-        pg_leaders = conn.execute("SELECT count(*) FROM department_leaders").fetchone()[0]
-        pg_members = conn.execute("SELECT count(*) FROM users WHERE department_id IS NOT NULL").fetchone()[0]
-        pg_assignments = conn.execute("SELECT count(*) FROM case_assignments WHERE unassigned_at IS NULL").fetchone()[0]
-
-    # Kiểm tra số lượng nút & cạnh trên Neo4j
+        pg = tuple(conn.execute(q).fetchone()[0] for q in (
+            "SELECT count(*) FROM users",
+            "SELECT count(*) FROM departments",
+            "SELECT count(*) FROM department_leaders",
+            "SELECT count(*) FROM users WHERE department_id IS NOT NULL",
+            "SELECT count(*) FROM case_assignments WHERE unassigned_at IS NULL",
+        ))
     driver = neo4j_driver()
     with driver.session() as s:
-        neo_users = s.run("MATCH (u:User) RETURN count(u) AS cnt").single()["cnt"]
-        neo_depts = s.run("MATCH (d:Department) RETURN count(d) AS cnt").single()["cnt"]
-        neo_leaders = s.run("MATCH (:User)-[:LEADS]->(:Department) RETURN count(*) AS cnt").single()["cnt"]
-        neo_members = s.run("MATCH (:User)-[:MEMBER_OF]->(:Department) RETURN count(*) AS cnt").single()["cnt"]
-        neo_assignments = s.run("MATCH (:User)-[:ASSIGNED_TO]->(:Case) RETURN count(*) AS cnt").single()["cnt"]
+        neo = tuple(s.run(q).single()["cnt"] for q in (
+            "MATCH (u:User) RETURN count(u) AS cnt",
+            "MATCH (d:Department) RETURN count(d) AS cnt",
+            "MATCH (:User)-[:LEADS]->(:Department) RETURN count(*) AS cnt",
+            "MATCH (:User)-[:MEMBER_OF]->(:Department) RETURN count(*) AS cnt",
+            "MATCH (:User)-[:ASSIGNED_TO]->(:Case) RETURN count(*) AS cnt",
+        ))
     driver.close()
+    return pg, neo
 
-    assert neo_users == pg_users, f"Số nút User ({neo_users}) không khớp PostgreSQL ({pg_users})"
-    assert neo_depts == pg_depts, f"Số nút Department ({neo_depts}) không khớp PostgreSQL ({pg_depts})"
-    assert neo_leaders == pg_leaders, f"Số cạnh :LEADS ({neo_leaders}) không khớp PostgreSQL ({pg_leaders})"
-    assert neo_members == pg_members, f"Số cạnh :MEMBER_OF ({neo_members}) không khớp PostgreSQL ({pg_members})"
-    assert neo_assignments == pg_assignments, f"Số cạnh :ASSIGNED_TO ({neo_assignments}) không khớp PostgreSQL ({pg_assignments})"
 
-    # Chạy lần 2: kết quả phải giống hệt lần 1
-    res2 = subprocess.run(cmd, capture_output=True, text=True)
-    assert res2.returncode == 0, f"rebuild_graph lần 2 thất bại:\nstdout: {res2.stdout}\nstderr: {res2.stderr}"
+def _assert_graph_matches_pg(label: str) -> None:
+    # DB dev dùng chung: test của task khác chạy song song có thể tạo user/phân công giữa lúc rebuild và lúc đếm,
+    # nên thử lại tối đa 3 lần; rebuild sai thật thì lần nào cũng lệch.
+    for _ in range(3):
+        pg, neo = _rebuild_and_count()
+        if pg == neo:
+            return
+    diffs = [f"{n}: Neo4j {b} ≠ PostgreSQL {a}" for n, a, b in zip(_GRAPH_COUNT_NAMES, pg, neo) if a != b]
+    raise AssertionError(f"{label}: đồ thị không khớp PostgreSQL — " + "; ".join(diffs))
 
-    driver = neo4j_driver()
-    with driver.session() as s:
-        neo_users_2 = s.run("MATCH (u:User) RETURN count(u) AS cnt").single()["cnt"]
-        neo_depts_2 = s.run("MATCH (d:Department) RETURN count(d) AS cnt").single()["cnt"]
-        neo_leaders_2 = s.run("MATCH (:User)-[:LEADS]->(:Department) RETURN count(*) AS cnt").single()["cnt"]
-        neo_members_2 = s.run("MATCH (:User)-[:MEMBER_OF]->(:Department) RETURN count(*) AS cnt").single()["cnt"]
-        neo_assignments_2 = s.run("MATCH (:User)-[:ASSIGNED_TO]->(:Case) RETURN count(*) AS cnt").single()["cnt"]
-    driver.close()
 
-    assert neo_users_2 == neo_users, "rebuild_graph lần 2 làm thay đổi số nút User"
-    assert neo_depts_2 == neo_depts, "rebuild_graph lần 2 làm thay đổi số nút Department"
-    assert neo_leaders_2 == neo_leaders, "rebuild_graph lần 2 làm thay đổi số cạnh :LEADS"
-    assert neo_members_2 == neo_members, "rebuild_graph lần 2 làm thay đổi số cạnh :MEMBER_OF"
-    assert neo_assignments_2 == neo_assignments, "rebuild_graph lần 2 làm thay đổi số cạnh :ASSIGNED_TO"
+def test_rebuild_graph_matches_postgresql_seed_and_is_idempotent():
+    """rebuild_graph trên DB seed: số nút/cạnh khớp dữ liệu PostgreSQL; chạy lại lần nữa vẫn khớp (lặp được)."""
+    _assert_graph_matches_pg("rebuild_graph lần 1")
+    _assert_graph_matches_pg("rebuild_graph lần 2")
 
 
 # =====================================================================
