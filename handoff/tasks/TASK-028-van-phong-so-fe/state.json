@@ -1,0 +1,41 @@
+{
+  "id": "TASK-028",
+  "title": "Văn phòng số trực quan (SCR-15, FEAT-01)",
+  "status": "tests_ready",
+  "conversation_id": null,
+  "history": [
+    {
+      "at": "2026-11-11T18:30:09",
+      "status": "draft",
+      "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-11T18:37:22",
+      "status": "tests_assigned",
+      "note": "giao viết test chéo cho agy2"
+    },
+    {
+      "at": "2026-11-11T18:47:08",
+      "status": "tests_ready",
+      "note": "test chéo đã khoá (4 file), verify đỏ đúng chờ code"
+    }
+  ],
+  "agents": {
+    "coder": {
+      "account": null,
+      "conversation_id": null
+    },
+    "tester": {
+      "account": "agy2",
+      "conversation_id": "8ef4e1e8-0d39-4b22-ad68-030b97cfbb9e"
+    }
+  },
+  "locked_files": [
+    "handoff/tasks/TASK-028-van-phong-so-fe/verify.sh",
+    "frontend/tests/floorplan/floorplan-lib.test.ts",
+    "frontend/tests/floorplan/use-floorplan.test.ts",
+    "frontend/tests/floorplan/floorplan-page.test.tsx",
+    "frontend/tests/floorplan/conventions.test.ts"
+  ],
+  "via": "agy"
+}
