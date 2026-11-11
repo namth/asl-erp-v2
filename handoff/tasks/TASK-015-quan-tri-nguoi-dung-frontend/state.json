@@ -1,0 +1,63 @@
+{
+  "id": "TASK-015",
+  "title": "Màn hình quản trị người dùng & phòng ban (SCR-19)",
+  "status": "accepted",
+  "conversation_id": "fd636f9b-52fe-4509-90aa-4da66a574b4a",
+  "history": [
+    {
+      "at": "2026-11-11T12:50:01",
+      "status": "draft",
+      "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-11T12:50:14",
+      "status": "tests_assigned",
+      "note": "giao viết test chéo cho agy3"
+    },
+    {
+      "at": "2026-11-11T12:59:57",
+      "status": "tests_ready",
+      "note": "test chéo đã khoá (6 file), verify đỏ đúng chờ code"
+    },
+    {
+      "at": "2026-11-11T13:00:22",
+      "status": "assigned",
+      "note": "giao code qua agy cho agy2 (model mặc định)"
+    },
+    {
+      "at": "2026-11-11T13:00:38",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-11T13:13:02",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-11T13:13:12",
+      "status": "accepted",
+      "note": "LOW: không nghiệm thu chéo bằng agent — cổng tự động (orchestrate.py gate) trước khi merge"
+    }
+  ],
+  "agents": {
+    "coder": {
+      "account": "agy2",
+      "conversation_id": "fd636f9b-52fe-4509-90aa-4da66a574b4a"
+    },
+    "tester": {
+      "account": "agy3",
+      "conversation_id": "dd83022b-b676-4b69-acc2-303caf140828"
+    }
+  },
+  "locked_files": [
+    "handoff/tasks/TASK-015-quan-tri-nguoi-dung-frontend/verify.sh",
+    "frontend/tests/admin/use-admin.test.ts",
+    "frontend/tests/admin/users-page.test.tsx",
+    "frontend/tests/admin/user-create.test.tsx",
+    "frontend/tests/admin/user-detail-page.test.tsx",
+    "frontend/tests/admin/departments-page.test.tsx",
+    "frontend/tests/admin/conventions.test.ts"
+  ],
+  "via": "agy"
+}
