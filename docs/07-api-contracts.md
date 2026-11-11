@@ -439,6 +439,15 @@ Header bắt buộc: `Idempotency-Key`.
 - Thu thừa: ghi nhận, `warnings` có `OVERPAYMENT` kèm số dư.
 - Lỗi: `MILESTONE_NOT_AWAITING_PAYMENT`, `DUPLICATE_BANK_REF`, `IDEMPOTENCY_KEY_REUSED`.
 
+#### `GET /api/v1/accounting/inbox?status=AWAITING_PAYMENT,PARTIALLY_PAID&q=&page=` (ACCOUNTANT)
+Hàng chờ đợt thu cần đối soát (phạm vi `finance`): `[{milestone_id, case {id, case_code, title, client_name}, name, amount, received_total, remaining, status, awaiting_since, payments: [{received_amount, misa_invoice_no, bank_ref_code, confirmed_at, confirmed_by {full_name}}]}]` + `meta`. Tiền là chuỗi.
+
+#### `GET /api/v1/finance/commissions?case_id=&user_id=&from=&to=&page=`
+Sổ hoa hồng (`commission_transactions`, chỉ đọc): `[{id, case {case_code}, milestone {name}, user {id, full_name}, role_type: ORIGINATOR|SUPERVISOR|CASE_MANAGER|EXECUTOR, task {title}?, base_amount, rate_pct, amount, created_at, disbursed_at?}]` + `meta` + `summary: {total_amount, by_role: {…}}`. `MANAGER`, `ACCOUNTANT` xem trong phạm vi; `ATTORNEY` chỉ nhận dòng của chính mình (tham số `user_id` khác bị bỏ qua). `GET /finance/commissions/export` cùng tham số → tệp `.xlsx`.
+
+#### `GET /api/v1/cases/{id}/milestones` · `GET/PUT /cases/{id}/commission-policy` (phạm vi `finance`)
+Đợt thu của vụ việc (`[{id, order_index, name, amount, received_total, status, triggered_by_task {title}?}]`) và chính sách hoa hồng (`{originator_rate, management_rate, supervisor_share_pct, execution_rate, locked_at}`); `PUT` chỉ Quản lý, trước lần thu đầu (`409 COMMISSION_POLICY_LOCKED`), tổng ≤ 100 (`422 COMMISSION_RATES_EXCEED_100`).
+
 ### 3.6. Trợ lý AI
 
 #### `POST /api/v1/ai/chat`
