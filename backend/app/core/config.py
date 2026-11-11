@@ -6,16 +6,15 @@ class Settings(BaseSettings):
     APP_ENV: str = "development"
     APP_PORT: int = 8000
 
-    # PostgreSQL Supabase
+    # PostgreSQL Supabase (Direct)
     DATABASE_URL: str = os.getenv(
         "DATABASE_URL", 
-        "postgresql+asyncpg://postgres:hbh64G2whRg5Qvzo@127.0.0.1:65432/postgres"
+        "postgresql+asyncpg://postgres:hbh64G2whRg5Qvzo@db.khybbuyphemhkjphxeip.supabase.co:5432/postgres"
     )
     DATABASE_SYNC_URL: str = os.getenv(
         "DATABASE_SYNC_URL", 
-        "postgresql://postgres:hbh64G2whRg5Qvzo@127.0.0.1:65432/postgres?sslmode=disable"
+        "postgresql://postgres:hbh64G2whRg5Qvzo@db.khybbuyphemhkjphxeip.supabase.co:5432/postgres?sslmode=require"
     )
-    POSTGRES_DIRECT_URL: str = "postgresql://postgres:hbh64G2whRg5Qvzo@db.khybbuyphemhkjphxeip.supabase.co:5432/postgres"
 
     # Neo4j Aura (Graph RBAC & Need-to-Know)
     NEO4J_URI: str = "neo4j+s://fe86bb14.databases.neo4j.io"
