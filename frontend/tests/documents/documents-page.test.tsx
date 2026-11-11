@@ -243,7 +243,8 @@ describe('Màn hình Tài liệu vụ việc - cases/[id]/documents/page.tsx (SC
     it('hiển thị đầy đủ 4 thư mục cố định với nhãn tiếng Việt chuẩn khi có đủ quyền', () => {
       render(<DocumentsPage />);
 
-      expect(screen.getByText(/Hợp đồng dịch vụ/i)).toBeDefined();
+      // Nhãn thư mục trùng tiền tố với tiêu đề tài liệu mẫu → đòi khớp đúng nguyên nhãn
+      expect(screen.getAllByText(/^\s*Hợp đồng dịch vụ\s*$/i).length).toBeGreaterThan(0);
       expect(screen.getByText(/Giấy tờ thân chủ cung cấp/i)).toBeDefined();
       expect(screen.getByText(/Đơn từ nộp cơ quan nhà nước\/Tòa án/i)).toBeDefined();
       expect(screen.getByText(/Bản thảo nội bộ/i)).toBeDefined();
@@ -265,8 +266,8 @@ describe('Màn hình Tài liệu vụ việc - cases/[id]/documents/page.tsx (SC
 
       render(<DocumentsPage />);
 
-      // Thấy Hợp đồng dịch vụ
-      expect(screen.getByText(/Hợp đồng dịch vụ/i)).toBeDefined();
+      // Thấy Hợp đồng dịch vụ (nhãn thư mục, khớp nguyên nhãn vì tiêu đề tài liệu cũng bắt đầu bằng cụm này)
+      expect(screen.getAllByText(/^\s*Hợp đồng dịch vụ\s*$/i).length).toBeGreaterThan(0);
 
       // Không thấy 3 thư mục kia
       expect(screen.queryByText(/Giấy tờ thân chủ cung cấp/i)).toBeNull();
@@ -315,7 +316,8 @@ describe('Màn hình Tài liệu vụ việc - cases/[id]/documents/page.tsx (SC
       fireEvent.click(toggleSwitch);
 
       // Phải có huy hiệu "Đã lưu trữ" cho tài liệu lưu trữ
-      expect(screen.getByText(/Đã lưu trữ/i)).toBeDefined();
+      // Khớp nguyên huy hiệu, không lẫn với nhãn công tắc "Hiện tài liệu đã lưu trữ"
+      expect(screen.getAllByText(/^\s*Đã lưu trữ\s*$/i).length).toBeGreaterThan(0);
     });
   });
 
@@ -325,7 +327,8 @@ describe('Màn hình Tài liệu vụ việc - cases/[id]/documents/page.tsx (SC
 
       expect(screen.getByText('Hợp đồng dịch vụ tư vấn pháp lý')).toBeDefined();
       expect(screen.getByText('Soạn hợp đồng')).toBeDefined();
-      expect(screen.getByText(/v2/i)).toBeDefined();
+      // Huy hiệu phiên bản khớp nguyên "v2" (tên tệp hop-dong-v2.pdf cũng chứa v2)
+      expect(screen.getAllByText(/^\s*v2\s*$/i).length).toBeGreaterThan(0);
       expect(screen.getByText('hop-dong-v2.pdf')).toBeDefined();
       expect(screen.getByText(/471 KB/i)).toBeDefined();
       expect(screen.getByText('LS. Mai Linh')).toBeDefined();
@@ -464,10 +467,15 @@ describe('Màn hình Tài liệu vụ việc - cases/[id]/documents/page.tsx (SC
 
       expect(screen.getByText('Lịch sử phiên bản')).toBeDefined();
       // Ver 2 đứng trước Ver 1
-      const v2Element = screen.getByText(/v2/i);
-      const v1Element = screen.getByText(/v1/i);
-      expect(v2Element).toBeDefined();
-      expect(v1Element).toBeDefined();
+      // Trong lịch sử (sau tiêu đề "Lịch sử phiên bản"): huy hiệu v2 phải đứng trước v1
+      const heading = screen.getByText('Lịch sử phiên bản');
+      const v1Element = screen.getByText(/^\s*v1\s*$/i);
+      const after = (a: Node, b: Node) => (a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING) !== 0;
+      const v2InHistory = screen
+        .getAllByText(/^\s*v2\s*$/i)
+        .filter((el) => after(heading, el));
+      expect(v2InHistory.length).toBeGreaterThan(0);
+      expect(after(v2InHistory[0], v1Element)).toBe(true);
     });
 
     it('nút Tải xuống bị tắt khi tệp đang quét (PENDING) hoặc nhiễm virus (INFECTED)', () => {
