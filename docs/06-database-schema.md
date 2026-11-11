@@ -217,6 +217,7 @@ Template **bất biến sau khi phát hành**. Sửa template = tạo phiên b�
 | :--- | :--- | :--- | :--- |
 | `template_stage_id` | `UUID` | FK, NOT NULL | |
 | `title` | `VARCHAR(255)` | NOT NULL | |
+| `order_index` | `SMALLINT` | NOT NULL, DEFAULT `0` | Thứ tự task trong stage (theo thứ tự trong payload lưu cây); đọc `ORDER BY order_index` — migration `004_task_order_index.sql` |
 | `description` | `TEXT` | NULL | |
 | `default_case_role` | `VARCHAR(20)` | CHECK IN (`CASE_MANAGER`,`EXECUTOR`,`ASSISTANT`) | Ai trong vụ việc được gán mặc định |
 | `sla_business_days` | `SMALLINT` | NULL, CHECK `> 0` | Hạn tương đối, tính theo ngày làm việc |
@@ -303,6 +304,7 @@ Các bên của vụ việc — đầu vào kiểm tra xung đột lợi ích (`
 | `stage_id` | `UUID` | FK `case_stages`, NOT NULL | |
 | `template_task_id` | `UUID` | FK, NULL | |
 | `title` | `VARCHAR(255)` | NOT NULL | |
+| `order_index` | `SMALLINT` | NOT NULL, DEFAULT `0` | Sao từ `template_tasks.order_index` khi sinh vụ việc; task bổ sung xếp cuối stage — migration `004_task_order_index.sql` |
 | `description` | `TEXT` | NULL | |
 | `assigned_to` | `UUID` | FK `users`, NULL | Phải là người đang được phân công vào vụ việc |
 | `status` | `VARCHAR(20)` | DEFAULT `'TODO'`, CHECK IN (`TODO`,`IN_PROGRESS`,`WAITING_APPROVAL`,`COMPLETED`) | |
