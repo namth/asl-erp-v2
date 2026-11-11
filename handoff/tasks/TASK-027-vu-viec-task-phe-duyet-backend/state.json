@@ -1,0 +1,40 @@
+{
+  "id": "TASK-027",
+  "title": "Backend vụ việc, stage, task, phân công & phê duyệt (TSK-07, TSK-08, TSK-19)",
+  "status": "tests_ready",
+  "conversation_id": null,
+  "history": [
+    {
+      "at": "2026-11-11T17:43:32",
+      "status": "draft",
+      "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-11T17:43:33",
+      "status": "tests_assigned",
+      "note": "giao viết test chéo cho agy3"
+    },
+    {
+      "at": "2026-11-11T17:57:39",
+      "status": "tests_ready",
+      "note": "test chéo đã khoá (3 file), verify đỏ đúng chờ code"
+    }
+  ],
+  "agents": {
+    "coder": {
+      "account": null,
+      "conversation_id": null
+    },
+    "tester": {
+      "account": "agy3",
+      "conversation_id": "8bce9dec-89ba-4648-bb54-61dd4a964eb6"
+    }
+  },
+  "locked_files": [
+    "handoff/tasks/TASK-027-vu-viec-task-phe-duyet-backend/verify.sh",
+    "backend/tests/test_approvals.py",
+    "backend/tests/test_cases_workspace.py",
+    "backend/tests/test_task_flow.py"
+  ],
+  "via": "agy"
+}
