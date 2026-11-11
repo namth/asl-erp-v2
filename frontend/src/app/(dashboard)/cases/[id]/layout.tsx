@@ -21,7 +21,8 @@ export default function CaseWorkspaceLayout({
 
   const isOverviewActive = pathname === `/cases/${id}`;
   const isTasksActive = pathname.startsWith(`/cases/${id}/tasks`);
-  const isBillingActive = pathname.startsWith(`/cases/${id}/billing`);
+  const isFinanceActive = pathname.startsWith(`/cases/${id}/finance`);
+  const isDocumentsActive = pathname.startsWith(`/cases/${id}/documents`);
 
   return (
     <div className="space-y-6">
@@ -60,11 +61,11 @@ export default function CaseWorkspaceLayout({
             </Link>
           )}
 
-          {/* Billing Tab (Empty/Placeholder M4) */}
+          {/* Finance Tab */}
           <Link
-            href={`/cases/${id}/billing`}
+            href={`/cases/${id}/finance`}
             className={`pb-3 border-b-2 transition-colors flex items-center gap-2 ${
-              isBillingActive
+              isFinanceActive
                 ? 'border-blue-600 text-blue-600 dark:text-blue-400 dark:border-blue-400'
                 : 'border-transparent text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'
             }`}
@@ -74,6 +75,22 @@ export default function CaseWorkspaceLayout({
             </svg>
             <span>Tài chính</span>
           </Link>
+          {/* Documents Tab (ACCOUNTANT chỉ thấy thư mục Hợp đồng — server lọc) */}
+          {searchParams.get('view') !== 'progress' && (
+            <Link
+              href={`/cases/${id}/documents`}
+              className={`pb-3 border-b-2 transition-colors flex items-center gap-2 ${
+                isDocumentsActive
+                  ? 'border-blue-600 text-blue-600 dark:text-blue-400 dark:border-blue-400'
+                  : 'border-transparent text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'
+              }`}
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V7z" />
+              </svg>
+              <span>Tài liệu</span>
+            </Link>
+          )}
         </nav>
       </div>
 

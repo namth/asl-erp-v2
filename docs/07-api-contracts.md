@@ -89,6 +89,8 @@
 | `FILE_TYPE_NOT_ALLOWED` | 415 | Định dạng ngoài danh sách trắng |
 | `FILE_TOO_LARGE` | 413 | > 50 MB |
 | `FILE_NOT_AVAILABLE` | 409 | Tệp chưa quét xong hoặc nhiễm virus |
+| `FOLDER_NOT_ALLOWED` | 403 | Thư mục tài liệu ngoài phạm vi người dùng (vd Kế toán với thư mục khác Hợp đồng) |
+| `DOCUMENT_ARCHIVED` | 409 | Tài liệu đã lưu trữ, không nhận phiên bản mới |
 | `RATE_LIMITED` | 429 | Vượt giới hạn tần suất |
 | `INTERNAL_ERROR` | 500 | Lỗi không lường trước (không lộ chi tiết) |
 
@@ -119,7 +121,7 @@ Cột "Milestone" theo lộ trình `11`. Endpoint M1–M2 có đặc tả chi ti
 | Tài chính vụ việc | `GET/PUT /cases/{id}/commission-policy` · `GET/POST /cases/{id}/milestones` · `PATCH /cases/{id}/milestones/{mid}` · `POST /cases/{id}/milestones/{mid}/cancel` | `finance` | M4 |
 | Kế toán | `GET /accounting/inbox` · `POST /accounting/confirm-payment` | ACCOUNTANT | M4 |
 | Hoa hồng | `GET /finance/commissions` · `GET /finance/commissions/export` · `POST /finance/commissions/disburse` | MANAGER, ACCOUNTANT; ATTORNEY chỉ của mình | M4 |
-| Tài liệu | `GET/POST /cases/{id}/documents` · `POST /documents/{id}/versions` · `GET /documents/{id}/versions/{vid}/download` · `POST /documents/{id}/archive` | `professional` (`finance` với thư mục Hợp đồng) | M5 |
+| Tài liệu | `GET/POST /cases/{id}/documents` · `GET/POST /documents/{id}/versions` · `GET /documents/{id}/versions/{vid}/download` · `POST /documents/{id}/archive` | `professional` (`finance` với thư mục Hợp đồng) | M5 |
 | Thông báo | `GET /notifications` · `POST /notifications/{id}/read` · `WS /ws/notifications` · `POST /me/telegram/link` | mọi người | M5 |
 | Trợ lý AI | `POST /ai/chat` | mọi người, dữ liệu trong phạm vi | M5 |
 | Báo cáo | `GET /reports/revenue` · `GET /reports/commissions` · `GET /reports/operations` · `GET /reports/{name}/export` | theo `02` Phân hệ 10 | M5 |
@@ -503,3 +505,50 @@ Giám đốc chọn được mọi phòng; Trưởng phòng bỏ trống `depart
   }
 }
 ```
+
+### 3.8. Tài liệu vụ việc (M5 — SCR-17, DEC-04)
+
+Phạm vi `professional` của vụ việc (người được phân công, Trưởng phòng phụ trách, Giám đốc). Kế toán (phạm vi `finance`) chỉ **xem và tải** thư mục `LEGAL_CONTRACTS`, không tải lên/lưu trữ. Quản trị viên không truy cập. Không thuộc phạm vi → `403 NEED_TO_KNOW_DENIED`; thư mục ngoài phạm vi → `403 FOLDER_NOT_ALLOWED`. 4 thư mục cố định: `LEGAL_CONTRACTS` (Hợp đồng dịch vụ), `CLIENT_SUBMISSIONS` (Giấy tờ thân chủ cung cấp), `OFFICIAL_FILINGS` (Đơn từ nộp cơ quan nhà nước/Tòa án), `INTERNAL_DRAFTS` (Bản thảo nội bộ).
+
+#### `GET /api/v1/cases/{id}/documents?folder={FOLDER}&include_archived=false`
+Chỉ trả tài liệu trong thư mục người xem được phép; `meta` cho biết thư mục nào hiện và có được tải lên không.
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": "doc-1",
+      "folder": "LEGAL_CONTRACTS",
+      "title": "Hợp đồng dịch vụ đăng ký nhãn hiệu",
+      "task": { "id": "task-3", "title": "Soạn hợp đồng" },
+      "is_archived": false,
+      "created_at": "2026-11-02T03:00:00Z",
+      "current_version": {
+        "id": "ver-2", "version_no": 2, "original_filename": "hop-dong-v2.pdf",
+        "mime_type": "application/pdf", "size_bytes": 482133, "scan_status": "CLEAN",
+        "uploaded_by": { "id": "usr-02", "name": "LS. Mai Linh" }, "uploaded_at": "2026-11-05T08:10:00Z"
+      }
+    }
+  ],
+  "meta": { "allowed_folders": ["LEGAL_CONTRACTS", "CLIENT_SUBMISSIONS", "OFFICIAL_FILINGS", "INTERNAL_DRAFTS"], "can_upload": true }
+}
+```
+
+#### `POST /api/v1/cases/{id}/documents` (multipart/form-data)
+Trường: `folder`, `title` (1–255), `task_id` (tuỳ chọn, phải thuộc vụ việc), `file`. → `201` tài liệu mới, `current_version.version_no = 1`, `scan_status = "PENDING"`. Lỗi: `415 FILE_TYPE_NOT_ALLOWED` (kiểm theo nội dung tệp, không theo đuôi — danh sách trắng PDF, DOCX, XLSX, JPG, PNG), `413 FILE_TOO_LARGE` (> 50 MB), `422 VALIDATION_ERROR`, `403 FOLDER_NOT_ALLOWED`, `409 LEGACY_CASE_READ_ONLY`. Audit `DOCUMENT_UPLOADED`.
+
+#### `GET /api/v1/documents/{id}/versions`
+Lịch sử phiên bản, mới nhất trước; mỗi phần tử cùng dạng `current_version`.
+
+#### `POST /api/v1/documents/{id}/versions` (multipart/form-data)
+Trường: `file`. Không ghi đè bản cũ; `version_no` tăng 1 và thành `current_version`. Lỗi như tải lên lần đầu, thêm `409 DOCUMENT_ARCHIVED`. Audit `DOCUMENT_VERSION_UPLOADED`.
+
+#### `GET /api/v1/documents/{id}/versions/{vid}/download`
+Trả tệp (giải mã AES-256-GCM phía server) với `Content-Disposition: attachment; filename*=UTF-8''…`. `scan_status` khác `CLEAN` → `409 FILE_NOT_AVAILABLE`. Mọi lượt tải ghi audit `DOCUMENT_DOWNLOADED`.
+
+#### `POST /api/v1/documents/{id}/archive`
+```json
+{ "reason": "Bản thảo đã thay bằng hồ sơ nộp chính thức" }
+```
+`reason` bắt buộc (1–500). Không xoá cứng; tài liệu đã lưu trữ chỉ hiện khi `include_archived=true`, vẫn tải được các phiên bản. Kế toán → `403 FOLDER_NOT_ALLOWED`. Audit `DOCUMENT_ARCHIVED`.
