@@ -58,8 +58,23 @@ async def create_user(
         except ValueError:
             raise AppException(422, "VALIDATION_ERROR", "department_id không hợp lệ")
 
-    # 2. Check duplicate email and department existence
-    async with engine.connect() as conn:
+    # 2. Generate credentials
+    temp_password = generate_temporary_password(16)
+    pwd_hash = hash_password(temp_password)
+    user_id = uuid.uuid4()
+
+    outbox_payload = {
+        "id": str(user_id),
+        "email": payload.email,
+        "full_name": payload.full_name,
+        "system_role": payload.system_role,
+        "is_executive": payload.is_executive,
+        "department_id": str(dept_id) if dept_id else None,
+        "is_active": True
+    }
+
+    # 3. Validate and insert in a single transaction
+    async with engine.begin() as conn:
         res_email = await conn.execute(
             text("SELECT id FROM users WHERE email = :email"),
             {"email": payload.email}
@@ -75,23 +90,6 @@ async def create_user(
             if not res_dept.fetchone():
                 raise AppException(404, "NOT_FOUND", "Phòng ban không tồn tại")
 
-    # 3. Generate credentials
-    temp_password = generate_temporary_password(16)
-    pwd_hash = hash_password(temp_password)
-    user_id = uuid.uuid4()
-
-    # 4. Insert user and outbox event in same PostgreSQL transaction
-    outbox_payload = {
-        "id": str(user_id),
-        "email": payload.email,
-        "full_name": payload.full_name,
-        "system_role": payload.system_role,
-        "is_executive": payload.is_executive,
-        "department_id": str(dept_id) if dept_id else None,
-        "is_active": True
-    }
-
-    async with engine.begin() as conn:
         await conn.execute(
             text("""
                 INSERT INTO users (
@@ -179,8 +177,8 @@ async def update_user(
     except ValueError:
         raise AppException(422, "VALIDATION_ERROR", "Định danh người dùng không hợp lệ")
 
-    # 1. Fetch current user from DB
-    async with engine.connect() as conn:
+    # 1. Fetch user, validate and update in a single transaction
+    async with engine.begin() as conn:
         res = await conn.execute(
             text("""
                 SELECT id, email, full_name, title, phone_number,
@@ -193,38 +191,37 @@ async def update_user(
         if not row:
             raise AppException(404, "NOT_FOUND", "Người dùng không tồn tại")
 
-    target = {
-        "id": str(row.id),
-        "email": row.email,
-        "full_name": row.full_name,
-        "title": row.title or "",
-        "phone_number": row.phone_number or "",
-        "system_role": row.system_role,
-        "is_executive": bool(row.is_executive),
-        "department_id": str(row.department_id) if row.department_id else None,
-        "is_active": bool(row.is_active),
-        "totp_enabled": bool(row.totp_enabled)
-    }
+        target = {
+            "id": str(row.id),
+            "email": row.email,
+            "full_name": row.full_name,
+            "title": row.title or "",
+            "phone_number": row.phone_number or "",
+            "system_role": row.system_role,
+            "is_executive": bool(row.is_executive),
+            "department_id": str(row.department_id) if row.department_id else None,
+            "is_active": bool(row.is_active),
+            "totp_enabled": bool(row.totp_enabled)
+        }
 
-    # 2. Check ADMIN self-demotion
-    if str(user_id) == str(current_user.get("id")):
-        if payload.system_role is not None and payload.system_role != "ADMIN":
-            raise AppException(403, "FORBIDDEN_ROLE", "Quản trị viên không thể tự hạ vai trò của chính mình")
+        # 2. Check ADMIN self-demotion
+        if str(user_id) == str(current_user.get("id")):
+            if payload.system_role is not None and payload.system_role != "ADMIN":
+                raise AppException(403, "FORBIDDEN_ROLE", "Quản trị viên không thể tự hạ vai trò của chính mình")
 
-    # 3. Check is_executive constraints
-    effective_role = payload.system_role if payload.system_role is not None else target["system_role"]
-    effective_exec = payload.is_executive if payload.is_executive is not None else target["is_executive"]
-    if effective_exec and effective_role != "MANAGER":
-        raise AppException(422, "VALIDATION_ERROR", "Chỉ vai trò MANAGER mới có thể là Giám đốc điều hành (is_executive)")
+        # 3. Check is_executive constraints
+        effective_role = payload.system_role if payload.system_role is not None else target["system_role"]
+        effective_exec = payload.is_executive if payload.is_executive is not None else target["is_executive"]
+        if effective_exec and effective_role != "MANAGER":
+            raise AppException(422, "VALIDATION_ERROR", "Chỉ vai trò MANAGER mới có thể là Giám đốc điều hành (is_executive)")
 
-    dept_id = None
-    if payload.department_id is not None:
-        if payload.department_id != "":
-            try:
-                dept_id = uuid.UUID(str(payload.department_id))
-            except ValueError:
-                raise AppException(422, "VALIDATION_ERROR", "department_id không hợp lệ")
-            async with engine.connect() as conn:
+        dept_id = None
+        if payload.department_id is not None:
+            if payload.department_id != "":
+                try:
+                    dept_id = uuid.UUID(str(payload.department_id))
+                except ValueError:
+                    raise AppException(422, "VALIDATION_ERROR", "department_id không hợp lệ")
                 res_dept = await conn.execute(
                     text("SELECT id FROM departments WHERE id = :did"),
                     {"did": dept_id}
@@ -232,29 +229,28 @@ async def update_user(
                 if not res_dept.fetchone():
                     raise AppException(404, "NOT_FOUND", "Phòng ban không tồn tại")
 
-    # 4. Prepare updated fields
-    new_full_name = payload.full_name if payload.full_name is not None else target["full_name"]
-    new_title = payload.title if payload.title is not None else target["title"]
-    new_phone = payload.phone_number if payload.phone_number is not None else target["phone_number"]
-    new_role = effective_role
-    new_exec = effective_exec
-    new_dept_id = dept_id if payload.department_id is not None else row.department_id
+        # 4. Prepare updated fields
+        new_full_name = payload.full_name if payload.full_name is not None else target["full_name"]
+        new_title = payload.title if payload.title is not None else target["title"]
+        new_phone = payload.phone_number if payload.phone_number is not None else target["phone_number"]
+        new_role = effective_role
+        new_exec = effective_exec
+        new_dept_id = dept_id if payload.department_id is not None else row.department_id
 
-    role_changed = (payload.system_role is not None and payload.system_role != target["system_role"])
-    dept_changed = (payload.department_id is not None and str(payload.department_id or "") != str(target["department_id"] or ""))
+        role_changed = (payload.system_role is not None and payload.system_role != target["system_role"])
+        dept_changed = (payload.department_id is not None and str(payload.department_id or "") != str(target["department_id"] or ""))
 
-    outbox_payload = {
-        "id": str(user_id),
-        "email": target["email"],
-        "full_name": new_full_name,
-        "system_role": new_role,
-        "is_executive": new_exec,
-        "department_id": str(new_dept_id) if new_dept_id else None,
-        "is_active": target["is_active"]
-    }
+        outbox_payload = {
+            "id": str(user_id),
+            "email": target["email"],
+            "full_name": new_full_name,
+            "system_role": new_role,
+            "is_executive": new_exec,
+            "department_id": str(new_dept_id) if new_dept_id else None,
+            "is_active": target["is_active"]
+        }
 
-    # 5. Execute DB update and outbox in same transaction
-    async with engine.begin() as conn:
+        # 5. Execute DB update and outbox in same transaction
         await conn.execute(
             text("""
                 UPDATE users SET

@@ -130,8 +130,11 @@ async def put_department_leaders_endpoint(
     except ValueError:
         raise AppException(422, "VALIDATION_ERROR", "Định danh phòng ban không hợp lệ")
 
-    # 1. Check department exists
-    async with engine.connect() as conn:
+    outbox_payload: Dict[str, Any] = {}
+    validated_leader_ids: List[uuid.UUID] = []
+
+    # 1, 2, 3. Validate and update PostgreSQL in a single connection & transaction
+    async with engine.begin() as conn:
         res_dept = await conn.execute(
             text("SELECT id, code, name FROM departments WHERE id = :id"),
             {"id": dept_id}
@@ -140,15 +143,12 @@ async def put_department_leaders_endpoint(
         if not dept_row:
             raise AppException(404, "NOT_FOUND", "Phòng ban không tồn tại")
 
-    # 2. Validate every leader user is active MANAGER
-    validated_leader_ids: List[uuid.UUID] = []
-    for uid_str in payload.leader_user_ids:
-        try:
-            uid = uuid.UUID(uid_str)
-        except ValueError:
-            raise AppException(422, "VALIDATION_ERROR", f"Định danh người dùng '{uid_str}' không hợp lệ")
+        for uid_str in payload.leader_user_ids:
+            try:
+                uid = uuid.UUID(uid_str)
+            except ValueError:
+                raise AppException(422, "VALIDATION_ERROR", f"Định danh người dùng '{uid_str}' không hợp lệ")
 
-        async with engine.connect() as conn:
             res_u = await conn.execute(
                 text("SELECT id, system_role, is_active FROM users WHERE id = :id"),
                 {"id": uid}
@@ -160,15 +160,13 @@ async def put_department_leaders_endpoint(
                 raise AppException(422, "VALIDATION_ERROR", f"Người dùng '{uid_str}' không có vai trò MANAGER")
             if not u_row.is_active:
                 raise AppException(422, "VALIDATION_ERROR", f"Người dùng '{uid_str}' đang bị vô hiệu hóa")
-        validated_leader_ids.append(uid)
+            validated_leader_ids.append(uid)
 
-    # 3. Update PostgreSQL & outbox event
-    outbox_payload = {
-        "department_id": str(dept_id),
-        "leader_user_ids": [str(x) for x in validated_leader_ids]
-    }
+        outbox_payload = {
+            "department_id": str(dept_id),
+            "leader_user_ids": [str(x) for x in validated_leader_ids]
+        }
 
-    async with engine.begin() as conn:
         await conn.execute(
             text("DELETE FROM department_leaders WHERE department_id = :did"),
             {"did": dept_id}

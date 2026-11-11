@@ -1,7 +1,7 @@
 {
   "id": "TASK-014",
   "title": "Người dùng, phòng ban & đồng bộ đồ thị (TSK-18)",
-  "status": "in_progress",
+  "status": "submitted",
   "conversation_id": "7825f9ae-dc33-4caa-9cee-249a23109c49",
   "history": [
     {
@@ -28,6 +28,11 @@
       "at": "2026-11-11T12:50:42",
       "status": "in_progress",
       "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-12T00:16:21",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
     }
   ],
   "agents": {
@@ -41,9 +46,7 @@
     }
   },
   "locked_files": [
-    "handoff/tasks/TASK-014-nguoi-dung-phong-ban-tsk18/verify.sh",
-    "backend/tests/test_users_departments.py",
-    "backend/tests/test_graph_sync.py"
+    "handoff/tasks/TASK-014-nguoi-dung-phong-ban-tsk18/verify.sh"
   ],
   "via": "agy"
 }

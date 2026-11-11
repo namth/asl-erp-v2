@@ -89,84 +89,87 @@ def rebuild_graph(dry_run: bool = False) -> dict:
         print(f"  - :ASSIGNED_TO edges (cạnh phân công): {stats['assignments']}")
         return stats
 
-    # 2. Apply full rebuild to Neo4j Aura
+    # 2. Apply full rebuild to Neo4j Aura in a single atomic write transaction
     driver = GraphDatabase.driver(
         settings.NEO4J_URI,
         auth=(settings.NEO4J_USERNAME, settings.NEO4J_PASSWORD)
     )
 
     with driver.session() as s:
-        # A. Clean up all existing User, Department, Case nodes and edges
-        s.run("MATCH (u:User) DETACH DELETE u")
-        s.run("MATCH (d:Department) DETACH DELETE d")
-        s.run("MATCH (c:Case) DETACH DELETE c")
+        def _do_rebuild(tx):
+            # A. Clean up all existing User, Department, Case nodes and edges
+            tx.run("MATCH (u:User) DETACH DELETE u")
+            tx.run("MATCH (d:Department) DETACH DELETE d")
+            tx.run("MATCH (c:Case) DETACH DELETE c")
 
-        s.run("MATCH ()-[r:LEADS]->() DELETE r")
-        s.run("MATCH ()-[r:MEMBER_OF]->() DELETE r")
-        s.run("MATCH ()-[r:ASSIGNED_TO]->() DELETE r")
+            tx.run("MATCH ()-[r:LEADS]->() DELETE r")
+            tx.run("MATCH ()-[r:MEMBER_OF]->() DELETE r")
+            tx.run("MATCH ()-[r:ASSIGNED_TO]->() DELETE r")
 
-        # B. Recreate Department nodes
-        if depts:
-            s.run("""
-                UNWIND $depts AS d
-                CREATE (dept:Department {id: d.id, code: d.code, name: d.name})
-            """, depts=depts)
+            # B. Recreate Department nodes
+            if depts:
+                tx.run("""
+                    UNWIND $depts AS d
+                    CREATE (dept:Department {id: d.id, code: d.code, name: d.name})
+                """, depts=depts)
 
-        # C. Recreate User nodes
-        if users:
-            s.run("""
-                UNWIND $users AS u
-                CREATE (user:User {
-                    id: u.id,
-                    email: u.email,
-                    full_name: u.full_name,
-                    system_role: u.system_role,
-                    is_executive: u.is_executive,
-                    is_active: u.is_active
-                })
-            """, users=users)
+            # C. Recreate User nodes
+            if users:
+                tx.run("""
+                    UNWIND $users AS u
+                    CREATE (user:User {
+                        id: u.id,
+                        email: u.email,
+                        full_name: u.full_name,
+                        system_role: u.system_role,
+                        is_executive: u.is_executive,
+                        is_active: u.is_active
+                    })
+                """, users=users)
 
-        # D. Recreate Case nodes and :IN_DEPARTMENT
-        if cases:
-            s.run("""
-                UNWIND $cases AS c
-                CREATE (case_node:Case {
-                    id: c.id,
-                    case_code: c.case_code,
-                    status: c.status
-                })
-                WITH case_node, c
-                WHERE c.department_id IS NOT NULL
-                MATCH (d:Department {id: c.department_id})
-                CREATE (case_node)-[:IN_DEPARTMENT]->(d)
-            """, cases=cases)
+            # D. Recreate Case nodes and :IN_DEPARTMENT
+            if cases:
+                tx.run("""
+                    UNWIND $cases AS c
+                    CREATE (case_node:Case {
+                        id: c.id,
+                        case_code: c.case_code,
+                        status: c.status
+                    })
+                    WITH case_node, c
+                    WHERE c.department_id IS NOT NULL
+                    MATCH (d:Department {id: c.department_id})
+                    CREATE (case_node)-[:IN_DEPARTMENT]->(d)
+                """, cases=cases)
 
-        # E. Recreate :MEMBER_OF edges
-        if members:
-            s.run("""
-                UNWIND $members AS m
-                MATCH (u:User {id: m.user_id})
-                MATCH (d:Department {id: m.department_id})
-                CREATE (u)-[:MEMBER_OF]->(d)
-            """, members=members)
+            # E. Recreate :MEMBER_OF edges
+            if members:
+                tx.run("""
+                    UNWIND $members AS m
+                    MATCH (u:User {id: m.user_id})
+                    MATCH (d:Department {id: m.department_id})
+                    CREATE (u)-[:MEMBER_OF]->(d)
+                """, members=members)
 
-        # F. Recreate :LEADS edges
-        if leaders:
-            s.run("""
-                UNWIND $leaders AS l
-                MATCH (u:User {id: l.user_id})
-                MATCH (d:Department {id: l.department_id})
-                CREATE (u)-[:LEADS]->(d)
-            """, leaders=leaders)
+            # F. Recreate :LEADS edges
+            if leaders:
+                tx.run("""
+                    UNWIND $leaders AS l
+                    MATCH (u:User {id: l.user_id})
+                    MATCH (d:Department {id: l.department_id})
+                    CREATE (u)-[:LEADS]->(d)
+                """, leaders=leaders)
 
-        # G. Recreate :ASSIGNED_TO edges
-        if assignments:
-            s.run("""
-                UNWIND $assignments AS a
-                MATCH (u:User {id: a.user_id})
-                MATCH (c:Case {id: a.case_id})
-                CREATE (u)-[:ASSIGNED_TO {role: a.role}]->(c)
-            """, assignments=assignments)
+            # G. Recreate :ASSIGNED_TO edges
+            if assignments:
+                tx.run("""
+                    UNWIND $assignments AS a
+                    MATCH (u:User {id: a.user_id})
+                    MATCH (c:Case {id: a.case_id})
+                    CREATE (u)-[:ASSIGNED_TO {role: a.role}]->(c)
+                """, assignments=assignments)
+
+        s.execute_write(_do_rebuild)
 
     driver.close()
     print("Rebuild graph completed successfully:")
