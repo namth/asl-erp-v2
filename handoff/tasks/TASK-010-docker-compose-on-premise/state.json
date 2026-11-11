@@ -1,17 +1,63 @@
 {
   "id": "TASK-010",
   "title": "Docker Compose cụm dịch vụ On-Premise (TSK-01)",
-  "status": "draft",
-  "conversation_id": null,
+  "status": "accepted",
+  "conversation_id": "e8d93447-19b9-4e27-b85a-be9c26e1e675",
   "history": [
     {
       "at": "2026-11-11T11:27:33",
       "status": "draft",
       "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-11T11:30:03",
+      "status": "assigned",
+      "note": "giao code qua agy cho agy1 (model mặc định)"
+    },
+    {
+      "at": "2026-11-11T11:31:02",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-11T11:44:32",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-11T11:45:55",
+      "status": "changes_requested",
+      "note": "Claude yêu cầu sửa"
+    },
+    {
+      "at": "2026-11-11T11:46:18",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-11T11:48:23",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-11T11:48:58",
+      "status": "accepted",
+      "note": "Claude nghiệm thu"
     }
   ],
   "locked_files": [
     "handoff/tasks/TASK-010-docker-compose-on-premise/verify.sh",
     "tests/infra/test_task_010_compose.py"
-  ]
+  ],
+  "agents": {
+    "tester": {
+      "account": null,
+      "conversation_id": null
+    },
+    "coder": {
+      "account": "agy1",
+      "conversation_id": "e8d93447-19b9-4e27-b85a-be9c26e1e675"
+    }
+  },
+  "via": "agy"
 }
