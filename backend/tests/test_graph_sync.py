@@ -139,10 +139,11 @@ def auth_client(user: dict, csrf_val: str = "csrf-sync-fixed") -> tuple[httpx.As
         "iat": now,
         "exp": now + 1800,
         "system_role": user.get("role", "ADMIN"),
+        "typ": "access",
     }
     token = jwt.encode(payload, settings.SECRET_KEY, algorithm=settings.JWT_ALGORITHM)
-    c.cookies.set("access_token", token, domain="testserver")
-    c.cookies.set("csrf_token", csrf_val, domain="testserver")
+    c.cookies.set("access_token", token)
+    c.cookies.set("csrf_token", csrf_val)
     headers = {"X-CSRF-Token": csrf_val, "Authorization": f"Bearer {token}"}
     return c, headers
 

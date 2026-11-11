@@ -137,15 +137,24 @@ def make_token(user_id: str, role: str = "ADMIN") -> str:
         "exp": now + 1800,
         "system_role": role,
         "role": role,
+        "typ": "access",
     }
     return jwt.encode(payload, settings.SECRET_KEY, algorithm=settings.JWT_ALGORITHM)
+
+
+def reopen(c: httpx.AsyncClient) -> httpx.AsyncClient:
+    """Client mới mang cùng cookie phiên (httpx không cho mở lại client đã đóng)."""
+    n = client()
+    for ck in c.cookies.jar:
+        n.cookies.set(ck.name, ck.value)
+    return n
 
 
 def auth_client(user: dict, csrf_val: str = "csrf-test-token-fixed") -> tuple[httpx.AsyncClient, dict]:
     c = client()
     token = make_token(user["id"], user.get("role", "ADMIN"))
-    c.cookies.set("access_token", token, domain="testserver")
-    c.cookies.set("csrf_token", csrf_val, domain="testserver")
+    c.cookies.set("access_token", token)
+    c.cookies.set("csrf_token", csrf_val)
     headers = {
         "X-CSRF-Token": csrf_val,
         "Authorization": f"Bearer {token}",
@@ -385,8 +394,8 @@ async def test_csrf_protection_on_write_routes():
     admin = make_user("ADMIN")
     c = client()
     token = make_token(admin["id"], "ADMIN")
-    c.cookies.set("access_token", token, domain="testserver")
-    c.cookies.set("csrf_token", "real-csrf-token-1234", domain="testserver")
+    c.cookies.set("access_token", token)
+    c.cookies.set("csrf_token", "real-csrf-token-1234")
 
     async with c:
         # Không có header X-CSRF-Token
@@ -445,8 +454,8 @@ async def test_deactivate_user_revokes_session_locks_login_and_updates_neo4j_imm
             (f"Khach test T18 {case_code}", f"khach test t18 {case_code.lower()}")).fetchone()[0]
         conn.execute(
             """INSERT INTO cases (id, case_code, department_id, title, client_id, matter_type_id,
-                                  workflow_mode, contract_value, status)
-               VALUES (%s, %s, %s, %s, %s, %s, 'STRICT', 1000000, 'ACTIVE')""",
+                                  workflow_mode, contract_value, status, created_by)
+               VALUES (%s, %s, %s, %s, %s, %s, 'STRICT', 1000000, 'ACTIVE', (SELECT id FROM users LIMIT 1))""",
             (case_id, case_code, dept["id"], "Vụ việc test phân công", client_id, mt_id)
         )
         conn.execute(
@@ -489,7 +498,7 @@ async def test_deactivate_user_revokes_session_locks_login_and_updates_neo4j_imm
     assert r_deact.status_code in (200, 204), f"Khoá tài khoản thất bại: {r_deact.text}"
 
     # 1. Phiên đang mở của victim → 401 TOKEN_REVOKED ngay request kế tiếp
-    async with c_victim:
+    async with reopen(c_victim) as c_victim:
         r_post = await c_victim.get("/api/v1/auth/me", headers=h_victim)
     assert r_post.status_code == 401, f"Sau khoá phải bị 401, nhận: {r_post.status_code}"
     assert error_code(r_post) == "TOKEN_REVOKED"
@@ -611,7 +620,7 @@ async def test_patch_user_role_or_dept_revokes_sessions():
     assert r_patch.status_code == 200, r_patch.text
 
     # Phiên cũ của user_target phải nhận 401 TOKEN_REVOKED
-    async with c_target:
+    async with reopen(c_target) as c_target:
         r_after = await c_target.get("/api/v1/auth/me", headers=h_target)
     assert r_after.status_code == 401, f"Phiên cũ phải bị thu hồi, nhận: {r_after.status_code}"
     assert error_code(r_after) == "TOKEN_REVOKED"
