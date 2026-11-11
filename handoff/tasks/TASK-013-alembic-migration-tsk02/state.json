@@ -1,0 +1,48 @@
+{
+  "id": "TASK-013",
+  "title": "Alembic migration, hai user DB & bảng bất biến (TSK-02)",
+  "status": "accepted",
+  "conversation_id": "04c10885-ad39-4f60-a23b-522e294af955",
+  "history": [
+    {
+      "at": "2026-11-11T12:14:04",
+      "status": "draft",
+      "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-11T12:15:11",
+      "status": "assigned",
+      "note": "giao code qua agy cho agy1 (gemini-3.8-flash-high)"
+    },
+    {
+      "at": "2026-11-11T12:16:04",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-11T12:27:05",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-11T12:28:30",
+      "status": "accepted",
+      "note": "Claude nghiệm thu"
+    }
+  ],
+  "locked_files": [
+    "handoff/tasks/TASK-013-alembic-migration-tsk02/verify.sh",
+    "tests/infra/test_task_013_migrations.py"
+  ],
+  "agents": {
+    "tester": {
+      "account": null,
+      "conversation_id": null
+    },
+    "coder": {
+      "account": "agy1",
+      "conversation_id": "04c10885-ad39-4f60-a23b-522e294af955"
+    }
+  },
+  "via": "agy"
+}
