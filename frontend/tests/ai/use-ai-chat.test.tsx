@@ -165,7 +165,7 @@ describe('Hook tích hợp API useAiChat - hooks/use-ai-chat.ts (brief mục 4 &
           m.text.includes('Bạn đã hỏi quá nhiều, thử lại sau ít phút')
       ) ||
       (result.current.error &&
-        String(result.current.error?.message || '').includes(
+        String((result.current.error as { message?: string } | null)?.message || '').includes(
           'Bạn đã hỏi quá nhiều, thử lại sau ít phút'
         ));
 

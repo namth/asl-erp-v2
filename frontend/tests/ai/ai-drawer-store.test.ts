@@ -75,8 +75,8 @@ describe('Quản lý trạng thái Zustand cho Trợ lý AI - stores/ai-drawer-s
 
     // Giả lập đã có tin nhắn trong lịch sử
     const sampleMessages = [
-      { id: '1', role: 'user', content: 'Chào AI' },
-      { id: '2', role: 'assistant', content: 'Xin chào, tôi là trợ lý pháp lý ASL LAW.' },
+      { id: '1', role: 'user' as const, content: 'Chào AI' },
+      { id: '2', role: 'assistant' as const, content: 'Xin chào, tôi là trợ lý pháp lý ASL LAW.' },
     ];
     useAiDrawerStore.setState({ messages: sampleMessages });
     expect(useAiDrawerStore.getState().messages?.length).toBe(2);
