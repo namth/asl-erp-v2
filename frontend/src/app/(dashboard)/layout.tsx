@@ -7,6 +7,7 @@ import { useMe } from '@/hooks/use-auth';
 import { useSidebarStore } from '@/stores/sidebar-store';
 import { getMenu, MenuItem } from '@/lib/menu';
 import { LoadingSkeleton } from '@/components/ui/loading-skeleton';
+import { AiChatButton, AiChatDrawer } from '@/components/ai';
 import {
   LayoutDashboard,
   Briefcase,
@@ -245,6 +246,8 @@ export default function DashboardLayout({
           </div>
 
           <div className="flex items-center gap-4">
+            <AiChatButton />
+
             <button
               type="button"
               onClick={toggleTheme}
@@ -281,6 +284,8 @@ export default function DashboardLayout({
         {/* Page Content */}
         <main className="flex-1 p-6">{children}</main>
       </div>
+
+      <AiChatDrawer />
     </div>
   );
 }
