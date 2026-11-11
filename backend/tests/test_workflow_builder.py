@@ -76,7 +76,10 @@ async def client_for_role(role="ADMIN"):
     import jwt as _jwt
     u = make_user(role=role)
     now = int(time.time())
-    token = _jwt.encode({"sub": u["id"], "jti": str(uuid.uuid4()), "iat": now - 30, "exp": now + 1800, "typ": "access"},
+    # tokens_valid_after của user test lùi 10 phút: đồng hồ DB có thể nhanh hơn máy chạy test, token iat=now sẽ bị coi là bị thu hồi
+    with db() as _c:
+        _c.execute("UPDATE users SET tokens_valid_after = now() - interval '10 minutes' WHERE id = %s", (str(u["id"]),))
+    token = _jwt.encode({"sub": u["id"], "jti": str(uuid.uuid4()), "iat": now, "exp": now + 1800, "typ": "access"},
                         settings.SECRET_KEY, algorithm=settings.JWT_ALGORITHM)
     async with client() as c:
         c.cookies.set("access_token", token)

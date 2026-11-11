@@ -1,2 +1,2 @@
 50790f43f0d425b50d238f372d869adbd72622b190424898a8ac82f7cb80af61  handoff/tasks/TASK-021-thiet-ke-quy-trinh-backend-tsk06/verify.sh
-1685421887764ace9f9dcf2df299c5d7ae8ffe47559569a2750362fefadd6283  backend/tests/test_workflow_builder.py
+72dd9caf627970f558afe9daf719fbd4d1ebc619e867047c854d5243b373b13f  backend/tests/test_workflow_builder.py
