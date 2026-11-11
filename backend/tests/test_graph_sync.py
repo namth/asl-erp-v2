@@ -133,7 +133,7 @@ def auth_client(user: dict, csrf_val: str = "csrf-sync-fixed") -> tuple[httpx.As
     payload = {
         "sub": str(user["id"]),
         "jti": str(uuid.uuid4()),
-        "iat": now,
+        "iat": now - 30,  # lùi 30 giây: đồng hồ DB (tokens_valid_after = now() của DB) có thể nhanh hơn máy chạy test
         "exp": now + 1800,
         "system_role": user.get("role", "ADMIN"),
     }
