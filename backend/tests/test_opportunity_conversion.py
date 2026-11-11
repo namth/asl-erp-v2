@@ -1008,7 +1008,7 @@ async def test_50_parallel_conversions_distinct_case_codes():
     -> 50 vụ việc được tạo thành công, 50 mã khác nhau, liên tiếp, không trùng mã."""
     c, u = await authenticated_client(role="ATTORNEY")
     dept_id = make_department()
-    matter_code = f"P{secrets.token_hex(1).upper()[:2]}"
+    matter_code = "P" + "".join(secrets.choice("ABCDEFGHJKLMNPQRSTUVWXYZ") for _ in range(2))
     mid = make_matter_type(department_id=dept_id, code=matter_code)
     tmpl_id = make_workflow_template(mid)
     v_id = make_template_version(tmpl_id, version_no=1, status="PUBLISHED")
