@@ -5,3 +5,8 @@ qlcvaslgate-old/
 prototype.zip
 _claude-setup/
 __pycache__/
+.venv/
+.env
+*.pyc
+.pytest_cache/
+
