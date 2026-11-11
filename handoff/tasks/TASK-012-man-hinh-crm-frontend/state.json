@@ -1,0 +1,62 @@
+{
+  "id": "TASK-012",
+  "title": "Màn hình CRM frontend: khách hàng & pipeline cơ hội (SCR-03, 04, 05)",
+  "status": "accepted",
+  "conversation_id": "b66c4485-4d94-4abf-b315-419fc440269c",
+  "history": [
+    {
+      "at": "2026-11-11T12:12:36",
+      "status": "draft",
+      "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-11T12:13:13",
+      "status": "tests_assigned",
+      "note": "giao viết test chéo cho agy2"
+    },
+    {
+      "at": "2026-11-11T12:21:06",
+      "status": "tests_ready",
+      "note": "test chéo đã khoá (5 file), verify đỏ đúng chờ code"
+    },
+    {
+      "at": "2026-11-11T12:21:14",
+      "status": "assigned",
+      "note": "giao code qua agy cho agy3 (model mặc định)"
+    },
+    {
+      "at": "2026-11-11T12:21:25",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-11T12:41:20",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-11T12:41:37",
+      "status": "accepted",
+      "note": "LOW: không nghiệm thu chéo bằng agent — cổng tự động (orchestrate.py gate) trước khi merge"
+    }
+  ],
+  "agents": {
+    "coder": {
+      "account": "agy3",
+      "conversation_id": "b66c4485-4d94-4abf-b315-419fc440269c"
+    },
+    "tester": {
+      "account": "agy2",
+      "conversation_id": "993d212b-628e-4d85-9f2e-25a4859d99f9"
+    }
+  },
+  "locked_files": [
+    "handoff/tasks/TASK-012-man-hinh-crm-frontend/verify.sh",
+    "frontend/tests/crm/format-vnd.test.ts",
+    "frontend/tests/crm/use-crm.test.ts",
+    "frontend/tests/crm/clients-page.test.tsx",
+    "frontend/tests/crm/client-detail-page.test.tsx",
+    "frontend/tests/crm/opportunities-page.test.tsx"
+  ],
+  "via": "agy"
+}

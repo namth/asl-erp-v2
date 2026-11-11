@@ -1,0 +1,6 @@
+bc838a4ac7148df9c2a1b4ff7ff84645caff2ad7ae5384b745d86f9f65f79a4d  handoff/tasks/TASK-012-man-hinh-crm-frontend/verify.sh
+4104b85e92d425a399fba421f77712c041ccc37cafce8ec26cd9864a72b344f0  frontend/tests/crm/format-vnd.test.ts
+7567570674420c24c69faae98913dffaf54571f610f17cbb89497bfafb08bfeb  frontend/tests/crm/use-crm.test.ts
+b497c6bd25ac4f3bccbd97babb0e8734f00fbf83c74e4868486578f762730bd1  frontend/tests/crm/clients-page.test.tsx
+cd1013ffe0700b8cd65fb8c658e4bc3562aeb5c08571eaf3a792e140491e82d2  frontend/tests/crm/client-detail-page.test.tsx
+f2e8cab897cbc1bf40639c2cca5539c7b105ee59cfeb1c05a8c9720baf84b485  frontend/tests/crm/opportunities-page.test.tsx
