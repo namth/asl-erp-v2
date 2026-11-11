@@ -1,0 +1,3 @@
+KẾT LUẬN: ĐẠT
+Đã kiểm: verify xanh (exit 0, typecheck/lint/test/build đạt, 55 test suites, 446 passed), phạm vi OK (chỉ chỉnh sửa và tạo file trong phạm vi cho phép), đối chiếu brief mục 4–6 đầy đủ (SCR-02 phân quyền vai trò ATTORNEY/MANAGER/ACCOUNTANT/ADMIN, KPI card đổi màu quá hạn, bộ lọc due=, 4 trạng thái UI độc lập khi lỗi; SCR-20 tài khoản và bảng hoa hồng mặc định phân quyền ADMIN/MANAGER, validation tổng 3 tỷ lệ > 100 theo dòng bằng số nguyên xu, PUT body tỷ lệ dạng chuỗi, không localStorage, không parseFloat cho tỷ lệ, không emoji nút bấm, không chuỗi mã đặc tả).
+Rủi ro cho trưởng phòng: Không
