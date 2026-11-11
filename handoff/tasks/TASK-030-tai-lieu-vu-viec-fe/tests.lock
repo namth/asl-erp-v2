@@ -1,0 +1,5 @@
+c7fffad0efb5f148eefa97b3b3f39c6af43183971b8915819d514853fc7990f6  handoff/tasks/TASK-030-tai-lieu-vu-viec-fe/verify.sh
+6a42280b5af96e1cc1ecfbed9c4adc4176412f0d3d1146d8eec51c4ce5e76a49  frontend/tests/documents/conventions.test.ts
+96cb6c2d250d776241c8ae87392e9f687fd736946bb231eea721338a33cf561c  frontend/tests/documents/documents-page.test.tsx
+c9cc443b60a711be4cd05af1bc1227acb049c74cc1ebee1c5c20c7589536d091  frontend/tests/documents/file-rules.test.ts
+a2af9a8577a53578a41eb7495a3580adc1ec28a27905de0a7e32ed64db204ae8  frontend/tests/documents/use-documents.test.ts

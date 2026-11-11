@@ -1,0 +1,46 @@
+{
+  "id": "TASK-030",
+  "title": "Tài liệu vụ việc (SCR-17)",
+  "status": "tests_ready",
+  "conversation_id": null,
+  "history": [
+    {
+      "at": "2026-11-11T19:45:39",
+      "status": "draft",
+      "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-11T19:46:52",
+      "status": "tests_assigned",
+      "note": "giao viết test chéo cho agy2"
+    },
+    {
+      "at": "2026-11-11T19:47:49",
+      "status": "tests_assigned",
+      "note": "giao viết test chéo cho agy2"
+    },
+    {
+      "at": "2026-11-11T20:11:13",
+      "status": "tests_ready",
+      "note": "test chéo đã khoá (4 file), verify đỏ đúng chờ code"
+    }
+  ],
+  "agents": {
+    "coder": {
+      "account": null,
+      "conversation_id": null
+    },
+    "tester": {
+      "account": "agy2",
+      "conversation_id": "b8305b29-c32e-4df0-bcc3-704ef521d651"
+    }
+  },
+  "via": "agy",
+  "locked_files": [
+    "handoff/tasks/TASK-030-tai-lieu-vu-viec-fe/verify.sh",
+    "frontend/tests/documents/conventions.test.ts",
+    "frontend/tests/documents/documents-page.test.tsx",
+    "frontend/tests/documents/file-rules.test.ts",
+    "frontend/tests/documents/use-documents.test.ts"
+  ]
+}
