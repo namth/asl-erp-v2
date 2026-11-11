@@ -3,17 +3,19 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { apiFetch, ApiError } from '@/lib/api-client';
+import { TwoFactorSetup } from '@/components/two-factor';
 
 interface AuthErrorDetails {
   retry_after_seconds?: number;
   challenge_id?: string;
   reset_token?: string;
+  setup_token?: string;
 }
 
 export default function LoginPage() {
   const router = useRouter();
 
-  const [step, setStep] = useState<'login' | 'totp' | 'password_reset'>('login');
+  const [step, setStep] = useState<'login' | 'totp' | 'password_reset' | 'setup_2fa'>('login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [totpCode, setTotpCode] = useState('');
@@ -21,6 +23,7 @@ export default function LoginPage() {
 
   const [challengeId, setChallengeId] = useState<string | null>(null);
   const [resetToken, setResetToken] = useState<string | null>(null);
+  const [setupToken, setSetupToken] = useState<string | null>(null);
 
   const [emailError, setEmailError] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
@@ -72,7 +75,12 @@ export default function LoginPage() {
           setChallengeId(details.challenge_id || null);
           setStep('totp');
         } else if (err.code === 'TOTP_SETUP_REQUIRED') {
-          setInfoMessage('Tài khoản cần thiết lập 2FA trước khi tiếp tục.');
+          if (details.setup_token) {
+            setSetupToken(details.setup_token);
+            setStep('setup_2fa');
+          } else {
+            setInfoMessage('Tài khoản cần thiết lập 2FA trước khi tiếp tục.');
+          }
         } else if (err.code === 'PASSWORD_RESET_REQUIRED') {
           setResetToken(details.reset_token || null);
           setStep('password_reset');
@@ -304,6 +312,14 @@ export default function LoginPage() {
               <span>{isLoading ? 'Đang cập nhật...' : 'Đổi mật khẩu'}</span>
             </button>
           </form>
+        )}
+
+        {/* Step 4: Thiết lập 2FA bắt buộc */}
+        {step === 'setup_2fa' && setupToken && (
+          <TwoFactorSetup
+            setupToken={setupToken}
+            onComplete={() => router.push('/')}
+          />
         )}
       </div>
     </div>

@@ -1,0 +1,62 @@
+{
+  "id": "TASK-017",
+  "title": "Giao diện thiết lập 2FA & bảo mật tài khoản",
+  "status": "accepted",
+  "conversation_id": "dd5f9bb6-72a2-4d3f-ad08-c28e2184ed0d",
+  "history": [
+    {
+      "at": "2026-11-11T13:39:28",
+      "status": "draft",
+      "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-11T13:39:35",
+      "status": "tests_assigned",
+      "note": "giao viết test chéo cho agy3"
+    },
+    {
+      "at": "2026-11-11T13:53:31",
+      "status": "tests_ready",
+      "note": "test chéo đã khoá (5 file), verify đỏ đúng chờ code"
+    },
+    {
+      "at": "2026-11-11T13:54:30",
+      "status": "assigned",
+      "note": "giao code qua agy cho agy2 (model mặc định)"
+    },
+    {
+      "at": "2026-11-11T13:54:45",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-11T14:05:29",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-11T14:05:39",
+      "status": "accepted",
+      "note": "LOW: không nghiệm thu chéo bằng agent — cổng tự động (orchestrate.py gate) trước khi merge"
+    }
+  ],
+  "agents": {
+    "coder": {
+      "account": "agy2",
+      "conversation_id": "dd5f9bb6-72a2-4d3f-ad08-c28e2184ed0d"
+    },
+    "tester": {
+      "account": "agy3",
+      "conversation_id": "805c7653-e356-4a5a-a144-f92fc9aa4dfd"
+    }
+  },
+  "locked_files": [
+    "handoff/tasks/TASK-017-giao-dien-2fa-bao-mat/verify.sh",
+    "frontend/tests/two-factor/use-two-factor.test.ts",
+    "frontend/tests/two-factor/two-factor-setup.test.tsx",
+    "frontend/tests/two-factor/login-2fa.test.tsx",
+    "frontend/tests/two-factor/security-page.test.tsx",
+    "frontend/tests/two-factor/conventions.test.ts"
+  ],
+  "via": "agy"
+}
