@@ -18,6 +18,7 @@ Tên tham số của từng công cụ Antigravity không cố định, nên scr
 from __future__ import annotations
 
 import json
+import os
 import re
 import sys
 from pathlib import Path
@@ -25,7 +26,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 TASKS = ROOT / "handoff" / "tasks"
 TASK_FILES = ("brief.md", "tests.lock", "state.json", "review.md")
-BASE_PROTECTED = ("scripts/handoff.py", "scripts/agy_guard.py", ".agents/", "handoff/config.json")
+BASE_PROTECTED = ("scripts/handoff.py", "scripts/agy_guard.py", "scripts/orchestrate.py", ".agents/", "handoff/config.json")
 
 
 def config_protected() -> tuple[str, ...]:
@@ -90,10 +91,52 @@ def hit(path: str, protected: set[str]) -> bool:
     return path in protected or path.startswith(PROTECTED_PREFIXES) or name.startswith(".env")
 
 
+def draft_brief(path: str) -> bool:
+    """Điều phối chỉ được viết brief.md của task còn ở trạng thái draft và chưa khoá test."""
+    m = re.fullmatch(r"handoff/tasks/([^/]+)/brief\.md", path)
+    if not m:
+        return False
+    try:
+        state = json.loads((TASKS / m.group(1) / "state.json").read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return False
+    return state.get("status") == "draft" and not (TASKS / m.group(1) / "tests.lock").exists()
+
+
+def draft_brief_hit(texts: list[str]) -> bool:
+    return any(rel(t) and draft_brief(rel(t) or "") for t in texts)
+
+
+def orchestrator_decide(call: dict, texts: list[str]) -> dict | None:
+    """Vai ĐIỀU PHỐI (HANDOFF_ROLE=orchestrator) chỉ được ghi trong handoff/ (digest, nhật ký, brief task draft)."""
+    if str(call.get("name", "")) == "run_command":
+        if MUTATING.search(" ".join(texts)):
+            return {"decision": "deny", "reason": "Vai điều phối không sửa file bằng lệnh shell; chỉ chạy python3 scripts/orchestrate.py|handoff.py "
+                                                  "và ghi handoff/digest.md bằng công cụ file."}
+        return None
+    for text in texts:
+        path = rel(text)
+        if not path:
+            continue
+        if draft_brief(path):
+            continue
+        if (not path.startswith("handoff/") or hit(path, protected_paths())
+                or re.fullmatch(r"handoff/tasks/[^/]+/(state\.json|tests\.lock|review\.md|cross-review\.md|gate\.json|verify\.sh)", path)):
+            return {"decision": "deny", "reason": f"Vai điều phối không được sửa {path}: chỉ ghi trong handoff/ "
+                                                  "(digest.md, logs/, brief.md của task draft). Việc cần sửa code → giao task cho kỹ sư."}
+    return None
+
+
 def decide(payload: dict) -> dict:
     call = payload.get("toolCall") or {}
     tool = str(call.get("name", ""))
     texts = strings(call.get("args", {}))
+    if os.environ.get("HANDOFF_ROLE") == "orchestrator":
+        verdict = orchestrator_decide(call, texts)
+        if verdict:
+            return verdict
+        if draft_brief_hit(texts):
+            return {"decision": "ask"}
     protected = protected_paths()
 
     if tool == "run_command":

@@ -10,3 +10,8 @@ __pycache__/
 *.pyc
 .pytest_cache/
 
+
+# Phối hợp Claude ↔ Antigravity (file sinh ra khi chạy)
+handoff/digest.md
+handoff/logs/
+handoff/tasks/*/gate.json

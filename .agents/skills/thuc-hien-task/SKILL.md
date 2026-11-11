@@ -12,7 +12,7 @@ Nếu chưa biết task nào: chạy `python3 scripts/handoff.py list` và chọ
 3. Đọc mọi tài liệu ở brief mục 2, và đọc `verify.sh` cùng các file test trong `tests.lock` để hiểu chính xác điều gì sẽ được kiểm.
 4. Lập kế hoạch ngắn (file nào, thay đổi gì) bám theo brief mục 3. Không chờ duyệt — trưởng phòng đã duyệt qua brief.
 5. Thực hiện thay đổi.
-6. Tự kiểm: `python3 scripts/handoff.py verify <ID>` (kiểm khoá test và chạy `verify.sh`). Đỏ thì sửa code, chạy lại đến khi xanh. Không sửa test.
+6. Tự kiểm: `python3 scripts/handoff.py verify <ID>` (kiểm khoá test và chạy `verify.sh`). Đỏ thì sửa code, chạy lại đến khi xanh. Không sửa test. Task có blueprint thì bám blueprint. Sửa 2 lần liên tiếp vẫn đỏ vì bế tắc giải thuật → làm theo luật 11 (cầu cứu): ghi phân tích vào `report.md` mục "câu hỏi", không nộp, kết thúc bằng "<ID> cần trưởng phòng hỗ trợ: <một câu>".
 7. Viết `handoff/tasks/<ID>-*/report.md` theo mẫu `handoff/templates/report.md` (vòng sửa: thêm mục "Vòng sửa N" ở cuối, giữ nội dung cũ).
 8. Chạy `python3 scripts/handoff.py submit <ID>`. Nếu lệnh báo lỗi, xử lý rồi chạy lại.
 9. Kết thúc bằng một dòng: "<ID> đã nộp — chờ trưởng phòng nghiệm thu."

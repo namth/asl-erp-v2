@@ -13,6 +13,8 @@
   "agy_timeout": "60m",
   "test_paths": [
     "tests/",
-    "prototype/"
+    "prototype/",
+    "backend/tests/",
+    "frontend/tests/"
   ]
 }

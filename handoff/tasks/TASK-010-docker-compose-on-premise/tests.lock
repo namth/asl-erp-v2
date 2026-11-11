@@ -1,0 +1,2 @@
+2e2920ce075cb121c2768b9010d1bbe32efab507c7c181fcaccde129d4fce09f  handoff/tasks/TASK-010-docker-compose-on-premise/verify.sh
+28c849534ea0d5d522ce34b958d25d37c6f4199ab8b740f5b208ede9c474424e  tests/infra/test_task_010_compose.py

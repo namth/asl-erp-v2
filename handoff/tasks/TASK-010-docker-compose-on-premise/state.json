@@ -1,0 +1,17 @@
+{
+  "id": "TASK-010",
+  "title": "Docker Compose cụm dịch vụ On-Premise (TSK-01)",
+  "status": "draft",
+  "conversation_id": null,
+  "history": [
+    {
+      "at": "2026-11-11T11:27:33",
+      "status": "draft",
+      "note": "Claude tạo task"
+    }
+  ],
+  "locked_files": [
+    "handoff/tasks/TASK-010-docker-compose-on-premise/verify.sh",
+    "tests/infra/test_task_010_compose.py"
+  ]
+}

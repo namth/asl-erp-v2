@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Lệnh xác minh tự động cho TASK-008 — do trưởng phòng viết, file này bị khoá.
+# Chạy từ thư mục gốc repo. Exit 0 = đạt. Cần: .venv, Redis cục bộ, đường hầm PostgreSQL dev.
+set -euo pipefail
+PY=.venv/bin/python
+# Hợp đồng API: access token sống 30 phút (07 §3.1) — biến môi trường thắng giá trị trong .env cục bộ
+export ACCESS_TOKEN_EXPIRE_MINUTES=30
+redis-cli ping >/dev/null || { echo "Redis cục bộ chưa chạy (redis-server)"; exit 1; }
+# Thêm test auth + toàn bộ test backend cũ (không được làm hỏng)
+$PY -m pytest backend/tests -q -p no:cacheprovider

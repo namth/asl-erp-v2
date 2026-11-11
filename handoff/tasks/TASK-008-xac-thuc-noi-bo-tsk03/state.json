@@ -1,0 +1,43 @@
+{
+  "id": "TASK-008",
+  "title": "Xác thực nội bộ, phiên & thu hồi token (TSK-03)",
+  "status": "in_progress",
+  "conversation_id": "5cfe37b5-1385-4b78-86f4-a8614aa0045e",
+  "history": [
+    {
+      "at": "2026-11-11T11:18:24",
+      "status": "draft",
+      "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-11T11:22:48",
+      "status": "assigned",
+      "note": "giao code qua agy cho agy1 (gemini-3.8-flash-high)"
+    },
+    {
+      "at": "2026-11-11T11:23:17",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    }
+  ],
+  "locked_files": [
+    "handoff/tasks/TASK-008-xac-thuc-noi-bo-tsk03/verify.sh",
+    "backend/tests/test_auth.py",
+    "backend/tests/test_access_policy.py",
+    "backend/tests/test_health_and_db.py",
+    "backend/tests/test_neo4j_guard.py",
+    "backend/tests/test_schema_constraints.py",
+    "backend/tests/test_seed_and_audit.py"
+  ],
+  "agents": {
+    "tester": {
+      "account": null,
+      "conversation_id": null
+    },
+    "coder": {
+      "account": "agy1",
+      "conversation_id": "5cfe37b5-1385-4b78-86f4-a8614aa0045e"
+    }
+  },
+  "via": "agy"
+}
