@@ -437,8 +437,8 @@ async def test_deactivate_user_revokes_session_locks_login_and_updates_neo4j_imm
             "INSERT INTO matter_types (department_id, name, code) VALUES (%s, %s, %s) RETURNING id",
             (dept["id"], "Loại vụ việc test T18", mt_code)).fetchone()[0]
         client_id = conn.execute(
-            """INSERT INTO clients (client_type, name, normalized_name, phone)
-               VALUES ('FOREIGN', %s, %s, '0900000000') RETURNING id""",
+            """INSERT INTO clients (client_type, name, normalized_name, phone, address)
+               VALUES ('FOREIGN', %s, %s, '0900000000', 'Hà Nội') RETURNING id""",
             (f"Khach test T18 {case_code}", f"khach test t18 {case_code.lower()}")).fetchone()[0]
         conn.execute(
             """INSERT INTO cases (id, case_code, department_id, title, client_id, matter_type_id,
