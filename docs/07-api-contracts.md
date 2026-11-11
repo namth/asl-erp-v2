@@ -68,6 +68,11 @@
 | `INVALID_STATE_TRANSITION` | 409 | Chuyển trạng thái không có trong máy trạng thái (`12` §1) |
 | `PREREQUISITE_TASK_NOT_COMPLETED` | 422 | Vi phạm phụ thuộc task (`12` §2.1) |
 | `STAGE_LOCKED` | 409 | Stage đang `LOCKED`/`WAITING_APPROVAL`/`WAITING_PAYMENT` |
+| `ACTIVE_TEMPLATE_EXISTS` | 409 | Loại vụ việc đã có template đang hoạt động |
+| `DRAFT_VERSION_EXISTS` | 409 | Template đã có một phiên bản `DRAFT` |
+| `VERSION_NOT_DRAFT` | 409 | Sửa phiên bản đã phát hành/ngừng |
+| `DEPENDENCY_CYCLE` | 422 | Phụ thuộc task tạo chu trình (khi phát hành) |
+| `INVALID_DEPENDENCY` | 422 | Task phụ thuộc task ở stage sau |
 | `STRICT_GOVERNANCE_VIOLATION` | 403 | Thêm task/stage vào vụ việc template `STRICT` |
 | `CHANGE_REQUEST_REQUIRED` | 403 | Thêm task/stage trực tiếp vào vụ việc `FLEXIBLE` mà không qua yêu cầu đã duyệt |
 | `APPROVAL_NOT_ALLOWED` | 403 | Người duyệt không đủ thẩm quyền, hoặc tự duyệt yêu cầu của mình |
@@ -101,7 +106,7 @@ Cột "Milestone" theo lộ trình `11`. Endpoint M1–M2 có đặc tả chi ti
 | Khách hàng | `GET/POST /crm/clients` · `GET/PATCH /crm/clients/{id}` · `GET/POST /crm/clients/{id}/interactions` | MANAGER, ATTORNEY (ACCOUNTANT xem) | M2 |
 | Cơ hội | `GET/POST /crm/opportunities` · `PATCH /crm/opportunities/{id}` · `POST /crm/opportunities/{id}/convert` | MANAGER, ATTORNEY | M2 |
 | Xung đột lợi ích | `POST /crm/conflict-check` | MANAGER, ATTORNEY | M2 |
-| Workflow | `GET/POST /workflows/templates` · `POST /workflows/templates/{id}/versions` · `PUT /workflows/versions/{id}` · `POST /workflows/versions/{id}/publish` | ADMIN (MANAGER xem) | M3 |
+| Workflow | `GET/POST/PATCH /workflows/templates` · `GET/POST /workflows/templates/{id}/versions` · `GET/PUT /workflows/versions/{id}` · `POST /workflows/versions/{id}/publish` · `PUT /workflows/matter-types/{id}/custom-fields` (§3.3a) | ADMIN (MANAGER xem) | M3 |
 | Vụ việc | `GET/POST /cases` · `GET/PATCH /cases/{id}` · `POST /cases/{id}/status` | `progress` (danh sách) · `professional` | M3 |
 | Phân công | `GET/PUT /cases/{id}/assignments` | MANAGER trong phạm vi | M3 |
 | Các bên | `GET/POST /cases/{id}/parties` | `professional` | M3 |
@@ -280,6 +285,43 @@ Header bắt buộc: `Idempotency-Key`.
   "message": "Đã tạo vụ việc. Cần phân công nhân sự để bắt đầu."
 }
 ```
+
+### 3.3a. Trình thiết kế quy trình (M3 — TSK-06, SCR-06)
+Quyền: ghi chỉ `ADMIN`; đọc `ADMIN`, `MANAGER`. Template **bất biến sau khi phát hành** — mọi chỉnh sửa diễn ra trên một phiên bản `DRAFT`.
+
+| Method & Path | Việc |
+| :--- | :--- |
+| `GET /workflows/templates?matter_type_id=` | Danh sách template kèm `published_version_no`, `draft_version_id` |
+| `POST /workflows/templates` `{matter_type_id, name, mode}` | Tạo template + phiên bản 1 `DRAFT` rỗng. Loại vụ việc đã có template active → `409 ACTIVE_TEMPLATE_EXISTS` |
+| `PATCH /workflows/templates/{id}` `{name?, mode?, is_active?}` | `mode` chỉ áp cho vụ việc tạo **sau** lần phát hành kế tiếp (vụ việc cũ giữ chế độ đã sao chép) |
+| `GET /workflows/templates/{id}/versions` | Lịch sử phiên bản (`version_no`, `status`, `published_at`, `published_by`) |
+| `POST /workflows/templates/{id}/versions` | Tạo `DRAFT` mới sao chép từ bản `PUBLISHED` mới nhất. Đã có `DRAFT` → `409 DRAFT_VERSION_EXISTS` |
+| `GET /workflows/versions/{id}` | Cây đầy đủ (mẫu dưới) |
+| `PUT /workflows/versions/{id}` | Thay **toàn bộ** cây của bản `DRAFT`; bản khác `DRAFT` → `409 VERSION_NOT_DRAFT` |
+| `POST /workflows/versions/{id}/publish` | Kiểm tra rồi phát hành; bản `PUBLISHED` cũ → `RETIRED`; audit `WORKFLOW_PUBLISHED` |
+| `PUT /workflows/matter-types/{id}/custom-fields` `{fields: […]}` | Trường động của loại vụ việc (`matter_types.custom_fields_schema`) |
+| `GET/PUT /settings/holidays?year=` `{year, days: [{date, name}]}` | Ngày nghỉ lễ dùng tính SLA ngày làm việc |
+
+Cây phiên bản (`GET` trả về, `PUT` gửi lên cùng dạng; `key` là định danh do client đặt, ổn định trong một lần lưu, dùng để nối phụ thuộc):
+```json
+{
+  "id": "…", "template_id": "…", "version_no": 2, "status": "DRAFT", "mode": "STRICT",
+  "stages": [
+    { "key": "s1", "name": "Tiếp nhận & thẩm định", "order_index": 1, "requires_approval": true,
+      "tasks": [
+        { "key": "t1", "title": "Tra cứu nhãn hiệu", "description": null, "default_case_role": "EXECUTOR",
+          "sla_business_days": 3, "complexity_weight": 2, "requires_approval": true,
+          "triggers_milestone_order": null, "depends_on": [] },
+        { "key": "t2", "title": "Gửi báo cáo tra cứu", "default_case_role": "CASE_MANAGER",
+          "sla_business_days": 1, "complexity_weight": 1, "requires_approval": false,
+          "triggers_milestone_order": 1, "depends_on": ["t1"] }
+      ] }
+  ]
+}
+```
+- Kiểm tra khi `PUT` (422 `VALIDATION_ERROR` kèm `details.fields`): `order_index` liên tục từ 1; `key` duy nhất; `sla_business_days > 0`; `complexity_weight` 1–4; `depends_on` chỉ trỏ tới `key` có trong bản; không tự phụ thuộc; `triggers_milestone_order` ≥ 1 và không trùng.
+- Kiểm tra khi `publish`: có ≥ 1 stage, mỗi stage ≥ 1 task; đồ thị phụ thuộc không có chu trình → `422 DEPENDENCY_CYCLE` (`details.cycle`: danh sách `key`); task không phụ thuộc task ở **stage sau** → `422 INVALID_DEPENDENCY`.
+- Trường động: `{key, label, type: text|number|date|select|boolean, required, options?}`; `key` dạng `snake_case` duy nhất; `select` bắt buộc `options` ≥ 1.
 
 ### 3.4. Vụ việc & task (M3 — tóm tắt hợp đồng)
 
