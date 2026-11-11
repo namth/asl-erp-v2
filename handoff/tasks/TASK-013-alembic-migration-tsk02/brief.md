@@ -12,7 +12,11 @@ Thay việc áp tay `backend/alembic/versions/001_initial_schema.sql` bằng Ale
 - Test: `tests/infra/test_task_013_migrations.py` (hợp đồng nghiệm thu)
 
 ## 3. Phạm vi file
-**Được tạo/sửa:** `backend/alembic.ini`, `backend/alembic/env.py`, `backend/alembic/script.py.mako`, `backend/alembic/versions/` (file `.py` mới; **giữ** `001_initial_schema.sql` làm nguồn, revision đầu đọc và chạy file này).
+**Được tạo/sửa:**
+- `backend/alembic.ini`
+- `backend/alembic/env.py`, `backend/alembic/script.py.mako`
+- `backend/alembic/versions/` (file `.py` mới; **giữ** `001_initial_schema.sql` làm nguồn, revision đầu đọc và chạy file này)
+
 **Không được sửa:** mọi file trong `tests.lock`; `backend/app/`, `backend/tests/`, `docs/`, `qlcvaslgate-old/`.
 
 ## 4. Đặc tả chi tiết
