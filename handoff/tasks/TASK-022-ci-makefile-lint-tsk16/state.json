@@ -1,0 +1,58 @@
+{
+  "id": "TASK-022",
+  "title": "CI GitHub Actions, Makefile & lint (TSK-16 phần CI)",
+  "status": "accepted",
+  "conversation_id": "218bf45c-a988-41e3-828a-4a3d1ab91485",
+  "history": [
+    {
+      "at": "2026-11-11T16:36:40",
+      "status": "draft",
+      "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-11T16:36:55",
+      "status": "tests_assigned",
+      "note": "giao viết test chéo cho agy2"
+    },
+    {
+      "at": "2026-11-11T16:40:22",
+      "status": "tests_ready",
+      "note": "test chéo đã khoá (1 file), verify đỏ đúng chờ code"
+    },
+    {
+      "at": "2026-11-11T16:40:27",
+      "status": "assigned",
+      "note": "giao code qua agy cho agy3 (model mặc định)"
+    },
+    {
+      "at": "2026-11-11T16:40:36",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-11T16:47:02",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-11T16:47:07",
+      "status": "accepted",
+      "note": "LOW: không nghiệm thu chéo bằng agent — cổng tự động (orchestrate.py gate) trước khi merge"
+    }
+  ],
+  "agents": {
+    "coder": {
+      "account": "agy3",
+      "conversation_id": "218bf45c-a988-41e3-828a-4a3d1ab91485"
+    },
+    "tester": {
+      "account": "agy2",
+      "conversation_id": "ed8c67fd-47c2-4638-ba29-e908e9132bbb"
+    }
+  },
+  "via": "agy",
+  "locked_files": [
+    "handoff/tasks/TASK-022-ci-makefile-lint-tsk16/verify.sh",
+    "tests/infra/test_task_022_ci.py"
+  ]
+}
