@@ -1,0 +1,38 @@
+{
+  "id": "TASK-021",
+  "title": "Backend trình thiết kế quy trình, phiên bản & ngày nghỉ (TSK-06)",
+  "status": "tests_ready",
+  "conversation_id": null,
+  "history": [
+    {
+      "at": "2026-11-11T16:05:41",
+      "status": "draft",
+      "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-11T16:05:52",
+      "status": "tests_assigned",
+      "note": "giao viết test chéo cho agy2"
+    },
+    {
+      "at": "2026-11-11T16:14:24",
+      "status": "tests_ready",
+      "note": "test chéo đã khoá (1 file), verify đỏ đúng chờ code"
+    }
+  ],
+  "agents": {
+    "coder": {
+      "account": null,
+      "conversation_id": null
+    },
+    "tester": {
+      "account": "agy2",
+      "conversation_id": "4c8c096f-ae0a-4880-9804-95b70c2c2969"
+    }
+  },
+  "locked_files": [
+    "handoff/tasks/TASK-021-thiet-ke-quy-trinh-backend-tsk06/verify.sh",
+    "backend/tests/test_workflow_builder.py"
+  ],
+  "via": "agy"
+}
