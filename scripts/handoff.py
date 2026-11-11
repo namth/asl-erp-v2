@@ -275,10 +275,11 @@ FAIL_LINE = re.compile(r"FAIL|✗|×|✘|Error|error TS|AssertionError|Expected|
 
 
 def verify_log(task: Path) -> Path:
-    """Log đầy đủ của lần verify gần nhất — nằm ngoài repo để không lọt vào commit."""
-    d = Path(tempfile.gettempdir()) / "handoff-verify"
-    d.mkdir(exist_ok=True)
-    return d / f"{ROOT.name}-{task.name}.log"
+    """Log đầy đủ của lần verify gần nhất — trong handoff/logs/ (đã gitignore) để agent đọc được
+    bằng công cụ đọc file; thư mục tạm của hệ thống nằm ngoài workspace nên agent chạy ngầm bị từ chối đọc."""
+    d = ROOT / "handoff" / "logs"
+    d.mkdir(parents=True, exist_ok=True)
+    return d / f"verify-{task.name}.log"
 
 
 def run_verify(task: Path, quiet: bool = False) -> int:
