@@ -1,2 +1,2 @@
 6a1aea9dbd78e04f41eca995ade4d53995cb7722db1f772a6cf38a10b06d2053  handoff/tasks/TASK-018-khach-hang-backend-tsk04/verify.sh
-aafab8b850a83b5c5725e72c217be8571d8637e7b9cdf71130ec3826c6968062  backend/tests/test_crm_clients.py
+c490160de15b843fe54a908e8747ccd7c7b87976b09b1af23e0155dee75ac334  backend/tests/test_crm_clients.py

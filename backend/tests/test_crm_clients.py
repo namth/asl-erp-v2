@@ -111,8 +111,8 @@ async def login(c: httpx.AsyncClient, email: str, password: str = PASSWORD) -> h
     now = int(_time.time())
     token = _jwt.encode({"sub": uid, "jti": str(uuid.uuid4()), "iat": now, "exp": now + 1800, "typ": "access"},
                         _settings.SECRET_KEY, algorithm=_settings.JWT_ALGORITHM)
-    c.cookies.set("access_token", token, domain="testserver")
-    c.cookies.set("csrf_token", "csrf-test-fixed", domain="testserver")
+    c.cookies.set("access_token", token)
+    c.cookies.set("csrf_token", "csrf-test-fixed")
     return httpx.Response(200, json={"success": True, "data": {}})
 
 
