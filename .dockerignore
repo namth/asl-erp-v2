@@ -1,0 +1,15 @@
+.env
+.env*
+qlcvaslgate-old
+.venv
+node_modules
+.git
+.gitignore
+__pycache__
+*.pyc
+.pytest_cache
+.coverage
+htmlcov
+*.log
+docker/nginx/certs/
+*.key

@@ -79,6 +79,35 @@ class TestComposeProduction(unittest.TestCase):
         raw = (ROOT / "docker-compose.yml").read_text(encoding="utf-8")
         self.assertIn("${NAS_MOUNT_PATH", raw)
 
+    def test_backend_env_matches_app_settings(self):
+        """Biến môi trường phải đúng tên mà backend/app/core/config.py đọc, và trỏ vào service trong cụm —
+        nếu không, container âm thầm dùng giá trị mặc định (DB dev trên cloud)."""
+        fields = set(re.findall(r"^\s+([A-Z][A-Z0-9_]*)\s*:", (ROOT / "backend/app/core/config.py").read_text(encoding="utf-8"), re.M))
+        fields.add("REDIS_URL")  # TASK-008 thêm vào config.py
+        expect = {"DATABASE_URL": "@postgres:", "DATABASE_SYNC_URL": "@postgres:", "NEO4J_URI": "neo4j:7687",
+                  "NEO4J_USERNAME": "", "NEO4J_PASSWORD": "", "REDIS_URL": "@redis:6379", "SECRET_KEY": ""}
+        for name in ("backend", "celery_worker", "celery_beat"):
+            env = self.svcs[name].get("environment") or {}
+            for key, host in expect.items():
+                with self.subTest(f"{name}.{key}"):
+                    self.assertIn(key, fields, f"config.py không có {key}")
+                    self.assertIn(key, env, f"{name} thiếu {key}")
+                    self.assertIn(host, str(env[key]))
+            unknown = {k for k in env if k not in fields} - {"NAS_STORAGE_MOUNT_PATH", "CLAMAV_HOST", "CLAMAV_PORT", "PYTHONPATH"}
+            self.assertFalse(unknown, f"{name}: biến app không đọc tới {sorted(unknown)}")
+
+    def test_healthchecks_are_real(self):
+        for name, s in self.svcs.items():
+            test = " ".join((s.get("healthcheck") or {}).get("test") or [])
+            with self.subTest(name):
+                self.assertNotRegex(test, r"\|\|\s*(exit 0|true)\b", "healthcheck luôn báo khỏe")
+
+    def test_app_waits_for_healthy_datastores(self):
+        dep = self.svcs["backend"].get("depends_on") or {}
+        for ds in ("postgres", "neo4j", "redis"):
+            with self.subTest(ds):
+                self.assertEqual((dep.get(ds) or {}).get("condition"), "service_healthy")
+
     def test_redis_requires_password(self):
         cmd = " ".join(self.svcs["redis"].get("command") or [])
         self.assertIn("--requirepass", cmd)
