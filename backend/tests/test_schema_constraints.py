@@ -2,7 +2,7 @@ import os
 import psycopg
 import pytest
 
-DATABASE_URL = os.getenv("DATABASE_SYNC_URL", "postgresql://postgres:hbh64G2whRg5Qvzo@db.khybbuyphemhkjphxeip.supabase.co:5432/postgres?sslmode=require")
+DATABASE_URL = os.getenv("DATABASE_SYNC_URL", "postgresql://postgres.khybbuyphemhkjphxeip:hbh64G2whRg5Qvzo@aws-1-ap-southeast-2.pooler.supabase.com:5432/postgres?sslmode=require")
 
 def test_audit_logs_immutable():
     """Verify that audit_logs cannot be updated or deleted (trigger protection)."""

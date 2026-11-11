@@ -6,14 +6,14 @@ class Settings(BaseSettings):
     APP_ENV: str = "development"
     APP_PORT: int = 8000
 
-    # PostgreSQL Supabase (Direct)
+    # PostgreSQL Supabase (Session Pooler - IPv4 compatible)
     DATABASE_URL: str = os.getenv(
         "DATABASE_URL", 
-        "postgresql+asyncpg://postgres:hbh64G2whRg5Qvzo@db.khybbuyphemhkjphxeip.supabase.co:5432/postgres"
+        "postgresql+asyncpg://postgres.khybbuyphemhkjphxeip:hbh64G2whRg5Qvzo@aws-1-ap-southeast-2.pooler.supabase.com:5432/postgres?ssl=require"
     )
     DATABASE_SYNC_URL: str = os.getenv(
         "DATABASE_SYNC_URL", 
-        "postgresql://postgres:hbh64G2whRg5Qvzo@db.khybbuyphemhkjphxeip.supabase.co:5432/postgres?sslmode=require"
+        "postgresql://postgres.khybbuyphemhkjphxeip:hbh64G2whRg5Qvzo@aws-1-ap-southeast-2.pooler.supabase.com:5432/postgres?sslmode=require"
     )
 
     # Neo4j Aura (Graph RBAC & Need-to-Know)
