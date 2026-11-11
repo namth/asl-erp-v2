@@ -1,0 +1,62 @@
+{
+  "id": "TASK-016",
+  "title": "Màn hình nhật ký kiểm toán (SCR-13)",
+  "status": "accepted",
+  "conversation_id": "4d176e6c-7e5d-4ef0-9b0a-511cc73b93aa",
+  "history": [
+    {
+      "at": "2026-11-11T13:15:04",
+      "status": "draft",
+      "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-11T13:15:11",
+      "status": "tests_assigned",
+      "note": "giao viết test chéo cho agy2"
+    },
+    {
+      "at": "2026-11-11T13:24:16",
+      "status": "tests_ready",
+      "note": "test chéo đã khoá (5 file), verify đỏ đúng chờ code"
+    },
+    {
+      "at": "2026-11-11T13:24:25",
+      "status": "assigned",
+      "note": "giao code qua agy cho agy3 (model mặc định)"
+    },
+    {
+      "at": "2026-11-11T13:24:36",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-11T13:37:50",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-11T13:38:01",
+      "status": "accepted",
+      "note": "LOW: không nghiệm thu chéo bằng agent — cổng tự động (orchestrate.py gate) trước khi merge"
+    }
+  ],
+  "agents": {
+    "coder": {
+      "account": "agy3",
+      "conversation_id": "4d176e6c-7e5d-4ef0-9b0a-511cc73b93aa"
+    },
+    "tester": {
+      "account": "agy2",
+      "conversation_id": "2cf361ba-d105-4405-a640-60bc0ebbe685"
+    }
+  },
+  "via": "agy",
+  "locked_files": [
+    "handoff/tasks/TASK-016-nhat-ky-kiem-toan-frontend/verify.sh",
+    "frontend/tests/audit/use-audit-logs.test.ts",
+    "frontend/tests/audit/audit-page.test.tsx",
+    "frontend/tests/audit/audit-diff.test.tsx",
+    "frontend/tests/audit/audit-integrity.test.tsx",
+    "frontend/tests/audit/conventions.test.ts"
+  ]
+}
