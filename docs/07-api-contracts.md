@@ -59,6 +59,7 @@
 | `FORBIDDEN_ROLE` | 403 | Vai trò hệ thống không được dùng chức năng này |
 | `NEED_TO_KNOW_DENIED` | 403 | Không thuộc phạm vi vụ việc (ghi `ACCESS_DENIED` vào audit) |
 | `NOT_FOUND` | 404 | Không tồn tại |
+| `DUPLICATE_EMAIL` | 409 | Email người dùng đã tồn tại |
 | `DUPLICATE_TAX_CODE` | 409 | MST đã tồn tại |
 | `DUPLICATE_IDENTITY_NO` | 409 | CCCD/hộ chiếu đã tồn tại |
 | `OPPORTUNITY_NOT_WON` | 409 | Chuyển đổi khi cơ hội chưa `WON` |
