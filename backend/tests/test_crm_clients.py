@@ -109,7 +109,7 @@ async def login(c: httpx.AsyncClient, email: str, password: str = PASSWORD) -> h
     with db() as conn:
         uid = str(conn.execute("SELECT id FROM users WHERE email = %s", (email,)).fetchone()[0])
     now = int(_time.time())
-    token = _jwt.encode({"sub": uid, "jti": str(uuid.uuid4()), "iat": now, "exp": now + 1800, "typ": "access"},
+    token = _jwt.encode({"sub": uid, "jti": str(uuid.uuid4()), "iat": now - 30,  # lùi 30 giây: đồng hồ DB (tokens_valid_after = now() của DB) có thể nhanh hơn máy chạy test "exp": now + 1800, "typ": "access"},
                         _settings.SECRET_KEY, algorithm=_settings.JWT_ALGORITHM)
     c.cookies.set("access_token", token)
     c.cookies.set("csrf_token", "csrf-test-fixed")
