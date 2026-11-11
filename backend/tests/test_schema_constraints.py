@@ -11,18 +11,10 @@ def test_audit_logs_immutable():
     """Verify that audit_logs cannot be updated or deleted (trigger protection)."""
     with psycopg.connect(DATABASE_URL) as conn:
         with conn.cursor() as cur:
-            # Insert a temporary test audit log
-            cur.execute("""
-                INSERT INTO audit_logs (
-                    actor_type, action, entity_name, entity_id, prev_hash, row_hash
-                ) VALUES (
-                    'SYSTEM', 'TEST_SECURITY', 'SYSTEM', '0', 
-                    '0000000000000000000000000000000000000000000000000000000000000000',
-                    '1111111111111111111111111111111111111111111111111111111111111111'
-                ) RETURNING id, created_at;
-            """)
-            row = cur.fetchone()
-            log_id, created_at = row[0], row[1]
+            # Ghi qua service dùng chung để giữ chuỗi băm hợp lệ (bảng bất biến: dòng hash giả sẽ làm đứt chuỗi vĩnh viễn)
+            from backend.app.services.audit import log_audit_event
+            log_id, _ = log_audit_event(conn, actor_type="SYSTEM", action="TEST_SECURITY",
+                                        entity_name="SYSTEM", entity_id="0")
             conn.commit()
 
             # Attempt DELETE - Must fail
