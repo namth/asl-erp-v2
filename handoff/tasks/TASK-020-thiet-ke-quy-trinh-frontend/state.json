@@ -1,0 +1,64 @@
+{
+  "id": "TASK-020",
+  "title": "Màn hình thiết kế quy trình (SCR-06)",
+  "status": "accepted",
+  "conversation_id": "55b43fc7-1e71-432b-bf94-e14c86da65d6",
+  "history": [
+    {
+      "at": "2026-11-11T16:05:41",
+      "status": "draft",
+      "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-11T16:05:52",
+      "status": "tests_assigned",
+      "note": "giao viết test chéo cho agy3"
+    },
+    {
+      "at": "2026-11-11T16:20:05",
+      "status": "tests_ready",
+      "note": "test chéo đã khoá (7 file), verify đỏ đúng chờ code"
+    },
+    {
+      "at": "2026-11-11T16:20:16",
+      "status": "assigned",
+      "note": "giao code qua agy cho agy2 (model mặc định)"
+    },
+    {
+      "at": "2026-11-11T16:20:31",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-11T16:34:59",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-11T16:35:11",
+      "status": "accepted",
+      "note": "LOW: không nghiệm thu chéo bằng agent — cổng tự động (orchestrate.py gate) trước khi merge"
+    }
+  ],
+  "agents": {
+    "coder": {
+      "account": "agy2",
+      "conversation_id": "55b43fc7-1e71-432b-bf94-e14c86da65d6"
+    },
+    "tester": {
+      "account": "agy3",
+      "conversation_id": "fd421728-3983-469a-82e9-495ba0cb16b8"
+    }
+  },
+  "locked_files": [
+    "handoff/tasks/TASK-020-thiet-ke-quy-trinh-frontend/verify.sh",
+    "frontend/tests/workflow/workflow-graph.test.ts",
+    "frontend/tests/workflow/use-workflows.test.ts",
+    "frontend/tests/workflow/workflows-page.test.tsx",
+    "frontend/tests/workflow/workflow-editor-page.test.tsx",
+    "frontend/tests/workflow/custom-fields.test.tsx",
+    "frontend/tests/workflow/holidays-page.test.tsx",
+    "frontend/tests/workflow/conventions.test.ts"
+  ],
+  "via": "agy"
+}

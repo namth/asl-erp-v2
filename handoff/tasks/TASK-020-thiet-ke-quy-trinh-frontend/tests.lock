@@ -1,0 +1,8 @@
+dce6776a7b5903b70c314d2268634e207becde710464bdc32c59bc4acb72c757  handoff/tasks/TASK-020-thiet-ke-quy-trinh-frontend/verify.sh
+b1bb00cefa7522e40f785e9e5389f2c2e5e4e97ec033539d580cea6832f2e50d  frontend/tests/workflow/workflow-graph.test.ts
+94441961977adee6c64304d8b523f0d0c3dfcf84d411c521190eee8800c5aa0e  frontend/tests/workflow/use-workflows.test.ts
+6ce5e1328ba9bc0346eb2772f4e01a89004bc6331efa6569f90e5543ccda4efb  frontend/tests/workflow/workflows-page.test.tsx
+058b5dfc23572cc05763709d6e5c5a658de3af004706babb29ad52454b380609  frontend/tests/workflow/workflow-editor-page.test.tsx
+246b23af46fcb864a569253242463dc29ea7b03f21c9296507b56176f17c1352  frontend/tests/workflow/custom-fields.test.tsx
+a9cba20c2713fa53b23dcffec69d597de67dd730240125e1c0afc97725b69dbf  frontend/tests/workflow/holidays-page.test.tsx
+d4da255b8a1ae69eec6c03284f522764869973e10f8b8175dc34e5259aa1ba17  frontend/tests/workflow/conventions.test.ts
