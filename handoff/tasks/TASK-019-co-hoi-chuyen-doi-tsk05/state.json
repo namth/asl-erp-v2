@@ -1,0 +1,57 @@
+{
+  "id": "TASK-019",
+  "title": "Backend pipeline cơ hội & chuyển đổi 1-chạm (TSK-05)",
+  "status": "accepted",
+  "conversation_id": "b2a66e30-b6d0-4a07-9744-80bb054625ba",
+  "history": [
+    {
+      "at": "2026-11-11T14:09:21",
+      "status": "draft",
+      "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-11T14:09:41",
+      "status": "tests_assigned",
+      "note": "giao viết test chéo cho agy2"
+    },
+    {
+      "at": "2026-11-11T14:18:51",
+      "status": "tests_ready",
+      "note": "test chéo đã khoá (1 file), verify đỏ đúng chờ code"
+    },
+    {
+      "at": "2026-11-11T20:50:53",
+      "status": "assigned",
+      "note": "giao code qua agy cho agy1 (model mặc định)"
+    },
+    {
+      "at": "2026-11-11T20:51:37",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-12T00:39:12",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-12T02:15:37",
+      "status": "accepted",
+      "note": "Claude nghiệm thu"
+    }
+  ],
+  "agents": {
+    "coder": {
+      "account": "agy1",
+      "conversation_id": "b2a66e30-b6d0-4a07-9744-80bb054625ba"
+    },
+    "tester": {
+      "account": "agy2",
+      "conversation_id": "90e5957a-be45-459b-8fb2-8dcb263d7769"
+    }
+  },
+  "locked_files": [
+    "handoff/tasks/TASK-019-co-hoi-chuyen-doi-tsk05/verify.sh"
+  ],
+  "via": "agy"
+}
