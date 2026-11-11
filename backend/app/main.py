@@ -6,6 +6,7 @@ from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from sqlalchemy import text
 
+
 from backend.app.core.config import settings
 from backend.app.core.errors import (
     AppException,
@@ -17,6 +18,8 @@ from backend.app.db.postgres import engine
 from backend.app.db.neo4j import get_neo4j_driver, close_neo4j_driver
 from backend.app.db.redis import close_redis
 from backend.app.api.auth import router as auth_router
+from backend.app.api.workflows import router as workflows_router
+from backend.app.api.settings_holidays import router as settings_holidays_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -49,6 +52,8 @@ app.add_middleware(
 
 # Routers
 app.include_router(auth_router, prefix="/api/v1")
+app.include_router(workflows_router, prefix="/api/v1")
+app.include_router(settings_holidays_router, prefix="/api/v1")
 
 @app.get("/api/v1/health", tags=["System"])
 async def health_check():
