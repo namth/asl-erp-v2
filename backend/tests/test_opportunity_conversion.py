@@ -101,7 +101,10 @@ async def login(c: httpx.AsyncClient, email: str, password: str = PASSWORD) -> h
     with db() as conn:
         uid = str(conn.execute("SELECT id FROM users WHERE email = %s", (email,)).fetchone()[0])
     now = int(_time.time())
-    token = _jwt.encode({"sub": uid, "jti": str(uuid.uuid4()), "iat": now - 30, "exp": now + 1800, "typ": "access"},
+    # tokens_valid_after của user test lùi 10 phút: đồng hồ DB có thể nhanh hơn máy chạy test, token iat=now sẽ bị coi là bị thu hồi
+    with db() as _c:
+        _c.execute("UPDATE users SET tokens_valid_after = now() - interval '10 minutes' WHERE id = %s", (str(uid),))
+    token = _jwt.encode({"sub": uid, "jti": str(uuid.uuid4()), "iat": now, "exp": now + 1800, "typ": "access"},
                         settings.SECRET_KEY, algorithm=settings.JWT_ALGORITHM)
     c.cookies.set("access_token", token)
     c.cookies.set("csrf_token", "csrf-test-fixed")

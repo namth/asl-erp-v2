@@ -1,2 +1,2 @@
 e925931dc87e6e7315450e99123c271a31570d0d8862c4ac14e07417fcd83b8a  handoff/tasks/TASK-019-co-hoi-chuyen-doi-tsk05/verify.sh
-f17f40eea0805dc814b95633174bcd6015d9dc35465cc3f2982907daa2d76f16  backend/tests/test_opportunity_conversion.py
+191d545e5ca7450a10302bf18c54633e5c1d65b05ef776c6f562c7e0e369f2cf  backend/tests/test_opportunity_conversion.py
