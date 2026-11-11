@@ -17,6 +17,7 @@ from backend.app.db.postgres import engine
 from backend.app.db.neo4j import get_neo4j_driver, close_neo4j_driver
 from backend.app.db.redis import close_redis
 from backend.app.api.auth import router as auth_router
+from backend.app.api.crm_opportunities import router as crm_opportunities_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -49,6 +50,7 @@ app.add_middleware(
 
 # Routers
 app.include_router(auth_router, prefix="/api/v1")
+app.include_router(crm_opportunities_router, prefix="/api/v1")
 
 @app.get("/api/v1/health", tags=["System"])
 async def health_check():

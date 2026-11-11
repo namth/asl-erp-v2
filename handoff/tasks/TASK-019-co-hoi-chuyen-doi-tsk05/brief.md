@@ -18,7 +18,7 @@ API pipeline cơ hội theo máy trạng thái và chuyển đổi 1-chạm cơ 
 **Được tạo/sửa (người code):**
 - `backend/app/api/crm_opportunities.py`, `backend/app/services/opportunities.py`, `backend/app/services/case_factory.py`
 - `backend/app/schemas/crm.py` (thêm schema cơ hội)
-- `backend/alembic/versions/003_matter_type_commission_defaults.sql` và revision Alembic `.py` chạy file đó
+- `backend/alembic/versions/003_matter_type_commission_defaults.sql` và revision Alembic `backend/alembic/versions/0003_matter_type_commission_defaults.py` chạy file đó
 - `backend/app/main.py` (gắn router)
 
 **Người viết test:** `backend/tests/test_opportunity_conversion.py` và `verify.sh` của task.
