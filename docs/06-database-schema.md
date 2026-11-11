@@ -178,6 +178,12 @@ Dòng thời gian tương tác (SCR-04).
 | `name` | `VARCHAR(150)` | NOT NULL | Đăng ký nhãn hiệu, Tranh chấp đất đai… |
 | `code` | `VARCHAR(4)` | UNIQUE, NOT NULL, CHECK `^[A-Z]{2,4}$` | Dùng trong mã vụ việc (`TM`, `LD`, `MA`) |
 | `custom_fields_schema` | `JSONB` | DEFAULT `'[]'` | Định nghĩa trường động |
+| `default_originator_rate` | `NUMERIC(5,2)` | NOT NULL, DEFAULT `0`, CHECK `0..100` | Mặc định cho `commission_policies.originator_rate` khi chuyển đổi |
+| `default_management_rate` | `NUMERIC(5,2)` | NOT NULL, DEFAULT `0`, CHECK `0..100` | |
+| `default_supervisor_share_pct` | `NUMERIC(5,2)` | NOT NULL, DEFAULT `50`, CHECK `0..100` | |
+| `default_execution_rate` | `NUMERIC(5,2)` | NOT NULL, DEFAULT `0`, CHECK `0..100` | |
+
+CHECK: `default_originator_rate + default_management_rate + default_execution_rate <= 100`. Thêm bằng `backend/alembic/versions/003_matter_type_commission_defaults.sql` (idempotent, `ADD COLUMN IF NOT EXISTS`) và revision Alembic chạy file đó (TSK-05).
 
 #### `workflow_templates`
 | Cột | Kiểu | Ràng buộc | Mô tả |
