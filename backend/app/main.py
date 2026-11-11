@@ -1,6 +1,7 @@
 import time
+import uuid
 from contextlib import asynccontextmanager
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
@@ -18,6 +19,9 @@ from backend.app.db.neo4j import get_neo4j_driver, close_neo4j_driver
 from backend.app.db.redis import close_redis
 from backend.app.api.auth import router as auth_router
 from backend.app.api.crm_clients import router as crm_clients_router
+from backend.app.api.cases import router as cases_router
+from backend.app.api.approvals import router as approvals_router
+from backend.app.api.me import router as me_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -51,6 +55,9 @@ app.add_middleware(
 # Routers
 app.include_router(auth_router, prefix="/api/v1")
 app.include_router(crm_clients_router, prefix="/api/v1")
+app.include_router(cases_router, prefix="/api/v1")
+app.include_router(approvals_router, prefix="/api/v1")
+app.include_router(me_router, prefix="/api/v1")
 
 @app.get("/api/v1/health", tags=["System"])
 async def health_check():
