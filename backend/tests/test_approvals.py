@@ -40,8 +40,8 @@ def make_auth_client(user_id: str) -> httpx.AsyncClient:
         base_url="https://testserver",
         headers={"X-CSRF-Token": csrf_token, "Authorization": f"Bearer {token}"},
     )
-    c.cookies.set("access_token", token, domain="testserver")
-    c.cookies.set("csrf_token", csrf_token, domain="testserver")
+    c.cookies.set("access_token", token)
+    c.cookies.set("csrf_token", csrf_token)
     return c
 
 
