@@ -73,6 +73,9 @@
 | `VERSION_NOT_DRAFT` | 409 | Sửa phiên bản đã phát hành/ngừng |
 | `DEPENDENCY_CYCLE` | 422 | Phụ thuộc task tạo chu trình (khi phát hành) |
 | `INVALID_DEPENDENCY` | 422 | Task phụ thuộc task ở stage sau |
+| `ASSIGNEE_HAS_OPEN_TASKS` | 409 | Gỡ phân công người còn task `IN_PROGRESS`/`WAITING_APPROVAL` |
+| `ASSIGNEE_NOT_IN_CASE` | 422 | Giao task cho người không được phân công vào vụ việc |
+| `CASE_PAUSED` | 409 | Đổi trạng thái task khi vụ việc `PAUSED` |
 | `STRICT_GOVERNANCE_VIOLATION` | 403 | Thêm task/stage vào vụ việc template `STRICT` |
 | `CHANGE_REQUEST_REQUIRED` | 403 | Thêm task/stage trực tiếp vào vụ việc `FLEXIBLE` mà không qua yêu cầu đã duyệt |
 | `APPROVAL_NOT_ALLOWED` | 403 | Người duyệt không đủ thẩm quyền, hoặc tự duyệt yêu cầu của mình |
@@ -323,7 +326,26 @@ Cây phiên bản (`GET` trả về, `PUT` gửi lên cùng dạng; `key` là đ
 - Kiểm tra khi `publish`: có ≥ 1 stage, mỗi stage ≥ 1 task; đồ thị phụ thuộc không có chu trình → `422 DEPENDENCY_CYCLE` (`details.cycle`: danh sách `key`); task không phụ thuộc task ở **stage sau** → `422 INVALID_DEPENDENCY`.
 - Trường động: `{key, label, type: text|number|date|select|boolean, required, options?}`; `key` dạng `snake_case` duy nhất; `select` bắt buộc `options` ≥ 1.
 
-### 3.4. Vụ việc & task (M3 — tóm tắt hợp đồng)
+### 3.4. Vụ việc & task (M3 — TSK-07, TSK-08, TSK-19)
+
+Quy tắc trạng thái, phụ thuộc, khoá tiền, phê duyệt, phân công theo `12` §1.2–1.4, §2.1–2.6. Mọi route `/cases/{id}/…` đi qua `verify_need_to_know` với phạm vi ghi trong bảng; ghi qua `verify_csrf`; vụ việc `is_legacy` → ghi bị `409 LEGACY_CASE_READ_ONLY`.
+
+| Method & Path | Phạm vi | Việc |
+| :--- | :--- | :--- |
+| `GET /cases?q=&status=&department_id=&mine=true&page=` | `progress` | Danh sách vụ việc **người xem có quyền**: `id, case_code, title, client_name, status, workflow_mode, current_stage {name, status}, progress_pct, due_at_nearest, my_role_in_case` + `meta` |
+| `GET /cases/{id}` | `professional` (`?view=progress` cho phạm vi `progress`) | Mẫu dưới |
+| `POST /cases/{id}/status` `{status, reason?}` | `professional` (Quản lý) | `ACTIVE`/`PAUSED`/`TERMINATED`/`CLOSED` theo `12` §1.2; `PAUSED`, `TERMINATED` bắt buộc `reason` |
+| `GET /cases/{id}/stages` | `professional` | `[{id, name, order_index, status, requires_approval, blocking_milestone {id, name, status}?, task_counts {todo, in_progress, waiting_approval, completed}}]` |
+| `GET/PUT /cases/{id}/assignments` `{assignments: [{user_id, role_in_case}]}` | Quản lý trong phạm vi | Thay toàn bộ; đúng 1 `CASE_MANAGER`, ≤ 1 `SUPERVISOR`; gỡ người còn task dở → `409 ASSIGNEE_HAS_OPEN_TASKS` (`details.task_ids`) |
+| `GET /cases/{id}/tasks?stage_id=&status=&assigned_to=` | `professional` | `[{id, stage_id, title, status, assigned_to {id, full_name}?, due_at, sla_business_days, complexity_weight, requires_approval, is_ad_hoc, depends_on: [task_id], blocked_by: [task_id chưa COMPLETED]}]` |
+| `PATCH /cases/{id}/tasks/{taskId}` `{assigned_to?, due_at?, description?}` | `professional` | `assigned_to` phải đang được phân công vào vụ việc (`422 ASSIGNEE_NOT_IN_CASE`) |
+| `PATCH /cases/{id}/tasks/{taskId}/status` | `professional` | Mẫu dưới |
+| `GET/POST /cases/{id}/tasks/{taskId}/comments` `{body}` | `professional` | Mới nhất trước; `body` 1–5000 ký tự |
+| `GET /cases/{id}/change-requests` · `POST` (mẫu dưới) | `professional` | Danh sách yêu cầu bổ sung kèm trạng thái |
+| `GET /approvals?status=PENDING&type=` | người có thẩm quyền | Hàng chờ duyệt **của người xem** (`12` §2.2): `[{id, type: TASK|STAGE_GATE|CHANGE_REQUEST, case {id, case_code, title}, subject {id, title}, requested_by {id, full_name}, requested_at, note}]` |
+| `POST /approvals/{id}/decide` | người có thẩm quyền | Mẫu dưới |
+
+Mã lỗi thêm: `ASSIGNEE_HAS_OPEN_TASKS` (409), `ASSIGNEE_NOT_IN_CASE` (422), `CASE_PAUSED` (409 — đổi trạng thái task khi vụ việc `PAUSED`).
 
 #### `GET /api/v1/cases/{id}` — phạm vi `professional`
 ```json
