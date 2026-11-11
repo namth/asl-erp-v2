@@ -326,11 +326,11 @@ async def test_totp_step_window_and_anti_replay():
         auth = {"Authorization": f"Bearer {l.json()['error']['details']['setup_token']}"}
         secret = (await c.post("/api/v1/auth/2fa/setup", headers=auth)).json()["data"]["secret"]
         totp = pyotp.TOTP(secret)
-        await c.post("/api/v1/auth/2fa/enable", headers=auth, json={"code": totp.at(time.time() - 30)})
+        await c.post("/api/v1/auth/2fa/enable", headers=auth, json={"code": totp.now()})
     async with client() as c:
         chal_res1 = await login(c, u["email"])
         chal_id1 = chal_res1.json()["error"]["details"]["challenge_id"]
-        current_code = totp.now()
+        current_code = totp.at(time.time() + 30)  # bước kế tiếp: chưa dùng ở enable
         v1 = await c.post("/api/v1/auth/2fa/verify", json={"challenge_id": chal_id1, "code": current_code})
         assert v1.status_code == 200
 
