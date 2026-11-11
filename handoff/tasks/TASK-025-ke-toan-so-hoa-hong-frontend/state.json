@@ -1,0 +1,63 @@
+{
+  "id": "TASK-025",
+  "title": "Bàn làm việc Kế toán & sổ hoa hồng (SCR-11, SCR-12)",
+  "status": "accepted",
+  "conversation_id": "516fbd93-62ec-4074-a81b-5d39aec49f6b",
+  "history": [
+    {
+      "at": "2026-11-11T17:02:56",
+      "status": "draft",
+      "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-11T17:03:03",
+      "status": "tests_assigned",
+      "note": "giao viết test chéo cho agy3"
+    },
+    {
+      "at": "2026-11-11T17:16:03",
+      "status": "tests_ready",
+      "note": "test chéo đã khoá (6 file), verify đỏ đúng chờ code"
+    },
+    {
+      "at": "2026-11-11T17:16:25",
+      "status": "assigned",
+      "note": "giao code qua agy cho agy2 (model mặc định)"
+    },
+    {
+      "at": "2026-11-11T17:16:40",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-11T17:31:52",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-11T17:32:04",
+      "status": "accepted",
+      "note": "LOW: không nghiệm thu chéo bằng agent — cổng tự động (orchestrate.py gate) trước khi merge"
+    }
+  ],
+  "agents": {
+    "coder": {
+      "account": "agy2",
+      "conversation_id": "516fbd93-62ec-4074-a81b-5d39aec49f6b"
+    },
+    "tester": {
+      "account": "agy3",
+      "conversation_id": "78adbb86-1fbb-40b8-bf9e-e91366f4e18d"
+    }
+  },
+  "locked_files": [
+    "handoff/tasks/TASK-025-ke-toan-so-hoa-hong-frontend/verify.sh",
+    "frontend/tests/finance/money.test.ts",
+    "frontend/tests/finance/use-finance.test.ts",
+    "frontend/tests/finance/accounting-page.test.tsx",
+    "frontend/tests/finance/commissions-page.test.tsx",
+    "frontend/tests/finance/case-finance-page.test.tsx",
+    "frontend/tests/finance/conventions.test.ts"
+  ],
+  "via": "agy"
+}

@@ -1,0 +1,7 @@
+61365eb16215cada5986dae3bf9d7949915921db9e5aad89471c6cea908b623a  handoff/tasks/TASK-025-ke-toan-so-hoa-hong-frontend/verify.sh
+184208dc7ab694cd09423118d7fae41f10bf06938555d4e81a6c6584903981a8  frontend/tests/finance/money.test.ts
+7f9d2e52bc932e78c400d76ba0abebf255ec3a51825cdbcf01c0809189bf4ab4  frontend/tests/finance/use-finance.test.ts
+1c50d3b71a20b1764a39c1ae48d76c25d70b18623e7b9c67d7d29fd31a3179d4  frontend/tests/finance/accounting-page.test.tsx
+40926256064efacaf70510dbff4dc981c0dfb2165c3f868f8f0c76a4c34e42ab  frontend/tests/finance/commissions-page.test.tsx
+e8a7a1103aa3ab16256d4f8c99c5ab08585835d89bc855221302ab66e3029b62  frontend/tests/finance/case-finance-page.test.tsx
+79d5890f73260e2763a589a7385222b8e21b470c2c3a5b60656058d1ee797a02  frontend/tests/finance/conventions.test.ts
