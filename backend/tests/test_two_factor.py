@@ -269,12 +269,20 @@ async def test_voluntary_2fa_setup_via_cookie_session_and_regenerate():
 
 # ---------- 4. Cửa sổ thời gian lệch ±1 bước & chống phát lại ----------
 
+async def _wait_step_start(margin: float = 8.0) -> None:
+    """Chờ tới đầu một bước TOTP 30 s để cả cụm kiểm nằm gọn trong cùng một bước (tránh bấp bênh ở ranh giới)."""
+    r = time.time() % 30
+    if r > margin:
+        await asyncio.sleep(30 - r + 0.5)
+
+
 async def test_totp_step_window_and_anti_replay():
     """Kiểm tra:
     - Mã lệch ±1 bước (30s) được chấp nhận (valid_window = 1).
     - Mã lệch ±3 bước (90s) bị từ chối (401 TOTP_INVALID).
     - Chống phát lại: mã TOTP đã dùng thành công trong bước 30s không được dùng lại trong cùng bước.
     """
+    await _wait_step_start()
     u = make_user("ACCOUNTANT", totp_enabled=False)
 
     # Setup & Enable để lấy secret
@@ -320,6 +328,7 @@ async def test_totp_step_window_and_anti_replay():
         assert v.status_code == 401 and error_code(v) == "TOTP_INVALID"
 
     # Chống phát lại (Anti-replay): người dùng mới, để bước hiện tại chưa bị dùng ở enable/verify phía trên
+    await _wait_step_start()
     u = make_user("ACCOUNTANT", totp_enabled=False)
     async with client() as c:
         l = await login(c, u["email"])
