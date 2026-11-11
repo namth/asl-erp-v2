@@ -15,7 +15,7 @@ redis-cli ping >/dev/null || { echo "Redis cục bộ chưa chạy (redis-server
 
 # Áp migration tạo bảng user_recovery_codes nếu có file
 if [ -f backend/alembic/versions/002_user_recovery_codes.sql ]; then
-  $PY backend/tests/apply_sql.py backend/alembic/versions/002_user_recovery_codes.sql
+  PYTHONPATH=. $PY backend/tests/apply_sql.py backend/alembic/versions/002_user_recovery_codes.sql
 fi
 
 # Chạy toàn bộ test backend (kể cả test_auth.py và test_two_factor.py mới)
