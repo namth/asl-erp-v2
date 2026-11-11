@@ -1,1 +1,3 @@
 fb2dacfb47b4f4ad68a6d4dea3ef16de5dba25915b96f3c761b29d074690df87  handoff/tasks/TASK-033-nhat-ky-kiem-toan-be/verify.sh
+aa58159b29acaa86fa9ade2a0f8d5b7ffcb64318eb6de60512eca6a7c73ca742  backend/tests/test_audit_log_api.py
+19db9d56c8b6042f62a70f89c884af4e6f5c46010e2349a5840bca1a7c520e89  backend/tests/test_no_test_hooks_in_app.py
