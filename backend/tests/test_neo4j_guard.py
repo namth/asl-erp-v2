@@ -1,15 +1,10 @@
 import pytest
 import uuid
-from backend.app.db.neo4j import get_neo4j_driver, close_neo4j_driver
+from backend.app.db.neo4j import get_neo4j_driver
 from backend.app.db.neo4j_schema import apply_neo4j_constraints
 from backend.app.guards.need_to_know import query_need_to_know_facts, verify_need_to_know
 from backend.app.guards.conflict_check import check_conflict_of_interest
 from fastapi import HTTPException
-
-@pytest.fixture(autouse=True)
-async def cleanup_driver_fixture():
-    yield
-    await close_neo4j_driver()
 
 @pytest.mark.asyncio
 async def test_apply_neo4j_constraints():

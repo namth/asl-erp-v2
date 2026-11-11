@@ -1,23 +1,36 @@
+import asyncio
+from typing import AsyncGenerator, Any
 from neo4j import AsyncGraphDatabase, AsyncDriver
-from typing import AsyncGenerator
 from backend.app.core.config import settings
 
 _driver: AsyncDriver | None = None
+_driver_loop: Any = None
 
 def get_neo4j_driver() -> AsyncDriver:
-    global _driver
-    if _driver is None:
+    global _driver, _driver_loop
+    current_loop = None
+    try:
+        current_loop = asyncio.get_running_loop()
+    except RuntimeError:
+        pass
+
+    if _driver is None or (_driver_loop is not None and _driver_loop != current_loop):
         _driver = AsyncGraphDatabase.driver(
             settings.NEO4J_URI,
             auth=(settings.NEO4J_USERNAME, settings.NEO4J_PASSWORD)
         )
+        _driver_loop = current_loop
     return _driver
 
 async def close_neo4j_driver():
-    global _driver
+    global _driver, _driver_loop
     if _driver is not None:
-        await _driver.close()
+        try:
+            await _driver.close()
+        except Exception:
+            pass
         _driver = None
+        _driver_loop = None
 
 async def get_neo4j_session():
     driver = get_neo4j_driver()
