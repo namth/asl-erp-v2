@@ -1,0 +1,59 @@
+{
+  "id": "TASK-011",
+  "title": "Xác thực 2 lớp TOTP & mã khôi phục (TSK-17)",
+  "status": "accepted",
+  "conversation_id": "9f99f071-5109-466e-917d-6c6765456c89",
+  "history": [
+    {
+      "at": "2026-11-11T11:49:18",
+      "status": "draft",
+      "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-11T11:50:24",
+      "status": "tests_assigned",
+      "note": "giao viết test chéo cho agy3"
+    },
+    {
+      "at": "2026-11-11T11:58:36",
+      "status": "tests_ready",
+      "note": "test chéo đã khoá (2 file), verify đỏ đúng chờ code"
+    },
+    {
+      "at": "2026-11-11T12:47:54",
+      "status": "assigned",
+      "note": "giao code qua agy cho agy1 (gemini-3.8-flash-high)"
+    },
+    {
+      "at": "2026-11-11T12:49:12",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-11T17:48:24",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-11T18:54:45",
+      "status": "accepted",
+      "note": "Claude nghiệm thu"
+    }
+  ],
+  "agents": {
+    "coder": {
+      "account": "agy1",
+      "conversation_id": "9f99f071-5109-466e-917d-6c6765456c89"
+    },
+    "tester": {
+      "account": "agy3",
+      "conversation_id": "6d1a540a-0c8b-4e61-b1be-9ef00cb8059b"
+    }
+  },
+  "via": "agy",
+  "locked_files": [
+    "handoff/tasks/TASK-011-totp-2fa-tsk17/verify.sh",
+    "backend/tests/test_two_factor.py",
+    "backend/tests/apply_sql.py"
+  ]
+}

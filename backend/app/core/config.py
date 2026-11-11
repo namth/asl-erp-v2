@@ -1,5 +1,17 @@
 import os
+import psycopg
+from psycopg.adapt import Loader
+from pydantic import model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+# Chỉ cho development/test — không bao giờ dùng ở production.
+_DEV_DATA_KEY = "MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIzNDU2Nzg5MDE="
+
+class StrUuidLoader(Loader):
+    def load(self, data: memoryview | bytes) -> str:
+        return bytes(data).decode("ascii")
+
+psycopg.adapters.register_loader("uuid", StrUuidLoader)
 
 class Settings(BaseSettings):
     APP_NAME: str = "ASL LAW ERP v2.0"
@@ -30,6 +42,20 @@ class Settings(BaseSettings):
     JWT_ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     REFRESH_TOKEN_EXPIRE_DAYS: int = 7
+
+    # 2FA & Data Encryption (DEC-02)
+    # Khoá mặc định chỉ dùng cho development/test; môi trường khác bắt buộc đặt biến này.
+    DATA_ENCRYPTION_MASTER_KEY: str = os.getenv("DATA_ENCRYPTION_MASTER_KEY", "")
+    TOTP_ISSUER: str = os.getenv("TOTP_ISSUER", "ASL LAW ERP")
+    TOTP_REQUIRED_ROLES: list[str] = ["ADMIN", "MANAGER", "ACCOUNTANT"]
+
+    @model_validator(mode="after")
+    def _require_data_key_outside_dev(self):
+        if not self.DATA_ENCRYPTION_MASTER_KEY:
+            if self.APP_ENV not in ("development", "test"):
+                raise ValueError("DATA_ENCRYPTION_MASTER_KEY bắt buộc ngoài môi trường development/test")
+            self.DATA_ENCRYPTION_MASTER_KEY = _DEV_DATA_KEY
+        return self
 
     model_config = SettingsConfigDict(
         env_file=".env",

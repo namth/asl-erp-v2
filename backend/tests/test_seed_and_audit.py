@@ -67,3 +67,34 @@ def test_audit_log_hash_chain():
         is_valid, count, err = verify_audit_chain(conn, from_id=id1)
         assert is_valid is True, f"Audit chain verification failed: {err}"
         assert count >= 2
+
+
+def test_audit_chain_stays_valid_under_concurrent_autocommit_writers():
+    """Nhiều kết nối autocommit ghi audit đồng thời: advisory lock vẫn tuần tự hoá, chuỗi băm không rẽ nhánh."""
+    import threading
+
+    with psycopg.connect(settings.DATABASE_SYNC_URL, autocommit=True) as conn:
+        start_id = conn.execute("SELECT COALESCE(max(id), 0) FROM audit_logs").fetchone()[0]
+
+    errors: list[BaseException] = []
+
+    def writer(i: int) -> None:
+        try:
+            with psycopg.connect(settings.DATABASE_SYNC_URL, autocommit=True) as conn:
+                for k in range(4):
+                    log_audit_event(conn, actor_type="SYSTEM", action="TEST_CONCURRENCY",
+                                    entity_name="SYSTEM", entity_id=f"{i}-{k}")
+        except BaseException as e:  # noqa: BLE001 — gom lỗi để báo ở luồng chính
+            errors.append(e)
+
+    threads = [threading.Thread(target=writer, args=(i,)) for i in range(5)]
+    for t in threads:
+        t.start()
+    for t in threads:
+        t.join()
+    assert not errors, errors
+
+    with psycopg.connect(settings.DATABASE_SYNC_URL) as conn:
+        is_valid, count, err = verify_audit_chain(conn, from_id=start_id + 1)
+    assert is_valid is True, f"Chuỗi băm rẽ nhánh khi ghi đồng thời: {err}"
+    assert count >= 20

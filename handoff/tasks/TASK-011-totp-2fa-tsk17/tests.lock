@@ -1,0 +1,3 @@
+b83986b215d936ec838fb3bd5759131e5d4d15a86de10d52e1d48c92c8dcbdd7  handoff/tasks/TASK-011-totp-2fa-tsk17/verify.sh
+315b99ea4f435facf7d03ea780528f992838ca958d1006bb03e332438ffa60ba  backend/tests/test_two_factor.py
+470f10d93548af4a23cb782955f10747bf510bcb234c03ed1ce59722bb95649f  backend/tests/apply_sql.py

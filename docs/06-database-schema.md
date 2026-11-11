@@ -513,7 +513,7 @@ Phân vùng theo tháng (`PARTITION BY RANGE (created_at)`).
 | `ip_address` | `INET` | NULL | Bắt buộc khi `actor_type = 'USER'` (CHECK) |
 | `user_agent` | `TEXT` | NULL | |
 | `prev_hash` | `CHAR(64)` | NOT NULL | Băm của dòng trước — chuỗi chứng thực toàn vẹn |
-| `row_hash` | `CHAR(64)` | NOT NULL | `sha256(prev_hash ‖ canonical_json(dòng))`; ghi tuần tự bằng `pg_advisory_xact_lock` |
+| `row_hash` | `CHAR(64)` | NOT NULL | `sha256(prev_hash ‖ canonical_json(dòng))`; ghi tuần tự bằng `pg_advisory_xact_lock`; "dòng trước" là dòng có `id` lớn nhất (không theo `created_at` — `now()` là giờ bắt đầu transaction nên có thể lệch thứ tự khi ghi đồng thời) |
 
 **Bất biến:** `asl_app` chỉ có `INSERT, SELECT`; thêm trigger `BEFORE UPDATE OR DELETE … RAISE EXCEPTION` để chặn cả khi lỡ cấp quyền. Job hằng đêm kiểm tra chuỗi băm và cảnh báo nếu đứt.
 
