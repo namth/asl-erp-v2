@@ -6,55 +6,6 @@ import type {
   WorkstationDesk,
 } from '@/types/floorplan';
 
-// Hỗ trợ matcher toBeInTheDocument và xử lý multiple matches cho vitest trong môi trường kiểm thử
-if (
-  typeof globalThis !== 'undefined' &&
-  (globalThis as any).expect &&
-  typeof (globalThis as any).expect.extend === 'function'
-) {
-  (globalThis as any).expect.extend({
-    toBeInTheDocument(received: any) {
-      const pass = Boolean(
-        received &&
-          received.ownerDocument &&
-          received.ownerDocument.documentElement &&
-          received.ownerDocument.documentElement.contains(received)
-      );
-      return {
-        pass,
-        message: () =>
-          pass
-            ? 'expected document not to contain element'
-            : 'expected document to contain element',
-      };
-    },
-  });
-
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const rtl = require('@testing-library/react');
-    if (rtl && rtl.screen && !rtl.screen._patchedByFloorplan) {
-      rtl.screen._patchedByFloorplan = true;
-      const originalGetByText = rtl.screen.getByText;
-      rtl.screen.getByText = function (text: any, options: any) {
-        try {
-          return originalGetByText.call(this, text, options);
-        } catch (err: any) {
-          if (err && typeof err.message === 'string' && err.message.includes('Found multiple elements')) {
-            const all = rtl.screen.getAllByText(text, options);
-            if (all && all.length > 0) {
-              return all[0];
-            }
-          }
-          throw err;
-        }
-      };
-    }
-  } catch {
-    // Ignore in non-test runtime
-  }
-}
-
 /**
  * Tách danh sách hàng chờ duyệt và bàn nhân viên,
  * đánh dấu trạng thái is_in_queue trên bàn tương ứng.

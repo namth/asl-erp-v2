@@ -77,9 +77,3 @@ export type FloorplanEvent =
       payload: ApprovalDecidedPayload;
     };
 
-declare module '@vitest/expect' {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  interface Assertion<T> {
-    toBeInTheDocument(): void;
-  }
-}
