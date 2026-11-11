@@ -191,6 +191,41 @@ Khoá tài khoản: `is_active = false`, `tokens_valid_after = NOW()`, gỡ các
 ```
 Mọi user phải có `system_role = MANAGER`. Đồng bộ cạnh `:LEADS`.
 
+### 3.2a. Nhật ký kiểm toán (ADMIN — SCR-13)
+
+#### `GET /api/v1/audit-logs`
+Tham số: `actor_id`, `actor_type` (`USER`|`SYSTEM`), `action`, `entity_name`, `entity_id`, `from`, `to` (ISO 8601, lọc `created_at`), `page`, `limit` (mặc định 50, tối đa 200). Sắp xếp mới nhất trước; `meta` phân trang như §1.2.
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": 1042,
+      "created_at": "2026-11-11T09:12:03.120Z",
+      "actor_type": "USER",
+      "actor": { "id": "c1f8a29e-…", "full_name": "Nguyễn Văn Trường", "email": "truong.nv@asllaw.vn" },
+      "action": "USER_DEACTIVATED",
+      "entity_name": "users",
+      "entity_id": "5f0c…",
+      "before_state": { "is_active": true },
+      "after_state": { "is_active": false, "reason": "Nghỉ việc" },
+      "ip_address": "10.0.0.12",
+      "user_agent": "Mozilla/5.0 …",
+      "row_hash": "9b1d…"
+    }
+  ],
+  "meta": { "page": 1, "limit": 50, "total_records": 1042, "total_pages": 21 }
+}
+```
+`actor` là `null` khi `actor_type = SYSTEM` hoặc người dùng đã bị xoá liên kết. Chỉ đọc — không có endpoint sửa/xoá.
+
+#### `GET /api/v1/audit-logs/integrity`
+Kết quả lần kiểm chuỗi băm gần nhất (job hằng đêm) — `?recheck=true` chạy kiểm ngay (giới hạn 1 lần/5 phút, vượt → `429 RATE_LIMITED`).
+```json
+{ "success": true, "data": { "status": "OK", "checked_rows": 1042, "verified_at": "2026-11-11T02:00:04Z", "first_broken_id": null } }
+```
+`status`: `OK` | `BROKEN` (kèm `first_broken_id`) | `NEVER_CHECKED`.
+
 ### 3.3. Khách hàng & cơ hội
 
 #### `POST /api/v1/crm/clients`
