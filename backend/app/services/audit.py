@@ -30,12 +30,15 @@ def log_audit_event(
     user_agent: Optional[str] = "ASL-Internal/2.0"
 ) -> Tuple[int, str]:
     """Records an immutable audit log entry into PostgreSQL with cryptographic hash chaining."""
-    with conn.cursor() as cur:
+    # conn.transaction(): giữ advisory lock tới khi INSERT xong kể cả khi conn ở chế độ autocommit
+    # (autocommit sẽ nhả pg_advisory_xact_lock ngay sau câu lệnh → hai lần ghi đồng thời đọc cùng prev_hash).
+    # Nếu conn đang trong transaction thì đây là savepoint, lock giữ tới khi transaction ngoài kết thúc.
+    with conn.transaction(), conn.cursor() as cur:
         # Acquire advisory transaction lock to serialize audit writes
         cur.execute("SELECT pg_advisory_xact_lock(742189);")
 
         # Get latest prev_hash
-        cur.execute("SELECT row_hash FROM audit_logs ORDER BY created_at DESC, id DESC LIMIT 1;")
+        cur.execute("SELECT row_hash FROM audit_logs ORDER BY id DESC LIMIT 1;")
         row = cur.fetchone()
         prev_hash = row[0] if row else GENESIS_HASH
 
@@ -103,7 +106,7 @@ def verify_audit_chain(
         if from_id is not None:
             query += " WHERE id >= %s"
             params.append(from_id)
-        query += " ORDER BY created_at ASC, id ASC;"
+        query += " ORDER BY id ASC;"
         cur.execute(query, params)
         rows = cur.fetchall()
 

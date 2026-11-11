@@ -1,0 +1,72 @@
+{
+  "id": "TASK-026",
+  "title": "Bàn làm việc cá nhân & Cài đặt (SCR-02, SCR-20)",
+  "status": "accepted",
+  "conversation_id": "6ed562c4-4ea4-4f8c-86c7-8e0360803dae",
+  "history": [
+    {
+      "at": "2026-11-11T17:35:29",
+      "status": "draft",
+      "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-11T17:35:30",
+      "status": "tests_assigned",
+      "note": "giao viết test chéo cho agy2"
+    },
+    {
+      "at": "2026-11-11T17:45:48",
+      "status": "tests_ready",
+      "note": "test chéo đã khoá (5 file), verify đỏ đúng chờ code"
+    },
+    {
+      "at": "2026-11-11T17:45:48",
+      "status": "assigned",
+      "note": "giao code qua agy cho agy3 (model mặc định)"
+    },
+    {
+      "at": "2026-11-11T17:46:07",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-11T18:54:16",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-11T19:01:51",
+      "status": "in_review",
+      "note": "giao nghiệm thu chéo cho agy2"
+    },
+    {
+      "at": "2026-11-11T19:08:37",
+      "status": "accepted",
+      "note": "nghiệm thu chéo đạt bởi agy2 (LOW)"
+    }
+  ],
+  "agents": {
+    "coder": {
+      "account": "agy3",
+      "conversation_id": "6ed562c4-4ea4-4f8c-86c7-8e0360803dae"
+    },
+    "tester": {
+      "account": "agy2",
+      "conversation_id": "761ba0da-6378-42ab-b36d-5e4e4fd68eed"
+    },
+    "reviewer": {
+      "account": "agy2",
+      "conversation_id": "ad8661de-a4a7-45ea-9dba-a692aaade333"
+    }
+  },
+  "via": "agy",
+  "locked_files": [
+    "handoff/tasks/TASK-026-ban-lam-viec-cai-dat/verify.sh",
+    "frontend/tests/dashboard/conventions.test.ts",
+    "frontend/tests/dashboard/dashboard-page.test.tsx",
+    "frontend/tests/dashboard/declarations.d.ts",
+    "frontend/tests/dashboard/settings-page.test.tsx",
+    "frontend/tests/dashboard/use-dashboard.test.ts"
+  ],
+  "review_fingerprint": "e5cdb38c332abd957c190b92f380fc940883d5b4baf9e79228b774cff290508b"
+}
