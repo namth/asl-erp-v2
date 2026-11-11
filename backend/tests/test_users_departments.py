@@ -127,10 +127,13 @@ def make_department(code=None, name=None) -> dict:
 
 def make_token(user_id: str, role: str = "ADMIN") -> str:
     now = int(time.time())
+    # tokens_valid_after của user test lùi 10 phút: đồng hồ DB có thể nhanh hơn máy chạy test, token iat=now sẽ bị coi là bị thu hồi
+    with db() as _c:
+        _c.execute("UPDATE users SET tokens_valid_after = now() - interval '10 minutes' WHERE id = %s", (str(user_id),))
     payload = {
         "sub": str(user_id),
         "jti": str(uuid.uuid4()),
-        "iat": now - 30,  # lùi 30 giây: đồng hồ DB (tokens_valid_after = now() của DB) có thể nhanh hơn máy chạy test
+        "iat": now,
         "exp": now + 1800,
         "system_role": role,
         "role": role,
