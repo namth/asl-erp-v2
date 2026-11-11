@@ -299,6 +299,7 @@ async def test_totp_step_window_and_anti_replay():
     async with client() as c:
         chal_res = await login(c, u["email"])
         chal_id = chal_res.json()["error"]["details"]["challenge_id"]
+        await _wait_step_start(margin=20)  # còn ≥ 10 s trước ranh giới bước
         code_prev = totp.at(time.time() - 30)
         v = await c.post("/api/v1/auth/2fa/verify", json={"challenge_id": chal_id, "code": code_prev})
         assert v.status_code == 200, f"Mã lệch -1 bước phải được chấp nhận: {v.text}"
@@ -307,6 +308,7 @@ async def test_totp_step_window_and_anti_replay():
     async with client() as c:
         chal_res = await login(c, u["email"])
         chal_id = chal_res.json()["error"]["details"]["challenge_id"]
+        await _wait_step_start(margin=20)  # còn ≥ 10 s trước ranh giới bước
         code_next = totp.at(time.time() + 30)
         v = await c.post("/api/v1/auth/2fa/verify", json={"challenge_id": chal_id, "code": code_next})
         assert v.status_code == 200, f"Mã lệch +1 bước phải được chấp nhận: {v.text}"
@@ -315,6 +317,7 @@ async def test_totp_step_window_and_anti_replay():
     async with client() as c:
         chal_res = await login(c, u["email"])
         chal_id = chal_res.json()["error"]["details"]["challenge_id"]
+        await _wait_step_start(margin=20)  # còn ≥ 10 s trước ranh giới bước
         code_old = totp.at(time.time() - 90)
         v = await c.post("/api/v1/auth/2fa/verify", json={"challenge_id": chal_id, "code": code_old})
         assert v.status_code == 401 and error_code(v) == "TOTP_INVALID"
@@ -323,6 +326,7 @@ async def test_totp_step_window_and_anti_replay():
     async with client() as c:
         chal_res = await login(c, u["email"])
         chal_id = chal_res.json()["error"]["details"]["challenge_id"]
+        await _wait_step_start(margin=20)  # còn ≥ 10 s trước ranh giới bước
         code_future = totp.at(time.time() + 90)
         v = await c.post("/api/v1/auth/2fa/verify", json={"challenge_id": chal_id, "code": code_future})
         assert v.status_code == 401 and error_code(v) == "TOTP_INVALID"
@@ -339,6 +343,7 @@ async def test_totp_step_window_and_anti_replay():
     async with client() as c:
         chal_res1 = await login(c, u["email"])
         chal_id1 = chal_res1.json()["error"]["details"]["challenge_id"]
+        await _wait_step_start(margin=20)  # còn ≥ 10 s trước ranh giới bước
         current_code = totp.at(time.time() + 30)  # bước kế tiếp: chưa dùng ở enable
         v1 = await c.post("/api/v1/auth/2fa/verify", json={"challenge_id": chal_id1, "code": current_code})
         assert v1.status_code == 200
