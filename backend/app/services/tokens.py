@@ -61,6 +61,22 @@ async def create_challenge_id(user_id: str | uuid.UUID) -> str:
     await r.set(f"totp_challenge:{challenge_id}", str(user_id), ex=300)
     return challenge_id
 
+async def get_challenge_user_id(challenge_id: str) -> Optional[uuid.UUID]:
+    """Retrieves the user_id associated with a challenge_id from Redis if not expired."""
+    r = get_redis()
+    val = await r.get(f"totp_challenge:{challenge_id}")
+    if not val:
+        return None
+    try:
+        return uuid.UUID(val)
+    except ValueError:
+        return None
+
+async def delete_challenge_id(challenge_id: str) -> None:
+    """Deletes a challenge_id from Redis once successfully consumed."""
+    r = get_redis()
+    await r.delete(f"totp_challenge:{challenge_id}")
+
 def decode_token(token: str, expected_type: Optional[str] = None) -> Dict[str, Any]:
     """Decodes and validates a JWT token."""
     try:
