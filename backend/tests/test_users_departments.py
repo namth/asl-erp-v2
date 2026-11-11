@@ -340,7 +340,7 @@ async def test_rbac_manager_and_attorney_denied_write_routes():
                 elif method == "PUT":
                     resp = await c.put(path, json=payload, headers=headers)
                 assert resp.status_code == 403, f"{role_user['role']} gọi {method} {path} phải nhận 403, nhận {resp.status_code}: {resp.text}"
-                assert error_code(resp) in ("FORBIDDEN", "FORBIDDEN_ROLE")
+                assert error_code(resp) in ("FORBIDDEN_ROLE", "FORBIDDEN_ROLE")
 
 
 async def test_rbac_read_routes_permissions():
@@ -431,10 +431,20 @@ async def test_deactivate_user_revokes_session_locks_login_and_updates_neo4j_imm
             "INSERT INTO department_leaders (user_id, department_id) VALUES (%s, %s)",
             (victim["id"], dept["id"])
         )
+        # Vụ việc cần đủ cột NOT NULL: loại vụ việc + khách hàng tạo riêng cho test
+        mt_code = "".join(__import__("random").choice("ABCDEFGHJKLMNPQRSTUVWXYZ") for _ in range(4))
+        mt_id = conn.execute(
+            "INSERT INTO matter_types (department_id, name, code) VALUES (%s, %s, %s) RETURNING id",
+            (dept["id"], "Loại vụ việc test T18", mt_code)).fetchone()[0]
+        client_id = conn.execute(
+            """INSERT INTO clients (client_type, name, normalized_name, phone)
+               VALUES ('FOREIGN', %s, %s, '0900000000') RETURNING id""",
+            (f"Khach test T18 {case_code}", f"khach test t18 {case_code.lower()}")).fetchone()[0]
         conn.execute(
-            """INSERT INTO cases (id, case_code, department_id, title)
-               VALUES (%s, %s, %s, %s)""",
-            (case_id, case_code, dept["id"], "Vụ việc test phân công")
+            """INSERT INTO cases (id, case_code, department_id, title, client_id, matter_type_id,
+                                  workflow_mode, contract_value, status)
+               VALUES (%s, %s, %s, %s, %s, %s, 'STRICT', 1000000, 'ACTIVE')""",
+            (case_id, case_code, dept["id"], "Vụ việc test phân công", client_id, mt_id)
         )
         conn.execute(
             """INSERT INTO case_assignments (case_id, user_id, role_in_case)
@@ -547,7 +557,7 @@ async def test_admin_cannot_self_deactivate_or_self_demote():
             headers=headers
         )
         assert r_deact.status_code == 403, f"ADMIN tự khoá phải 403: {r_deact.text}"
-        assert error_code(r_deact) in ("FORBIDDEN", "FORBIDDEN_ROLE")
+        assert error_code(r_deact) in ("FORBIDDEN_ROLE", "FORBIDDEN_ROLE")
 
         # Tự hạ vai trò xuống ATTORNEY
         r_demote_attorney = await c.patch(

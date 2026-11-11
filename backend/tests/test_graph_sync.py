@@ -393,6 +393,9 @@ def test_rebuild_graph_matches_postgresql_seed_and_is_idempotent():
 async def test_audit_covers_four_actions_and_no_secret_leaks():
     """Audit đủ 4 hành động (USER_CREATED, USER_UPDATED, USER_DEACTIVATED, USER_ACTIVATED),
     không dòng nào chứa temporary_password hay password_hash, chuỗi băm audit không đứt."""
+    # Chỉ kiểm chuỗi băm từ mốc trước test: DB dev chung có dòng cũ với hash giả (audit bất biến, không xoá được)
+    with db() as conn:
+        start_id = conn.execute("SELECT COALESCE(MAX(id), 0) FROM audit_logs").fetchone()[0]
     admin = make_user("ADMIN")
     c, headers = auth_client(admin)
 
@@ -433,7 +436,7 @@ async def test_audit_covers_four_actions_and_no_secret_leaks():
 
     # Kiểm tra chuỗi băm mật mã toàn vẹn
     with db() as conn:
-        is_valid, count, err = verify_audit_chain(conn)
+        is_valid, count, err = verify_audit_chain(conn, from_id=start_id + 1)
     assert is_valid is True, f"Chuỗi băm audit_logs bị đứt: {err} (đã kiểm {count} bản ghi)"
 
     # Tuyệt đối không dòng nào chứa temporary_password, password_hash hay argon2
