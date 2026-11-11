@@ -1,0 +1,43 @@
+{
+  "id": "TASK-029",
+  "title": "Trợ lý AI dạng ngăn kéo (SCR-14)",
+  "status": "tests_ready",
+  "conversation_id": null,
+  "history": [
+    {
+      "at": "2026-11-11T19:11:23",
+      "status": "draft",
+      "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-11T19:13:41",
+      "status": "tests_assigned",
+      "note": "giao viết test chéo cho agy2"
+    },
+    {
+      "at": "2026-11-11T19:26:14",
+      "status": "tests_ready",
+      "note": "test chéo đã khoá (6 file), verify đỏ đúng chờ code"
+    }
+  ],
+  "agents": {
+    "coder": {
+      "account": null,
+      "conversation_id": null
+    },
+    "tester": {
+      "account": "agy2",
+      "conversation_id": "bd6d3c08-2d61-4b64-827d-698cd9ceb045"
+    }
+  },
+  "locked_files": [
+    "handoff/tasks/TASK-029-tro-ly-ai-fe/verify.sh",
+    "frontend/tests/ai/declarations.d.ts",
+    "frontend/tests/ai/ai-links.test.ts",
+    "frontend/tests/ai/ai-drawer-store.test.ts",
+    "frontend/tests/ai/use-ai-chat.test.tsx",
+    "frontend/tests/ai/ai-chat-drawer.test.tsx",
+    "frontend/tests/ai/conventions.test.ts"
+  ],
+  "via": "agy"
+}

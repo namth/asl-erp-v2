@@ -1,0 +1,7 @@
+45ca71170ed80d6ec57595566e332ed3778602b0419f79a2bf94ac48a9b87277  handoff/tasks/TASK-029-tro-ly-ai-fe/verify.sh
+84dc7c848018b9fdf1be3a0c658b34c5a174da46142bb2f538a9b491504bc532  frontend/tests/ai/declarations.d.ts
+b1a42f71f4e346d3f4c54f1d34101999d063888dc8e92e6e3bd03521a9bab5a7  frontend/tests/ai/ai-links.test.ts
+9da27a77c14a4b01c24cf2893d73b96544ec52e00c146b6108e996c6a78a979a  frontend/tests/ai/ai-drawer-store.test.ts
+713c5c252e262f7bab2ce8d0e8bde089f97e76f0d9c8db5957ab861130744d8b  frontend/tests/ai/use-ai-chat.test.tsx
+3628be1bbc1c6b96f40d1f6c2fea90d3e85c8d13f41223d9a94f7282f88af265  frontend/tests/ai/ai-chat-drawer.test.tsx
+63ec6f9777ed940fe884d0264aca357c01eda4a9f94fc315cb1fc76632de109a  frontend/tests/ai/conventions.test.ts
