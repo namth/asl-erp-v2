@@ -1,8 +1,8 @@
 {
   "id": "TASK-027",
   "title": "Backend vụ việc, stage, task, phân công & phê duyệt (TSK-07, TSK-08, TSK-19)",
-  "status": "tests_ready",
-  "conversation_id": null,
+  "status": "accepted",
+  "conversation_id": "830892d0-2691-47f1-84b2-dc7c0d6ae63f",
   "history": [
     {
       "at": "2026-11-11T17:43:32",
@@ -18,12 +18,32 @@
       "at": "2026-11-11T17:57:39",
       "status": "tests_ready",
       "note": "test chéo đã khoá (3 file), verify đỏ đúng chờ code"
+    },
+    {
+      "at": "2026-11-11T18:06:49",
+      "status": "assigned",
+      "note": "giao code qua agy cho agy1 (model mặc định)"
+    },
+    {
+      "at": "2026-11-11T18:07:52",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-11T22:03:09",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-11T23:00:32",
+      "status": "accepted",
+      "note": "Claude nghiệm thu"
     }
   ],
   "agents": {
     "coder": {
-      "account": null,
-      "conversation_id": null
+      "account": "agy1",
+      "conversation_id": "830892d0-2691-47f1-84b2-dc7c0d6ae63f"
     },
     "tester": {
       "account": "agy3",
@@ -31,10 +51,7 @@
     }
   },
   "locked_files": [
-    "handoff/tasks/TASK-027-vu-viec-task-phe-duyet-backend/verify.sh",
-    "backend/tests/test_approvals.py",
-    "backend/tests/test_cases_workspace.py",
-    "backend/tests/test_task_flow.py"
+    "handoff/tasks/TASK-027-vu-viec-task-phe-duyet-backend/verify.sh"
   ],
   "via": "agy"
 }
