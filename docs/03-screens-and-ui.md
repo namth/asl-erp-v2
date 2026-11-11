@@ -7,7 +7,7 @@ Cột "Vai trò" dùng 4 vai trò hệ thống (DEC-01). Cột "Prototype" là t
 | Mã | Tên màn hình | Vai trò | Prototype | Code Status (FE = frontend, BE = backend) | Đường dẫn mã nguồn dự kiến | Tiêu chuẩn Nghiệm thu (DoD) |
 | :--- | :--- | :--- | :--- | :---: | :--- | :--- |
 | **SCR-01** | Đăng nhập & xác thực 2FA | Mọi nhân sự | `auth/login.html` (cần sửa theo DEC-02) | FE ✓ · BE đang làm | `frontend/src/app/(auth)/login/page.tsx` | Email + mật khẩu nội bộ; bước TOTP chỉ hiện khi tài khoản bật 2FA; buộc đổi mật khẩu khi `must_reset_password`; khoá tạm sau 5 lần sai; **không** có SSO. |
-| **SCR-02** | Bàn làm việc cá nhân | Mọi nhân sự | `dashboard/index.html` | Pending | `frontend/src/app/(dashboard)/page.tsx` | Việc của tôi, hạn 3 ngày tới, thông báo mới, bộ đếm vụ việc — nội dung khác nhau theo vai trò. |
+| **SCR-02** | Bàn làm việc cá nhân | Mọi nhân sự | `dashboard/index.html` | FE ✓ · BE chờ | `frontend/src/app/(dashboard)/page.tsx` | Việc của tôi, hạn 3 ngày tới, thông báo mới, bộ đếm vụ việc — nội dung khác nhau theo vai trò. |
 | **SCR-03** | Danh sách khách hàng | Quản lý, Luật sư, Kế toán (xem) | `crm/customers.html`, `crm/list.html` | FE ✓ · BE chờ | `frontend/src/app/(dashboard)/crm/clients/page.tsx` | Phân trang, tìm theo tên/MST, lọc nhóm; tạo mới chặn trùng MST/CCCD; cảnh báo xung đột lợi ích. |
 | **SCR-04** | Chi tiết khách hàng | Quản lý, Luật sư | `crm/detail.html`, `crm/edit.html` | FE ✓ · BE chờ | `frontend/src/app/(dashboard)/crm/clients/[id]/page.tsx` | Thông tin liên hệ, dòng thời gian tương tác, danh sách vụ việc (chỉ hiện vụ việc người xem có quyền). |
 | **SCR-05** | Pipeline cơ hội | Quản lý, Luật sư | `crm/index.html`, `crm/create-lead.html` | FE ✓ · BE chờ | `frontend/src/app/(dashboard)/crm/opportunities/page.tsx` | Kanban theo giai đoạn, giá trị dự kiến, người mang khách về; nút chuyển đổi chỉ bật khi `WON`. |
@@ -25,7 +25,7 @@ Cột "Vai trò" dùng 4 vai trò hệ thống (DEC-01). Cột "Prototype" là t
 | **SCR-17** | Tài liệu vụ việc | Theo `02` Phân hệ 9 | `documents/index.html`, `documents/detail.html`, `documents/create.html` | Pending | `frontend/src/app/(dashboard)/documents/page.tsx` | Cây 4 thư mục, phiên bản, trạng thái quét virus; tải xuống ghi audit. |
 | **SCR-18** | Báo cáo & thống kê | Quản lý, Kế toán, Luật sư (của mình) | `reports/index.html` | Pending | `frontend/src/app/(dashboard)/reports/page.tsx` | Báo cáo theo `02` Phân hệ 10; xuất Excel. |
 | **SCR-19** | Người dùng & phòng ban | Quản trị viên (Quản lý chỉ xem) | `users/*.html` | FE ✓ · BE đang làm | `frontend/src/app/(dashboard)/admin/users/page.tsx` | Tạo/khoá tài khoản (thu hồi mọi phiên ngay), gán phòng ban, đặt Giám đốc/Trưởng phòng, reset 2FA có ghi audit. |
-| **SCR-20** | Cài đặt | Quản trị viên; mục "Tài khoản của tôi" cho mọi người | `settings/index.html` | Pending | `frontend/src/app/(dashboard)/settings/page.tsx` | Ngày nghỉ lễ, mặc định tỷ lệ hoa hồng theo loại vụ việc, kênh thông báo; cá nhân: đổi mật khẩu, bật 2FA, liên kết Telegram. |
+| **SCR-20** | Cài đặt | Quản trị viên; mục "Tài khoản của tôi" cho mọi người | `settings/index.html` | FE ✓ · BE chờ | `frontend/src/app/(dashboard)/settings/page.tsx` | Ngày nghỉ lễ, mặc định tỷ lệ hoa hồng theo loại vụ việc, kênh thông báo; cá nhân: đổi mật khẩu, bật 2FA, liên kết Telegram. |
 
 **Ngoài Phase 1 (DEC-04):** `timesheet/*.html` (Chấm công) và `client-portal/index.html` (Cổng khách hàng) — giữ file, ẩn khỏi menu.
 
