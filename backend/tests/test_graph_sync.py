@@ -338,42 +338,58 @@ def test_rebuild_graph_dry_run_option():
     )
 
 
-_GRAPH_COUNT_NAMES = ("nút User", "nút Department", "cạnh :LEADS", "cạnh :MEMBER_OF", "cạnh :ASSIGNED_TO")
+_GRAPH_SET_NAMES = ("nút User", "nút Department", "cạnh :LEADS", "cạnh :MEMBER_OF", "cạnh :ASSIGNED_TO")
+
+_PG_SET_QUERIES = (
+    "SELECT id::text FROM users",
+    "SELECT id::text FROM departments",
+    "SELECT user_id::text || '>' || department_id::text FROM department_leaders",
+    "SELECT id::text || '>' || department_id::text FROM users WHERE department_id IS NOT NULL",
+    "SELECT user_id::text || '>' || case_id::text FROM case_assignments WHERE unassigned_at IS NULL",
+)
+_NEO_SET_QUERIES = (
+    "MATCH (u:User) RETURN u.id AS k",
+    "MATCH (d:Department) RETURN d.id AS k",
+    "MATCH (u:User)-[:LEADS]->(d:Department) RETURN u.id + '>' + d.id AS k",
+    "MATCH (u:User)-[:MEMBER_OF]->(d:Department) RETURN u.id + '>' + d.id AS k",
+    "MATCH (u:User)-[:ASSIGNED_TO]->(c:Case) RETURN u.id + '>' + c.id AS k",
+)
 
 
-def _rebuild_and_count() -> tuple[tuple, tuple]:
+def _pg_sets() -> list[set]:
+    with db() as conn:
+        return [{str(r[0]) for r in conn.execute(q).fetchall()} for q in _PG_SET_QUERIES]
+
+
+def _rebuild_and_compare() -> list[str]:
+    """Chụp PostgreSQL trước (A) và sau (B) khi rebuild + đọc đồ thị. DB dev dùng chung: test khác có thể
+    thêm/xoá bản ghi giữa chừng, nên chỉ đòi: mọi bản ghi tồn tại suốt quá trình (A ∩ B) phải có trong đồ thị,
+    và đồ thị không có gì ngoài những bản ghi từng tồn tại (A ∪ B). Rebuild sai (thiếu/thừa thật) vẫn bị bắt."""
+    before = _pg_sets()
     cmd = [sys.executable, "-m", "backend.app.scripts.rebuild_graph"]
     res = subprocess.run(cmd, capture_output=True, text=True)
     assert res.returncode == 0, f"rebuild_graph thất bại:\nstdout: {res.stdout}\nstderr: {res.stderr}"
-    with db() as conn:
-        pg = tuple(conn.execute(q).fetchone()[0] for q in (
-            "SELECT count(*) FROM users",
-            "SELECT count(*) FROM departments",
-            "SELECT count(*) FROM department_leaders",
-            "SELECT count(*) FROM users WHERE department_id IS NOT NULL",
-            "SELECT count(*) FROM case_assignments WHERE unassigned_at IS NULL",
-        ))
     driver = neo4j_driver()
     with driver.session() as s:
-        neo = tuple(s.run(q).single()["cnt"] for q in (
-            "MATCH (u:User) RETURN count(u) AS cnt",
-            "MATCH (d:Department) RETURN count(d) AS cnt",
-            "MATCH (:User)-[:LEADS]->(:Department) RETURN count(*) AS cnt",
-            "MATCH (:User)-[:MEMBER_OF]->(:Department) RETURN count(*) AS cnt",
-            "MATCH (:User)-[:ASSIGNED_TO]->(:Case) RETURN count(*) AS cnt",
-        ))
+        neo = [{str(r["k"]) for r in s.run(q)} for q in _NEO_SET_QUERIES]
     driver.close()
-    return pg, neo
+    after = _pg_sets()
+    diffs = []
+    for name, a, b, n in zip(_GRAPH_SET_NAMES, before, after, neo):
+        missing = (a & b) - n
+        extra = n - (a | b)
+        if missing or extra:
+            diffs.append(f"{name}: thiếu {len(missing)} (vd {sorted(missing)[:3]}), thừa {len(extra)} (vd {sorted(extra)[:3]})")
+    return diffs
 
 
 def _assert_graph_matches_pg(label: str) -> None:
-    # DB dev dùng chung: test của task khác chạy song song có thể tạo user/phân công giữa lúc rebuild và lúc đếm,
-    # nên thử lại tối đa 3 lần; rebuild sai thật thì lần nào cũng lệch.
+    # Thử lại tối đa 3 lần phòng trường hợp hiếm (bản ghi tạo rồi xoá ngay giữa hai lần chụp); rebuild sai thật thì lần nào cũng lệch.
+    diffs: list[str] = []
     for _ in range(3):
-        pg, neo = _rebuild_and_count()
-        if pg == neo:
+        diffs = _rebuild_and_compare()
+        if not diffs:
             return
-    diffs = [f"{n}: Neo4j {b} ≠ PostgreSQL {a}" for n, a, b in zip(_GRAPH_COUNT_NAMES, pg, neo) if a != b]
     raise AssertionError(f"{label}: đồ thị không khớp PostgreSQL — " + "; ".join(diffs))
 
 
