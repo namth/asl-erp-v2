@@ -1,8 +1,8 @@
 {
   "id": "TASK-014",
   "title": "Người dùng, phòng ban & đồng bộ đồ thị (TSK-18)",
-  "status": "tests_ready",
-  "conversation_id": null,
+  "status": "in_progress",
+  "conversation_id": "7825f9ae-dc33-4caa-9cee-249a23109c49",
   "history": [
     {
       "at": "2026-11-11T12:29:42",
@@ -18,12 +18,22 @@
       "at": "2026-11-11T12:41:11",
       "status": "tests_ready",
       "note": "test chéo đã khoá (2 file), verify đỏ đúng chờ code"
+    },
+    {
+      "at": "2026-11-11T12:49:09",
+      "status": "assigned",
+      "note": "giao code qua agy cho agy1 (gemini-3.8-flash-high)"
+    },
+    {
+      "at": "2026-11-11T12:50:42",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
     }
   ],
   "agents": {
     "coder": {
-      "account": null,
-      "conversation_id": null
+      "account": "agy1",
+      "conversation_id": "7825f9ae-dc33-4caa-9cee-249a23109c49"
     },
     "tester": {
       "account": "agy2",

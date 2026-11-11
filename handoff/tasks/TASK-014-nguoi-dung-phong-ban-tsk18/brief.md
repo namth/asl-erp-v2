@@ -26,10 +26,10 @@ Quản trị viên tạo/sửa/khoá người dùng, quản lý phòng ban và T
 **Không được sửa:** mọi file trong `tests.lock`; `backend/tests/` (trừ file test của task); `backend/app/guards/`, `backend/app/services/audit.py`, `backend/alembic/`; `docs/`, `qlcvaslgate-old/`.
 
 ## 4. Đặc tả chi tiết (chỉ phần docs chưa có)
-- Quyền: ghi chỉ `ADMIN`; `GET /users`, `GET /users/{id}`, `GET /departments` cho `ADMIN` và `MANAGER`; vai trò khác → 403 `FORBIDDEN`. Mọi route ghi qua `verify_csrf`.
+- Quyền: ghi chỉ `ADMIN`; `GET /users`, `GET /users/{id}`, `GET /departments` cho `ADMIN` và `MANAGER`; vai trò khác → 403 `FORBIDDEN_ROLE`. Mọi route ghi qua `verify_csrf`.
 - `POST /users`: email phải đuôi `@asllaw.vn`, trùng → 409 `DUPLICATE_EMAIL`; `is_executive` chỉ với `MANAGER` (422); mật khẩu tạm 16 ký tự ngẫu nhiên đạt chính sách, băm Argon2id, `must_reset_password = TRUE`; trả `temporary_password` **một lần** trong 201 (không ghi vào log/audit). Ghi audit `USER_CREATED`.
-- `PATCH /users/{id}`: sửa `full_name`, `title`, `phone_number`, `system_role`, `is_executive`, `department_id`. Đổi `system_role` hoặc `department_id` → thu hồi phiên (`revoke_user_sessions`). ADMIN không tự hạ vai trò của chính mình (403). Audit `USER_UPDATED` với `before_state`/`after_state` (không chứa băm/bí mật).
-- `POST /users/{id}/deactivate` `{ "reason" }`: theo `docs/07` §3.2; không tự khoá chính mình (403). Audit `USER_DEACTIVATED`. `POST /users/{id}/activate` mở lại (audit `USER_ACTIVATED`).
+- `PATCH /users/{id}`: sửa `full_name`, `title`, `phone_number`, `system_role`, `is_executive`, `department_id`. Đổi `system_role` hoặc `department_id` → thu hồi phiên (`revoke_user_sessions`). ADMIN không tự hạ vai trò của chính mình (403 `FORBIDDEN_ROLE`). Audit `USER_UPDATED` với `before_state`/`after_state` (không chứa băm/bí mật).
+- `POST /users/{id}/deactivate` `{ "reason" }`: theo `docs/07` §3.2; không tự khoá chính mình (403 `FORBIDDEN_ROLE`). Audit `USER_DEACTIVATED`. `POST /users/{id}/activate` mở lại (audit `USER_ACTIVATED`).
 - `GET /users?q=&role=&department_id=&page=&limit=` có `meta` phân trang; không trả `password_hash`, `totp_secret_enc`.
 - `POST /departments` `{code, name}`; `PUT /departments/{id}/leaders`: mọi id phải là `MANAGER` đang hoạt động (422), thay toàn bộ danh sách.
 - **Đồng bộ đồ thị:** trong cùng transaction PostgreSQL ghi `outbox_events` (`event_type` vd `USER_UPSERTED`, `USER_DEACTIVATED`, `DEPARTMENT_LEADERS_SET`). Khoá tài khoản và gỡ Trưởng phòng **cập nhật Neo4j ngay trong request** (gỡ cạnh `:LEADS`, `:ASSIGNED_TO`, đặt `u.is_active=false`); `services/graph_sync.process_outbox(limit)` áp sự kiện còn lại bằng `MERGE` (idempotent) rồi đặt `processed_at`. Nhãn/quan hệ theo `docs/06` §3.
