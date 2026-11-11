@@ -79,8 +79,8 @@ async def client_for_role(role="ADMIN"):
     token = _jwt.encode({"sub": u["id"], "jti": str(uuid.uuid4()), "iat": now, "exp": now + 1800, "typ": "access"},
                         settings.SECRET_KEY, algorithm=settings.JWT_ALGORITHM)
     async with client() as c:
-        c.cookies.set("access_token", token, domain="testserver")
-        c.cookies.set("csrf_token", "csrf-test-fixed", domain="testserver")
+        c.cookies.set("access_token", token)
+        c.cookies.set("csrf_token", "csrf-test-fixed")
         yield c, u
 
 
