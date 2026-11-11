@@ -1,10 +1,12 @@
 import time
+import uuid
 from contextlib import asynccontextmanager
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from sqlalchemy import text
+
 
 from backend.app.core.config import settings
 from backend.app.core.errors import (
@@ -17,6 +19,12 @@ from backend.app.db.postgres import engine
 from backend.app.db.neo4j import get_neo4j_driver, close_neo4j_driver
 from backend.app.db.redis import close_redis
 from backend.app.api.auth import router as auth_router
+from backend.app.api.crm_clients import router as crm_clients_router
+from backend.app.api.cases import router as cases_router
+from backend.app.api.approvals import router as approvals_router
+from backend.app.api.me import router as me_router
+from backend.app.api.workflows import router as workflows_router
+from backend.app.api.settings_holidays import router as settings_holidays_router
 from backend.app.api.crm_opportunities import router as crm_opportunities_router
 
 @asynccontextmanager
@@ -50,6 +58,12 @@ app.add_middleware(
 
 # Routers
 app.include_router(auth_router, prefix="/api/v1")
+app.include_router(crm_clients_router, prefix="/api/v1")
+app.include_router(cases_router, prefix="/api/v1")
+app.include_router(approvals_router, prefix="/api/v1")
+app.include_router(me_router, prefix="/api/v1")
+app.include_router(workflows_router, prefix="/api/v1")
+app.include_router(settings_holidays_router, prefix="/api/v1")
 app.include_router(crm_opportunities_router, prefix="/api/v1")
 
 @app.get("/api/v1/health", tags=["System"])

@@ -1,0 +1,71 @@
+{
+  "id": "TASK-028",
+  "title": "Văn phòng số trực quan (SCR-15, FEAT-01)",
+  "status": "accepted",
+  "conversation_id": "2b442e80-aa34-4e13-b0d4-0205591d06aa",
+  "history": [
+    {
+      "at": "2026-11-11T18:30:09",
+      "status": "draft",
+      "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-11T18:37:22",
+      "status": "tests_assigned",
+      "note": "giao viết test chéo cho agy2"
+    },
+    {
+      "at": "2026-11-11T18:47:08",
+      "status": "tests_ready",
+      "note": "test chéo đã khoá (4 file), verify đỏ đúng chờ code"
+    },
+    {
+      "at": "2026-11-11T19:01:29",
+      "status": "assigned",
+      "note": "giao code qua agy cho agy3 (model mặc định)"
+    },
+    {
+      "at": "2026-11-11T19:01:45",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-11T20:06:37",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-11T20:07:03",
+      "status": "in_review",
+      "note": "giao nghiệm thu chéo cho agy2"
+    },
+    {
+      "at": "2026-11-11T20:14:44",
+      "status": "accepted",
+      "note": "nghiệm thu chéo đạt bởi agy2 (LOW)"
+    }
+  ],
+  "agents": {
+    "coder": {
+      "account": "agy3",
+      "conversation_id": "2b442e80-aa34-4e13-b0d4-0205591d06aa"
+    },
+    "tester": {
+      "account": "agy2",
+      "conversation_id": "8ef4e1e8-0d39-4b22-ad68-030b97cfbb9e"
+    },
+    "reviewer": {
+      "account": "agy2",
+      "conversation_id": "c4ad86c5-d3f8-4513-8284-a326bdfb8d3a"
+    }
+  },
+  "locked_files": [
+    "handoff/tasks/TASK-028-van-phong-so-fe/verify.sh",
+    "frontend/tests/floorplan/floorplan-lib.test.ts",
+    "frontend/tests/floorplan/use-floorplan.test.ts",
+    "frontend/tests/floorplan/floorplan-page.test.tsx",
+    "frontend/tests/floorplan/conventions.test.ts"
+  ],
+  "via": "agy",
+  "review_fingerprint": "766bc89fa93d50406f1237cd1dbdfd76e0cbbe8a82a82aa4527b86c28fbe4a85"
+}
