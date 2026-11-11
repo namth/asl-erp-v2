@@ -1,0 +1,39 @@
+{
+  "id": "TASK-014",
+  "title": "Người dùng, phòng ban & đồng bộ đồ thị (TSK-18)",
+  "status": "tests_ready",
+  "conversation_id": null,
+  "history": [
+    {
+      "at": "2026-11-11T12:29:42",
+      "status": "draft",
+      "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-11T12:29:50",
+      "status": "tests_assigned",
+      "note": "giao viết test chéo cho agy2"
+    },
+    {
+      "at": "2026-11-11T12:41:11",
+      "status": "tests_ready",
+      "note": "test chéo đã khoá (2 file), verify đỏ đúng chờ code"
+    }
+  ],
+  "agents": {
+    "coder": {
+      "account": null,
+      "conversation_id": null
+    },
+    "tester": {
+      "account": "agy2",
+      "conversation_id": "030fa63c-1d2e-4376-9517-60d47ba533cf"
+    }
+  },
+  "locked_files": [
+    "handoff/tasks/TASK-014-nguoi-dung-phong-ban-tsk18/verify.sh",
+    "backend/tests/test_users_departments.py",
+    "backend/tests/test_graph_sync.py"
+  ],
+  "via": "agy"
+}
