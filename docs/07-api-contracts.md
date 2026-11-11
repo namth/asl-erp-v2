@@ -344,6 +344,8 @@ Quy tắc trạng thái, phụ thuộc, khoá tiền, phê duyệt, phân công 
 | `GET /cases/{id}/change-requests` · `POST` (mẫu dưới) | `professional` | Danh sách yêu cầu bổ sung kèm trạng thái |
 | `GET /approvals?status=PENDING&type=` | người có thẩm quyền | Hàng chờ duyệt **của người xem** (`12` §2.2): `[{id, type: TASK|STAGE_GATE|CHANGE_REQUEST, case {id, case_code, title}, subject {id, title}, requested_by {id, full_name}, requested_at, note}]` |
 | `POST /approvals/{id}/decide` | người có thẩm quyền | Mẫu dưới |
+| `GET /me/tasks?status=&due=overdue|today|week&page=` | của chính mình | Task được giao cho người xem trên mọi vụ việc (Bàn làm việc — SCR-02): `[{id, title, status, due_at, is_overdue, case {id, case_code, title}, stage {name, status}, blocked_by_count}]` + `meta` + `summary {todo, in_progress, waiting_approval, overdue}` |
+| `GET/PUT /settings/commission-defaults` | ADMIN (MANAGER xem) | Tỷ lệ mặc định theo loại vụ việc (`matter_types.default_*`): `[{matter_type_id, name, code, default_originator_rate, default_management_rate, default_supervisor_share_pct, default_execution_rate}]`; `PUT` gửi cùng dạng, tổng 3 tỷ lệ ≤ 100 (`422 COMMISSION_RATES_EXCEED_100`); chỉ áp cho vụ việc chuyển đổi **sau** khi lưu |
 
 Mã lỗi thêm: `ASSIGNEE_HAS_OPEN_TASKS` (409), `ASSIGNEE_NOT_IN_CASE` (422), `CASE_PAUSED` (409 — đổi trạng thái task khi vụ việc `PAUSED`).
 
