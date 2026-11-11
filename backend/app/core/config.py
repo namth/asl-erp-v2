@@ -23,10 +23,13 @@ class Settings(BaseSettings):
     NEO4J_PASSWORD: str = "PCltARSy5cm-k_DLv-HjZKOPSqUy1hqr4cUTWbFbcvE"
     NEO4J_DATABASE: str = "fe86bb14"
 
+    # Redis
+    REDIS_URL: str = os.getenv("REDIS_URL", "redis://127.0.0.1:6379/0")
+
     # Security
     SECRET_KEY: str = "asl-erp-secret-key-production-dev-2026-secure-random"
     JWT_ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     REFRESH_TOKEN_EXPIRE_DAYS: int = 7
 
     model_config = SettingsConfigDict(

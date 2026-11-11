@@ -343,6 +343,58 @@ async def test_change_password_revokes_other_sessions():
     assert rb.status_code == 401 and error_code(rb) == "TOKEN_REVOKED"
 
 
+# ---------- refresh token: không dựng lại được từ DB, không xoay vòng đôi ----------
+
+async def test_refresh_token_cannot_be_forged_from_db_ids():
+    """Lộ bảng refresh_tokens (bản sao lưu, quyền đọc DB) không được đủ để chiếm phiên:
+    giá trị cookie không được là `refresh_tokens.id` nguyên văn."""
+    u = make_user()
+    async with client() as c:
+        await login(c, u["email"])
+        cookie = c.cookies.get("refresh_token")
+    with db() as conn:
+        ids = {str(r[0]) for r in conn.execute("SELECT id FROM refresh_tokens WHERE user_id = %s", (u["id"],))}
+    assert ids and cookie not in ids, "refresh token không được trùng khoá chính lưu trong DB"
+    async with client() as attacker:
+        attacker.cookies.set("refresh_token", next(iter(ids)))
+        attacker.cookies.set("csrf_token", "z")
+        r = await attacker.post("/api/v1/auth/refresh", headers={"X-CSRF-Token": "z"})
+    assert r.status_code == 401
+
+
+async def test_concurrent_refresh_with_same_token_rotates_once():
+    u = make_user()
+    async with client() as c:
+        await login(c, u["email"])
+        token, token_csrf = c.cookies.get("refresh_token"), c.cookies.get("csrf_token")
+
+    async def attempt():
+        async with client() as x:
+            x.cookies.set("refresh_token", token)
+            x.cookies.set("csrf_token", token_csrf)
+            return await x.post("/api/v1/auth/refresh", headers={"X-CSRF-Token": token_csrf})
+
+    results = await asyncio.gather(*(attempt() for _ in range(4)))
+    ok = [r for r in results if r.status_code == 200]
+    assert len(ok) <= 1, f"một refresh token chỉ được xoay vòng một lần, có {len(ok)} lần thành công"
+
+
+def test_every_write_route_requires_csrf():
+    """Mọi route POST/PUT/PATCH/DELETE (trừ /auth/login) phải đi qua verify_csrf — kể cả router thêm sau này."""
+    from fastapi.routing import APIRoute
+    from backend.app.core.security import verify_csrf
+
+    def calls(dep):
+        yield dep.call
+        for d in dep.dependencies:
+            yield from calls(d)
+
+    missing = [f"{sorted(r.methods)} {r.path}" for r in app.routes
+               if isinstance(r, APIRoute) and r.methods & {"POST", "PUT", "PATCH", "DELETE"}
+               and not r.path.endswith("/auth/login") and verify_csrf not in set(calls(r.dependant))]
+    assert missing == [], missing
+
+
 # ---------- chống lách ----------
 
 def test_no_plaintext_secrets_or_hardcoded_test_bypass():

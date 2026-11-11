@@ -2,11 +2,21 @@ import time
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.exceptions import RequestValidationError
+from starlette.exceptions import HTTPException as StarletteHTTPException
 from sqlalchemy import text
 
 from backend.app.core.config import settings
+from backend.app.core.errors import (
+    AppException,
+    app_exception_handler,
+    validation_exception_handler,
+    http_exception_handler,
+)
 from backend.app.db.postgres import engine
 from backend.app.db.neo4j import get_neo4j_driver, close_neo4j_driver
+from backend.app.db.redis import close_redis
+from backend.app.api.auth import router as auth_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -15,6 +25,7 @@ async def lifespan(app: FastAPI):
     # Shutdown: close pools
     await engine.dispose()
     await close_neo4j_driver()
+    await close_redis()
 
 app = FastAPI(
     title="ASL LAW ERP v2.0 Core API",
@@ -23,6 +34,11 @@ app = FastAPI(
     lifespan=lifespan
 )
 
+# Exception handlers
+app.add_exception_handler(AppException, app_exception_handler)
+app.add_exception_handler(RequestValidationError, validation_exception_handler)
+app.add_exception_handler(StarletteHTTPException, http_exception_handler)
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -30,6 +46,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Routers
+app.include_router(auth_router, prefix="/api/v1")
 
 @app.get("/api/v1/health", tags=["System"])
 async def health_check():
