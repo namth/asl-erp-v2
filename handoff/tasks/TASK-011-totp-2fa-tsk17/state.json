@@ -1,7 +1,7 @@
 {
   "id": "TASK-011",
   "title": "Xác thực 2 lớp TOTP & mã khôi phục (TSK-17)",
-  "status": "submitted",
+  "status": "accepted",
   "conversation_id": "9f99f071-5109-466e-917d-6c6765456c89",
   "history": [
     {
@@ -33,6 +33,11 @@
       "at": "2026-11-11T17:48:24",
       "status": "submitted",
       "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-11T18:54:45",
+      "status": "accepted",
+      "note": "Claude nghiệm thu"
     }
   ],
   "agents": {
