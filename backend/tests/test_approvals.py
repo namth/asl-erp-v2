@@ -642,9 +642,9 @@ async def test_approval_decide_stage_gate_approve():
 
         # Verify Stage 1 is COMPLETED and Stage 2 is ACTIVE
         with db_conn() as conn:
-            s_rows = dict(conn.execute("SELECT id, status FROM case_stages WHERE case_id = %s", (case["id"],)).fetchall())
-            assert s_rows[uuid.UUID(s1_id)] == "COMPLETED"
-            assert s_rows[uuid.UUID(s2_id)] == "ACTIVE"
+            s_rows = {str(k): v for k, v in conn.execute("SELECT id, status FROM case_stages WHERE case_id = %s", (case["id"],)).fetchall()}
+            assert s_rows[str(s1_id)] == "COMPLETED"
+            assert s_rows[str(s2_id)] == "ACTIVE"
     finally:
         await cleanup_all(case_ids=[case["id"]], user_ids=[supervisor["id"], executor["id"]],
                           dept_ids=[dept["id"]], client_ids=[client["id"]], mt_ids=[mt["id"]])

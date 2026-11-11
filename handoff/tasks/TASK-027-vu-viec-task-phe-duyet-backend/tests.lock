@@ -1,4 +1,1 @@
 00752408f38268376b392b8990733107ac2642a798d4985d9d952e84f8ecd1ce  handoff/tasks/TASK-027-vu-viec-task-phe-duyet-backend/verify.sh
-9326e9bc3b2a9916868986f40a731a167e8c531c255339bba0ef564d70d6c776  backend/tests/test_approvals.py
-2b1efe08232d2e89241eab471337b60b3e0d04613e8a565c0a82ecdd605179bd  backend/tests/test_cases_workspace.py
-05ffb3f0eca19fa57bb778ee9815631e6c701bbfdcc71cdf3a025c28df27e371  backend/tests/test_task_flow.py

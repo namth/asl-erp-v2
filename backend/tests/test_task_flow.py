@@ -637,9 +637,9 @@ async def test_stage_completion_unblocks_next_stage_active_or_waiting_payment():
 
         # Verify: Stage 1 is COMPLETED, Stage 2 is WAITING_PAYMENT (because m2 is not paid)
         with db_conn() as conn:
-            s_rows = dict(conn.execute("SELECT id, status FROM case_stages WHERE case_id = %s", (case["id"],)).fetchall())
-            assert s_rows[uuid.UUID(s1_id)] == "COMPLETED"
-            assert s_rows[uuid.UUID(s2_id)] == "WAITING_PAYMENT"
+            s_rows = {str(k): v for k, v in conn.execute("SELECT id, status FROM case_stages WHERE case_id = %s", (case["id"],)).fetchall()}
+            assert s_rows[str(s1_id)] == "COMPLETED"
+            assert s_rows[str(s2_id)] == "WAITING_PAYMENT"
     finally:
         await cleanup_all(case_ids=[case["id"]], user_ids=[attorney["id"]], dept_ids=[dept["id"]], client_ids=[client["id"]], mt_ids=[mt["id"]])
 
@@ -809,7 +809,9 @@ async def test_get_me_tasks_filters_and_summary():
     """GET /me/tasks: đúng người, đúng summary {todo, in_progress, waiting_approval, overdue}, lọc due theo giờ VN."""
     now = dt.datetime.now(dt.timezone.utc)
     yesterday = now - dt.timedelta(days=1)
-    today = now + dt.timedelta(hours=2)
+    # Hạn 'hôm nay' = 23:59:59 theo giờ VN: now + vài giờ sẽ sang ngày mai nếu test chạy buổi tối
+    _vn = dt.timezone(dt.timedelta(hours=7))
+    today = now.astimezone(_vn).replace(hour=23, minute=59, second=59, microsecond=0)
     in_three_days = now + dt.timedelta(days=3)
 
     with db_conn() as conn:

@@ -776,13 +776,13 @@ async def test_case_status_lifecycle_terminated():
 
         # Verify billing milestones status
         with db_conn() as conn:
-            rows = dict(conn.execute(
+            rows = {str(k): v for k, v in conn.execute(
                 "SELECT id, status FROM billing_milestones WHERE case_id = %s",
                 (case["id"],),
-            ).fetchall())
-            assert rows[uuid.UUID(m1_id)] == "PAID_CONFIRMED", "Paid milestone must not be cancelled"
-            assert rows[uuid.UUID(m2_id)] == "CANCELLED", "Pending milestone must be cancelled"
-            assert rows[uuid.UUID(m3_id)] == "CANCELLED", "Awaiting payment milestone must be cancelled"
+            ).fetchall()}
+            assert rows[str(m1_id)] == "PAID_CONFIRMED", "Paid milestone must not be cancelled"
+            assert rows[str(m2_id)] == "CANCELLED", "Pending milestone must be cancelled"
+            assert rows[str(m3_id)] == "CANCELLED", "Awaiting payment milestone must be cancelled"
     finally:
         await cleanup_all(case_ids=[case["id"]], user_ids=[mgr["id"]], dept_ids=[dept["id"]], client_ids=[client["id"]], mt_ids=[mt["id"]])
 
