@@ -1,0 +1,7 @@
+b232a860e30a3a81495d5a10b8d678fd2b9b294eb86ce0c6fdebafe85aaf995f  handoff/tasks/TASK-009-khung-frontend-nextjs/verify.sh
+45967c7814e52f3cc25680f1175fc5862e2a8f31d076cee36b6934d48bf5570c  frontend/tests/api-client.test.ts
+22140200c84cf0d642b76e3852a39ecc87ea88362e73303581360278d23a2c16  frontend/tests/conventions.test.ts
+b18d0e66a2c48797dbf669010754ccb79edafa1e13ad817a07689fb14f929998  frontend/tests/dashboard-layout.test.tsx
+b5b722a015a1368aa69b0f45ded8fcde804ff3906958fefdba0a84489c77799b  frontend/tests/login.test.tsx
+9c72cd716dffc40e857513c6a2334533d7c201abd5a19fe825078c0d2b3f93dd  frontend/tests/menu.test.ts
+5e98f07bb8a2d4a869fb4a2dce4c927cf6c1438a477f09d56f6a3db361838ad2  frontend/tests/ui-states.test.tsx
