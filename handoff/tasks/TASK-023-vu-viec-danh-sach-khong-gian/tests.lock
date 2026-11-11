@@ -1,0 +1,5 @@
+986a75b4a345e1fad056ef006696f00f3e93b85605406009b0d89996a73ee7c9  handoff/tasks/TASK-023-vu-viec-danh-sach-khong-gian/verify.sh
+39b5fb308716a11187358d9abc1d04816a083942d49748f17df11092e3a08247  frontend/tests/cases/use-cases.test.ts
+fd1b215207ee14a1aa62a23801d367a4b3ec84510320daac12893a8aacfc3c14  frontend/tests/cases/cases-page.test.tsx
+2816825fbe43fe7ea944441e86ad8579ea7304998948b6517812588127da6257  frontend/tests/cases/case-workspace.test.tsx
+e9b2951e19ffee6cddc7610704aef812117b80d37ea9d1291e60eebb248e150d  frontend/tests/cases/conventions.test.ts

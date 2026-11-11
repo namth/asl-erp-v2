@@ -1,0 +1,61 @@
+{
+  "id": "TASK-023",
+  "title": "Danh sách vụ việc & không gian vụ việc (SCR-07, SCR-08)",
+  "status": "accepted",
+  "conversation_id": "5b4b3f60-7884-4ceb-b5ea-859982df78e4",
+  "history": [
+    {
+      "at": "2026-11-11T16:39:41",
+      "status": "draft",
+      "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-11T16:39:50",
+      "status": "tests_assigned",
+      "note": "giao viết test chéo cho agy3"
+    },
+    {
+      "at": "2026-11-11T16:48:25",
+      "status": "tests_ready",
+      "note": "test chéo đã khoá (4 file), verify đỏ đúng chờ code"
+    },
+    {
+      "at": "2026-11-11T16:48:37",
+      "status": "assigned",
+      "note": "giao code qua agy cho agy2 (model mặc định)"
+    },
+    {
+      "at": "2026-11-11T16:48:47",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-11T17:00:26",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-11T17:00:40",
+      "status": "accepted",
+      "note": "LOW: không nghiệm thu chéo bằng agent — cổng tự động (orchestrate.py gate) trước khi merge"
+    }
+  ],
+  "agents": {
+    "coder": {
+      "account": "agy2",
+      "conversation_id": "5b4b3f60-7884-4ceb-b5ea-859982df78e4"
+    },
+    "tester": {
+      "account": "agy3",
+      "conversation_id": "010d0b7a-1573-47b1-93d8-7c9d7f921db7"
+    }
+  },
+  "via": "agy",
+  "locked_files": [
+    "handoff/tasks/TASK-023-vu-viec-danh-sach-khong-gian/verify.sh",
+    "frontend/tests/cases/use-cases.test.ts",
+    "frontend/tests/cases/cases-page.test.tsx",
+    "frontend/tests/cases/case-workspace.test.tsx",
+    "frontend/tests/cases/conventions.test.ts"
+  ]
+}
