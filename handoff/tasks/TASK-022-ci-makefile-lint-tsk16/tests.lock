@@ -1,0 +1,2 @@
+c04517afa15168546015f04869b647b51e38e46341006351a19257cfd04f0915  handoff/tasks/TASK-022-ci-makefile-lint-tsk16/verify.sh
+587a6798514d9bc694bd56f1d19766c3bd65d6508baea560dc8237d5eb9d333a  tests/infra/test_task_022_ci.py
