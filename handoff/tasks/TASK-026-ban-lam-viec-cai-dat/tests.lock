@@ -1,0 +1,6 @@
+d99d3b68aa8d9c23bddd556f4a62cd395529de4770845d338ff645b6729e05b9  handoff/tasks/TASK-026-ban-lam-viec-cai-dat/verify.sh
+c8b171ccb1d4b40afd6141e6b15be4abfad33cee5e43cfd551503d85ce7d7118  frontend/tests/dashboard/conventions.test.ts
+cbc63c1f3db77977a0e2ca3de1cd26bf07cc0ee10368a97789fbbbdbe11ee3cf  frontend/tests/dashboard/dashboard-page.test.tsx
+8aae0d4bbf37c0b2d177195db20046f03ce53c70d761775b53cd5cb0bc2c26cd  frontend/tests/dashboard/declarations.d.ts
+b6c31d0a50e6834b08b0fb776b2b4e12acc03bee6d196685c621d27c73b7597d  frontend/tests/dashboard/settings-page.test.tsx
+b3595af8d3e906c41268aea36e0804ffcc3ea4ae17b16b4ad84478f2ed17e4bd  frontend/tests/dashboard/use-dashboard.test.ts
