@@ -76,7 +76,7 @@ async def client_for_role(role="ADMIN"):
     import jwt as _jwt
     u = make_user(role=role)
     now = int(time.time())
-    token = _jwt.encode({"sub": u["id"], "jti": str(uuid.uuid4()), "iat": now - 30,  # lùi 30 giây: đồng hồ DB (tokens_valid_after = now() của DB) có thể nhanh hơn máy chạy test "exp": now + 1800, "typ": "access"},
+    token = _jwt.encode({"sub": u["id"], "jti": str(uuid.uuid4()), "iat": now - 30, "exp": now + 1800, "typ": "access"},
                         settings.SECRET_KEY, algorithm=settings.JWT_ALGORITHM)
     async with client() as c:
         c.cookies.set("access_token", token)
