@@ -1,8 +1,8 @@
 {
   "id": "TASK-030",
   "title": "Tài liệu vụ việc (SCR-17)",
-  "status": "tests_ready",
-  "conversation_id": null,
+  "status": "changes_requested",
+  "conversation_id": "cb355184-9ae0-47e5-b611-0db8e8fc8efa",
   "history": [
     {
       "at": "2026-11-11T19:45:39",
@@ -23,16 +23,45 @@
       "at": "2026-11-11T20:11:13",
       "status": "tests_ready",
       "note": "test chéo đã khoá (4 file), verify đỏ đúng chờ code"
+    },
+    {
+      "at": "2026-11-11T20:14:02",
+      "status": "assigned",
+      "note": "giao code qua agy cho agy3 (model mặc định)"
+    },
+    {
+      "at": "2026-11-11T20:14:36",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-11T21:01:39",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-11T21:22:03",
+      "status": "in_review",
+      "note": "giao nghiệm thu chéo cho agy2"
+    },
+    {
+      "at": "2026-11-11T23:24:02",
+      "status": "changes_requested",
+      "note": "nghiệm thu chéo trả về bởi agy2 (vòng 1)"
     }
   ],
   "agents": {
     "coder": {
-      "account": null,
-      "conversation_id": null
+      "account": "agy3",
+      "conversation_id": "cb355184-9ae0-47e5-b611-0db8e8fc8efa"
     },
     "tester": {
       "account": "agy2",
       "conversation_id": "b8305b29-c32e-4df0-bcc3-704ef521d651"
+    },
+    "reviewer": {
+      "account": "agy2",
+      "conversation_id": "6e274102-9de3-4e74-a251-da8ede7372fe"
     }
   },
   "via": "agy",
@@ -42,5 +71,7 @@
     "frontend/tests/documents/documents-page.test.tsx",
     "frontend/tests/documents/file-rules.test.ts",
     "frontend/tests/documents/use-documents.test.ts"
-  ]
+  ],
+  "review_fingerprint": "076e4a1763ae9c6abcdceb789e195568cb6285d2d5df3a8304ef1c02ad4a5e45",
+  "cross_rounds": 1
 }
