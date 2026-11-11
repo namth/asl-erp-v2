@@ -34,7 +34,7 @@ def config_protected() -> tuple[str, ...]:
     if not path.exists():
         return ()
     try:
-        return tuple(str(p).lstrip("./") for p in json.loads(path.read_text(encoding="utf-8")).get("protected_paths", []))
+        return tuple(str(p).removeprefix("./") for p in json.loads(path.read_text(encoding="utf-8")).get("protected_paths", []))
     except json.JSONDecodeError:
         return ()
 

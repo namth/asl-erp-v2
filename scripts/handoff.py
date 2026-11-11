@@ -178,7 +178,7 @@ def brief_scope(task: Path) -> list[str]:
             continue
         ticks = re.findall(r"`([^`]+)`", line)
         pats += ticks or [line.lstrip("-* ").split(" ")[0]]
-    return [p.strip().lstrip("./") for p in pats if p.strip()]
+    return [p.strip().removeprefix("./") for p in pats if p.strip()]
 
 
 def in_patterns(path: str, pats: list[str]) -> bool:
@@ -612,7 +612,7 @@ def cmd_tests_done(a) -> None:
     script = task / "verify.sh"
     if "TODO" in script.read_text(encoding="utf-8"):
         die(f"{script.relative_to(ROOT)} vẫn còn TODO — điền lệnh xác minh thật")
-    files = [f.lstrip("./") for f in a.files]
+    files = [f.removeprefix("./") for f in a.files]
     if not files:
         die("liệt kê các file test đã viết: tests-done <ID> tests/abc.test.ts …")
     for f in files:
