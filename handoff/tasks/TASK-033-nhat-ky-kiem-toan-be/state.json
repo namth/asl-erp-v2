@@ -11,6 +11,8 @@
     }
   ],
   "locked_files": [
-    "handoff/tasks/TASK-033-nhat-ky-kiem-toan-be/verify.sh"
+    "handoff/tasks/TASK-033-nhat-ky-kiem-toan-be/verify.sh",
+    "backend/tests/test_audit_log_api.py",
+    "backend/tests/test_no_test_hooks_in_app.py"
   ]
 }
