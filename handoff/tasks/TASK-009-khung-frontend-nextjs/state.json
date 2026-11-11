@@ -1,13 +1,63 @@
 {
   "id": "TASK-009",
   "title": "Khung frontend Next.js 15, khung giao diện theo vai trò & trang đăng nhập (TSK-16 phần FE)",
-  "status": "draft",
-  "conversation_id": null,
+  "status": "accepted",
+  "conversation_id": "b3cf0938-de39-47ef-9ee0-c61a342034aa",
   "history": [
     {
       "at": "2026-11-11T11:27:33",
       "status": "draft",
       "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-11T11:30:27",
+      "status": "tests_assigned",
+      "note": "giao viết test chéo cho agy3"
+    },
+    {
+      "at": "2026-11-11T11:43:27",
+      "status": "tests_ready",
+      "note": "test chéo đã khoá (6 file), verify đỏ đúng chờ code"
+    },
+    {
+      "at": "2026-11-11T11:43:35",
+      "status": "assigned",
+      "note": "giao code qua agy cho agy2 (model mặc định)"
+    },
+    {
+      "at": "2026-11-11T11:43:47",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-11T11:59:33",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-11T12:00:02",
+      "status": "accepted",
+      "note": "LOW: không nghiệm thu chéo bằng agent — cổng tự động (orchestrate.py gate) trước khi merge"
     }
+  ],
+  "agents": {
+    "coder": {
+      "account": "agy2",
+      "conversation_id": "b3cf0938-de39-47ef-9ee0-c61a342034aa"
+    },
+    "tester": {
+      "account": "agy3",
+      "conversation_id": "c89a6181-46c8-44af-ad95-3d1ad306846f"
+    }
+  },
+  "via": "agy",
+  "locked_files": [
+    "handoff/tasks/TASK-009-khung-frontend-nextjs/verify.sh",
+    "frontend/tests/api-client.test.ts",
+    "frontend/tests/conventions.test.ts",
+    "frontend/tests/dashboard-layout.test.tsx",
+    "frontend/tests/login.test.tsx",
+    "frontend/tests/menu.test.ts",
+    "frontend/tests/ui-states.test.tsx"
   ]
 }
