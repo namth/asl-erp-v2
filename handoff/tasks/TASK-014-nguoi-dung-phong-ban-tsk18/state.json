@@ -1,7 +1,7 @@
 {
   "id": "TASK-014",
   "title": "Người dùng, phòng ban & đồng bộ đồ thị (TSK-18)",
-  "status": "in_progress",
+  "status": "submitted",
   "conversation_id": "7825f9ae-dc33-4caa-9cee-249a23109c49",
   "history": [
     {
@@ -43,6 +43,11 @@
       "at": "2026-11-12T00:42:04",
       "status": "in_progress",
       "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-12T07:12:08",
+      "status": "submitted",
+      "note": "Claude sửa test LEADS (lỗi Cypher của test), nộp thay để nghiệm thu"
     }
   ],
   "agents": {

@@ -103,7 +103,12 @@ def create_test_matter_type(conn, custom_fields=None) -> tuple[str, str, str]:
         )
         dept_id = str(cur.fetchone()[0])
 
-        mt_code = "T" + "".join(__import__("random").choice("ABCDEFGHJKLMNPQRSTUVWXYZ") for _ in range(3))
+        mt_code = None
+        while mt_code is None:
+            cand = "".join(__import__("secrets").choice("ABCDEFGHIJKLMNOPQRSTUVWXYZ") for _ in range(4))
+            cur.execute("SELECT 1 FROM matter_types WHERE code = %s", (cand,))
+            if cur.fetchone() is None:
+                mt_code = cand
         cur.execute(
             """INSERT INTO matter_types (department_id, name, code, custom_fields_schema)
                VALUES (%s, %s, %s, %s) RETURNING id""",

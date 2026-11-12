@@ -513,6 +513,12 @@ def cmd_new(a) -> None:
 def cmd_lock(a) -> None:
     task = find_task(a.id)
     files = [task / "verify.sh", *[ROOT / f for f in a.files]]
+    if not a.files and (task / "tests.lock").exists():
+        # Khoá lại không kèm danh sách file → giữ nguyên các file đã khoá (trước đây bị thu về chỉ verify.sh,
+        # làm file test của task mất khoá mà không ai hay).
+        prev = load_state(task).get("locked_files") or [
+            l.split("  ", 1)[1] for l in (task / "tests.lock").read_text(encoding="utf-8").splitlines() if "  " in l]
+        files = [task / "verify.sh", *[ROOT / f for f in prev if not f.endswith("verify.sh")]]
     bad = [l.strip() for l in (task / "verify.sh").read_text(encoding="utf-8").splitlines()
            if re.search(r"\btsc\b", l) and re.search(r"\.tsx?\b", l) and not re.search(r"(-p|--project)\b", l)
            and not l.lstrip().startswith("#")]

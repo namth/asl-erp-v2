@@ -540,8 +540,8 @@ async def test_conflict_of_interest_warning_notifications_and_audit():
             # Tạo vụ việc ACTIVE trong PostgreSQL
             cur.execute("""
                 INSERT INTO cases (id, case_code, title, client_id, department_id, matter_type_id,
-                                  workflow_mode, contract_value, status)
-                VALUES (%s, %s, %s, %s, %s, %s, 'STRICT', 100000000, 'ACTIVE')
+                                  workflow_mode, contract_value, status, created_by)
+                VALUES (%s, %s, %s, %s, %s, %s, 'STRICT', 100000000, 'ACTIVE', (SELECT id FROM users LIMIT 1))
             """, (case_id, case_code, f"Vụ việc kiểm thử xung đột {rand_suffix}",
                   existing_client_id, dept_id, matter_type_id))
 
@@ -898,14 +898,14 @@ async def test_client_detail_cases_filtered_by_need_to_know():
             # Tạo 2 vụ việc
             cur.execute("""
                 INSERT INTO cases (id, case_code, title, client_id, department_id, matter_type_id,
-                                  workflow_mode, contract_value, status)
-                VALUES (%s, %s, 'Vụ việc được gán', %s, %s, %s, 'STRICT', 50000000, 'ACTIVE')
+                                  workflow_mode, contract_value, status, created_by)
+                VALUES (%s, %s, 'Vụ việc được gán', %s, %s, %s, 'STRICT', 50000000, 'ACTIVE', (SELECT id FROM users LIMIT 1))
             """, (case_id_assigned, case_code_assigned, client_id, dept_id, matter_type_id))
 
             cur.execute("""
                 INSERT INTO cases (id, case_code, title, client_id, department_id, matter_type_id,
-                                  workflow_mode, contract_value, status)
-                VALUES (%s, %s, 'Vụ việc bí mật', %s, %s, %s, 'STRICT', 80000000, 'ACTIVE')
+                                  workflow_mode, contract_value, status, created_by)
+                VALUES (%s, %s, 'Vụ việc bí mật', %s, %s, %s, 'STRICT', 80000000, 'ACTIVE', (SELECT id FROM users LIMIT 1))
             """, (case_id_secret, case_code_secret, client_id, dept_id, matter_type_id))
 
             # Phân công attorney_assigned vào case_assigned trong PostgreSQL
