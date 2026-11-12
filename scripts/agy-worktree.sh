@@ -64,7 +64,7 @@ case "$cmd" in
       rgit push -q "$GIT_REMOTE" "$(branch):refs/heads/$(branch)"
       # node_modules dùng chung ở repo gốc của máy thợ; cài lại khi package-lock.json đổi
       rsh "cd $REMOTE_REPO && if ! git diff --quiet HEAD $(branch) -- package-lock.json 2>/dev/null; then git checkout -q --detach $(branch) && npm ci --no-audit --no-fund >/dev/null 2>&1 && echo 'đã npm ci trên máy thợ'; fi; \
-           git worktree add -q $(rwt_path) $(branch) && ln -s $REMOTE_REPO/node_modules $(rwt_path)/node_modules"
+           git worktree add -q $(rwt_path) $(branch) && ln -s $REMOTE_REPO/node_modules $(rwt_path)/node_modules && ln -s $REMOTE_REPO/.venv $(rwt_path)/.venv"
       echo "Worktree trên $HOST: $(rwt_path)  (nhánh $(branch))"
     else
       mkdir -p "$BASE_DIR"
@@ -112,7 +112,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"; }
       state="$(rsh "cd $(rwt_path) && python3 -c \"import json,glob; d=json.load(open(glob.glob('handoff/tasks/$id-*/state.json')[0])); print(d['status']); print(d['title'])\"")"
       status="$(echo "$state" | head -1)"; title="$(echo "$state" | sed -n 2p)"
       [ "$status" = "accepted" ] || die "$id chưa được nghiệm thu (status=$status) — chạy accept trước"
-      rsh "cd $(rwt_path) && rm -f node_modules && git add -A && (git diff --cached --quiet || git commit -q -F -)" <<<"$(msg_title "$title")"
+      rsh "cd $(rwt_path) && rm -f node_modules .venv && git add -A && (git diff --cached --quiet || git commit -q -F -)" <<<"$(msg_title "$title")"
       rgit fetch -q "$GIT_REMOTE" "+refs/heads/$(branch):refs/heads/$(branch)"
       git -C "$ROOT" merge --no-ff "$(branch)" -m "merge: $id — $title
 
