@@ -109,7 +109,7 @@ async def test_stream_tung_manh_che_pii_va_khoi_phuc_ma_gia_bi_cat(install_llm):
                                                              arguments={"keyword": code})])]
         p = PSEUDO.findall(last_tool_content(messages))[0]
         seen["p"] = p
-        parts = [f"Vụ {code} của ", p[:2], p[2:5], " đang xử lý; liên hệ ", p[:5], p[5:]]
+        parts = [f"Vụ {code} của ", p[:2], p[2:5], p[5:] + " đang xử lý; liên hệ ", p[:5], p[5:]]
         return [LLMReply(text=s, tool_calls=[]) for s in parts]
 
     llm = install_llm(FakeStreamLLM(script))
