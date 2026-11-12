@@ -24,7 +24,7 @@ from backend.app.services.report_export import build_report_xlsx
 VN_TZ = dt.timezone(dt.timedelta(hours=7))
 VALID_REPORT_NAMES = {"revenue", "commissions", "operations"}
 ALLOWED_GROUP_BY = {"month", "quarter"}
-ALLOWED_PAYOUT_STATUS = {"ACCUMULATED", "DISBURSED"}
+COMMISSION_ROLES = ("ORIGINATOR", "SUPERVISOR", "CASE_MANAGER", "EXECUTOR", "ASSISTANT")
 
 
 def validate_and_parse_period(
@@ -397,17 +397,22 @@ def get_commissions_data(
     current_user: Dict[str, Any],
     from_date: dt.date,
     to_date: dt.date,
-    payout_status: Optional[str],
     scope_ctx: ScopeContext,
+    *args: Any,
+    **kwargs: Any,  # DEC-09: payout_status bị bỏ qua trong logic
 ) -> Dict[str, Any]:
-    """Truy vấn và tính toán báo cáo hoa hồng SCR-18."""
+    """Truy vấn và tính toán báo cáo hoa hồng SCR-18 theo tháng (DEC-09)."""
+    periods = generate_periods(from_date, to_date, "month")
+
     if scope_ctx.empty_result:
         return {
             "summary": {
                 "total_amount": "0",
-                "accumulated_amount": "0",
-                "disbursed_amount": "0",
+                "transaction_count": 0,
+                "by_role": {r: "0" for r in COMMISSION_ROLES},
             },
+            "periods": periods,
+            "by_period": [{"period": p, "total_amount": "0"} for p in periods],
             "by_user": [],
         }
 
@@ -420,10 +425,6 @@ def get_commissions_data(
         "to_date": to_date,
     }
 
-    if payout_status:
-        where_clauses.append("ct.payout_status = %(payout_status)s")
-        query_params["payout_status"] = payout_status
-
     if scope_ctx.scope == "SELF":
         where_clauses.append("u.id = %(user_id)s")
         query_params["user_id"] = str(current_user["id"])
@@ -435,75 +436,74 @@ def get_commissions_data(
 
     query = f"""
         SELECT
-            ct.id,
             ct.user_id,
-            ct.role_type,
-            ct.amount,
-            ct.payout_status,
             u.full_name,
-            d.name AS department_name
+            d.name AS department_name,
+            ct.role_type,
+            to_char(ct.created_at AT TIME ZONE 'Asia/Ho_Chi_Minh', 'YYYY-MM') AS month,
+            SUM(ct.amount) AS total_amount,
+            COUNT(*) AS tx_count
         FROM commission_transactions ct
         JOIN users u ON ct.user_id = u.id
         LEFT JOIN departments d ON u.department_id = d.id
         WHERE {where_sql}
+        GROUP BY ct.user_id, u.full_name, d.name, ct.role_type, to_char(ct.created_at AT TIME ZONE 'Asia/Ho_Chi_Minh', 'YYYY-MM')
     """
 
     with conn.cursor(row_factory=dict_row) as cur:
         cur.execute(query, query_params)
         rows = cur.fetchall()
 
-    total_amount_dec = Decimal(0)
-    accumulated_amount_dec = Decimal(0)
-    disbursed_amount_dec = Decimal(0)
+    total_amount_dec = Decimal("0")
+    transaction_count = 0
+    summary_by_role_dec = {r: Decimal("0") for r in COMMISSION_ROLES}
+    by_period_dec = {p: Decimal("0") for p in periods}
 
     users_data: Dict[str, Dict[str, Any]] = {}
 
     for row in rows:
-        amt = Decimal(str(row["amount"]))
-        status = row["payout_status"]
+        amt = Decimal(str(row["total_amount"]))
+        cnt = int(row["tx_count"])
         uid = str(row["user_id"])
         fname = str(row["full_name"])
         dname = str(row["department_name"]) if row["department_name"] is not None else None
         role = str(row["role_type"])
+        month = str(row["month"])
 
         total_amount_dec += amt
-        if status == "ACCUMULATED":
-            accumulated_amount_dec += amt
-        elif status == "DISBURSED":
-            disbursed_amount_dec += amt
+        transaction_count += cnt
+        if role in summary_by_role_dec:
+            summary_by_role_dec[role] += amt
+        if month in by_period_dec:
+            by_period_dec[month] += amt
 
         if uid not in users_data:
             users_data[uid] = {
                 "id": uid,
                 "full_name": fname,
                 "department_name": dname,
-                "total_amount": Decimal(0),
-                "accumulated_amount": Decimal(0),
-                "disbursed_amount": Decimal(0),
-                "by_role": {
-                    "ORIGINATOR": Decimal(0),
-                    "SUPERVISOR": Decimal(0),
-                    "CASE_MANAGER": Decimal(0),
-                    "EXECUTOR": Decimal(0),
-                    "ASSISTANT": Decimal(0),
-                },
+                "total_amount": Decimal("0"),
+                "by_role": {r: Decimal("0") for r in COMMISSION_ROLES},
+                "by_period": {p: Decimal("0") for p in periods},
             }
 
         u_entry = users_data[uid]
         u_entry["total_amount"] += amt
-        if status == "ACCUMULATED":
-            u_entry["accumulated_amount"] += amt
-        elif status == "DISBURSED":
-            u_entry["disbursed_amount"] += amt
-
         if role in u_entry["by_role"]:
             u_entry["by_role"][role] += amt
+        if month in u_entry["by_period"]:
+            u_entry["by_period"][month] += amt
 
     summary = {
         "total_amount": str(int(total_amount_dec)),
-        "accumulated_amount": str(int(accumulated_amount_dec)),
-        "disbursed_amount": str(int(disbursed_amount_dec)),
+        "transaction_count": transaction_count,
+        "by_role": {r: str(int(summary_by_role_dec[r])) for r in COMMISSION_ROLES},
     }
+
+    by_period = [
+        {"period": p, "total_amount": str(int(by_period_dec[p]))}
+        for p in periods
+    ]
 
     user_list = [u for u in users_data.values() if u["total_amount"] > 0]
     user_list.sort(key=lambda x: (-x["total_amount"], x["full_name"], x["id"]))
@@ -516,17 +516,19 @@ def get_commissions_data(
                 "department_name": u["department_name"],
             },
             "total_amount": str(int(u["total_amount"])),
-            "accumulated_amount": str(int(u["accumulated_amount"])),
-            "disbursed_amount": str(int(u["disbursed_amount"])),
-            "by_role": {
-                r: str(int(amt)) for r, amt in u["by_role"].items()
-            },
+            "by_role": {r: str(int(u["by_role"][r])) for r in COMMISSION_ROLES},
+            "by_period": [
+                {"period": p, "total_amount": str(int(u["by_period"][p]))}
+                for p in periods
+            ],
         }
         for u in user_list
     ]
 
     return {
         "summary": summary,
+        "periods": periods,
+        "by_period": by_period,
         "by_user": by_user,
     }
 
@@ -783,13 +785,14 @@ def execute_commissions_report(
     current_user: Dict[str, Any],
     from_date: dt.date,
     to_date: dt.date,
-    payout_status: Optional[str],
-    department_id: Optional[str],
+    department_id: Optional[str] = None,
+    *args: Any,
+    **kwargs: Any,  # DEC-09: payout_status bị bỏ qua trong logic
 ) -> Tuple[Dict[str, Any], Dict[str, Any]]:
     """Hàm đồng bộ thực thi báo cáo hoa hồng và đóng gói meta."""
     with psycopg.connect(settings.DATABASE_SYNC_URL, autocommit=True) as conn:
         scope_ctx = resolve_scope(conn, current_user, "commissions", department_id)
-        data = get_commissions_data(conn, current_user, from_date, to_date, payout_status, scope_ctx)
+        data = get_commissions_data(conn, current_user, from_date, to_date, scope_ctx)
         meta = {
             "scope": scope_ctx.scope,
             "departments": scope_ctx.meta_departments,
@@ -823,9 +826,10 @@ def execute_export_report(
     current_user: Dict[str, Any],
     from_date: dt.date,
     to_date: dt.date,
-    department_id: Optional[str],
-    group_by: str,
-    payout_status: Optional[str],
+    department_id: Optional[str] = None,
+    group_by: str = "month",
+    *args: Any,
+    **kwargs: Any,  # DEC-09: payout_status bị bỏ qua trong logic
 ) -> Tuple[bytes, str, str, Optional[str], str]:
     """Hàm đồng bộ sinh tệp Excel và ghi nhật ký kiểm toán."""
     with psycopg.connect(settings.DATABASE_SYNC_URL, autocommit=True) as conn:
@@ -834,7 +838,7 @@ def execute_export_report(
         if name == "revenue":
             data = get_revenue_data(conn, current_user, from_date, to_date, group_by, scope_ctx)
         elif name == "commissions":
-            data = get_commissions_data(conn, current_user, from_date, to_date, payout_status, scope_ctx)
+            data = get_commissions_data(conn, current_user, from_date, to_date, scope_ctx)
         elif name == "operations":
             data = get_operations_data(conn, current_user, from_date, to_date, scope_ctx)
         else:

@@ -196,6 +196,8 @@ def _build_revenue_wb(wb: Workbook, data: dict[str, Any], meta: dict[str, Any]) 
 
 def _build_commissions_wb(wb: Workbook, data: dict[str, Any], meta: dict[str, Any]) -> None:
     summary = data.get("summary") or {}
+    periods: list[str] = data.get("periods") or []
+    by_user = data.get("by_user", [])
 
     # Sheet 1: Tổng quan
     ws_summary = wb.active
@@ -205,38 +207,85 @@ def _build_commissions_wb(wb: Workbook, data: dict[str, Any], meta: dict[str, An
         ("Kỳ", _format_period_range(meta), None),
         ("Phạm vi", _format_scope(meta), None),
         ("Tổng hoa hồng", _to_money(summary.get("total_amount", "0")), "#,##0"),
-        ("Tích luỹ", _to_money(summary.get("accumulated_amount", "0")), "#,##0"),
-        ("Đã chi", _to_money(summary.get("disbursed_amount", "0")), "#,##0"),
+        ("Số bút toán", _to_int(summary.get("transaction_count", 0)), None),
     ]
     _write_kv_sheet(ws_summary, kv_items)
 
-    # Sheet 2: Theo nhân sự
+    # Sheet 2: Theo tháng
+    ws_month = wb.create_sheet(title="Theo tháng")
+    period_headers = [f"{p.split('-')[1]}/{p.split('-')[0]}" for p in periods]
+    month_headers = ["Nhân sự", "Phòng ban", *period_headers, "Tổng"]
+    month_col_formats = [None, None, *["#,##0"] * len(periods), "#,##0"]
+
+    for col_idx, h in enumerate(month_headers, start=1):
+        _set_cell(ws_month.cell(row=1, column=col_idx), h, bold=True)
+
+    dec_period_totals = {p: Decimal(0) for p in periods}
+    dec_month_grand_total = Decimal(0)
+    current_row = 2
+
+    for item in by_user:
+        user = item.get("user") or {}
+        full_name = user.get("full_name") if isinstance(user, dict) else None
+        dept_name = user.get("department_name") if isinstance(user, dict) else None
+
+        user_bp = {bp["period"]: bp.get("total_amount", "0") for bp in item.get("by_period", [])}
+        user_total_raw = item.get("total_amount", "0") or "0"
+        dec_month_grand_total += Decimal(str(user_total_raw))
+
+        user_month_vals = []
+        for p in periods:
+            p_amt_raw = user_bp.get(p, "0") or "0"
+            dec_period_totals[p] += Decimal(str(p_amt_raw))
+            user_month_vals.append(_to_money(p_amt_raw))
+
+        row_vals = [
+            full_name,
+            dept_name,
+            *user_month_vals,
+            _to_money(user_total_raw),
+        ]
+        for col_idx, val in enumerate(row_vals, start=1):
+            _set_cell(ws_month.cell(row=current_row, column=col_idx), val, number_format=month_col_formats[col_idx - 1])
+        current_row += 1
+
+    if by_user:
+        total_vals = [
+            "Tổng cộng",
+            None,
+            *[int(dec_period_totals[p]) for p in periods],
+            int(dec_month_grand_total),
+        ]
+        for col_idx, val in enumerate(total_vals, start=1):
+            _set_cell(
+                ws_month.cell(row=current_row, column=col_idx),
+                val,
+                number_format=month_col_formats[col_idx - 1],
+                bold=True,
+            )
+
+    # Sheet 3: Theo nhân sự
     ws_user = wb.create_sheet(title="Theo nhân sự")
     headers = [
         "Nhân sự",
         "Phòng ban",
         "Tổng hoa hồng",
-        "Tích luỹ",
-        "Đã chi",
         "Mang khách về",
         "Giám sát",
         "Quản lý vụ việc",
         "Thực hiện",
         "Hỗ trợ",
     ]
-    col_formats = [None, None, "#,##0", "#,##0", "#,##0", "#,##0", "#,##0", "#,##0", "#,##0", "#,##0"]
+    col_formats = [None, None, "#,##0", "#,##0", "#,##0", "#,##0", "#,##0", "#,##0"]
 
     # Row 1: Headers (bold)
     for col_idx, h in enumerate(headers, start=1):
         _set_cell(ws_user.cell(row=1, column=col_idx), h, bold=True)
 
-    by_user = data.get("by_user", [])
     current_row = 2
 
     # Totals in Decimal
     dec_total = Decimal(0)
-    dec_acc = Decimal(0)
-    dec_disb = Decimal(0)
     dec_orig = Decimal(0)
     dec_sup = Decimal(0)
     dec_mgr = Decimal(0)
@@ -249,8 +298,6 @@ def _build_commissions_wb(wb: Workbook, data: dict[str, Any], meta: dict[str, An
         dept_name = user.get("department_name") if isinstance(user, dict) else None
 
         raw_total = item.get("total_amount", "0") or "0"
-        raw_acc = item.get("accumulated_amount", "0") or "0"
-        raw_disb = item.get("disbursed_amount", "0") or "0"
 
         by_role = item.get("by_role") or {}
         raw_orig = by_role.get("ORIGINATOR", "0") or "0"
@@ -260,8 +307,6 @@ def _build_commissions_wb(wb: Workbook, data: dict[str, Any], meta: dict[str, An
         raw_asst = by_role.get("ASSISTANT", "0") or "0"
 
         dec_total += Decimal(str(raw_total))
-        dec_acc += Decimal(str(raw_acc))
-        dec_disb += Decimal(str(raw_disb))
         dec_orig += Decimal(str(raw_orig))
         dec_sup += Decimal(str(raw_sup))
         dec_mgr += Decimal(str(raw_mgr))
@@ -272,8 +317,6 @@ def _build_commissions_wb(wb: Workbook, data: dict[str, Any], meta: dict[str, An
             full_name,
             dept_name,
             _to_money(raw_total),
-            _to_money(raw_acc),
-            _to_money(raw_disb),
             _to_money(raw_orig),
             _to_money(raw_sup),
             _to_money(raw_mgr),
@@ -290,8 +333,6 @@ def _build_commissions_wb(wb: Workbook, data: dict[str, Any], meta: dict[str, An
             "Tổng cộng",
             None,
             int(dec_total),
-            int(dec_acc),
-            int(dec_disb),
             int(dec_orig),
             int(dec_sup),
             int(dec_mgr),

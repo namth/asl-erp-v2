@@ -19,11 +19,12 @@ def get_commission_ledger_sync(
     case_id: Optional[str],
     user_id: Optional[str],
     role_type: Optional[str],
-    payout_status: Optional[str],
     from_date: Optional[dt.date],
     to_date: Optional[dt.date],
     page: int,
     limit: int,
+    *args: Any,
+    **kwargs: Any,  # DEC-09: payout_status bị bỏ qua trong logic
 ) -> Dict[str, Any]:
     system_role = current_user.get("system_role")
     is_executive = bool(current_user.get("is_executive", False))
@@ -80,10 +81,6 @@ def get_commission_ledger_sync(
             if role_type:
                 where_clauses.append("ct.role_type = %(role_type)s")
                 params["role_type"] = role_type
-
-            if payout_status:
-                where_clauses.append("ct.payout_status = %(payout_status)s")
-                params["payout_status"] = payout_status
 
             if from_date is not None:
                 where_clauses.append("(ct.created_at AT TIME ZONE 'Asia/Ho_Chi_Minh')::date >= %(from_date)s")
@@ -156,7 +153,6 @@ def get_commission_ledger_sync(
                     ct.base_amount,
                     ct.rate_pct,
                     ct.amount,
-                    ct.payout_status,
                     ct.created_at
                 FROM commission_transactions ct
                 JOIN cases c ON ct.case_id = c.id
@@ -206,7 +202,6 @@ def get_commission_ledger_sync(
                     "base_amount": format_money(row["base_amount"]),
                     "rate_pct": format_money(row["rate_pct"]),
                     "amount": format_money(row["amount"]),
-                    "payout_status": row["payout_status"],
                     "created_at": created_at_str,
                 })
 

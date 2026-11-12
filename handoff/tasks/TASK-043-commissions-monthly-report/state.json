@@ -1,13 +1,28 @@
 {
   "id": "TASK-043",
   "title": "Báo cáo hoa hồng theo tháng, bỏ trạng thái chi trả (DEC-09)",
-  "status": "draft",
-  "conversation_id": null,
+  "status": "accepted",
+  "conversation_id": "54c05137-61ee-46f0-8fab-6f27d59d6e58",
   "history": [
     {
       "at": "2026-11-12T17:34:40",
       "status": "draft",
       "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-12T17:35:10",
+      "status": "assigned",
+      "note": "giao code qua agy cho agy1 (gemini-3.8-flash-high)"
+    },
+    {
+      "at": "2026-11-12T17:37:46",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-12T18:03:31",
+      "status": "accepted",
+      "note": "Claude nghiệm thu"
     }
   ],
   "locked_files": [
@@ -15,5 +30,16 @@
     "backend/tests/test_reports_api.py",
     "backend/tests/test_report_export.py",
     "backend/tests/test_finance_commissions_api.py"
-  ]
+  ],
+  "agents": {
+    "tester": {
+      "account": null,
+      "conversation_id": null
+    },
+    "coder": {
+      "account": "agy1",
+      "conversation_id": "54c05137-61ee-46f0-8fab-6f27d59d6e58"
+    }
+  },
+  "via": "agy"
 }
