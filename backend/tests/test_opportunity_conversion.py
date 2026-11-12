@@ -501,7 +501,7 @@ async def test_tc_crm_02_convert_won_opportunity_success():
     dept_id = make_department()
     mid = make_matter_type(
         department_id=dept_id,
-        code="TM",
+        code=None,
         name="Đăng ký Nhãn hiệu Độc quyền",
         default_originator=Decimal("5.00"),
         default_management=Decimal("7.00"),
@@ -657,7 +657,7 @@ async def test_convert_uses_latest_published_template_version():
     opp_id = make_opportunity_record(cid, u["id"], stage="WON")
 
     dept_id = make_department()
-    mid = make_matter_type(department_id=dept_id, code="MA")
+    mid = make_matter_type(department_id=dept_id)
     tmpl_id = make_workflow_template(mid, mode="FLEXIBLE", name="Quy trình Hợp đồng")
 
     # Bản 1: PUBLISHED
