@@ -1,13 +1,33 @@
 {
   "id": "TASK-038",
   "title": "Backend báo cáo & thống kê SCR-18 (TSK-15)",
-  "status": "draft",
-  "conversation_id": null,
+  "status": "accepted",
+  "conversation_id": "287fc7dc-61fa-4dde-b060-1cd4d7ab3a3a",
   "history": [
     {
       "at": "2026-11-12T08:51:14",
       "status": "draft",
       "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-12T08:52:08",
+      "status": "assigned",
+      "note": "giao code qua agy cho agy1 (gemini-3.8-flash-high)"
+    },
+    {
+      "at": "2026-11-12T08:52:44",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-12T09:14:30",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-12T10:58:21",
+      "status": "accepted",
+      "note": "Claude nghiệm thu"
     }
   ],
   "locked_files": [
@@ -16,5 +36,16 @@
     "backend/tests/test_report_export.py",
     "backend/tests/test_no_test_hooks_in_app.py",
     "handoff/tasks/TASK-038-bao-cao-be/verify.sh"
-  ]
+  ],
+  "agents": {
+    "tester": {
+      "account": null,
+      "conversation_id": null
+    },
+    "coder": {
+      "account": "agy1",
+      "conversation_id": "287fc7dc-61fa-4dde-b060-1cd4d7ab3a3a"
+    }
+  },
+  "via": "agy"
 }
