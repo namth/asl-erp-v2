@@ -1,13 +1,39 @@
 {
   "id": "TASK-048",
   "title": "Xuất Excel sổ hoa hồng GET /finance/commissions/export (SCR-12)",
-  "status": "draft",
+  "status": "tests_ready",
   "conversation_id": null,
   "history": [
     {
       "at": "2026-11-12T19:06:32",
       "status": "draft",
       "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-12T19:24:47",
+      "status": "tests_assigned",
+      "note": "giao viết test chéo cho agy1"
+    },
+    {
+      "at": "2026-11-12T19:36:01",
+      "status": "tests_ready",
+      "note": "test chéo đã khoá (1 file), verify đỏ đúng chờ code"
     }
-  ]
+  ],
+  "agents": {
+    "coder": {
+      "account": null,
+      "conversation_id": null
+    },
+    "tester": {
+      "account": "agy1",
+      "conversation_id": "ebb9bdbf-0a96-44e8-a15a-ebfa5b778b5b"
+    }
+  },
+  "locked_files": [
+    "handoff/tasks/TASK-048-commissions-ledger-export/verify.sh",
+    "backend/tests/test_finance_commissions_export.py",
+    "handoff/tasks/TASK-048-commissions-ledger-export/verify.sh"
+  ],
+  "via": "agy"
 }
