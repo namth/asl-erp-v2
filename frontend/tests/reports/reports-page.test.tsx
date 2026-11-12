@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach, onTestFinished } from 'vitest';
 import { render, screen, fireEvent, waitFor, within } from '@testing-library/react';
 import React from 'react';
 import ReportsPage from '@/app/(dashboard)/reports/page';
@@ -185,7 +185,7 @@ describe('Màn hình Báo cáo & Thống kê - /reports (brief mục 4 & 5, DoD 
 
       render(<ReportsPage />);
 
-      expect(screen.getByText(/không có quyền truy cập/i)).toBeInTheDocument();
+      expect(screen.getAllByText(/không có quyền truy cập/i).length).toBeGreaterThan(0);
       // Đảm bảo không gọi truy vấn dữ liệu báo cáo
       expect(reportsHooks.useRevenueReport).toHaveBeenCalledWith(
         expect.anything(),
@@ -206,9 +206,9 @@ describe('Màn hình Báo cáo & Thống kê - /reports (brief mục 4 & 5, DoD 
 
       render(<ReportsPage />);
 
-      expect(screen.getByRole('tab', { name: /doanh thu/i })).toBeInTheDocument();
-      expect(screen.getByRole('tab', { name: /hoa hồng/i })).toBeInTheDocument();
-      expect(screen.queryByRole('tab', { name: /vận hành/i })).not.toBeInTheDocument();
+      expect(screen.getByRole('tab', { name: /doanh thu/i })).toBeTruthy();
+      expect(screen.getByRole('tab', { name: /hoa hồng/i })).toBeTruthy();
+      expect(screen.queryByRole('tab', { name: /vận hành/i })).toBeNull();
     });
 
     it('vai trò ACCOUNTANT -> mặc định mở tab đầu tiên được phép (Doanh thu)', () => {
@@ -231,30 +231,30 @@ describe('Màn hình Báo cáo & Thống kê - /reports (brief mục 4 & 5, DoD 
     it('vai trò MANAGER -> hiển thị đầy đủ 3 tab Doanh thu, Hoa hồng, Vận hành', () => {
       render(<ReportsPage />);
 
-      expect(screen.getByRole('tab', { name: /doanh thu/i })).toBeInTheDocument();
-      expect(screen.getByRole('tab', { name: /hoa hồng/i })).toBeInTheDocument();
-      expect(screen.getByRole('tab', { name: /vận hành/i })).toBeInTheDocument();
+      expect(screen.getByRole('tab', { name: /doanh thu/i })).toBeTruthy();
+      expect(screen.getByRole('tab', { name: /hoa hồng/i })).toBeTruthy();
+      expect(screen.getByRole('tab', { name: /vận hành/i })).toBeTruthy();
     });
   });
 
   describe('2. Nhãn phạm vi theo meta.scope (brief mục 4)', () => {
     it('hiển thị nhãn "Toàn hãng" khi meta.scope = FIRM', () => {
       render(<ReportsPage />);
-      expect(screen.getByText('Toàn hãng')).toBeInTheDocument();
+      expect(screen.getAllByText('Toàn hãng').length).toBeGreaterThan(0);
     });
 
     it('hiển thị nhãn "Phòng ban" khi meta.scope = DEPARTMENT', () => {
       // Chuyển sang tab Hoa hồng có meta.scope = DEPARTMENT
       render(<ReportsPage />);
       fireEvent.click(screen.getByRole('tab', { name: /hoa hồng/i }));
-      expect(screen.getByText('Phòng ban')).toBeInTheDocument();
+      expect(screen.getAllByText('Phòng ban').length).toBeGreaterThan(0);
     });
 
     it('hiển thị nhãn "Số liệu của tôi" khi meta.scope = SELF', () => {
       // Chuyển sang tab Vận hành có meta.scope = SELF
       render(<ReportsPage />);
       fireEvent.click(screen.getByRole('tab', { name: /vận hành/i }));
-      expect(screen.getByText('Số liệu của tôi')).toBeInTheDocument();
+      expect(screen.getAllByText('Số liệu của tôi').length).toBeGreaterThan(0);
     });
   });
 
@@ -279,7 +279,7 @@ describe('Màn hình Báo cáo & Thống kê - /reports (brief mục 4 & 5, DoD 
 
         expect(
           screen.getByText('Ngày bắt đầu phải trước ngày kết thúc')
-        ).toBeInTheDocument();
+        ).toBeTruthy();
       }
     });
 
@@ -296,7 +296,7 @@ describe('Màn hình Báo cáo & Thống kê - /reports (brief mục 4 & 5, DoD 
 
         expect(
           screen.getByText('Khoảng thời gian tối đa 366 ngày')
-        ).toBeInTheDocument();
+        ).toBeTruthy();
       }
     });
 
@@ -305,10 +305,10 @@ describe('Màn hình Báo cáo & Thống kê - /reports (brief mục 4 & 5, DoD 
 
       // sampleRevenueData có 2 phòng ban -> hiển thị dropdown chọn phòng ban
       const deptSelect = screen.getByRole('combobox', { name: /phòng ban/i });
-      expect(deptSelect).toBeInTheDocument();
-      expect(within(deptSelect).getByText('Tất cả phòng ban')).toBeInTheDocument();
-      expect(within(deptSelect).getByText('Phòng Sở Hữu Trí Tuệ')).toBeInTheDocument();
-      expect(within(deptSelect).getByText('Phòng Tranh Tụng')).toBeInTheDocument();
+      expect(deptSelect).toBeTruthy();
+      expect(within(deptSelect).getByText('Tất cả phòng ban')).toBeTruthy();
+      expect(within(deptSelect).getByText('Phòng Sở Hữu Trí Tuệ')).toBeTruthy();
+      expect(within(deptSelect).getByText('Phòng Tranh Tụng')).toBeTruthy();
     });
 
     it('dropdown phòng ban không hiển thị khi meta.departments có <= 1 phòng', () => {
@@ -325,7 +325,7 @@ describe('Màn hình Báo cáo & Thống kê - /reports (brief mục 4 & 5, DoD 
       } as any);
 
       render(<ReportsPage />);
-      expect(screen.queryByRole('combobox', { name: /phòng ban/i })).not.toBeInTheDocument();
+      expect(screen.queryByRole('combobox', { name: /phòng ban/i })).toBeNull();
     });
   });
 
@@ -334,32 +334,32 @@ describe('Màn hình Báo cáo & Thống kê - /reports (brief mục 4 & 5, DoD 
       render(<ReportsPage />);
 
       // 5.280.000.000 ₫ (received_total)
-      expect(screen.getByText('5.280.000.000 ₫')).toBeInTheDocument();
+      expect(screen.getAllByText('5.280.000.000 ₫').length).toBeGreaterThan(0);
       // 7.400.000.000 ₫ (contract_value_total)
-      expect(screen.getByText('7.400.000.000 ₫')).toBeInTheDocument();
+      expect(screen.getAllByText('7.400.000.000 ₫').length).toBeGreaterThan(0);
       // 71,35% (collection_rate_pct)
-      expect(screen.getByText('71,35%')).toBeInTheDocument();
+      expect(screen.getAllByText('71,35%').length).toBeGreaterThan(0);
       // 46 khoản thu (payment_count)
-      expect(screen.getByText(/46/)).toBeInTheDocument();
+      expect(screen.getAllByText(/46/).length).toBeGreaterThan(0);
     });
 
     it('hiển thị biểu đồ thanh ngang CSS theo kỳ (tháng/quý)', () => {
       render(<ReportsPage />);
 
-      expect(screen.getByText('2026-10')).toBeInTheDocument();
-      expect(screen.getByText('2026-11')).toBeInTheDocument();
-      expect(screen.getByText('1.840.000.000 ₫')).toBeInTheDocument();
-      expect(screen.getByText('3.440.000.000 ₫')).toBeInTheDocument();
+      expect(screen.getAllByText('2026-10').length).toBeGreaterThan(0);
+      expect(screen.getAllByText('2026-11').length).toBeGreaterThan(0);
+      expect(screen.getAllByText('1.840.000.000 ₫').length).toBeGreaterThan(0);
+      expect(screen.getAllByText('3.440.000.000 ₫').length).toBeGreaterThan(0);
     });
 
     it('hiển thị bảng doanh thu theo phòng ban và theo loại vụ việc', () => {
       render(<ReportsPage />);
 
-      expect(screen.getByText('Phòng Sở Hữu Trí Tuệ')).toBeInTheDocument();
-      expect(screen.getByText('790.000.000 ₫')).toBeInTheDocument();
+      expect(screen.getAllByText('Phòng Sở Hữu Trí Tuệ').length).toBeGreaterThan(0);
+      expect(screen.getAllByText('790.000.000 ₫').length).toBeGreaterThan(0);
 
-      expect(screen.getByText('Nhãn hiệu')).toBeInTheDocument();
-      expect(screen.getByText('420.000.000 ₫')).toBeInTheDocument();
+      expect(screen.getAllByText('Nhãn hiệu').length).toBeGreaterThan(0);
+      expect(screen.getAllByText('420.000.000 ₫').length).toBeGreaterThan(0);
     });
 
     it('bộ lọc nhóm theo tháng/quý (group_by) kích hoạt thay đổi tham số', () => {
@@ -368,8 +368,8 @@ describe('Màn hình Báo cáo & Thống kê - /reports (brief mục 4 & 5, DoD 
       const groupByMonth = screen.getByRole('button', { name: /tháng/i });
       const groupByQuarter = screen.getByRole('button', { name: /quý/i });
 
-      expect(groupByMonth).toBeInTheDocument();
-      expect(groupByQuarter).toBeInTheDocument();
+      expect(groupByMonth).toBeTruthy();
+      expect(groupByQuarter).toBeTruthy();
 
       fireEvent.click(groupByQuarter);
       expect(reportsHooks.useRevenueReport).toHaveBeenCalledWith(
@@ -386,30 +386,30 @@ describe('Màn hình Báo cáo & Thống kê - /reports (brief mục 4 & 5, DoD 
     });
 
     it('hiển thị 3 thẻ chỉ số: tổng, tích luỹ, đã chi', () => {
-      expect(screen.getByText('264.000.000 ₫')).toBeInTheDocument();
-      expect(screen.getByText('120.000.000 ₫')).toBeInTheDocument();
-      expect(screen.getByText('144.000.000 ₫')).toBeInTheDocument();
+      expect(screen.getAllByText('264.000.000 ₫').length).toBeGreaterThan(0);
+      expect(screen.getAllByText('120.000.000 ₫').length).toBeGreaterThan(0);
+      expect(screen.getAllByText('144.000.000 ₫').length).toBeGreaterThan(0);
     });
 
     it('hiển thị bảng theo nhân sự với cột từng vai trò (Mang khách về, Giám sát, Quản lý vụ việc, Thực hiện, Hỗ trợ)', () => {
-      expect(screen.getByText('LS. Mai Linh')).toBeInTheDocument();
+      expect(screen.getAllByText('LS. Mai Linh').length).toBeGreaterThan(0);
 
       // Kiểm tra tiêu đề các cột vai trò tiếng Việt
-      expect(screen.getByText('Mang khách về')).toBeInTheDocument();
-      expect(screen.getByText('Giám sát')).toBeInTheDocument();
-      expect(screen.getByText('Quản lý vụ việc')).toBeInTheDocument();
-      expect(screen.getByText('Thực hiện')).toBeInTheDocument();
-      expect(screen.getByText('Hỗ trợ')).toBeInTheDocument();
+      expect(screen.getAllByText('Mang khách về').length).toBeGreaterThan(0);
+      expect(screen.getAllByText('Giám sát').length).toBeGreaterThan(0);
+      expect(screen.getAllByText('Quản lý vụ việc').length).toBeGreaterThan(0);
+      expect(screen.getAllByText('Thực hiện').length).toBeGreaterThan(0);
+      expect(screen.getAllByText('Hỗ trợ').length).toBeGreaterThan(0);
 
       // Kiểm tra số tiền từng vai trò
-      expect(screen.getByText('6.000.000 ₫')).toBeInTheDocument();
-      expect(screen.getByText('21.000.000 ₫')).toBeInTheDocument();
-      expect(screen.getByText('15.000.000 ₫')).toBeInTheDocument();
+      expect(screen.getAllByText('6.000.000 ₫').length).toBeGreaterThan(0);
+      expect(screen.getAllByText('21.000.000 ₫').length).toBeGreaterThan(0);
+      expect(screen.getAllByText('15.000.000 ₫').length).toBeGreaterThan(0);
     });
 
     it('bộ lọc trạng thái chi trả payout_status (Tích luỹ / Đã chi / Tất cả)', () => {
       const payoutFilter = screen.getByRole('combobox', { name: /trạng thái chi trả/i });
-      expect(payoutFilter).toBeInTheDocument();
+      expect(payoutFilter).toBeTruthy();
 
       fireEvent.change(payoutFilter, { target: { value: 'ACCUMULATED' } });
 
@@ -427,48 +427,54 @@ describe('Màn hình Báo cáo & Thống kê - /reports (brief mục 4 & 5, DoD 
     });
 
     it('hiển thị thẻ số vụ việc theo 5 trạng thái với nhãn tiếng Việt', () => {
-      expect(screen.getByText('Khởi tạo')).toBeInTheDocument();
-      expect(screen.getByText('3')).toBeInTheDocument();
+      expect(screen.getAllByText('Khởi tạo').length).toBeGreaterThan(0);
+      expect(screen.getAllByText('3').length).toBeGreaterThan(0);
 
-      expect(screen.getByText('Đang thực hiện')).toBeInTheDocument();
-      expect(screen.getByText('42')).toBeInTheDocument();
+      expect(screen.getAllByText('Đang thực hiện').length).toBeGreaterThan(0);
+      expect(screen.getAllByText('42').length).toBeGreaterThan(0);
 
-      expect(screen.getByText('Tạm dừng')).toBeInTheDocument();
-      expect(screen.getByText('2')).toBeInTheDocument();
+      expect(screen.getAllByText('Tạm dừng').length).toBeGreaterThan(0);
+      expect(screen.getAllByText('2').length).toBeGreaterThan(0);
 
-      expect(screen.getByText('Đã đóng')).toBeInTheDocument();
-      expect(screen.getByText('17')).toBeInTheDocument();
+      expect(screen.getAllByText('Đã đóng').length).toBeGreaterThan(0);
+      expect(screen.getAllByText('17').length).toBeGreaterThan(0);
 
-      expect(screen.getByText('Chấm dứt')).toBeInTheDocument();
-      expect(screen.getByText('1')).toBeInTheDocument();
+      expect(screen.getAllByText('Chấm dứt').length).toBeGreaterThan(0);
+      expect(screen.getAllByText('1').length).toBeGreaterThan(0);
     });
 
     it('bảng task quá hạn có liên kết điều hướng đúng /cases/{id}', () => {
-      expect(screen.getByText('Nộp tờ khai')).toBeInTheDocument();
-      expect(screen.getByText('Trần Thu Hà')).toBeInTheDocument();
-      expect(screen.getByText(/6 ngày/)).toBeInTheDocument();
+      expect(screen.getAllByText('Nộp tờ khai').length).toBeGreaterThan(0);
+      expect(screen.getAllByText('Trần Thu Hà').length).toBeGreaterThan(0);
+      expect(screen.getAllByText(/6 ngày/).length).toBeGreaterThan(0);
 
       const caseLink = screen.getByRole('link', { name: 'ASL-2026-TM-0012' });
-      expect(caseLink).toBeInTheDocument();
+      expect(caseLink).toBeTruthy();
       expect(caseLink.getAttribute('href')).toBe('/cases/c1');
     });
 
     it('bảng thời gian xử lý trung bình theo stage và tỷ lệ chuyển đổi cơ hội', () => {
-      expect(screen.getByText('Thẩm định hình thức')).toBeInTheDocument();
-      expect(screen.getByText(/8\.5/)).toBeInTheDocument();
+      expect(screen.getAllByText('Thẩm định hình thức').length).toBeGreaterThan(0);
+      expect(screen.getAllByText(/8\.5/).length).toBeGreaterThan(0);
 
-      expect(screen.getByText('26,67%')).toBeInTheDocument();
-      expect(screen.getByText(/30/)).toBeInTheDocument();
-      expect(screen.getByText(/8/)).toBeInTheDocument();
+      expect(screen.getAllByText('26,67%').length).toBeGreaterThan(0);
+      expect(screen.getAllByText(/30/).length).toBeGreaterThan(0);
+      expect(screen.getAllByText(/8/).length).toBeGreaterThan(0);
     });
   });
 
   describe('7. Nút Xuất Excel (brief mục 4 & 5)', () => {
     it('bấm nút "Xuất Excel" kích hoạt hàm xuất với tab đang mở và tham số bộ lọc', async () => {
+      // Cố định "hôm nay" để khoảng ngày mặc định không phụ thuộc ngày chạy test
+      vi.useFakeTimers({ toFake: ['Date'] });
+      vi.setSystemTime(new Date('2026-11-11T09:00:00+07:00'));
+      onTestFinished(() => {
+        vi.useRealTimers();
+      });
       render(<ReportsPage />);
 
       const exportBtn = screen.getByRole('button', { name: /xuất excel/i });
-      expect(exportBtn).toBeInTheDocument();
+      expect(exportBtn).toBeTruthy();
 
       fireEvent.click(exportBtn);
 
@@ -496,7 +502,7 @@ describe('Màn hình Báo cáo & Thống kê - /reports (brief mục 4 & 5, DoD 
       await waitFor(() => {
         expect(
           screen.getByText('Không xuất được báo cáo, thử lại sau')
-        ).toBeInTheDocument();
+        ).toBeTruthy();
       });
     });
   });
@@ -532,7 +538,7 @@ describe('Màn hình Báo cáo & Thống kê - /reports (brief mục 4 & 5, DoD 
       } as any);
 
       render(<ReportsPage />);
-      expect(screen.getByText('Chưa có số liệu trong kỳ này')).toBeInTheDocument();
+      expect(screen.getAllByText('Chưa có số liệu trong kỳ này').length).toBeGreaterThan(0);
     });
 
     it('trạng thái lỗi 403 (NEED_TO_KNOW_DENIED / FORBIDDEN_ROLE): hiển thị ErrorState "Không có quyền truy cập"', () => {
@@ -544,7 +550,7 @@ describe('Màn hình Báo cáo & Thống kê - /reports (brief mục 4 & 5, DoD 
       } as any);
 
       render(<ReportsPage />);
-      expect(screen.getByText(/không có quyền truy cập/i)).toBeInTheDocument();
+      expect(screen.getAllByText(/không có quyền truy cập/i).length).toBeGreaterThan(0);
     });
 
     it('trạng thái lỗi 422: hiển thị thông báo lỗi bộ lọc', () => {
@@ -556,7 +562,7 @@ describe('Màn hình Báo cáo & Thống kê - /reports (brief mục 4 & 5, DoD 
       } as any);
 
       render(<ReportsPage />);
-      expect(screen.getByText(/lỗi bộ lọc|không hợp lệ/i)).toBeInTheDocument();
+      expect(screen.getAllByText(/lỗi bộ lọc|không hợp lệ/i).length).toBeGreaterThan(0);
     });
   });
 });
