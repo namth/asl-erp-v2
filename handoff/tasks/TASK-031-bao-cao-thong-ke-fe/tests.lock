@@ -1,1 +1,6 @@
 eb50ea0b06f993a49eb76025ec5012a0d1b1d8a2e993599dd01796c150b9e77f  handoff/tasks/TASK-031-bao-cao-thong-ke-fe/verify.sh
+7df45de59d6d4c5f33e902b7ffe66a6bf66db9bbe599c23ecdd132d9c5d76a27  frontend/tests/reports/conventions.test.ts
+6d007d51cc2946c9475c03b0a238998e4bc05f6657d3038ede6e0de435a9640f  frontend/tests/reports/reports-lib.test.ts
+fca772504d7cd49b6ba505d9726e9e8daab8e5acab867d47d8b8b4657a3618a2  frontend/tests/reports/reports-page.test.tsx
+468692cccfe2a42a32cb1f2ab24b8899ca9df805f58fd522dd4a3aa2f2a2274c  frontend/tests/reports/use-reports.test.ts
+4de2cc9e0bff8c0d572133d5338bffceea7e531e30e3ef045ed21d6fc1111d3d  frontend/tests/no-test-hooks-in-src.test.ts

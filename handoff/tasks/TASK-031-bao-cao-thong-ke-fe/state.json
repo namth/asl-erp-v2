@@ -1,8 +1,8 @@
 {
   "id": "TASK-031",
   "title": "Báo cáo & thống kê (SCR-18)",
-  "status": "tests_ready",
-  "conversation_id": null,
+  "status": "submitted",
+  "conversation_id": "64c39fe0-a5d0-43d2-b438-c6a7b1398cb4",
   "history": [
     {
       "at": "2026-11-11T21:27:17",
@@ -18,12 +18,27 @@
       "at": "2026-11-11T21:38:38",
       "status": "tests_ready",
       "note": "test chéo đã khoá (4 file), verify đỏ đúng chờ code"
+    },
+    {
+      "at": "2026-11-11T23:21:27",
+      "status": "assigned",
+      "note": "giao code qua agy cho agy3 (model mặc định)"
+    },
+    {
+      "at": "2026-11-11T23:21:41",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-12T01:37:34",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
     }
   ],
   "agents": {
     "coder": {
-      "account": null,
-      "conversation_id": null
+      "account": "agy3",
+      "conversation_id": "64c39fe0-a5d0-43d2-b438-c6a7b1398cb4"
     },
     "tester": {
       "account": "agy2",
@@ -31,7 +46,12 @@
     }
   },
   "locked_files": [
-    "handoff/tasks/TASK-031-bao-cao-thong-ke-fe/verify.sh"
+    "handoff/tasks/TASK-031-bao-cao-thong-ke-fe/verify.sh",
+    "frontend/tests/reports/conventions.test.ts",
+    "frontend/tests/reports/reports-lib.test.ts",
+    "frontend/tests/reports/reports-page.test.tsx",
+    "frontend/tests/reports/use-reports.test.ts",
+    "frontend/tests/no-test-hooks-in-src.test.ts"
   ],
   "via": "agy"
 }
