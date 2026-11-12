@@ -1,0 +1,57 @@
+{
+  "id": "TASK-027",
+  "title": "Backend vụ việc, stage, task, phân công & phê duyệt (TSK-07, TSK-08, TSK-19)",
+  "status": "accepted",
+  "conversation_id": "830892d0-2691-47f1-84b2-dc7c0d6ae63f",
+  "history": [
+    {
+      "at": "2026-11-11T17:43:32",
+      "status": "draft",
+      "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-11T17:43:33",
+      "status": "tests_assigned",
+      "note": "giao viết test chéo cho agy3"
+    },
+    {
+      "at": "2026-11-11T17:57:39",
+      "status": "tests_ready",
+      "note": "test chéo đã khoá (3 file), verify đỏ đúng chờ code"
+    },
+    {
+      "at": "2026-11-11T18:06:49",
+      "status": "assigned",
+      "note": "giao code qua agy cho agy1 (model mặc định)"
+    },
+    {
+      "at": "2026-11-11T18:07:52",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-11T22:03:09",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-11T23:00:32",
+      "status": "accepted",
+      "note": "Claude nghiệm thu"
+    }
+  ],
+  "agents": {
+    "coder": {
+      "account": "agy1",
+      "conversation_id": "830892d0-2691-47f1-84b2-dc7c0d6ae63f"
+    },
+    "tester": {
+      "account": "agy3",
+      "conversation_id": "8bce9dec-89ba-4648-bb54-61dd4a964eb6"
+    }
+  },
+  "locked_files": [
+    "handoff/tasks/TASK-027-vu-viec-task-phe-duyet-backend/verify.sh"
+  ],
+  "via": "agy"
+}

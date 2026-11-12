@@ -122,9 +122,9 @@ Cột "Milestone" theo lộ trình `11`. Endpoint M1–M2 có đặc tả chi ti
 | Kế toán | `GET /accounting/inbox` · `POST /accounting/confirm-payment` | ACCOUNTANT | M4 |
 | Hoa hồng | `GET /finance/commissions` · `GET /finance/commissions/export` · `POST /finance/commissions/disburse` | MANAGER, ACCOUNTANT; ATTORNEY chỉ của mình | M4 |
 | Tài liệu | `GET/POST /cases/{id}/documents` · `GET/POST /documents/{id}/versions` · `GET /documents/{id}/versions/{vid}/download` · `POST /documents/{id}/archive` | `professional` (`finance` với thư mục Hợp đồng) | M5 |
-| Thông báo | `GET /notifications` · `POST /notifications/{id}/read` · `WS /ws/notifications` · `POST /me/telegram/link` | mọi người | M5 |
+| Thông báo | `GET /notifications` · `POST /notifications/{id}/read` · `POST /notifications/read-all` · `WS /ws/notifications` · `POST /me/telegram/link` (§3.10) | mọi người | M5 |
 | Trợ lý AI | `POST /ai/chat` | mọi người, dữ liệu trong phạm vi | M5 |
-| Báo cáo | `GET /reports/revenue` · `GET /reports/commissions` · `GET /reports/operations` · `GET /reports/{name}/export` | theo `02` Phân hệ 10 | M5 |
+| Báo cáo | `GET /reports/revenue` · `GET /reports/commissions` · `GET /reports/operations` · `GET /reports/{name}/export` (§3.9) | theo `02` Phân hệ 10 | M5 |
 | Văn phòng số | `GET /operations/floorplan` · `WS /ws/floorplan/{dept_id}` | MANAGER | M6 |
 | Cài đặt | `GET/PUT /settings/holidays` · `GET/PUT /settings/commission-defaults` | ADMIN | M3 |
 
@@ -552,3 +552,84 @@ Trả tệp (giải mã AES-256-GCM phía server) với `Content-Disposition: at
 { "reason": "Bản thảo đã thay bằng hồ sơ nộp chính thức" }
 ```
 `reason` bắt buộc (1–500). Không xoá cứng; tài liệu đã lưu trữ chỉ hiện khi `include_archived=true`, vẫn tải được các phiên bản. Kế toán → `403 FOLDER_NOT_ALLOWED`. Audit `DOCUMENT_ARCHIVED`.
+
+### 3.9. Báo cáo & thống kê (M5 — SCR-18, `02` Phân hệ 10)
+
+Tham số chung: `from`, `to` (ngày `YYYY-MM-DD`, bao gồm cả hai đầu, mặc định đầu quý hiện tại → hôm nay; `from > to` hoặc khoảng > 366 ngày → `422 VALIDATION_ERROR`), `department_id` (tuỳ chọn). Tiền là chuỗi số nguyên VND, tổng tính bằng `Decimal`. Phạm vi dữ liệu (DEC-04):
+
+| Vai trò | `revenue` | `commissions` | `operations` |
+| :--- | :--- | :--- | :--- |
+| Giám đốc (`is_executive`) | toàn hãng, lọc được mọi phòng | toàn hãng | toàn hãng |
+| Trưởng phòng | phòng mình quản lý; phòng khác → `403 NEED_TO_KNOW_DENIED` | nhân sự phòng mình | phòng mình |
+| Kế toán | toàn hãng | toàn hãng | `403 FORBIDDEN_ROLE` |
+| Luật sư | vụ việc mình được phân công (`department_id` bị bỏ qua) | chỉ dòng của mình | vụ việc mình được phân công |
+| Quản trị viên | `403 FORBIDDEN_ROLE` | `403 FORBIDDEN_ROLE` | `403 FORBIDDEN_ROLE` |
+
+`meta.scope` trả `FIRM` | `DEPARTMENT` | `SELF` để giao diện hiện đúng nhãn phạm vi; `meta.departments` liệt kê các phòng người xem được lọc (rỗng nếu không lọc được).
+
+#### `GET /api/v1/reports/revenue?from=&to=&department_id=&group_by=month|quarter`
+Doanh thu **thực thu** = tổng `misa_transactions.received_amount` có `confirmed_at` trong kỳ (không tính hợp đồng chưa thu).
+```json
+{
+  "success": true,
+  "data": {
+    "summary": { "received_total": "5280000000", "contract_value_total": "7400000000", "collection_rate_pct": "71.35", "payment_count": 46 },
+    "by_period": [ { "period": "2026-10", "received_total": "1840000000" } ],
+    "by_department": [ { "department": { "id": "d1", "name": "Phòng Sở Hữu Trí Tuệ" }, "received_total": "790000000" } ],
+    "by_matter_type": [ { "matter_type": { "code": "TM", "name": "Nhãn hiệu" }, "received_total": "420000000", "contract_value_total": "610000000" } ]
+  },
+  "meta": { "scope": "DEPARTMENT", "departments": [ { "id": "d1", "name": "Phòng Sở Hữu Trí Tuệ" } ], "from": "2026-10-01", "to": "2026-11-11" }
+}
+```
+- `contract_value_total` = tổng giá trị hợp đồng của các vụ việc có ít nhất một khoản thu trong kỳ; `collection_rate_pct` = `received_total / contract_value_total × 100`, 2 chữ số thập phân, `contract_value_total = 0` → `"0.00"`.
+- `by_period` đủ mọi tháng/quý trong kỳ (kỳ không có thu → `"0"`), sắp tăng dần; `by_department`, `by_matter_type` sắp giảm dần theo `received_total`.
+
+#### `GET /api/v1/reports/commissions?from=&to=&department_id=&payout_status=ACCUMULATED|DISBURSED`
+Tổng hợp từ `commission_transactions` (`created_at` trong kỳ) theo nhân sự:
+```json
+{
+  "success": true,
+  "data": {
+    "summary": { "total_amount": "264000000", "accumulated_amount": "120000000", "disbursed_amount": "144000000" },
+    "by_user": [
+      { "user": { "id": "u2", "full_name": "LS. Mai Linh", "department_name": "Phòng Sở Hữu Trí Tuệ" },
+        "total_amount": "42000000", "accumulated_amount": "12000000", "disbursed_amount": "30000000",
+        "by_role": { "ORIGINATOR": "0", "SUPERVISOR": "6000000", "CASE_MANAGER": "21000000", "EXECUTOR": "15000000", "ASSISTANT": "0" } }
+    ]
+  },
+  "meta": { "scope": "FIRM", "departments": [], "from": "2026-10-01", "to": "2026-11-11" }
+}
+```
+Tách theo `commission_transactions.payout_status` (`ACCUMULATED` tích luỹ, `DISBURSED` đã chi); `by_user` sắp giảm dần theo `total_amount`.
+
+#### `GET /api/v1/reports/operations?from=&to=&department_id=`
+```json
+{
+  "success": true,
+  "data": {
+    "cases_by_status": { "INITIALIZING": 3, "ACTIVE": 42, "PAUSED": 2, "CLOSED": 17, "TERMINATED": 1 },
+    "overdue_tasks": { "count": 5, "items": [ { "task_id": "t9", "title": "Nộp tờ khai", "case": { "id": "c1", "case_code": "ASL-2026-TM-0012" }, "assignee": { "full_name": "Trần Thu Hà" }, "due_date": "2026-11-05", "days_overdue": 6 } ] },
+    "stage_durations": [ { "stage_name": "Thẩm định hình thức", "completed_count": 12, "avg_days": "8.5" } ],
+    "opportunity_conversion": { "created_count": 30, "won_count": 9, "converted_count": 8, "conversion_rate_pct": "26.67" }
+  },
+  "meta": { "scope": "DEPARTMENT", "departments": [ { "id": "d1", "name": "Phòng Sở Hữu Trí Tuệ" } ], "from": "2026-10-01", "to": "2026-11-11" }
+}
+```
+- `cases_by_status`: ảnh chụp hiện tại (không theo kỳ), đủ 5 khoá. `overdue_tasks`: task chưa `COMPLETED` có `due_date` < hôm nay, `items` tối đa 50, quá hạn lâu nhất trước. `stage_durations`: stage hoàn thành trong kỳ, `avg_days` 1 chữ số thập phân. `conversion_rate_pct` = `converted_count / created_count × 100` (mẫu 0 → `"0.00"`) trên cơ hội tạo trong kỳ.
+
+#### `GET /api/v1/reports/{name}/export?…` (`name` ∈ `revenue`, `commissions`, `operations`)
+Cùng tham số và phạm vi với báo cáo tương ứng → tệp `.xlsx` (`Content-Disposition: attachment; filename*=UTF-8''bao-cao-{name}-{from}-{to}.xlsx`). `name` khác → `404 NOT_FOUND`. Mỗi lượt xuất ghi audit `REPORT_EXPORTED`.
+
+### 3.10. Thông báo (M5)
+
+#### `GET /api/v1/notifications?unread_only=false&page=&page_size=20`
+Thông báo của chính người gọi (`notifications.user_id = me`), mới nhất trước: `[{id, kind, title, body, link, created_at, read_at}]` + `meta: {page, page_size, total, unread_count}`. `link` luôn là đường dẫn tương đối trong app.
+
+#### `POST /api/v1/notifications/{id}/read`
+Đánh dấu đã đọc (idempotent, đã đọc rồi vẫn `200`); thông báo của người khác → `404 NOT_FOUND`. → `{ "id": "…", "read_at": "…" }`.
+
+#### `POST /api/v1/notifications/read-all`
+Đánh dấu mọi thông báo chưa đọc của người gọi → `{ "updated_count": 7 }`.
+
+#### `WS /ws/notifications`
+Xác thực bằng cookie phiên. Mỗi tin nhắn JSON `{ "type": "NOTIFICATION_CREATED", "payload": { …một phần tử như danh sách… } }`. Máy chủ đóng kết nối khi token bị thu hồi.
