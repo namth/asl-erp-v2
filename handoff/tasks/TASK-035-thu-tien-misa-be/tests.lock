@@ -1,0 +1,4 @@
+8b70cfa702081a64ba97acd85f3f37679b0e9975e678491c96bc40b7222362ca  handoff/tasks/TASK-035-thu-tien-misa-be/verify.sh
+1db75ab0b79e1676c15472e350b159d8bb0fce3dcd978810262436d664ee09d5  backend/tests/test_misa_flow.py
+0b59f3d9c2f11da69ccf8d6b4db7a81cfc3baf40258ea10a49034cb8edd73241  backend/tests/test_commission_calculation.py
+19db9d56c8b6042f62a70f89c884af4e6f5c46010e2349a5840bca1a7c520e89  backend/tests/test_no_test_hooks_in_app.py

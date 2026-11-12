@@ -85,6 +85,7 @@
 | `IDEMPOTENCY_KEY_REUSED` | 409 | Cùng key, khác nội dung |
 | `COMMISSION_RATES_EXCEED_100` | 422 | Tổng tỷ lệ > 100% |
 | `COMMISSION_POLICY_LOCKED` | 409 | Sửa tỷ lệ sau lần thu tiền đầu tiên |
+| `CASE_MANAGER_REQUIRED` | 409 | Xác nhận thu tiền cho vụ việc chưa có Case Manager đang phân công (không chia được quỹ quản lý) |
 | `MILESTONES_EXCEED_CONTRACT` | 422 | Tổng các đợt thu > giá trị hợp đồng |
 | `FILE_TYPE_NOT_ALLOWED` | 415 | Định dạng ngoài danh sách trắng |
 | `FILE_TOO_LARGE` | 413 | > 50 MB |
@@ -440,8 +441,10 @@ Header bắt buộc: `Idempotency-Key`.
 }
 ```
 - Hoa hồng tính trên `received_amount` của **lần này** (`12` §3). Đợt chỉ `PAID_CONFIRMED` và mở khoá stage khi `received_total >= amount`.
-- Thu thừa: ghi nhận, `warnings` có `OVERPAYMENT` kèm số dư.
-- Lỗi: `MILESTONE_NOT_AWAITING_PAYMENT`, `DUPLICATE_BANK_REF`, `IDEMPOTENCY_KEY_REUSED`.
+- Thu thừa: ghi nhận, `warnings` (cấp trên cùng, cạnh `data`) có `{code: "OVERPAYMENT", amount: "<số thừa>", message}`.
+- Thứ tự xử lý trong **một transaction**: khoá đợt thu (`FOR UPDATE`) → kiểm `Idempotency-Key` (trùng key + cùng nội dung → trả lại đúng response cũ; khác nội dung → `409 IDEMPOTENCY_KEY_REUSED`) → kiểm trạng thái → ghi `misa_transactions` → khoá chính sách (`locked_at`) → tính hoa hồng (`12` §3) → cập nhật đợt/stage → audit `PAYMENT_CONFIRMED`. Lỗi ở bất kỳ bước nào → rollback.
+- Thiếu/sai định dạng `Idempotency-Key` (UUID) → `422 VALIDATION_ERROR`; `received_amount` là chuỗi số > 0, tối đa 2 chữ số lẻ.
+- Lỗi: `MILESTONE_NOT_AWAITING_PAYMENT`, `DUPLICATE_BANK_REF`, `IDEMPOTENCY_KEY_REUSED`, `CASE_MANAGER_REQUIRED`, `404 NOT_FOUND` (đợt không tồn tại), `403 FORBIDDEN_ROLE` (không phải Kế toán).
 
 #### `GET /api/v1/accounting/inbox?status=AWAITING_PAYMENT,PARTIALLY_PAID&q=&page=` (ACCOUNTANT)
 Hàng chờ đợt thu cần đối soát (phạm vi `finance`): `[{milestone_id, case {id, case_code, title, client_name}, name, amount, received_total, remaining, status, awaiting_since, payments: [{received_amount, misa_invoice_no, bank_ref_code, confirmed_at, confirmed_by {full_name}}]}]` + `meta`. Tiền là chuỗi.
