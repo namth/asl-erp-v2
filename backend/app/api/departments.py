@@ -192,26 +192,24 @@ async def put_department_leaders_endpoint(
     # 4. Neo4j Aura sync IMMEDIATELY in request: remove old :LEADS and set new :LEADS
     driver = get_neo4j_driver()
     async with driver.session() as session:
+        # Delete existing LEADS edges to this department
+        res_del = await session.run("""
+            MERGE (d:Department {id: $did})
+            WITH d
+            OPTIONAL MATCH ()-[r:LEADS]->(d)
+            DELETE r
+        """, did=str(dept_id))
+        await res_del.consume()
+
+        # Create new LEADS edges
         if validated_leader_ids:
-            res = await session.run("""
-                MERGE (d:Department {id: $did})
-                WITH d
-                OPTIONAL MATCH ()-[r:LEADS]->(d)
-                DELETE r
-                WITH d
+            res_add = await session.run("""
+                MATCH (d:Department {id: $did})
                 UNWIND $leader_ids AS lid
                 MERGE (u:User {id: lid})
                 MERGE (u)-[:LEADS]->(d)
             """, did=str(dept_id), leader_ids=[str(x) for x in validated_leader_ids])
-            await res.consume()
-        else:
-            res = await session.run("""
-                MERGE (d:Department {id: $did})
-                WITH d
-                OPTIONAL MATCH ()-[r:LEADS]->(d)
-                DELETE r
-            """, did=str(dept_id))
-            await res.consume()
+            await res_add.consume()
 
     # 5. Audit log
     with psycopg.connect(settings.DATABASE_SYNC_URL) as sync_conn:

@@ -730,9 +730,11 @@ async def test_put_department_leaders_neo4j_sync_replaces_old_leaders():
         driver = neo4j_driver()
         with driver.session() as s:
             rec = s.run("""
-                OPTIONAL MATCH (u1:User {id: $uid1})-[:LEADS]->(d:Department {id: $did})
-                OPTIONAL MATCH (u2:User {id: $uid2})-[:LEADS]->(d:Department {id: $did})
-                RETURN count(u1) AS cnt_m1, count(u2) AS cnt_m2
+                MATCH (d:Department {id: $did})
+                OPTIONAL MATCH (u1:User {id: $uid1})-[:LEADS]->(d)
+                WITH d, count(u1) AS cnt_m1
+                OPTIONAL MATCH (u2:User {id: $uid2})-[:LEADS]->(d)
+                RETURN cnt_m1, count(u2) AS cnt_m2
             """, uid1=m1["id"], uid2=m2["id"], did=dept["id"]).single()
         driver.close()
 
