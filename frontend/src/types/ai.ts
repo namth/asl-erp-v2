@@ -24,3 +24,17 @@ export interface ChatMessage {
   isPending?: boolean;
   timestamp?: string | number;
 }
+
+export interface AiStreamDeltaEvent {
+  text: string;
+}
+
+export interface AiStreamDoneEvent {
+  session_id: string;
+  suggested_actions?: AiSuggestedAction[];
+}
+
+export interface AiStreamErrorEvent {
+  code: string;
+  message: string;
+}

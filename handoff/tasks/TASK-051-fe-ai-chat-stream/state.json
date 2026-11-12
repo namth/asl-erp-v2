@@ -1,18 +1,49 @@
 {
   "id": "TASK-051",
   "title": "Khung chat AI hiện chữ dần theo stream SSE",
-  "status": "draft",
-  "conversation_id": null,
+  "status": "accepted",
+  "conversation_id": "838272c6-3393-4cd0-b41c-164e6a90dd6c",
   "history": [
     {
       "at": "2026-11-12T23:35:52",
       "status": "draft",
       "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-12T23:36:19",
+      "status": "assigned",
+      "note": "giao code qua agy cho agy1 (model mặc định)"
+    },
+    {
+      "at": "2026-11-12T23:37:13",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-12T23:51:58",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-12T23:54:57",
+      "status": "accepted",
+      "note": "Claude nghiệm thu"
     }
   ],
   "locked_files": [
     "handoff/tasks/TASK-051-fe-ai-chat-stream/verify.sh",
     "frontend/tests/ai/use-ai-chat.test.tsx",
     "handoff/tasks/TASK-051-fe-ai-chat-stream/verify.sh"
-  ]
+  ],
+  "agents": {
+    "tester": {
+      "account": null,
+      "conversation_id": null
+    },
+    "coder": {
+      "account": "agy1",
+      "conversation_id": "838272c6-3393-4cd0-b41c-164e6a90dd6c"
+    }
+  },
+  "via": "agy"
 }

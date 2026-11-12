@@ -1,29 +1,34 @@
 import { useMutation } from '@tanstack/react-query';
-import { apiFetch } from '@/lib/api-client';
+import { apiStream } from '@/lib/api-stream';
 import { useAiDrawerStore } from '@/stores/ai-drawer-store';
-import type { AiChatRequest, AiChatResponse, ChatMessage } from '@/types/ai';
+import type {
+  AiChatResponse,
+  AiSuggestedAction,
+  ChatMessage,
+} from '@/types/ai';
 
-interface ErrorWithStatus {
-  status?: number;
-  code?: string;
-  message?: string;
+interface StreamMutationPayload {
+  message: string;
+  session_id: string;
+  assistantId: string;
 }
 
-function getErrorDetails(err: unknown): { isRateLimit: boolean; message: string } {
-  const e = err as ErrorWithStatus | undefined;
-  const isRateLimit =
+function formatErrorMessage(err: unknown): string {
+  const e = err as { status?: number; code?: string; message?: string } | undefined;
+  if (
     e?.status === 429 ||
     e?.code === 'RATE_LIMIT_EXCEEDED' ||
-    Boolean(e?.message && e.message.includes('429'));
-
-  let message = 'Đã có lỗi xảy ra khi kết nối máy chủ.';
-  if (isRateLimit) {
-    message = 'Bạn đã hỏi quá nhiều, thử lại sau ít phút';
-  } else if (e?.message && e.message !== 'Failed to fetch' && !e.message.includes('Fetch')) {
-    message = e.message;
+    Boolean(e?.message && e.message.includes('429'))
+  ) {
+    return 'Bạn đã hỏi quá nhiều, thử lại sau ít phút';
   }
-
-  return { isRateLimit, message };
+  if (e?.message === 'STREAM_CLOSED_WITHOUT_DONE') {
+    return 'Kết nối bị gián đoạn, vui lòng thử lại.';
+  }
+  if (e?.message && e.message !== 'Failed to fetch' && !e.message.includes('Fetch')) {
+    return e.message;
+  }
+  return 'Kết nối bị gián đoạn, vui lòng thử lại.';
 }
 
 function generateId(): string {
@@ -47,25 +52,101 @@ export interface UseAiChatResult {
 export function useAiChat(options?: Record<string, unknown>): UseAiChatResult {
   void options;
 
-  const mutation = useMutation<AiChatResponse, Error, AiChatRequest>({
-    mutationFn: async (payload: AiChatRequest) => {
+  const mutation = useMutation<AiChatResponse, Error, StreamMutationPayload>({
+    mutationFn: async ({ message, session_id, assistantId }) => {
+      let accumulatedText = '';
+      let suggestedActions: AiSuggestedAction[] | undefined;
+      let hasDone = false;
+      let errorMsg: string | null = null;
+
       try {
-        return await apiFetch<AiChatResponse>('/ai/chat', {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
+        await apiStream(
+          '/ai/chat/stream',
+          {
+            method: 'POST',
+            headers: {
+              Accept: 'text/event-stream',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ message, session_id }),
           },
-          body: JSON.stringify(payload),
-        });
-      } catch (err: unknown) {
-        const { isRateLimit } = getErrorDetails(err);
-        if (isRateLimit) {
-          const rateLimitErr = new Error('Bạn đã hỏi quá nhiều, thử lại sau ít phút');
-          Object.assign(rateLimitErr, { status: 429 });
-          throw rateLimitErr;
+          (event, data) => {
+            if (event === 'delta') {
+              const d = data as { text?: string } | undefined;
+              const delta = d?.text ?? '';
+              accumulatedText += delta;
+              useAiDrawerStore.setState((prev) => ({
+                messages: (prev.messages || []).map((m) =>
+                  m.id === assistantId
+                    ? {
+                        ...m,
+                        content: accumulatedText,
+                        text: accumulatedText,
+                        response_text: accumulatedText,
+                      }
+                    : m
+                ),
+              }));
+            } else if (event === 'done') {
+              hasDone = true;
+              const d = data as
+                | { session_id?: string; suggested_actions?: AiSuggestedAction[] }
+                | undefined;
+              if (d?.session_id) {
+                useAiDrawerStore.setState({ sessionId: d.session_id });
+              }
+              suggestedActions = d?.suggested_actions || [];
+              useAiDrawerStore.setState((prev) => ({
+                messages: (prev.messages || []).map((m) =>
+                  m.id === assistantId
+                    ? {
+                        ...m,
+                        content: accumulatedText,
+                        text: accumulatedText,
+                        response_text: accumulatedText,
+                        suggested_actions: suggestedActions,
+                        isPending: false,
+                        isError: false,
+                      }
+                    : m
+                ),
+              }));
+            } else if (event === 'error') {
+              const d = data as { code?: string; message?: string } | undefined;
+              errorMsg = d?.message || d?.code || 'Đã có lỗi xảy ra';
+            }
+          }
+        );
+
+        if (errorMsg) {
+          throw new Error(errorMsg);
         }
-        throw err;
+
+        if (!hasDone) {
+          throw new Error('STREAM_CLOSED_WITHOUT_DONE');
+        }
+
+        return {
+          response_text: accumulatedText,
+          suggested_actions: suggestedActions,
+        };
+      } catch (err: unknown) {
+        const finalErrorMessage = formatErrorMessage(err);
+        useAiDrawerStore.setState((prev) => ({
+          messages: (prev.messages || []).map((m) =>
+            m.id === assistantId
+              ? {
+                  ...m,
+                  content: finalErrorMessage,
+                  text: finalErrorMessage,
+                  response_text: finalErrorMessage,
+                  isPending: false,
+                  isError: true,
+                }
+              : m
+          ),
+        }));
+        throw err instanceof Error ? err : new Error(finalErrorMessage);
       }
     },
   });
@@ -91,48 +172,28 @@ export function useAiChat(options?: Record<string, unknown>): UseAiChatResult {
       timestamp: Date.now(),
     };
 
+    const assistantId = generateId();
+    const assistantMsg: ChatMessage = {
+      id: assistantId,
+      role: 'assistant',
+      content: '',
+      text: '',
+      response_text: '',
+      isPending: true,
+      timestamp: Date.now(),
+    };
+
     useAiDrawerStore.setState((prev) => ({
-      messages: [...(prev.messages || []), userMsg],
+      messages: [...(prev.messages || []), userMsg, assistantMsg],
     }));
 
     try {
-      const data = await mutation.mutateAsync({
+      return await mutation.mutateAsync({
         message: trimmed,
         session_id: currentSessionId,
+        assistantId,
       });
-
-      const botMsg: ChatMessage = {
-        id: generateId(),
-        role: 'assistant',
-        content: data.response_text,
-        text: data.response_text,
-        response_text: data.response_text,
-        suggested_actions: data.suggested_actions,
-        timestamp: Date.now(),
-      };
-
-      useAiDrawerStore.setState((prev) => ({
-        messages: [...(prev.messages || []), botMsg],
-      }));
-
-      return data;
-    } catch (err: unknown) {
-      const { message: errorText } = getErrorDetails(err);
-
-      const errorMsg: ChatMessage = {
-        id: generateId(),
-        role: 'assistant',
-        content: errorText,
-        text: errorText,
-        response_text: errorText,
-        isError: true,
-        timestamp: Date.now(),
-      };
-
-      useAiDrawerStore.setState((prev) => ({
-        messages: [...(prev.messages || []), errorMsg],
-      }));
-
+    } catch {
       return undefined;
     }
   };
@@ -149,12 +210,10 @@ export function useAiChat(options?: Record<string, unknown>): UseAiChatResult {
       return;
     }
 
-    // Xoa tin nhan loi cuoi cung neu co de thu lai
-    const lastMsg = currentMessages[currentMessages.length - 1];
+    let msgs = currentMessages;
+    const lastMsg = msgs[msgs.length - 1];
     if (lastMsg && lastMsg.role === 'assistant' && lastMsg.isError) {
-      useAiDrawerStore.setState({
-        messages: currentMessages.slice(0, -1),
-      });
+      msgs = msgs.slice(0, -1);
     }
 
     let currentSessionId = useAiDrawerStore.getState().sessionId;
@@ -163,44 +222,28 @@ export function useAiChat(options?: Record<string, unknown>): UseAiChatResult {
       useAiDrawerStore.setState({ sessionId: currentSessionId });
     }
 
+    const assistantId = generateId();
+    const assistantMsg: ChatMessage = {
+      id: assistantId,
+      role: 'assistant',
+      content: '',
+      text: '',
+      response_text: '',
+      isPending: true,
+      timestamp: Date.now(),
+    };
+
+    useAiDrawerStore.setState({
+      messages: [...msgs, assistantMsg],
+    });
+
     try {
-      const data = await mutation.mutateAsync({
+      return await mutation.mutateAsync({
         message: content,
         session_id: currentSessionId,
+        assistantId,
       });
-
-      const botMsg: ChatMessage = {
-        id: generateId(),
-        role: 'assistant',
-        content: data.response_text,
-        text: data.response_text,
-        response_text: data.response_text,
-        suggested_actions: data.suggested_actions,
-        timestamp: Date.now(),
-      };
-
-      useAiDrawerStore.setState((prev) => ({
-        messages: [...(prev.messages || []), botMsg],
-      }));
-
-      return data;
-    } catch (err: unknown) {
-      const { message: errorText } = getErrorDetails(err);
-
-      const errorMsg: ChatMessage = {
-        id: generateId(),
-        role: 'assistant',
-        content: errorText,
-        text: errorText,
-        response_text: errorText,
-        isError: true,
-        timestamp: Date.now(),
-      };
-
-      useAiDrawerStore.setState((prev) => ({
-        messages: [...(prev.messages || []), errorMsg],
-      }));
-
+    } catch {
       return undefined;
     }
   };

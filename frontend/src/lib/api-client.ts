@@ -27,7 +27,7 @@ export class ApiError extends Error {
   }
 }
 
-function getCsrfTokenFromCookie(): string | null {
+export function getCsrfTokenFromCookie(): string | null {
   if (typeof document === 'undefined') {
     return null;
   }
@@ -35,14 +35,34 @@ function getCsrfTokenFromCookie(): string | null {
   return match ? decodeURIComponent(match[1]) : null;
 }
 
+export function buildApiUrl(path: string): string {
+  const base = process.env.NEXT_PUBLIC_API_BASE || '/api/v1';
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+  return normalizedPath.startsWith('http') ? normalizedPath : `${base}${normalizedPath}`;
+}
+
+export async function parseErrorResponse(response: Response): Promise<ApiError> {
+  let json: Record<string, unknown> | null = null;
+  try {
+    json = (await response.json()) as Record<string, unknown>;
+  } catch {
+    // Không có nội dung JSON
+  }
+  const errorObj = (json?.error as Record<string, unknown>) || {};
+  const code = (errorObj.code as string) || 'UNKNOWN_ERROR';
+  const message =
+    (errorObj.message as string) || response.statusText || 'Yêu cầu không thành công';
+  const details = errorObj.details;
+  return new ApiError(response.status, code, message, details);
+}
+
 async function requestJson(
   path: string,
   init?: RequestInit,
   isRetry = false
 ): Promise<Record<string, unknown> | null> {
-  const base = process.env.NEXT_PUBLIC_API_BASE || '/api/v1';
+  const url = buildApiUrl(path);
   const normalizedPath = path.startsWith('/') ? path : `/${path}`;
-  const url = normalizedPath.startsWith('http') ? normalizedPath : `${base}${normalizedPath}`;
 
   const method = (init?.method || 'GET').toUpperCase();
   const headers = new Headers(init?.headers);
