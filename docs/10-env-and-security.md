@@ -43,6 +43,9 @@ TELEGRAM_BOT_TOKEN=123456789:ABCdefGHIjklMNOpqrSTUvwxYZ
 ZALO_OA_APP_ID=your_zalo_app_id
 ZALO_OA_SECRET_KEY=your_zalo_secret_key
 ZALO_OA_ACCESS_TOKEN=temporary_init_token
+# Bỏ trống token → tin chờ gửi ở trạng thái PENDING, không gọi mạng
+OUTBOUND_ALLOWED_HOSTS=api.telegram.org,openapi.zalo.me
+ERP_PUBLIC_URL=https://erp.asllaw.vn   # gốc deep-link trong tin cảnh báo
 
 # --- TRÍ TUỆ NHÂN TẠO (AI ASSISTANT) ---
 GEMINI_API_KEY=AIzaSyD-YourGoogleGeminiApiKeyHere
