@@ -1,0 +1,2 @@
+4c5278ea1cc0a46ae34da2a02d0bd322e78c08cc8c1df1020fd76f405d526832  handoff/tasks/TASK-039-opportunities-list-create/verify.sh
+6892eed2cea0f94634ac6243bee86fbef5bf68bb4cdb3d319545ed80b9b36c44  backend/tests/test_opportunities_list_create.py

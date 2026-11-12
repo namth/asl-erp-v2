@@ -257,8 +257,23 @@ Kết quả lần kiểm chuỗi băm gần nhất (job hằng đêm) — `?rech
 - **201** kèm `warnings` nếu trùng tên/MST với bên đối tụng của vụ việc đang hiệu lực.
 - **409 `DUPLICATE_TAX_CODE`** / **`DUPLICATE_IDENTITY_NO`**.
 
+#### `GET /api/v1/crm/opportunities?stage=&client_id=&q=&page=1&limit=20`
+- Vai trò `MANAGER` xem toàn hãng; `ATTORNEY` chỉ thấy cơ hội có `originator_id = me`; vai trò khác → `403 FORBIDDEN_ROLE`.
+- `data` là mảng `[{id, client_id, client_name, title, lead_source, expected_value, probability_pct, stage, lost_reason, originator_id, originator_name, converted_case_id, created_at, updated_at}]`, mới cập nhật trước; `expected_value` là chuỗi số. `meta` theo §1.2 (`page, limit, total_records, total_pages`); `limit` 1–100.
+- `stage` ∉ 5 giá trị §1.1 của `12`, `client_id` không phải UUID, `page < 1`, `limit` ngoài 1–100 → `422 VALIDATION_ERROR`. `q` tìm không dấu, không phân biệt hoa thường trong `title` và tên khách hàng.
+
+#### `POST /api/v1/crm/opportunities`
+```json
+{ "client_id": "c1", "title": "Đăng ký nhãn hiệu ASL GATE", "lead_source": "REFERRAL",
+  "expected_value": "150000000", "probability_pct": 40, "originator_id": "u7" }
+```
+- **201**, cơ hội luôn bắt đầu ở `NEW_LEAD` (không nhận `stage`), trả cùng dạng phần tử của `GET`. Audit `OPPORTUNITY_CREATED`.
+- `originator_id` tuỳ chọn: `ATTORNEY` luôn là chính mình (gửi người khác → `403 FORBIDDEN_ROLE`); `MANAGER` mặc định là chính mình, được chỉ định người dùng nội bộ đang hoạt động khác (không tồn tại/đã khoá → `422 VALIDATION_ERROR`).
+- `title` 1–255 ký tự sau khi bỏ khoảng trắng, `lead_source` thuộc `WEBSITE|HOTLINE|FACEBOOK|REFERRAL|PARTNER|OTHER`, `expected_value ≥ 0`, `probability_pct` 0–100 → sai: `422 VALIDATION_ERROR`; `client_id` không tồn tại → `404 NOT_FOUND`.
+
 #### `POST /api/v1/crm/opportunities/{id}/convert`
 Header bắt buộc: `Idempotency-Key`.
+- Sau khi giao dịch PostgreSQL commit, server tạo ngay nút `(:Case {id, case_code, status})` và quan hệ `[:IN_DEPARTMENT]` tới phòng của vụ việc trong Neo4j (idempotent, `MERGE`) — không chờ worker outbox; worker xử lý sự kiện `CASE_CREATED` cũng `MERGE` cùng dữ liệu.
 ```json
 {
   "matter_type_id": "4e7a8f1b-2c3d-4e5f-6a7b-8c9d0e1f2a3b",
