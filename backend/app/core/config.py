@@ -49,12 +49,18 @@ class Settings(BaseSettings):
     TOTP_ISSUER: str = os.getenv("TOTP_ISSUER", "ASL LAW ERP")
     TOTP_REQUIRED_ROLES: list[str] = ["ADMIN", "MANAGER", "ACCOUNTANT"]
 
+    # AI Assistant (DEC-03)
+    GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
+    AI_MODEL_NAME: str = os.getenv("AI_MODEL_NAME", "gemini-2.5-flash")
+
     @model_validator(mode="after")
     def _require_data_key_outside_dev(self):
         if not self.DATA_ENCRYPTION_MASTER_KEY:
             if self.APP_ENV not in ("development", "test"):
                 raise ValueError("DATA_ENCRYPTION_MASTER_KEY bắt buộc ngoài môi trường development/test")
             self.DATA_ENCRYPTION_MASTER_KEY = _DEV_DATA_KEY
+        if not self.GEMINI_API_KEY and self.APP_ENV in ("development", "test"):
+            self.GEMINI_API_KEY = "dev-gemini-api-key"
         return self
 
     model_config = SettingsConfigDict(
