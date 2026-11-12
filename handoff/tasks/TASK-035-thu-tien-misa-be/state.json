@@ -1,13 +1,33 @@
 {
   "id": "TASK-035",
   "title": "Backend xác nhận thu tiền MISA, hòm thư Kế toán & chính sách hoa hồng (TSK-09, TSK-10 tích hợp)",
-  "status": "draft",
-  "conversation_id": null,
+  "status": "accepted",
+  "conversation_id": "cdaa00e9-7921-4cff-85a0-788175c84f82",
   "history": [
     {
       "at": "2026-11-12T07:23:01",
       "status": "draft",
       "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-12T07:29:54",
+      "status": "assigned",
+      "note": "giao code qua agy cho agy1 (gemini-3.8-flash-high)"
+    },
+    {
+      "at": "2026-11-12T07:30:51",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-12T08:18:33",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-12T08:38:59",
+      "status": "accepted",
+      "note": "Claude nghiệm thu"
     }
   ],
   "locked_files": [
@@ -15,5 +35,16 @@
     "backend/tests/test_misa_flow.py",
     "backend/tests/test_commission_calculation.py",
     "backend/tests/test_no_test_hooks_in_app.py"
-  ]
+  ],
+  "agents": {
+    "tester": {
+      "account": null,
+      "conversation_id": null
+    },
+    "coder": {
+      "account": "agy1",
+      "conversation_id": "cdaa00e9-7921-4cff-85a0-788175c84f82"
+    }
+  },
+  "via": "agy"
 }
