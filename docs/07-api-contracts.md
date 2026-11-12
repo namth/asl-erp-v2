@@ -92,6 +92,7 @@
 | `FILE_NOT_AVAILABLE` | 409 | Tệp chưa quét xong hoặc nhiễm virus |
 | `FOLDER_NOT_ALLOWED` | 403 | Thư mục tài liệu ngoài phạm vi người dùng (vd Kế toán với thư mục khác Hợp đồng) |
 | `DOCUMENT_ARCHIVED` | 409 | Tài liệu đã lưu trữ, không nhận phiên bản mới |
+| `AI_UNAVAILABLE` | 503 | Trợ lý AI chưa cấu hình khoá LLM hoặc nhà cung cấp LLM không phản hồi |
 | `RATE_LIMITED` | 429 | Vượt giới hạn tần suất |
 | `INTERNAL_ERROR` | 500 | Lỗi không lường trước (không lộ chi tiết) |
 
@@ -479,7 +480,8 @@ Sổ hoa hồng (`commission_transactions`, chỉ đọc): `data` = `[{id, case 
 { "message": "Tuần này tôi có vụ việc SHTT nào sắp tới hạn?", "session_id": "ai-sess-8f3a1b2c" }
 ```
 - Công cụ chỉ trả dữ liệu trong phạm vi người hỏi. Trước khi gửi kết quả công cụ lên LLM: thay tên khách hàng, MST/CCCD, điện thoại, email bằng mã giả; khôi phục khi trả về người dùng (DEC-03, `08` §4.3).
-- Phản hồi dạng stream (SSE); bản không stream:
+- `message` 1–2000 ký tự, `session_id` tuỳ chọn (chưa lưu lịch sử hội thoại — mỗi câu hỏi độc lập). Công cụ: `get_urgent_tasks`, `lookup_case_status` (`08` §4.3); tối đa 5 lượt gọi LLM mỗi câu hỏi. Audit `AI_QUERY` lưu câu hỏi đã che.
+- Hiện trả bản không stream (stream SSE làm sau):
 
 ```json
 {

@@ -1,0 +1,18 @@
+{
+  "id": "TASK-047",
+  "title": "Backend trợ lý AI: công cụ trong phạm vi quyền, che PII trước khi gửi LLM (TSK-13, SCR-14)",
+  "status": "draft",
+  "conversation_id": null,
+  "history": [
+    {
+      "at": "2026-11-12T19:04:51",
+      "status": "draft",
+      "note": "Claude tạo task"
+    }
+  ],
+  "locked_files": [
+    "handoff/tasks/TASK-047-ai-assistant-backend/verify.sh",
+    "backend/tests/test_ai_assistant.py",
+    "handoff/tasks/TASK-047-ai-assistant-backend/verify.sh"
+  ]
+}
