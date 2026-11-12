@@ -128,9 +128,16 @@ class GeminiClient:
         return LLMReply(text=text_reply, tool_calls=tool_calls_reply)
 
 
+class UnavailableLLMClient:
+    """Dùng khi chưa cấu hình khoá LLM: chỉ báo 503 lúc thực sự gọi, để lỗi đầu vào (422) vẫn được báo trước."""
+
+    async def chat(self, messages: list[dict], tools: list[dict]) -> LLMReply:
+        raise AppException(503, "AI_UNAVAILABLE", "Trợ lý AI chưa cấu hình khoá LLM")
+
+
 def get_llm_client() -> LLMClient:
     api_key = getattr(settings, "GEMINI_API_KEY", "")
     if not api_key:
-        raise AppException(503, "AI_UNAVAILABLE", "Trợ lý AI chưa cấu hình khoá LLM")
+        return UnavailableLLMClient()
     model_name = getattr(settings, "AI_MODEL_NAME", "gemini-2.5-flash")
     return GeminiClient(api_key=api_key, model_name=model_name)

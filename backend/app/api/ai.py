@@ -12,7 +12,8 @@ from backend.app.core.config import settings
 from backend.app.core.security import get_current_user
 from backend.app.db.postgres import engine
 from backend.app.services.ai.agent import run_ai_agent
-from backend.app.services.ai.llm import LLMClient, get_llm_client
+from backend.app.core.errors import AppException
+from backend.app.services.ai.llm import LLMClient, UnavailableLLMClient, get_llm_client
 from backend.app.services.ai.pii_redactor import PiiRedactor
 from backend.app.services.audit import log_audit_event
 from backend.app.services.cases import get_accessible_case_ids
@@ -46,6 +47,9 @@ async def ai_chat(
     current_user: Dict[str, Any] = Depends(get_current_user),
     llm: LLMClient = Depends(get_llm_client),
 ) -> Dict[str, Any]:
+    if isinstance(llm, UnavailableLLMClient):
+        # Đầu vào đã hợp lệ (422 báo trước); không tra dữ liệu hay ghi audit khi chưa có LLM.
+        raise AppException(503, "AI_UNAVAILABLE", "Trợ lý AI chưa cấu hình khoá LLM")
     redactor = PiiRedactor()
 
     # Pre-register in-scope client names and PII details into redactor
