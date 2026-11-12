@@ -1,17 +1,43 @@
 {
   "id": "TASK-039",
   "title": "Backend danh sách & tạo cơ hội, đồng bộ Case sang Neo4j khi chuyển đổi",
-  "status": "draft",
-  "conversation_id": null,
+  "status": "accepted",
+  "conversation_id": "74e01851-19b6-44b8-83f8-b873c07d22ed",
   "history": [
     {
       "at": "2026-11-12T13:41:55",
       "status": "draft",
       "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-12T13:47:19",
+      "status": "assigned",
+      "note": "giao code qua agy cho agy1 (gemini-3.8-flash-high)"
+    },
+    {
+      "at": "2026-11-12T13:48:05",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-12T15:23:26",
+      "status": "accepted",
+      "note": "Claude nghiệm thu"
     }
   ],
   "locked_files": [
     "handoff/tasks/TASK-039-opportunities-list-create/verify.sh",
     "backend/tests/test_opportunities_list_create.py"
-  ]
+  ],
+  "agents": {
+    "tester": {
+      "account": null,
+      "conversation_id": null
+    },
+    "coder": {
+      "account": "agy1",
+      "conversation_id": "74e01851-19b6-44b8-83f8-b873c07d22ed"
+    }
+  },
+  "via": "agy"
 }

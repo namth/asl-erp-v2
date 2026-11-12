@@ -102,6 +102,40 @@ async def process_outbox(limit: int = 100) -> int:
                         MERGE (u)-[:LEADS]->(d)
                     """, did=did, leader_ids=leader_ids)
 
+            elif event_type == "CASE_CREATED":
+                cid = str(payload.get("case_id"))
+                code = payload.get("case_code", "")
+                status_str = payload.get("status", "INITIALIZING")
+                did = payload.get("department_id")
+                if not did:
+                    with psycopg.connect(settings.DATABASE_SYNC_URL, autocommit=True) as p_conn:
+                        with p_conn.cursor() as p_cur:
+                            p_cur.execute("SELECT department_id, case_code, status FROM cases WHERE id = %s", (cid,))
+                            row = p_cur.fetchone()
+                            if row:
+                                did = str(row[0]) if row[0] else None
+                                if not code and row[1]:
+                                    code = row[1]
+                                if row[2]:
+                                    status_str = row[2]
+
+                did_str = str(did) if did else None
+                if did_str:
+                    await session.run("""
+                        MERGE (c:Case {id: $cid})
+                        ON CREATE SET c.status = $status
+                        SET c.case_code = $code
+                        WITH c
+                        MERGE (d:Department {id: $did})
+                        MERGE (c)-[:IN_DEPARTMENT]->(d)
+                    """, cid=cid, code=code, status=status_str, did=did_str)
+                else:
+                    await session.run("""
+                        MERGE (c:Case {id: $cid})
+                        ON CREATE SET c.status = $status
+                        SET c.case_code = $code
+                    """, cid=cid, code=code, status=status_str)
+
             processed_ids.append(event_id)
 
     # Mark events processed in PostgreSQL
