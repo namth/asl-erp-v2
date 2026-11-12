@@ -38,6 +38,7 @@ from backend.app.api.case_finance import router as case_finance_router
 from backend.app.api.reports import router as reports_router
 from backend.app.api.finance_commissions import router as finance_commissions_router
 from backend.app.api.ai import router as ai_router
+from backend.app.api.documents import router as documents_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -87,6 +88,7 @@ app.include_router(case_finance_router, prefix="/api/v1")
 app.include_router(reports_router, prefix="/api/v1")
 app.include_router(finance_commissions_router, prefix="/api/v1")
 app.include_router(ai_router, prefix="/api/v1")
+app.include_router(documents_router, prefix="/api/v1")
 
 @app.get("/api/v1/health", tags=["System"])
 async def health_check():

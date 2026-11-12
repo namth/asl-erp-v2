@@ -6,6 +6,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 # Chỉ cho development/test — không bao giờ dùng ở production.
 _DEV_DATA_KEY = "MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIzNDU2Nzg5MDE="
+_DEV_FILE_KEY = "MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIzNDU2Nzg5MDE="
 
 class StrUuidLoader(Loader):
     def load(self, data: memoryview | bytes) -> str:
@@ -53,14 +54,23 @@ class Settings(BaseSettings):
     GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
     AI_MODEL_NAME: str = os.getenv("AI_MODEL_NAME", "gemini-2.5-flash")
 
+    # Document Storage & Security (TASK-045)
+    NAS_STORAGE_MOUNT_PATH: str = os.getenv("NAS_STORAGE_MOUNT_PATH", "./.storage/documents")
+    FILE_ENCRYPTION_MASTER_KEY: str = os.getenv("FILE_ENCRYPTION_MASTER_KEY", "")
+    CLAMAV_HOST: str = os.getenv("CLAMAV_HOST", "127.0.0.1")
+    CLAMAV_PORT: int = int(os.getenv("CLAMAV_PORT", "3310"))
+    MAX_UPLOAD_SIZE_MB: int = int(os.getenv("MAX_UPLOAD_SIZE_MB", "50"))
+
     @model_validator(mode="after")
     def _require_data_key_outside_dev(self):
         if not self.DATA_ENCRYPTION_MASTER_KEY:
             if self.APP_ENV not in ("development", "test"):
                 raise ValueError("DATA_ENCRYPTION_MASTER_KEY bắt buộc ngoài môi trường development/test")
             self.DATA_ENCRYPTION_MASTER_KEY = _DEV_DATA_KEY
-        if not self.GEMINI_API_KEY and self.APP_ENV in ("development", "test"):
-            self.GEMINI_API_KEY = "dev-gemini-api-key"
+        if not self.FILE_ENCRYPTION_MASTER_KEY:
+            if self.APP_ENV not in ("development", "test"):
+                raise ValueError("FILE_ENCRYPTION_MASTER_KEY bắt buộc ngoài môi trường development/test")
+            self.FILE_ENCRYPTION_MASTER_KEY = _DEV_FILE_KEY
         return self
 
     model_config = SettingsConfigDict(
