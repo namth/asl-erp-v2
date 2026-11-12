@@ -126,7 +126,7 @@ Cột "Milestone" theo lộ trình `11`. Endpoint M1–M2 có đặc tả chi ti
 | Thông báo | `GET /notifications` · `POST /notifications/{id}/read` · `POST /notifications/read-all` · `WS /ws/notifications` · `POST /me/telegram/link` (§3.10) | mọi người | M5 |
 | Trợ lý AI | `POST /ai/chat` | mọi người, dữ liệu trong phạm vi | M5 |
 | Báo cáo | `GET /reports/revenue` · `GET /reports/commissions` · `GET /reports/operations` · `GET /reports/{name}/export` (§3.9) | theo `02` Phân hệ 10 | M5 |
-| Văn phòng số | `GET /operations/floorplan` · `WS /ws/floorplan/{dept_id}` | MANAGER | M6 |
+| Văn phòng số | `GET /operations/floorplan` · `WS /ws/operations/floorplan?department_id=` (§3.7) | MANAGER | M6 |
 | Cài đặt | `GET/PUT /settings/holidays` · `GET/PUT /settings/commission-defaults` | ADMIN | M3 |
 
 ---
@@ -525,6 +525,12 @@ Giám đốc chọn được mọi phòng; Trưởng phòng bỏ trống `depart
   }
 }
 ```
+
+#### `WS /ws/operations/floorplan?department_id={uuid}`
+Xác thực bằng cookie `access_token` như `/ws/notifications` (sai/thiếu → đóng mã `4401`); phạm vi phòng như GET (ngoài phạm vi → đóng `4403`). Mỗi tin là JSON `{"type", "payload"}`, phát qua Redis kênh `floorplan:{department_id}`:
+- `EVENT_TASK_STATUS_UPDATED` `{user_id, in_progress_count, todo_count}` — khi task của nhân sự trong phòng đổi trạng thái hoặc đổi người được giao.
+- `EVENT_APPROVAL_SUBMITTED` `{user_id, request: {id, subject_type, case_code, title, requested_at}}` — khi nhân sự gửi yêu cầu duyệt.
+- `EVENT_APPROVAL_DECIDED` `{user_id, request_id, status}` — khi yêu cầu được duyệt/từ chối/huỷ.
 
 ### 3.8. Tài liệu vụ việc (M5 — SCR-17, DEC-04)
 

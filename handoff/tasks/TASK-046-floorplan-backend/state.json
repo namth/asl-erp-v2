@@ -1,0 +1,13 @@
+{
+  "id": "TASK-046",
+  "title": "Backend Văn phòng số GET /operations/floorplan + WebSocket (TSK-15, SCR-15)",
+  "status": "draft",
+  "conversation_id": null,
+  "history": [
+    {
+      "at": "2026-11-12T18:57:52",
+      "status": "draft",
+      "note": "Claude tạo task"
+    }
+  ]
+}
