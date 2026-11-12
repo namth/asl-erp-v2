@@ -1,0 +1,2 @@
+b92fc9237cebeeaa20b43a4a72b000b6cf1a45a8fa7c33c87cbec5b45697d733  handoff/tasks/TASK-041-finance-commissions-ledger/verify.sh
+04220050dc3d2de9bf38dfea78cbd0a6c048fba898544696add1a17986964f25  backend/tests/test_finance_commissions_api.py

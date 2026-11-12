@@ -1,0 +1,17 @@
+{
+  "id": "TASK-041",
+  "title": "Backend sổ hoa hồng GET /finance/commissions (SCR-12)",
+  "status": "draft",
+  "conversation_id": null,
+  "history": [
+    {
+      "at": "2026-11-12T13:52:43",
+      "status": "draft",
+      "note": "Claude tạo task"
+    }
+  ],
+  "locked_files": [
+    "handoff/tasks/TASK-041-finance-commissions-ledger/verify.sh",
+    "backend/tests/test_finance_commissions_api.py"
+  ]
+}
