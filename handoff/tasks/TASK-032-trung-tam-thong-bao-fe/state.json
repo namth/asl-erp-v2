@@ -1,0 +1,63 @@
+{
+  "id": "TASK-032",
+  "title": "Trung tâm thông báo trên thanh đầu trang",
+  "status": "accepted",
+  "conversation_id": "11c47f48-ded1-48b7-a272-87d4a03f1bac",
+  "history": [
+    {
+      "at": "2026-11-11T21:27:17",
+      "status": "draft",
+      "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-11T21:27:48",
+      "status": "tests_assigned",
+      "note": "giao viết test chéo cho agy3"
+    },
+    {
+      "at": "2026-11-11T21:37:55",
+      "status": "tests_ready",
+      "note": "test chéo đã khoá (5 file), verify đỏ đúng chờ code"
+    },
+    {
+      "at": "2026-11-11T23:21:27",
+      "status": "assigned",
+      "note": "giao code qua agy cho agy2 (model mặc định)"
+    },
+    {
+      "at": "2026-11-11T23:21:41",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-12T07:14:44",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-12T07:20:34",
+      "status": "accepted",
+      "note": "Claude nghiệm thu"
+    }
+  ],
+  "agents": {
+    "coder": {
+      "account": "agy2",
+      "conversation_id": "11c47f48-ded1-48b7-a272-87d4a03f1bac"
+    },
+    "tester": {
+      "account": "agy3",
+      "conversation_id": "9973cad7-4264-4000-a7c7-3546457f8543"
+    }
+  },
+  "locked_files": [
+    "handoff/tasks/TASK-032-trung-tam-thong-bao-fe/verify.sh",
+    "frontend/tests/notifications/conventions.test.ts",
+    "frontend/tests/notifications/layout-bell.test.tsx",
+    "frontend/tests/notifications/notification-bell.test.tsx",
+    "frontend/tests/notifications/notifications-lib.test.ts",
+    "frontend/tests/notifications/use-notifications.test.ts",
+    "frontend/tests/no-test-hooks-in-src.test.ts"
+  ],
+  "via": "agy"
+}

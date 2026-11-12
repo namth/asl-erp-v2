@@ -1,0 +1,7 @@
+92ec3c85176ab302a11c5195050dee1c65f221355a982ae58d2beb1f9b463a30  handoff/tasks/TASK-032-trung-tam-thong-bao-fe/verify.sh
+9546ed6e3257925644d8004ccd2e42138725e9ec8365bdda7c0aa4e9b98a91f5  frontend/tests/notifications/conventions.test.ts
+8051bed150f7433bcd8b03ebd95e40f9cd29f82ea51db70450e38a019890127c  frontend/tests/notifications/layout-bell.test.tsx
+a3b6fe30821c1661c2a09e44725355d4b777d196c4c4a3ec2468369fdcb48c3c  frontend/tests/notifications/notification-bell.test.tsx
+c789b0392814b7998f60ff122aea85dd3eaa5b644d5d36426bcf31fba59f9f6f  frontend/tests/notifications/notifications-lib.test.ts
+88883a7d9cc04c0adf5d2897f47443677b73e3624644496b277f043007567a1a  frontend/tests/notifications/use-notifications.test.ts
+4de2cc9e0bff8c0d572133d5338bffceea7e531e30e3ef045ed21d6fc1111d3d  frontend/tests/no-test-hooks-in-src.test.ts
