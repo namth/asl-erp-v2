@@ -1,0 +1,13 @@
+{
+  "id": "TASK-048",
+  "title": "Xuất Excel sổ hoa hồng GET /finance/commissions/export (SCR-12)",
+  "status": "draft",
+  "conversation_id": null,
+  "history": [
+    {
+      "at": "2026-11-12T19:06:32",
+      "status": "draft",
+      "note": "Claude tạo task"
+    }
+  ]
+}
