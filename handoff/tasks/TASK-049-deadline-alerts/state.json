@@ -1,0 +1,13 @@
+{
+  "id": "TASK-049",
+  "title": "Quét hạn task theo giờ làm việc, leo thang 2 cấp, gửi Telegram/Zalo không lộ PII (TSK-21)",
+  "status": "draft",
+  "conversation_id": null,
+  "history": [
+    {
+      "at": "2026-11-12T19:07:38",
+      "status": "draft",
+      "note": "Claude tạo task"
+    }
+  ]
+}

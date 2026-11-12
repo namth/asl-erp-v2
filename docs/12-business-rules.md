@@ -186,8 +186,9 @@ Dữ liệu chuyển từ hệ thống cũ nhập nguyên số đã ghi nhận, 
 
 ### 4.2. Hạn chót & leo thang (SLA)
 - Hạn task tính theo **ngày làm việc** (thứ Hai–Sáu, trừ ngày trong bảng `holidays`, gồm Tết âm lịch).
+- **Giờ làm việc:** 08:00–12:00 và 13:00–17:00 giờ Việt Nam (8 giờ/ngày). "Giờ làm việc" trong các ngưỡng dưới đây đếm theo khung này.
 - Còn ≤ 24 giờ làm việc mà task ở `TODO`/`IN_PROGRESS`: cảnh báo cấp 1 tới người thực hiện.
-- Quá hạn > 4 giờ: cảnh báo cấp 2 tới `CASE_MANAGER` và `SUPERVISOR` của vụ việc.
+- Quá hạn > 4 giờ làm việc: cảnh báo cấp 2 tới `CASE_MANAGER` và `SUPERVISOR` của vụ việc.
 - Mỗi (task, cấp, kênh) gửi **tối đa một lần** (`notification_deliveries.dedupe_key`). Vụ việc `PAUSED` không cảnh báo.
 
 ### 4.3. Tin nhắn ra dịch vụ ngoài (DEC-03)
