@@ -1,3 +1,3 @@
 8bb4f050957b1e5f0309485f591819dbfce343c33d142243e57e28ae4cc356b2  handoff/tasks/TASK-050-ai-chat-stream/verify.sh
-d0da02fe4a4c04ba0ceba50b9e40c1d5afc9b8ab1a14fa7c5d32b37236563e72  backend/tests/test_ai_stream.py
+d5ac4b2a9c2d52e78960261041572c6cd0d6b449bd73e9d630e0222b312caf14  backend/tests/test_ai_stream.py
 8bb4f050957b1e5f0309485f591819dbfce343c33d142243e57e28ae4cc356b2  handoff/tasks/TASK-050-ai-chat-stream/verify.sh
