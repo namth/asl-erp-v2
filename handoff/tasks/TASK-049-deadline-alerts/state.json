@@ -1,13 +1,69 @@
 {
   "id": "TASK-049",
   "title": "Quét hạn task theo giờ làm việc, leo thang 2 cấp, gửi Telegram/Zalo không lộ PII (TSK-21)",
-  "status": "draft",
-  "conversation_id": null,
+  "status": "accepted",
+  "conversation_id": "46f287cd-3f86-4dfb-a689-8cc9b8d9f4c5",
   "history": [
     {
       "at": "2026-11-12T19:07:38",
       "status": "draft",
       "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-12T19:34:59",
+      "status": "tests_assigned",
+      "note": "giao viết test chéo cho agy3"
+    },
+    {
+      "at": "2026-11-12T20:00:10",
+      "status": "tests_ready",
+      "note": "test chéo đã khoá (1 file), verify đỏ đúng chờ code"
+    },
+    {
+      "at": "2026-11-12T20:01:08",
+      "status": "assigned",
+      "note": "giao code qua agy cho agy2 (gemini-3.8-flash-high)"
+    },
+    {
+      "at": "2026-11-12T20:01:25",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-12T23:50:11",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-12T23:50:33",
+      "status": "in_review",
+      "note": "giao nghiệm thu chéo cho agy3"
+    },
+    {
+      "at": "2026-11-13T02:36:48",
+      "status": "accepted",
+      "note": "Claude nghiệm thu"
     }
-  ]
+  ],
+  "agents": {
+    "coder": {
+      "account": "agy2",
+      "conversation_id": "46f287cd-3f86-4dfb-a689-8cc9b8d9f4c5"
+    },
+    "tester": {
+      "account": "agy3",
+      "conversation_id": "eded4d79-d911-4891-8ee4-4d4a2c19713d"
+    },
+    "reviewer": {
+      "account": "agy3",
+      "conversation_id": "57c18728-0eb9-49b6-b015-9027d4a6be30"
+    }
+  },
+  "locked_files": [
+    "handoff/tasks/TASK-049-deadline-alerts/verify.sh",
+    "backend/tests/test_deadline_alerts.py",
+    "handoff/tasks/TASK-049-deadline-alerts/verify.sh"
+  ],
+  "via": "agy",
+  "review_fingerprint": "bed0035a0c825a55ad8960d7da0e0525dd266b26b551263f9f3f09298edaf59f"
 }
