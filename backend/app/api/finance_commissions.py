@@ -2,39 +2,30 @@ from __future__ import annotations
 
 import asyncio
 import datetime as dt
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 import uuid
 
-from fastapi import APIRouter, Depends, Query, status
+from fastapi import APIRouter, Depends, Query, Response, status
 
 from backend.app.core.errors import AppException
 from backend.app.core.security import get_current_user
 from backend.app.services.commission_ledger import ROLES, get_commission_ledger_sync
+from backend.app.services.commission_ledger_export import export_commission_ledger_sync
+from backend.app.services.report_export import content_disposition
 
 router = APIRouter(prefix="/finance/commissions", tags=["Finance"])
 
 ALLOWED_ROLES = set(ROLES)
+XLSX_MIME = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 
 
-@router.get("", status_code=status.HTTP_200_OK)
-async def get_commissions_ledger_endpoint(
-    case_id: Optional[str] = Query(None),
-    user_id: Optional[str] = Query(None),
-    role_type: Optional[str] = Query(None),
-    payout_status: Optional[str] = Query(None),
-    from_date: Optional[str] = Query(None, alias="from"),
-    to_date: Optional[str] = Query(None, alias="to"),
-    page: Any = Query(1),
-    limit: Any = Query(20),
-    current_user: Dict[str, Any] = Depends(get_current_user),
-):
-    """Sổ hoa hồng (SCR-12 / M4).
-
-    Thứ tự kiểm tra:
-    1. Xác thực (401 - qua get_current_user)
-    2. Tham số (422 VALIDATION_ERROR kèm details.fields)
-    3. Vai trò (403 FORBIDDEN_ROLE)
-    """
+def validate_filter_params(
+    case_id: Optional[str],
+    user_id: Optional[str],
+    role_type: Optional[str],
+    from_date: Optional[str],
+    to_date: Optional[str],
+) -> Tuple[List[Dict[str, str]], Optional[str], Optional[str], Optional[dt.date], Optional[dt.date]]:
     fields: List[Dict[str, str]] = []
 
     # 1. Kiểm tra định dạng from_date
@@ -84,6 +75,103 @@ async def get_commissions_ledger_endpoint(
     if role_type is not None and role_type not in ALLOWED_ROLES:
         fields.append({"field": "role_type", "message": f"Tham số 'role_type' không hợp lệ, phải thuộc {sorted(ALLOWED_ROLES)}"})
 
+    return fields, parsed_case_id, parsed_user_id, parsed_from, parsed_to
+
+
+def check_user_role(current_user: Dict[str, Any]) -> None:
+    system_role = current_user.get("system_role")
+    if system_role == "ADMIN":
+        raise AppException(403, "FORBIDDEN_ROLE", "Quản trị viên không có quyền truy cập sổ hoa hồng")
+    if system_role not in ("ACCOUNTANT", "MANAGER", "ATTORNEY"):
+        raise AppException(403, "FORBIDDEN_ROLE", "Vai trò không có quyền truy cập sổ hoa hồng")
+
+
+@router.get("/export", status_code=status.HTTP_200_OK)
+async def export_commissions_ledger_endpoint(
+    case_id: Optional[str] = Query(None),
+    user_id: Optional[str] = Query(None),
+    role_type: Optional[str] = Query(None),
+    payout_status: Optional[str] = Query(None),
+    from_date: Optional[str] = Query(None, alias="from"),
+    to_date: Optional[str] = Query(None, alias="to"),
+    current_user: Dict[str, Any] = Depends(get_current_user),
+):
+    """Xuất Excel sổ hoa hồng (SCR-12 / TASK-048).
+
+    Thứ tự kiểm tra:
+    1. Xác thực (401 - qua get_current_user)
+    2. Tham số (422 VALIDATION_ERROR kèm details.fields)
+    3. Vai trò (403 FORBIDDEN_ROLE)
+    """
+    fields, parsed_case_id, parsed_user_id, parsed_from, parsed_to = validate_filter_params(
+        case_id=case_id,
+        user_id=user_id,
+        role_type=role_type,
+        from_date=from_date,
+        to_date=to_date,
+    )
+
+    if fields:
+        raise AppException(
+            status_code=422,
+            code="VALIDATION_ERROR",
+            message="Dữ liệu đầu vào không hợp lệ",
+            details={"fields": fields},
+        )
+
+    check_user_role(current_user)
+
+    xlsx_bytes = await asyncio.to_thread(
+        export_commission_ledger_sync,
+        current_user=current_user,
+        case_id=parsed_case_id,
+        user_id=parsed_user_id,
+        role_type=role_type,
+        from_date=parsed_from,
+        to_date=parsed_to,
+    )
+
+    from_part = parsed_from.isoformat() if parsed_from else "tat-ca"
+    to_part = parsed_to.isoformat() if parsed_to else "tat-ca"
+    filename = f"so-hoa-hong-{from_part}-{to_part}.xlsx"
+
+    return Response(
+        content=xlsx_bytes,
+        media_type=XLSX_MIME,
+        headers={
+            "Content-Type": XLSX_MIME,
+            "Content-Disposition": content_disposition(filename),
+        },
+    )
+
+
+@router.get("", status_code=status.HTTP_200_OK)
+async def get_commissions_ledger_endpoint(
+    case_id: Optional[str] = Query(None),
+    user_id: Optional[str] = Query(None),
+    role_type: Optional[str] = Query(None),
+    payout_status: Optional[str] = Query(None),
+    from_date: Optional[str] = Query(None, alias="from"),
+    to_date: Optional[str] = Query(None, alias="to"),
+    page: Any = Query(1),
+    limit: Any = Query(20),
+    current_user: Dict[str, Any] = Depends(get_current_user),
+):
+    """Sổ hoa hồng (SCR-12 / M4).
+
+    Thứ tự kiểm tra:
+    1. Xác thực (401 - qua get_current_user)
+    2. Tham số (422 VALIDATION_ERROR kèm details.fields)
+    3. Vai trò (403 FORBIDDEN_ROLE)
+    """
+    fields, parsed_case_id, parsed_user_id, parsed_from, parsed_to = validate_filter_params(
+        case_id=case_id,
+        user_id=user_id,
+        role_type=role_type,
+        from_date=from_date,
+        to_date=to_date,
+    )
+
     # 7. Kiểm tra page
     page_int = 1
     try:
@@ -111,12 +199,7 @@ async def get_commissions_ledger_endpoint(
             details={"fields": fields},
         )
 
-    # Kiểm tra vai trò
-    system_role = current_user.get("system_role")
-    if system_role == "ADMIN":
-        raise AppException(403, "FORBIDDEN_ROLE", "Quản trị viên không có quyền truy cập sổ hoa hồng")
-    if system_role not in ("ACCOUNTANT", "MANAGER", "ATTORNEY"):
-        raise AppException(403, "FORBIDDEN_ROLE", "Vai trò không có quyền truy cập sổ hoa hồng")
+    check_user_role(current_user)
 
     return await asyncio.to_thread(
         get_commission_ledger_sync,

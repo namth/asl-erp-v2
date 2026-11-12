@@ -3,7 +3,7 @@ from __future__ import annotations
 import datetime as dt
 import math
 from decimal import Decimal
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 import psycopg
 from psycopg.rows import dict_row
@@ -12,6 +12,66 @@ from backend.app.core.config import settings
 from backend.app.services.payments import format_money
 
 ROLES = ("ORIGINATOR", "SUPERVISOR", "CASE_MANAGER", "EXECUTOR", "ASSISTANT")
+
+
+def build_commission_ledger_where(
+    cur: Any,
+    current_user: Dict[str, Any],
+    case_id: Optional[str] = None,
+    user_id: Optional[str] = None,
+    role_type: Optional[str] = None,
+    from_date: Optional[dt.date] = None,
+    to_date: Optional[dt.date] = None,
+) -> Tuple[str, Dict[str, Any], bool]:
+    system_role = current_user.get("system_role")
+    is_executive = bool(current_user.get("is_executive", False))
+    me = str(current_user["id"])
+
+    where_clauses = ["1=1"]
+    params: Dict[str, Any] = {}
+
+    if system_role == "ATTORNEY":
+        where_clauses.append("ct.user_id = %(me)s")
+        params["me"] = me
+    elif system_role == "MANAGER" and not is_executive:
+        cur.execute(
+            "SELECT department_id FROM department_leaders WHERE user_id = %s",
+            (me,)
+        )
+        dept_rows = cur.fetchall()
+        if not dept_rows:
+            return "1=0", params, True
+        led_dept_ids = [str(r["department_id"]) for r in dept_rows]
+        where_clauses.append("u.department_id = ANY(%(led_dept_ids)s)")
+        params["led_dept_ids"] = led_dept_ids
+        if user_id:
+            where_clauses.append("ct.user_id = %(user_id)s")
+            params["user_id"] = user_id
+    else:
+        # ACCOUNTANT hoặc MANAGER có is_executive -> toàn hãng
+        if user_id:
+            where_clauses.append("ct.user_id = %(user_id)s")
+            params["user_id"] = user_id
+
+    # 2. Bộ lọc dữ liệu
+    if case_id:
+        where_clauses.append("ct.case_id = %(case_id)s")
+        params["case_id"] = case_id
+
+    if role_type:
+        where_clauses.append("ct.role_type = %(role_type)s")
+        params["role_type"] = role_type
+
+    if from_date is not None:
+        where_clauses.append("(ct.created_at AT TIME ZONE 'Asia/Ho_Chi_Minh')::date >= %(from_date)s")
+        params["from_date"] = from_date
+
+    if to_date is not None:
+        where_clauses.append("(ct.created_at AT TIME ZONE 'Asia/Ho_Chi_Minh')::date <= %(to_date)s")
+        params["to_date"] = to_date
+
+    where_sql = " AND ".join(where_clauses)
+    return where_sql, params, False
 
 
 def get_commission_ledger_sync(
@@ -26,71 +86,33 @@ def get_commission_ledger_sync(
     *args: Any,
     **kwargs: Any,  # DEC-09: payout_status bị bỏ qua trong logic
 ) -> Dict[str, Any]:
-    system_role = current_user.get("system_role")
-    is_executive = bool(current_user.get("is_executive", False))
-    me = str(current_user["id"])
-
     with psycopg.connect(settings.DATABASE_SYNC_URL) as conn:
         with conn.cursor(row_factory=dict_row) as cur:
-            # 1. Xác định phạm vi người dùng theo DEC-04
-            where_clauses = ["1=1"]
-            params: Dict[str, Any] = {}
-
-            if system_role == "ATTORNEY":
-                where_clauses.append("ct.user_id = %(me)s")
-                params["me"] = me
-            elif system_role == "MANAGER" and not is_executive:
-                cur.execute(
-                    "SELECT department_id FROM department_leaders WHERE user_id = %s",
-                    (me,)
-                )
-                dept_rows = cur.fetchall()
-                if not dept_rows:
-                    # Quản lý chưa phụ trách phòng ban nào -> kết quả rỗng
-                    return {
-                        "success": True,
-                        "data": [],
-                        "meta": {
-                            "page": page,
-                            "limit": limit,
-                            "total_records": 0,
-                            "total_pages": 0,
-                            "summary": {
-                                "total_amount": "0",
-                                "by_role": {r: "0" for r in ROLES},
-                            },
+            where_sql, params, is_empty = build_commission_ledger_where(
+                cur=cur,
+                current_user=current_user,
+                case_id=case_id,
+                user_id=user_id,
+                role_type=role_type,
+                from_date=from_date,
+                to_date=to_date,
+            )
+            if is_empty:
+                # Quản lý chưa phụ trách phòng ban nào -> kết quả rỗng
+                return {
+                    "success": True,
+                    "data": [],
+                    "meta": {
+                        "page": page,
+                        "limit": limit,
+                        "total_records": 0,
+                        "total_pages": 0,
+                        "summary": {
+                            "total_amount": "0",
+                            "by_role": {r: "0" for r in ROLES},
                         },
-                    }
-                led_dept_ids = [str(r["department_id"]) for r in dept_rows]
-                where_clauses.append("u.department_id = ANY(%(led_dept_ids)s)")
-                params["led_dept_ids"] = led_dept_ids
-                if user_id:
-                    where_clauses.append("ct.user_id = %(user_id)s")
-                    params["user_id"] = user_id
-            else:
-                # ACCOUNTANT hoặc MANAGER có is_executive -> toàn hãng
-                if user_id:
-                    where_clauses.append("ct.user_id = %(user_id)s")
-                    params["user_id"] = user_id
-
-            # 2. Bộ lọc dữ liệu
-            if case_id:
-                where_clauses.append("ct.case_id = %(case_id)s")
-                params["case_id"] = case_id
-
-            if role_type:
-                where_clauses.append("ct.role_type = %(role_type)s")
-                params["role_type"] = role_type
-
-            if from_date is not None:
-                where_clauses.append("(ct.created_at AT TIME ZONE 'Asia/Ho_Chi_Minh')::date >= %(from_date)s")
-                params["from_date"] = from_date
-
-            if to_date is not None:
-                where_clauses.append("(ct.created_at AT TIME ZONE 'Asia/Ho_Chi_Minh')::date <= %(to_date)s")
-                params["to_date"] = to_date
-
-            where_sql = " AND ".join(where_clauses)
+                    },
+                }
 
             # 3. Đếm tổng số bản ghi
             count_query = f"""

@@ -212,16 +212,14 @@ async def test_export_so_le_va_tat_ca_khong_loc_ngay():
     wb = load_workbook(io.BytesIO(res.content))
     ws = wb["Sổ hoa hồng"]
 
-    # Case c2 có 2 giao dịch: 333333 và 5000000
-    # Dòng 2 và dòng 3
-    amt1 = ws.cell(row=2, column=9).value
-    amt2 = ws.cell(row=3, column=9).value
-    assert sorted([amt1, amt2]) == [333333, 5000000]
-    assert isinstance(amt1, int) and isinstance(amt2, int)
+    # Không lọc ngày → c2 có 3 giao dịch: 333333, 5000000 (quý 1) và 1000000 (31/12 năm trước)
+    amts = [ws.cell(row=r, column=9).value for r in (2, 3, 4)]
+    assert sorted(amts) == [333333, 1000000, 5000000]
+    assert all(isinstance(a, int) for a in amts)
 
-    # Dòng 4 là dòng tổng cộng
-    total_val = ws.cell(row=4, column=9).value
-    assert total_val == 5333333, f"Tổng cộng số lẻ phải khớp từng đồng 5333333, nhận được {total_val}"
+    # Dòng 5 là dòng tổng cộng
+    total_val = ws.cell(row=5, column=9).value
+    assert total_val == 6333333, f"Tổng cộng số lẻ phải khớp từng đồng 6333333, nhận được {total_val}"
     assert isinstance(total_val, int)
 
 
@@ -344,11 +342,13 @@ async def test_chong_formula_injection_excel():
     formula_task = f"=cmd|' /C calc'!A0_{tag}"
 
     with db_conn() as conn:
-        u_hacker = _user(conn, "ATTORNEY", formula_name, W["dA"])
+        # Phòng riêng để không làm lệch phạm vi phòng A của test sổ hoa hồng chạy cùng phiên.
+        d_own = create_test_department(conn, name=f"Phòng chống công thức {tag}")
+        u_hacker = _user(conn, "ATTORNEY", formula_name, d_own)
         # Vụ riêng để không làm lệch số đếm theo c1 của test sổ hoa hồng chạy cùng phiên.
         cl = create_test_client(conn)
-        mt = create_test_matter_type(conn, W["dA"]["id"], name=f"Chống công thức {tag}")
-        own_case = create_test_case(conn, cl["id"], mt["id"], W["dA"]["id"], created_by=W["exe"]["id"])
+        mt = create_test_matter_type(conn, d_own["id"], name=f"Chống công thức {tag}")
+        own_case = create_test_case(conn, cl["id"], mt["id"], d_own["id"], created_by=W["exe"]["id"])
         sid = _stage(conn, own_case["id"], 1, "GĐ Test", "ACTIVE")
         # Tạo task có tiêu đề độc hại
         tid = str(uuid.uuid4())
