@@ -1,13 +1,74 @@
 {
   "id": "TASK-046",
   "title": "Backend Văn phòng số GET /operations/floorplan + WebSocket (TSK-15, SCR-15)",
-  "status": "draft",
-  "conversation_id": null,
+  "status": "accepted",
+  "conversation_id": "7dcf3559-4ae0-4ffc-a81c-71c59b8c37cb",
   "history": [
     {
       "at": "2026-11-12T18:57:52",
       "status": "draft",
       "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-12T19:02:01",
+      "status": "tests_assigned",
+      "note": "giao viết test chéo cho agy3"
+    },
+    {
+      "at": "2026-11-12T19:40:13",
+      "status": "tests_ready",
+      "note": "test chéo đã khoá (1 file), verify đỏ đúng chờ code"
+    },
+    {
+      "at": "2026-11-12T19:40:47",
+      "status": "assigned",
+      "note": "giao code qua agy cho agy2 (model mặc định)"
+    },
+    {
+      "at": "2026-11-12T19:40:57",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-12T23:52:11",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-13T00:51:49",
+      "status": "in_review",
+      "note": "giao nghiệm thu chéo cho agy3"
+    },
+    {
+      "at": "2026-11-13T01:43:03",
+      "status": "review_passed",
+      "note": "nghiệm thu chéo đạt bởi agy3 — chờ trưởng phòng (HIGH/nhạy cảm)"
+    },
+    {
+      "at": "2026-11-13T02:05:38",
+      "status": "accepted",
+      "note": "Claude nghiệm thu"
     }
-  ]
+  ],
+  "agents": {
+    "coder": {
+      "account": "agy2",
+      "conversation_id": "7dcf3559-4ae0-4ffc-a81c-71c59b8c37cb"
+    },
+    "tester": {
+      "account": "agy3",
+      "conversation_id": "c5642a32-6461-48a9-b773-e4f84dbdb374"
+    },
+    "reviewer": {
+      "account": "agy3",
+      "conversation_id": "e82fd66b-bd58-48db-89ae-a937b5028932"
+    }
+  },
+  "locked_files": [
+    "handoff/tasks/TASK-046-floorplan-backend/verify.sh",
+    "backend/tests/test_floorplan.py",
+    "handoff/tasks/TASK-046-floorplan-backend/verify.sh"
+  ],
+  "via": "agy",
+  "review_fingerprint": "adf7f591a2bed40b0ace75412d1998f21867972116df3f2d1fbcb6bfda92b820"
 }

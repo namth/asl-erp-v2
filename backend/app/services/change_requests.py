@@ -6,6 +6,7 @@ from sqlalchemy import text
 from backend.app.core.errors import AppException
 from backend.app.db.postgres import engine
 from backend.app.services.cases import check_case_access
+from backend.app.services.floorplan import notify_approval_submitted
 
 async def list_change_requests(case_id: str, current_user: Dict[str, Any]) -> List[Dict[str, Any]]:
     await check_case_access(current_user["id"], case_id, "professional")
@@ -86,6 +87,8 @@ async def create_change_request(
             "uid": user_uuid,
             "aid": appr_id
         })
+
+    await notify_approval_submitted(appr_id)
 
     return {
         "id": str(cr_id),
