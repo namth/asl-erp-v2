@@ -1,0 +1,4 @@
+b3befca4d87fea45450985be49093402c88bea67004a2d7689bacd2695f5596b  handoff/tasks/TASK-014-nguoi-dung-phong-ban-tsk18/verify.sh
+7ceeeccdb8490f67cb2dc9784ac1914001d694f91ad6c17c0c049b655b2bfd6e  backend/tests/test_users_departments.py
+ad0751599a422ecf49ad937a2fac53369ce3a345e0d90e7edd3982de80a05e2f  backend/tests/test_graph_sync.py
+19db9d56c8b6042f62a70f89c884af4e6f5c46010e2349a5840bca1a7c520e89  backend/tests/test_no_test_hooks_in_app.py

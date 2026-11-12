@@ -25,6 +25,8 @@ from backend.app.api.approvals import router as approvals_router
 from backend.app.api.me import router as me_router
 from backend.app.api.workflows import router as workflows_router
 from backend.app.api.settings_holidays import router as settings_holidays_router
+from backend.app.api.users import router as users_router
+from backend.app.api.departments import router as departments_router
 from backend.app.api.crm_opportunities import router as crm_opportunities_router
 from backend.app.api.audit_logs import router as audit_logs_router
 
@@ -65,6 +67,8 @@ app.include_router(approvals_router, prefix="/api/v1")
 app.include_router(me_router, prefix="/api/v1")
 app.include_router(workflows_router, prefix="/api/v1")
 app.include_router(settings_holidays_router, prefix="/api/v1")
+app.include_router(users_router, prefix="/api/v1")
+app.include_router(departments_router, prefix="/api/v1")
 app.include_router(crm_opportunities_router, prefix="/api/v1")
 app.include_router(audit_logs_router, prefix="/api/v1")
 

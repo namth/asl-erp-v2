@@ -1,0 +1,75 @@
+{
+  "id": "TASK-014",
+  "title": "Người dùng, phòng ban & đồng bộ đồ thị (TSK-18)",
+  "status": "accepted",
+  "conversation_id": "7825f9ae-dc33-4caa-9cee-249a23109c49",
+  "history": [
+    {
+      "at": "2026-11-11T12:29:42",
+      "status": "draft",
+      "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-11T12:29:50",
+      "status": "tests_assigned",
+      "note": "giao viết test chéo cho agy2"
+    },
+    {
+      "at": "2026-11-11T12:41:11",
+      "status": "tests_ready",
+      "note": "test chéo đã khoá (2 file), verify đỏ đúng chờ code"
+    },
+    {
+      "at": "2026-11-11T12:49:09",
+      "status": "assigned",
+      "note": "giao code qua agy cho agy1 (gemini-3.8-flash-high)"
+    },
+    {
+      "at": "2026-11-11T12:50:42",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-12T00:16:21",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-12T00:41:30",
+      "status": "changes_requested",
+      "note": "Claude yêu cầu sửa"
+    },
+    {
+      "at": "2026-11-12T00:42:04",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-12T07:12:08",
+      "status": "submitted",
+      "note": "Claude sửa test LEADS (lỗi Cypher của test), nộp thay để nghiệm thu"
+    },
+    {
+      "at": "2026-11-12T08:28:22",
+      "status": "accepted",
+      "note": "Claude nghiệm thu"
+    }
+  ],
+  "agents": {
+    "coder": {
+      "account": "agy1",
+      "conversation_id": "7825f9ae-dc33-4caa-9cee-249a23109c49"
+    },
+    "tester": {
+      "account": "agy2",
+      "conversation_id": "030fa63c-1d2e-4376-9517-60d47ba533cf"
+    }
+  },
+  "locked_files": [
+    "handoff/tasks/TASK-014-nguoi-dung-phong-ban-tsk18/verify.sh",
+    "backend/tests/test_users_departments.py",
+    "backend/tests/test_graph_sync.py",
+    "backend/tests/test_no_test_hooks_in_app.py"
+  ],
+  "via": "agy"
+}
