@@ -29,6 +29,10 @@ from backend.app.api.users import router as users_router
 from backend.app.api.departments import router as departments_router
 from backend.app.api.crm_opportunities import router as crm_opportunities_router
 from backend.app.api.audit_logs import router as audit_logs_router
+from backend.app.api.notifications import (
+    router as notifications_router,
+    ws_router as notifications_ws_router,
+)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -71,6 +75,8 @@ app.include_router(users_router, prefix="/api/v1")
 app.include_router(departments_router, prefix="/api/v1")
 app.include_router(crm_opportunities_router, prefix="/api/v1")
 app.include_router(audit_logs_router, prefix="/api/v1")
+app.include_router(notifications_router, prefix="/api/v1")
+app.include_router(notifications_ws_router)
 
 @app.get("/api/v1/health", tags=["System"])
 async def health_check():

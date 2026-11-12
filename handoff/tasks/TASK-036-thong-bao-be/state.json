@@ -1,18 +1,49 @@
 {
   "id": "TASK-036",
   "title": "Backend trung tâm thông báo web: danh sách, đã đọc, WebSocket (TSK-21 phần web)",
-  "status": "draft",
-  "conversation_id": null,
+  "status": "accepted",
+  "conversation_id": "ea637fbd-58df-4a8e-a186-340d0059a873",
   "history": [
     {
       "at": "2026-11-12T07:39:52",
       "status": "draft",
       "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-12T07:43:34",
+      "status": "assigned",
+      "note": "giao code qua agy cho agy1 (gemini-3.8-flash-high)"
+    },
+    {
+      "at": "2026-11-12T07:56:11",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-12T08:01:46",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-12T08:32:12",
+      "status": "accepted",
+      "note": "Claude nghiệm thu"
     }
   ],
   "locked_files": [
     "handoff/tasks/TASK-036-thong-bao-be/verify.sh",
     "backend/tests/test_notifications_api.py",
     "backend/tests/test_no_test_hooks_in_app.py"
-  ]
+  ],
+  "agents": {
+    "tester": {
+      "account": null,
+      "conversation_id": null
+    },
+    "coder": {
+      "account": "agy1",
+      "conversation_id": "ea637fbd-58df-4a8e-a186-340d0059a873"
+    }
+  },
+  "via": "agy"
 }
