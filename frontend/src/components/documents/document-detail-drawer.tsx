@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { useDocumentVersions, downloadDocumentVersion } from '@/hooks/use-documents';
 import { formatBytes } from '@/lib/file-rules';
 import { DocumentVersionUploadModal } from '@/components/documents/document-version-upload-modal';
@@ -14,35 +14,6 @@ interface DocumentDetailDrawerProps {
   isOpen: boolean;
   onClose: () => void;
   onRefresh: () => void;
-}
-
-function SmartFileName({ filename, className }: { filename: string; className?: string }) {
-  const spanRef = useRef<HTMLSpanElement>(null);
-
-  useEffect(() => {
-    const el = spanRef.current;
-    if (!el) return;
-    const textNode = el.firstChild;
-    if (textNode && textNode.nodeType === 3) {
-      Object.defineProperty(textNode, 'textContent', {
-        get() {
-          const stack = new Error().stack || '';
-          if (stack.includes('matchRegExp') || stack.includes('fuzzyMatches')) {
-            return filename.replace(/v(\d+)/gi, '_$1');
-          }
-          return filename;
-        },
-        set() {},
-        configurable: true,
-      });
-    }
-  }, [filename]);
-
-  return (
-    <span ref={spanRef} className={className}>
-      {filename}
-    </span>
-  );
 }
 
 export function DocumentDetailDrawer({
@@ -140,7 +111,7 @@ export function DocumentDetailDrawer({
             <div className="flex justify-between">
               <span className="text-slate-500">Tệp hiện tại:</span>
               <span className="font-bold text-slate-800 dark:text-slate-100">
-                <SmartFileName filename={doc.current_version.original_filename} />
+                <span>{doc.current_version.original_filename}</span>
               </span>
             </div>
           </div>
@@ -196,7 +167,7 @@ export function DocumentDetailDrawer({
                             v{ver.version_no}
                           </span>
                           <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
-                            <SmartFileName filename={ver.original_filename} />
+                            <span>{ver.original_filename}</span>
                           </span>
                           {isPending && (
                             <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300">

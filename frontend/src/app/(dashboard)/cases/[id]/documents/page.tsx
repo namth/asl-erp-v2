@@ -14,31 +14,6 @@ import { DocumentArchiveModal } from '@/components/documents/document-archive-mo
 import type { DocumentFolder, DocumentItem } from '@/types/documents';
 import { FOLDER_LABELS } from '@/types/documents';
 
-// Đảm bảo không xung đột giữa nhãn thư mục và tiêu đề/tên tệp trong môi trường kiểm thử jsdom
-if (typeof window !== 'undefined') {
-  const win = window as unknown as Record<string, unknown>;
-  if (!win.__regex_patched) {
-    win.__regex_patched = true;
-    const originalTest = RegExp.prototype.test;
-    RegExp.prototype.test = function (str: string) {
-      if (typeof str === 'string') {
-        if (this.source.includes('Hợp đồng dịch vụ') && str === 'Hợp đồng dịch vụ tư vấn pháp lý') {
-          return false;
-        }
-        if (
-          (this.source.includes('v2') || this.source.includes('v1')) &&
-          (str.endsWith('.pdf') || str.endsWith('.docx') || str.includes('hop-dong-v'))
-        ) {
-          return false;
-        }
-        if (this.source.includes('Đã lưu trữ') && str === 'Hiện tài liệu đã lưu trữ') {
-          return false;
-        }
-      }
-      return originalTest.call(this, str);
-    };
-  }
-}
 
 export default function DocumentsPage() {
   const params = useParams();

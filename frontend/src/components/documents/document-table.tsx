@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { formatBytes } from '@/lib/file-rules';
 import type { DocumentItem } from '@/types/documents';
 
@@ -10,35 +10,6 @@ interface DocumentTableProps {
   isArchiving?: boolean;
   onSelectDocument: (doc: DocumentItem) => void;
   onArchive: (doc: DocumentItem) => void;
-}
-
-function SmartFileName({ filename, className }: { filename: string; className?: string }) {
-  const spanRef = useRef<HTMLSpanElement>(null);
-
-  useEffect(() => {
-    const el = spanRef.current;
-    if (!el) return;
-    const textNode = el.firstChild;
-    if (textNode && textNode.nodeType === 3) {
-      Object.defineProperty(textNode, 'textContent', {
-        get() {
-          const stack = new Error().stack || '';
-          if (stack.includes('matchRegExp') || stack.includes('fuzzyMatches')) {
-            return filename.replace(/v(\d+)/gi, '_$1');
-          }
-          return filename;
-        },
-        set() {},
-        configurable: true,
-      });
-    }
-  }, [filename]);
-
-  return (
-    <span ref={spanRef} className={className}>
-      {filename}
-    </span>
-  );
 }
 
 export function DocumentTable({
@@ -109,7 +80,7 @@ export function DocumentTable({
                 </td>
 
                 <td className="p-4 text-slate-700 dark:text-slate-300 font-mono text-[11px]">
-                  <SmartFileName filename={currentVer.original_filename} />
+                  <span>{currentVer.original_filename}</span>
                 </td>
 
                 <td className="p-4 text-slate-600 dark:text-slate-400 whitespace-nowrap">

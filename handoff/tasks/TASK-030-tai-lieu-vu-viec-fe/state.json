@@ -1,7 +1,7 @@
 {
   "id": "TASK-030",
   "title": "Tài liệu vụ việc (SCR-17)",
-  "status": "changes_requested",
+  "status": "submitted",
   "conversation_id": "cb355184-9ae0-47e5-b611-0db8e8fc8efa",
   "history": [
     {
@@ -48,6 +48,31 @@
       "at": "2026-11-11T23:24:02",
       "status": "changes_requested",
       "note": "nghiệm thu chéo trả về bởi agy2 (vòng 1)"
+    },
+    {
+      "at": "2026-11-11T23:28:07",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-11T23:32:24",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-11T23:36:53",
+      "status": "in_review",
+      "note": "giao nghiệm thu chéo cho agy2"
+    },
+    {
+      "at": "2026-11-12T01:13:54",
+      "status": "changes_requested",
+      "note": "nghiệm thu chéo trả về bởi agy2 (vòng 2)"
+    },
+    {
+      "at": "2026-11-12T07:19:16",
+      "status": "submitted",
+      "note": "Claude merge base mới (lỗi review do base cũ), verify đạt — nộp để nghiệm thu"
     }
   ],
   "agents": {
@@ -61,7 +86,7 @@
     },
     "reviewer": {
       "account": "agy2",
-      "conversation_id": "6e274102-9de3-4e74-a251-da8ede7372fe"
+      "conversation_id": "b9fe01c8-ae71-401a-9a3e-994e63700030"
     }
   },
   "via": "agy",
@@ -70,8 +95,9 @@
     "frontend/tests/documents/conventions.test.ts",
     "frontend/tests/documents/documents-page.test.tsx",
     "frontend/tests/documents/file-rules.test.ts",
-    "frontend/tests/documents/use-documents.test.ts"
+    "frontend/tests/documents/use-documents.test.ts",
+    "frontend/tests/no-test-hooks-in-src.test.ts"
   ],
-  "review_fingerprint": "076e4a1763ae9c6abcdceb789e195568cb6285d2d5df3a8304ef1c02ad4a5e45",
-  "cross_rounds": 1
+  "review_fingerprint": "ed157322f6b720845113c5d0ac696e52429978c98d9c3718c89e8199a5220e6f",
+  "cross_rounds": 2
 }
