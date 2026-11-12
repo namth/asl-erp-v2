@@ -1,7 +1,7 @@
 {
   "id": "TASK-014",
   "title": "Người dùng, phòng ban & đồng bộ đồ thị (TSK-18)",
-  "status": "submitted",
+  "status": "accepted",
   "conversation_id": "7825f9ae-dc33-4caa-9cee-249a23109c49",
   "history": [
     {
@@ -48,6 +48,11 @@
       "at": "2026-11-12T07:12:08",
       "status": "submitted",
       "note": "Claude sửa test LEADS (lỗi Cypher của test), nộp thay để nghiệm thu"
+    },
+    {
+      "at": "2026-11-12T08:28:22",
+      "status": "accepted",
+      "note": "Claude nghiệm thu"
     }
   ],
   "agents": {
