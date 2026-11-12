@@ -1,18 +1,49 @@
 {
   "id": "TASK-037",
   "title": "Dựng tệp Excel cho 3 báo cáo SCR-18 (TSK-15, phần thuần)",
-  "status": "draft",
-  "conversation_id": null,
+  "status": "accepted",
+  "conversation_id": "41e29969-ff00-4c2a-8ff3-64bfbca94310",
   "history": [
     {
       "at": "2026-11-12T07:45:22",
       "status": "draft",
       "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-12T07:46:34",
+      "status": "assigned",
+      "note": "giao code qua agy cho agy2 (model mặc định)"
+    },
+    {
+      "at": "2026-11-12T07:46:46",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-12T07:51:08",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-12T08:29:20",
+      "status": "accepted",
+      "note": "Claude nghiệm thu"
     }
   ],
   "locked_files": [
     "handoff/tasks/TASK-037-xuat-excel-bao-cao/verify.sh",
     "backend/tests/test_report_export.py",
     "backend/tests/test_no_test_hooks_in_app.py"
-  ]
+  ],
+  "agents": {
+    "tester": {
+      "account": null,
+      "conversation_id": null
+    },
+    "coder": {
+      "account": "agy2",
+      "conversation_id": "41e29969-ff00-4c2a-8ff3-64bfbca94310"
+    }
+  },
+  "via": "agy"
 }
