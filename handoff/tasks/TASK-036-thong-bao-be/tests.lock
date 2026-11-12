@@ -1,0 +1,3 @@
+28a7f6d1b3bf27a74adeb0260848a5ae9457cd0f6e46b305b76983a36532ed35  handoff/tasks/TASK-036-thong-bao-be/verify.sh
+39506c3df0aa5763584a613888bbfe7799b3d0c5eed26fb4ca3c315df6979e02  backend/tests/test_notifications_api.py
+19db9d56c8b6042f62a70f89c884af4e6f5c46010e2349a5840bca1a7c520e89  backend/tests/test_no_test_hooks_in_app.py

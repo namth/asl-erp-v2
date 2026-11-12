@@ -1,0 +1,18 @@
+{
+  "id": "TASK-036",
+  "title": "Backend trung tâm thông báo web: danh sách, đã đọc, WebSocket (TSK-21 phần web)",
+  "status": "draft",
+  "conversation_id": null,
+  "history": [
+    {
+      "at": "2026-11-12T07:39:52",
+      "status": "draft",
+      "note": "Claude tạo task"
+    }
+  ],
+  "locked_files": [
+    "handoff/tasks/TASK-036-thong-bao-be/verify.sh",
+    "backend/tests/test_notifications_api.py",
+    "backend/tests/test_no_test_hooks_in_app.py"
+  ]
+}
