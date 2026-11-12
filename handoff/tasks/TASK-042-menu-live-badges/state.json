@@ -1,13 +1,90 @@
 {
   "id": "TASK-042",
   "title": "Huy hiệu menu đếm thật từ API thay số cứng",
-  "status": "draft",
-  "conversation_id": null,
+  "status": "accepted",
+  "conversation_id": "0c3c25e7-8cec-4bc6-9ed3-3f8062e9c022",
   "history": [
     {
       "at": "2026-11-12T16:46:39",
       "status": "draft",
       "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-12T16:47:31",
+      "status": "tests_assigned",
+      "note": "giao viết test chéo cho agy3"
+    },
+    {
+      "at": "2026-11-12T17:11:23",
+      "status": "tests_assigned",
+      "note": "giao viết test chéo cho agy3"
+    },
+    {
+      "at": "2026-11-12T17:37:08",
+      "status": "tests_assigned",
+      "note": "giao viết test chéo cho agy3"
+    },
+    {
+      "at": "2026-11-12T17:38:10",
+      "status": "tests_ready",
+      "note": "test chéo đã khoá (1 file), verify đỏ đúng chờ code"
+    },
+    {
+      "at": "2026-11-12T17:38:55",
+      "status": "assigned",
+      "note": "giao code qua agy cho agy2 (model mặc định)"
+    },
+    {
+      "at": "2026-11-12T17:39:17",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-12T18:01:25",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-12T18:01:49",
+      "status": "in_review",
+      "note": "giao nghiệm thu chéo cho agy3"
+    },
+    {
+      "at": "2026-11-12T18:08:29",
+      "status": "changes_requested",
+      "note": "nghiệm thu chéo trả về bởi agy3 (vòng 1)"
+    },
+    {
+      "at": "2026-11-12T18:08:43",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-12T18:13:01",
+      "status": "accepted",
+      "note": "Claude nghiệm thu"
     }
-  ]
+  ],
+  "agents": {
+    "coder": {
+      "account": "agy2",
+      "conversation_id": "0c3c25e7-8cec-4bc6-9ed3-3f8062e9c022"
+    },
+    "tester": {
+      "account": "agy3",
+      "conversation_id": "db7ece0d-29a9-421e-badd-6d9496151a44"
+    },
+    "reviewer": {
+      "account": "agy3",
+      "conversation_id": "fe3eaa68-cfc2-45e0-a880-dee5c6e1cff0"
+    }
+  },
+  "via": "agy",
+  "locked_files": [
+    "handoff/tasks/TASK-042-menu-live-badges/verify.sh",
+    "handoff/tasks/TASK-042-menu-live-badges/verify.sh",
+    "frontend/tests/menu-live-badges.test.tsx"
+  ],
+  "review_fingerprint": "0b4bd8aa382469b580f889da9f7cb17251147d08fd2f8b8648217d407af4b2a1",
+  "cross_rounds": 1
 }

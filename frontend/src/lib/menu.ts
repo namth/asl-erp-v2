@@ -1,3 +1,5 @@
+export type MenuCountKey = 'approvals' | 'cases' | 'tasks';
+
 export interface MenuItem {
   key: string;
   label: string;
@@ -6,6 +8,7 @@ export interface MenuItem {
   icon?: string;
   badge?: string;
   badgeClass?: string;
+  countKey?: MenuCountKey;
 }
 
 export interface MenuSection {
@@ -45,7 +48,7 @@ export function getMenu(role: string): MenuSection[] {
     label: 'Duyệt nhanh tài chính',
     url: '/approvals',
     href: '/approvals',
-    badge: '4',
+    countKey: 'approvals',
     badgeClass: 'bg-red-500 text-white animate-pulse',
     icon: 'CheckCircle',
   };
@@ -55,7 +58,7 @@ export function getMenu(role: string): MenuSection[] {
     label: 'Duyệt nhanh vụ việc',
     url: '/approvals',
     href: '/approvals',
-    badge: '8',
+    countKey: 'approvals',
     badgeClass: 'bg-red-500 text-white animate-pulse',
     icon: 'CheckCircle',
   };
@@ -65,7 +68,7 @@ export function getMenu(role: string): MenuSection[] {
     label: 'Vụ việc có liên quan',
     url: '/cases',
     href: '/cases',
-    badge: '18',
+    countKey: 'cases',
     badgeClass: 'bg-blue-100 text-[#002D54]',
     icon: 'Briefcase',
   };
@@ -75,7 +78,7 @@ export function getMenu(role: string): MenuSection[] {
     label: 'Hồ sơ vụ việc',
     url: '/cases',
     href: '/cases',
-    badge: '48',
+    countKey: 'cases',
     badgeClass: 'bg-blue-100 text-[#002D54]',
     icon: 'Briefcase',
   };
@@ -143,7 +146,7 @@ export function getMenu(role: string): MenuSection[] {
     label: 'Tác vụ thực hiện',
     url: '/tasks',
     href: '/tasks',
-    badge: '12',
+    countKey: 'tasks',
     badgeClass: 'bg-amber-100 text-amber-800',
     icon: 'CheckSquare',
   };
