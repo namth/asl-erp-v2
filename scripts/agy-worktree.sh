@@ -70,6 +70,7 @@ case "$cmd" in
       mkdir -p "$BASE_DIR"
       git -C "$ROOT" worktree add -b "$(branch)" "$(wt_path)" HEAD
       ln -s "$ROOT/node_modules" "$(wt_path)/node_modules"
+      ln -s "$ROOT/.venv" "$(wt_path)/.venv"
       echo "Worktree: $(wt_path)  (nhánh $(branch))"
     fi
     ;;
@@ -127,7 +128,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
       status="$(task_field "$wt" status)"
       [ "$status" = "accepted" ] || die "$id chưa được nghiệm thu (status=$status) — chạy accept trong worktree trước"
       title="$(task_field "$wt" title)"
-      rm -f "$wt/node_modules"
+      rm -f "$wt/node_modules" "$wt/.venv"
       git -C "$wt" add -A
       git -C "$wt" diff --cached --quiet || git -C "$wt" commit -q -m "$(msg_title "$title")"
       git -C "$ROOT" merge --no-ff "$(branch)" -m "merge: $id — $title
