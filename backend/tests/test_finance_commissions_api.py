@@ -1,7 +1,8 @@
 """Nghiệm thu: sổ hoa hồng GET /api/v1/finance/commissions (SCR-12).
 
 Hợp đồng: docs/07-api-contracts.md mục `GET /api/v1/finance/commissions` (§3.7) và §1.2; phạm vi theo bảng
-DEC-04 ở §3.9 cột `commissions`. Dữ liệu dựng trong một năm ngẫu nhiên để không lẫn dữ liệu khác trên DB dùng chung.
+DEC-04 ở §3.9 cột `commissions`. Dữ liệu dựng trong một năm ngẫu nhiên; DB dùng chung có thể còn dòng hoa hồng của lần chạy khác cùng năm
+(test báo cáo cũng ghi vào năm ngẫu nhiên), nên truy vấn toàn hãng luôn lọc thêm theo vụ việc/nhân sự riêng của test.
 """
 import os
 import random
@@ -89,9 +90,12 @@ def D(*xs):
 @pytest.mark.asyncio
 async def test_ke_toan_toan_hang_dung_tung_dong_va_dang_phan_tu():
     W = world()
-    data, meta = body_ok(await get(W["acct"], **{"from": W["frm"], "to": W["to"], "limit": 100}))
-    assert amounts(data) == D("3000000", "1500000", "2000000", "333333", "5000000")
-    assert meta["total_records"] == 5
+    q = {"from": W["frm"], "to": W["to"], "limit": 100}
+    data, meta = body_ok(await get(W["acct"], **q, case_id=W["c1"]["id"]))
+    assert amounts(data) == D("3000000", "1500000", "2000000")
+    assert meta["total_records"] == 3
+    data2, _ = body_ok(await get(W["acct"], **q, case_id=W["c2"]["id"]))
+    assert amounts(data2) == D("333333", "5000000")
     row = next(x for x in data if Decimal(x["amount"]) == Decimal("3000000"))
     assert row["case"]["case_code"] == W["c1"]["case_code"]
     assert row["user"]["id"] == W["u1"]["id"] and row["user"]["full_name"] == W["u1"]["full_name"]
@@ -107,16 +111,17 @@ async def test_ke_toan_toan_hang_dung_tung_dong_va_dang_phan_tu():
 @pytest.mark.asyncio
 async def test_summary_tinh_tren_toan_bo_ket_qua_loc_khong_chi_trang_hien_tai():
     W = world()
-    data, meta = body_ok(await get(W["exe"], **{"from": W["frm"], "to": W["to"], "limit": 2, "page": 1}))
-    assert len(data) == 2 and meta["total_records"] == 5 and meta["total_pages"] == 3
+    q = {"from": W["frm"], "to": W["to"], "case_id": W["c1"]["id"], "limit": 2}
+    data, meta = body_ok(await get(W["exe"], **q, page=1))
+    assert len(data) == 2 and meta["total_records"] == 3 and meta["total_pages"] == 2
     s = meta["summary"]
-    assert Decimal(s["total_amount"]) == Decimal("11833333")
+    assert Decimal(s["total_amount"]) == Decimal("6500000")
     by = {k: Decimal(v) for k, v in s["by_role"].items()}
     assert set(by) == set(ROLES)
-    assert by == {"ORIGINATOR": Decimal("5000000"), "SUPERVISOR": Decimal("2000000"),
-                  "CASE_MANAGER": Decimal("3000000"), "EXECUTOR": Decimal("1500000"), "ASSISTANT": Decimal("333333")}
-    _, m3 = body_ok(await get(W["exe"], **{"from": W["frm"], "to": W["to"], "limit": 2, "page": 3}))
-    assert m3["summary"] == s
+    assert by == {"ORIGINATOR": Decimal("0"), "SUPERVISOR": Decimal("2000000"),
+                  "CASE_MANAGER": Decimal("3000000"), "EXECUTOR": Decimal("1500000"), "ASSISTANT": Decimal("0")}
+    p2, m2 = body_ok(await get(W["exe"], **q, page=2))
+    assert len(p2) == 1 and m2["summary"] == s
 
 
 @pytest.mark.asyncio
@@ -127,8 +132,8 @@ async def test_bo_loc_case_user_role_payout():
     assert amounts(data) == D("333333", "5000000")
     data, _ = body_ok(await get(W["acct"], **base, user_id=W["u1"]["id"]))
     assert amounts(data) == D("3000000", "1500000")
-    data, _ = body_ok(await get(W["acct"], **base, role_type="SUPERVISOR"))
-    assert amounts(data) == D("2000000")
+    data, _ = body_ok(await get(W["acct"], **base, role_type="CASE_MANAGER", case_id=W["c1"]["id"]))
+    assert amounts(data) == D("3000000")
     data, _ = body_ok(await get(W["acct"], **base, payout_status="DISBURSED", user_id=W["u1"]["id"]))
     assert amounts(data) == D("1500000")
     data, _ = body_ok(await get(W["acct"], case_id=W["c1"]["id"], limit=100))  # không lọc ngày → mọi thời điểm
