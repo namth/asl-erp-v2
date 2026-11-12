@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useMe } from '@/hooks/use-auth';
+import { useMenuCounts } from '@/hooks/use-menu-counts';
 import { useSidebarStore } from '@/stores/sidebar-store';
 import { getMenu, MenuItem } from '@/lib/menu';
 import { LoadingSkeleton } from '@/components/ui/loading-skeleton';
@@ -96,6 +97,7 @@ export default function DashboardLayout({
   const { data: user, isLoading, isError } = useMe();
   const { isCollapsed, toggle } = useSidebarStore();
   const [isDark, setIsDark] = React.useState(false);
+  const { counts } = useMenuCounts(user?.system_role);
 
   useEffect(() => {
     if (!isLoading && (isError || !user)) {
@@ -193,15 +195,25 @@ export default function DashboardLayout({
                       {!isCollapsed && (
                         <>
                           <span className="flex-1 truncate">{item.label}</span>
-                          {item.badge && (
-                            <span
-                              className={`ml-auto px-1.5 py-0.5 rounded text-[10px] font-bold ${
-                                item.badgeClass || 'bg-slate-200 text-slate-700'
-                              }`}
-                            >
-                              {item.badge}
-                            </span>
-                          )}
+                          {(() => {
+                            let badgeText: string | null = null;
+                            if (item.badge) {
+                              badgeText = item.badge;
+                            } else if (item.countKey && counts && counts[item.countKey] > 0) {
+                              const c = counts[item.countKey];
+                              badgeText = c > 99 ? '99+' : String(c);
+                            }
+                            if (!badgeText) return null;
+                            return (
+                              <span
+                                className={`ml-auto px-1.5 py-0.5 rounded text-[10px] font-bold ${
+                                  item.badgeClass || 'bg-slate-200 text-slate-700'
+                                }`}
+                              >
+                                {badgeText}
+                              </span>
+                            );
+                          })()}
                         </>
                       )}
                     </Link>
