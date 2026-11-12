@@ -1,0 +1,108 @@
+{
+  "id": "TASK-030",
+  "title": "Tài liệu vụ việc (SCR-17)",
+  "status": "accepted",
+  "conversation_id": "cb355184-9ae0-47e5-b611-0db8e8fc8efa",
+  "history": [
+    {
+      "at": "2026-11-11T19:45:39",
+      "status": "draft",
+      "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-11T19:46:52",
+      "status": "tests_assigned",
+      "note": "giao viết test chéo cho agy2"
+    },
+    {
+      "at": "2026-11-11T19:47:49",
+      "status": "tests_assigned",
+      "note": "giao viết test chéo cho agy2"
+    },
+    {
+      "at": "2026-11-11T20:11:13",
+      "status": "tests_ready",
+      "note": "test chéo đã khoá (4 file), verify đỏ đúng chờ code"
+    },
+    {
+      "at": "2026-11-11T20:14:02",
+      "status": "assigned",
+      "note": "giao code qua agy cho agy3 (model mặc định)"
+    },
+    {
+      "at": "2026-11-11T20:14:36",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-11T21:01:39",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-11T21:22:03",
+      "status": "in_review",
+      "note": "giao nghiệm thu chéo cho agy2"
+    },
+    {
+      "at": "2026-11-11T23:24:02",
+      "status": "changes_requested",
+      "note": "nghiệm thu chéo trả về bởi agy2 (vòng 1)"
+    },
+    {
+      "at": "2026-11-11T23:28:07",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-11T23:32:24",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-11T23:36:53",
+      "status": "in_review",
+      "note": "giao nghiệm thu chéo cho agy2"
+    },
+    {
+      "at": "2026-11-12T01:13:54",
+      "status": "changes_requested",
+      "note": "nghiệm thu chéo trả về bởi agy2 (vòng 2)"
+    },
+    {
+      "at": "2026-11-12T07:19:16",
+      "status": "submitted",
+      "note": "Claude merge base mới (lỗi review do base cũ), verify đạt — nộp để nghiệm thu"
+    },
+    {
+      "at": "2026-11-12T07:19:42",
+      "status": "accepted",
+      "note": "Claude nghiệm thu"
+    }
+  ],
+  "agents": {
+    "coder": {
+      "account": "agy3",
+      "conversation_id": "cb355184-9ae0-47e5-b611-0db8e8fc8efa"
+    },
+    "tester": {
+      "account": "agy2",
+      "conversation_id": "b8305b29-c32e-4df0-bcc3-704ef521d651"
+    },
+    "reviewer": {
+      "account": "agy2",
+      "conversation_id": "b9fe01c8-ae71-401a-9a3e-994e63700030"
+    }
+  },
+  "via": "agy",
+  "locked_files": [
+    "handoff/tasks/TASK-030-tai-lieu-vu-viec-fe/verify.sh",
+    "frontend/tests/documents/conventions.test.ts",
+    "frontend/tests/documents/documents-page.test.tsx",
+    "frontend/tests/documents/file-rules.test.ts",
+    "frontend/tests/documents/use-documents.test.ts",
+    "frontend/tests/no-test-hooks-in-src.test.ts"
+  ],
+  "review_fingerprint": "ed157322f6b720845113c5d0ac696e52429978c98d9c3718c89e8199a5220e6f",
+  "cross_rounds": 2
+}
