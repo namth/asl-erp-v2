@@ -187,7 +187,7 @@ describe('Màn hình Văn phòng số trực quan - floorplan/page.tsx (SCR-15, 
 
       render(<FloorplanPage />);
 
-      expect(screen.getByText(/không có quyền truy cập/i)).toBeInTheDocument();
+      expect(screen.getByText(/không có quyền truy cập/i)).toBeTruthy();
       // Không gọi hook hoặc không enabled
       const enabledOption = useFloorplanSpy.mock.calls[0]?.[1] as any;
       if (enabledOption && typeof enabledOption === 'object') {
@@ -200,7 +200,7 @@ describe('Màn hình Văn phòng số trực quan - floorplan/page.tsx (SCR-15, 
 
       // Có dropdown chọn phòng ban
       const select = screen.getByRole('combobox') || document.querySelector('select');
-      expect(select).toBeInTheDocument();
+      expect(select).toBeTruthy();
 
       // Đổi phòng ban
       if (select) {
@@ -224,7 +224,7 @@ describe('Màn hình Văn phòng số trực quan - floorplan/page.tsx (SCR-15, 
       render(<FloorplanPage />);
 
       // Không có dropdown chọn phòng ban
-      expect(screen.queryByRole('combobox')).not.toBeInTheDocument();
+      expect(screen.queryByRole('combobox')).toBeNull();
     });
 
     it('xử lý lỗi 403 NEED_TO_KNOW_DENIED hiển thị ErrorState rõ ràng', () => {
@@ -240,7 +240,7 @@ describe('Màn hình Văn phòng số trực quan - floorplan/page.tsx (SCR-15, 
 
       expect(
         screen.getByText(/không có quyền xem phòng ban này|need_to_know_denied|có lỗi xảy ra/i)
-      ).toBeInTheDocument();
+      ).toBeTruthy();
     });
   });
 
@@ -259,7 +259,7 @@ describe('Màn hình Văn phòng số trực quan - floorplan/page.tsx (SCR-15, 
       const skeleton =
         screen.queryByRole('status', { name: /đang tải/i }) ||
         document.querySelector('.animate-pulse');
-      expect(skeleton).toBeInTheDocument();
+      expect(skeleton).toBeTruthy();
     });
 
     it('trạng thái rỗng (Empty state): hiển thị "Chưa có nhân sự nào được phân công vào phòng ban này"', () => {
@@ -281,7 +281,7 @@ describe('Màn hình Văn phòng số trực quan - floorplan/page.tsx (SCR-15, 
 
       expect(
         screen.getByText(/chưa có nhân sự nào được phân công vào phòng ban này/i)
-      ).toBeInTheDocument();
+      ).toBeTruthy();
     });
 
     it('trạng thái lỗi (Error state): hiển thị ErrorState và nút Thử lại', () => {
@@ -295,7 +295,7 @@ describe('Màn hình Văn phòng số trực quan - floorplan/page.tsx (SCR-15, 
 
       render(<FloorplanPage />);
 
-      expect(screen.getByText(/lỗi kết nối máy chủ|có lỗi xảy ra/i)).toBeInTheDocument();
+      expect(screen.getByText(/lỗi kết nối máy chủ|có lỗi xảy ra/i)).toBeTruthy();
       const retryBtn = screen.getByRole('button', { name: /thử lại/i });
       fireEvent.click(retryBtn);
       expect(mockRefetch).toHaveBeenCalled();
@@ -307,11 +307,11 @@ describe('Màn hình Văn phòng số trực quan - floorplan/page.tsx (SCR-15, 
       render(<FloorplanPage />);
 
       // Tổng nhân sự: 3
-      expect(screen.getByText(/3/)).toBeInTheDocument();
+      expect(screen.getAllByText(/^\s*3\s*$/).length).toBeGreaterThan(0);
       // Tỷ lệ đang làm việc: 2/3 = 67%
-      expect(screen.getByText(/67%/)).toBeInTheDocument();
+      expect(screen.getByText(/67%/)).toBeTruthy();
       // Hồ sơ chờ duyệt: 1
-      expect(screen.getByText(/1/)).toBeInTheDocument();
+      expect(screen.getAllByText(/^\s*1\s*$/).length).toBeGreaterThan(0);
     });
 
     it('tính tỷ lệ đang làm việc an toàn khi 0 nhân sự: hiển thị 0% không bị NaN%', () => {
@@ -331,8 +331,8 @@ describe('Màn hình Văn phòng số trực quan - floorplan/page.tsx (SCR-15, 
 
       render(<FloorplanPage />);
 
-      expect(screen.getByText('0%')).toBeInTheDocument();
-      expect(screen.queryByText(/NaN%/)).not.toBeInTheDocument();
+      expect(screen.getByText('0%')).toBeTruthy();
+      expect(screen.queryByText(/NaN%/)).toBeNull();
     });
   });
 
@@ -340,20 +340,20 @@ describe('Màn hình Văn phòng số trực quan - floorplan/page.tsx (SCR-15, 
     it('hiển thị đầy đủ tên, chức danh và huy hiệu số việc đang làm / chờ xử lý (TC-FL-03)', () => {
       render(<FloorplanPage />);
 
-      expect(screen.getByText(/Trần Thu Hà/i)).toBeInTheDocument();
-      expect(screen.getByText(/Chuyên viên Pháp lý/i)).toBeInTheDocument();
+      expect(screen.getByText(/Trần Thu Hà/i)).toBeTruthy();
+      expect(screen.getByText(/Chuyên viên Pháp lý/i)).toBeTruthy();
 
       // Trần Thu Hà có 3 in_progress, 2 todo
-      expect(screen.getByText(/3.*đang làm/i)).toBeInTheDocument();
-      expect(screen.getByText(/2.*chờ xử lý/i)).toBeInTheDocument();
+      expect(screen.getByText(/3.*đang làm/i)).toBeTruthy();
+      expect(screen.getByText(/2.*chờ xử lý/i)).toBeTruthy();
     });
 
     it('hiển thị huy hiệu ☕ Đang nghỉ ngơi khi in_progress_count == 0 (TC-FL-04)', () => {
       render(<FloorplanPage />);
 
       // Lê Hoàng Nam có 0 in_progress -> is_idle = true
-      expect(screen.getByText(/Lê Hoàng Nam/i)).toBeInTheDocument();
-      expect(screen.getByText(/☕\s*Đang nghỉ ngơi/i)).toBeInTheDocument();
+      expect(screen.getByText(/Lê Hoàng Nam/i)).toBeTruthy();
+      expect(screen.getByText(/☕\s*Đang nghỉ ngơi/i)).toBeTruthy();
     });
 
     it('nhân sự có hồ sơ chờ duyệt (LS. Mai Linh) xuất hiện ở hàng chờ và bàn cá nhân hiện "Đang trình duyệt" mờ (TC-FL-05)', () => {
@@ -363,14 +363,14 @@ describe('Màn hình Văn phòng số trực quan - floorplan/page.tsx (SCR-15, 
       expect(screen.getAllByText(/LS\. Mai Linh/i).length).toBeGreaterThanOrEqual(1);
 
       // Bàn cá nhân có chữ "Đang trình duyệt" hoặc biểu thị ghế vắng
-      expect(screen.getByText(/đang trình duyệt/i)).toBeInTheDocument();
+      expect(screen.getByText(/đang trình duyệt/i)).toBeTruthy();
     });
 
     it('ảnh đại diện: hiển thị avatar_url nếu có, hoặc chữ cái viết tắt (initials) nếu không có avatar', () => {
       render(<FloorplanPage />);
 
       // usr-04 không có avatar_url -> hiển thị ký tự viết tắt LN hoặc HN
-      expect(screen.getByText(/HN|LN/)).toBeInTheDocument();
+      expect(screen.getByText(/HN|LN/)).toBeTruthy();
     });
   });
 
@@ -383,9 +383,10 @@ describe('Màn hình Văn phòng số trực quan - floorplan/page.tsx (SCR-15, 
 
       // Mở ngăn chi tiết
       await waitFor(() => {
-        expect(screen.getByRole('dialog') || document.querySelector('[data-drawer="true"]') || document.querySelector('.fixed.right-0')).toBeInTheDocument();
+        expect(screen.getByRole('dialog') || document.querySelector('[data-drawer="true"]') || document.querySelector('.fixed.right-0')).toBeTruthy();
       });
-      expect(screen.getByText(/Chuyên viên Pháp lý/i)).toBeInTheDocument();
+      // Chức danh hiện ở bàn và trong ngăn chi tiết vừa mở
+      expect(screen.getAllByText(/Chuyên viên Pháp lý/i).length).toBeGreaterThanOrEqual(2);
     });
 
     it('nút Duyệt gửi POST /approvals/{id}/decide với action APPROVE và làm mới floorplan', async () => {
@@ -423,7 +424,7 @@ describe('Màn hình Văn phòng số trực quan - floorplan/page.tsx (SCR-15, 
 
       // Chưa nhập lý do -> không gửi mutation
       expect(mockDecideMutate).not.toHaveBeenCalled();
-      expect(screen.getByText(/lý do/i)).toBeInTheDocument();
+      expect(screen.getByText(/Vui lòng nhập lý do trả về/i)).toBeTruthy();
     });
 
     it('nút Trả về có nhập lý do sẽ gửi action REJECT kèm comment', async () => {
@@ -469,15 +470,15 @@ describe('Màn hình Văn phòng số trực quan - floorplan/page.tsx (SCR-15, 
       await waitFor(() => {
         expect(
           screen.getByText(/bạn không thể duyệt yêu cầu của chính mình/i)
-        ).toBeInTheDocument();
+        ).toBeTruthy();
       });
     });
 
     it('không có các nút "Giao việc nhanh" hoặc "Nhắn tin" theo ràng buộc brief mục 4', () => {
       render(<FloorplanPage />);
 
-      expect(screen.queryByRole('button', { name: /giao việc nhanh/i })).not.toBeInTheDocument();
-      expect(screen.queryByRole('button', { name: /nhắn tin/i })).not.toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: /giao việc nhanh/i })).toBeNull();
+      expect(screen.queryByRole('button', { name: /nhắn tin/i })).toBeNull();
     });
   });
 
@@ -491,9 +492,9 @@ describe('Màn hình Văn phòng số trực quan - floorplan/page.tsx (SCR-15, 
 
       render(<FloorplanPage />);
 
-      expect(screen.getByText(/mất kết nối thời gian thực/i)).toBeInTheDocument();
+      expect(screen.getByText(/mất kết nối thời gian thực/i)).toBeTruthy();
       const reconnectBtn = screen.getByRole('button', { name: /kết nối lại/i });
-      expect(reconnectBtn).toBeInTheDocument();
+      expect(reconnectBtn).toBeTruthy();
 
       fireEvent.click(reconnectBtn);
       expect(mockReconnect).toHaveBeenCalled();
