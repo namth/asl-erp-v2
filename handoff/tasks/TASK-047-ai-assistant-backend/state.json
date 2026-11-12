@@ -1,18 +1,49 @@
 {
   "id": "TASK-047",
   "title": "Backend trợ lý AI: công cụ trong phạm vi quyền, che PII trước khi gửi LLM (TSK-13, SCR-14)",
-  "status": "draft",
-  "conversation_id": null,
+  "status": "accepted",
+  "conversation_id": "e0d19806-c603-4831-876c-f05f1a0d19c2",
   "history": [
     {
       "at": "2026-11-12T19:04:51",
       "status": "draft",
       "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-12T19:05:41",
+      "status": "assigned",
+      "note": "giao code qua agy cho agy1 (gemini-3.8-flash-high)"
+    },
+    {
+      "at": "2026-11-12T19:06:58",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-12T19:21:08",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-12T19:28:24",
+      "status": "accepted",
+      "note": "Claude nghiệm thu"
     }
   ],
   "locked_files": [
     "handoff/tasks/TASK-047-ai-assistant-backend/verify.sh",
     "backend/tests/test_ai_assistant.py",
     "handoff/tasks/TASK-047-ai-assistant-backend/verify.sh"
-  ]
+  ],
+  "agents": {
+    "tester": {
+      "account": null,
+      "conversation_id": null
+    },
+    "coder": {
+      "account": "agy1",
+      "conversation_id": "e0d19806-c603-4831-876c-f05f1a0d19c2"
+    }
+  },
+  "via": "agy"
 }
