@@ -208,6 +208,55 @@ class OpportunityConvertRequest(BaseModel):
         return v
 
 
+class OpportunityCreate(BaseModel):
+    client_id: str
+    title: str = Field(..., min_length=1, max_length=255)
+    lead_source: Literal["WEBSITE", "HOTLINE", "FACEBOOK", "REFERRAL", "PARTNER", "OTHER"]
+    expected_value: Decimal = Field(default=Decimal("0"))
+    probability_pct: Optional[int] = None
+    originator_id: Optional[str] = None
+    stage: Optional[str] = None
+
+    @field_validator("title")
+    @classmethod
+    def validate_title(cls, v: str) -> str:
+        s = v.strip()
+        if not s or len(s) > 255:
+            raise ValueError("Tiêu đề cơ hội phải từ 1 đến 255 ký tự sau khi bỏ khoảng trắng")
+        return s
+
+    @field_validator("expected_value")
+    @classmethod
+    def validate_expected_value(cls, v: Decimal) -> Decimal:
+        if v < 0:
+            raise ValueError("Giá trị dự kiến không được âm")
+        return v
+
+    @field_validator("probability_pct")
+    @classmethod
+    def validate_probability_pct(cls, v: Optional[int]) -> Optional[int]:
+        if v is not None and (v < 0 or v > 100):
+            raise ValueError("Xác suất thành công phải từ 0 đến 100%")
+        return v
+
+
+class OpportunityItem(BaseModel):
+    id: str
+    client_id: str
+    client_name: str
+    title: str
+    lead_source: str
+    expected_value: str
+    probability_pct: Optional[int] = None
+    stage: str
+    lost_reason: Optional[str] = None
+    originator_id: str
+    originator_name: Optional[str] = None
+    converted_case_id: Optional[str] = None
+    created_at: str
+    updated_at: str
+
+
 class OpportunityData(BaseModel):
     id: str
     client_id: str

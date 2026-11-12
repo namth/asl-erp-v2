@@ -261,6 +261,7 @@ def convert_opportunity_to_case(
             )
 
             # 13. Ghi outbox_events
+            dept_id_str = str(tmpl["department_id"]) if tmpl["department_id"] else None
             outbox_payload = {
                 "case_id": case_id,
                 "case_code": case_code,
@@ -268,7 +269,8 @@ def convert_opportunity_to_case(
                 "client_id": str(opp["client_id"]),
                 "originator_id": originator_id,
                 "title": payload.title,
-                "contract_value": str(contract_value)
+                "contract_value": str(contract_value),
+                "department_id": dept_id_str
             }
             cur.execute(
                 """INSERT INTO outbox_events (event_type, payload, status)
@@ -297,5 +299,6 @@ def convert_opportunity_to_case(
                 "workflow_mode": tmpl["workflow_mode"],
                 "template_version": tmpl["version_no"],
                 "total_stages": len(template_stages),
-                "total_tasks_created": len(template_tasks)
+                "total_tasks_created": len(template_tasks),
+                "department_id": dept_id_str
             }

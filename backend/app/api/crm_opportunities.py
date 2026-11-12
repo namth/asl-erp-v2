@@ -1,25 +1,34 @@
 import asyncio
 import hashlib
 import json
+import logging
 import time
 from typing import Dict, Any, Optional, Tuple
 
-from fastapi import APIRouter, Request, Depends, Header
+from fastapi import APIRouter, Request, Depends, Header, Query
 from fastapi.responses import JSONResponse
 import jwt
 
 from backend.app.core.config import settings
 from backend.app.core.errors import AppException
 from backend.app.core.security import get_current_user, verify_csrf
+from backend.app.db.neo4j import get_neo4j_driver
 from backend.app.db.redis import get_redis
 from backend.app.schemas.crm import (
+    OpportunityCreate,
     OpportunityPatchRequest,
     OpportunityConvertRequest,
     OpportunityResponse,
     CaseConvertResponse,
 )
-from backend.app.services.opportunities import update_opportunity
+from backend.app.services.opportunities import (
+    list_opportunities,
+    create_opportunity,
+    update_opportunity,
+)
 from backend.app.services.case_factory import convert_opportunity_to_case
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/crm/opportunities", tags=["CRM - Opportunities"])
 
@@ -71,6 +80,52 @@ def require_opportunity_role(current_user: Dict[str, Any]) -> None:
             "FORBIDDEN_ROLE",
             f"Vai trò {role} không có quyền truy cập cơ hội kinh doanh"
         )
+
+
+@router.get("")
+async def list_opportunities_endpoint(
+    request: Request,
+    stage: Optional[str] = Query(None),
+    client_id: Optional[str] = Query(None),
+    q: Optional[str] = Query(None),
+    page: int = Query(1, ge=1),
+    limit: int = Query(20, ge=1, le=100),
+    current_user: Dict[str, Any] = Depends(get_current_user_cached),
+):
+    """Danh sách cơ hội kinh doanh kèm phân trang và tìm kiếm."""
+    require_opportunity_role(current_user)
+
+    result = await asyncio.to_thread(
+        list_opportunities,
+        current_user=current_user,
+        stage=stage,
+        client_id=client_id,
+        q=q,
+        page=page,
+        limit=limit,
+    )
+    return {
+        "success": True,
+        "data": result["data"],
+        "meta": result["meta"]
+    }
+
+
+@router.post("", status_code=201)
+async def create_opportunity_endpoint(
+    payload: OpportunityCreate,
+    request: Request,
+    current_user: Dict[str, Any] = Depends(get_current_user_cached),
+):
+    """Tạo mới cơ hội kinh doanh (luôn bắt đầu ở NEW_LEAD)."""
+    verify_csrf(request)
+    require_opportunity_role(current_user)
+
+    created = await asyncio.to_thread(create_opportunity, payload, current_user, request)
+    return {
+        "success": True,
+        "data": created
+    }
 
 
 @router.patch("/{opportunity_id}")
@@ -162,6 +217,33 @@ async def convert_opportunity_endpoint(
             payload,
             current_user
         )
+
+    # Sync Neo4j graph immediately after commit (idempotent MERGE)
+    try:
+        dept_id = result.get("department_id")
+        case_id = result["case_id"]
+        case_code = result["case_code"]
+        status_str = result["status"]
+
+        driver = get_neo4j_driver()
+        db_name = settings.NEO4J_DATABASE if settings.NEO4J_DATABASE and settings.NEO4J_DATABASE != "neo4j" else None
+        kwargs = {"database": db_name} if db_name else {}
+        async with driver.session(**kwargs) as session:
+            if dept_id:
+                await session.run("""
+                    MERGE (c:Case {id: $cid})
+                    SET c.case_code = $code, c.status = $status
+                    WITH c
+                    MERGE (d:Department {id: $did})
+                    MERGE (c)-[:IN_DEPARTMENT]->(d)
+                """, cid=case_id, code=case_code, status=status_str, did=dept_id)
+            else:
+                await session.run("""
+                    MERGE (c:Case {id: $cid})
+                    SET c.case_code = $code, c.status = $status
+                """, cid=case_id, code=case_code, status=status_str)
+    except Exception as e:
+        logger.warning("Neo4j immediate sync failed during convert (outbox will retry): %s", e)
 
     # Cache successful response in Redis (24 hours)
     cache_entry = {
