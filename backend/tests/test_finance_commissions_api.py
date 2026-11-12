@@ -99,7 +99,8 @@ async def test_ke_toan_toan_hang_dung_tung_dong_va_dang_phan_tu():
     row = next(x for x in data if Decimal(x["amount"]) == Decimal("3000000"))
     assert row["case"]["case_code"] == W["c1"]["case_code"]
     assert row["user"]["id"] == W["u1"]["id"] and row["user"]["full_name"] == W["u1"]["full_name"]
-    assert row["role_type"] == "CASE_MANAGER" and row["payout_status"] == "ACCUMULATED"
+    assert row["role_type"] == "CASE_MANAGER"
+    assert "payout_status" not in row, "DEC-09: không có trạng thái chi trả"
     assert Decimal(row["base_amount"]) == Decimal("3000000") and Decimal(row["rate_pct"]) == Decimal("5")
     for k in ("milestone", "task", "created_at"):
         assert k in row
@@ -125,7 +126,7 @@ async def test_summary_tinh_tren_toan_bo_ket_qua_loc_khong_chi_trang_hien_tai():
 
 
 @pytest.mark.asyncio
-async def test_bo_loc_case_user_role_payout():
+async def test_bo_loc_case_user_role():
     W = world()
     base = {"from": W["frm"], "to": W["to"], "limit": 100}
     data, _ = body_ok(await get(W["acct"], **base, case_id=W["c2"]["id"]))
@@ -135,7 +136,7 @@ async def test_bo_loc_case_user_role_payout():
     data, _ = body_ok(await get(W["acct"], **base, role_type="CASE_MANAGER", case_id=W["c1"]["id"]))
     assert amounts(data) == D("3000000")
     data, _ = body_ok(await get(W["acct"], **base, payout_status="DISBURSED", user_id=W["u1"]["id"]))
-    assert amounts(data) == D("1500000")
+    assert amounts(data) == D("3000000", "1500000"), "payout_status bị bỏ qua (DEC-09)"
     data, _ = body_ok(await get(W["acct"], case_id=W["c1"]["id"], limit=100))  # không lọc ngày → mọi thời điểm
     assert amounts(data) == D("3000000", "1500000", "2000000", "9999999")
 
@@ -160,7 +161,7 @@ async def test_pham_vi_theo_vai_tro():
 @pytest.mark.asyncio
 @pytest.mark.parametrize("params", [
     {"from": "2020-13-01"}, {"from": "2020-03-02", "to": "2020-03-01"}, {"case_id": "abc"}, {"user_id": "x"},
-    {"role_type": "SALES"}, {"payout_status": "PAID"}, {"page": 0}, {"limit": 101},
+    {"role_type": "SALES"}, {"page": 0}, {"limit": 101},
 ])
 async def test_tham_so_sai_422(params):
     W = world()

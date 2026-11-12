@@ -1,0 +1,19 @@
+{
+  "id": "TASK-043",
+  "title": "Báo cáo hoa hồng theo tháng, bỏ trạng thái chi trả (DEC-09)",
+  "status": "draft",
+  "conversation_id": null,
+  "history": [
+    {
+      "at": "2026-11-12T17:34:40",
+      "status": "draft",
+      "note": "Claude tạo task"
+    }
+  ],
+  "locked_files": [
+    "handoff/tasks/TASK-043-commissions-monthly-report/verify.sh",
+    "backend/tests/test_reports_api.py",
+    "backend/tests/test_report_export.py",
+    "backend/tests/test_finance_commissions_api.py"
+  ]
+}

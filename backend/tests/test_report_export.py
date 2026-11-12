@@ -30,17 +30,23 @@ REVENUE = {
                         "contract_value_total": "610000000"}],
 }
 
-COMMISSIONS = {
-    "summary": {"total_amount": "264000000", "accumulated_amount": "120000000", "disbursed_amount": "144000000"},
+COMMISSIONS = {  # docs/07 §3.9 — thống kê theo tháng (DEC-09)
+    "summary": {"total_amount": "43500001", "transaction_count": 7,
+                "by_role": {"ORIGINATOR": "1500001", "SUPERVISOR": "6000000", "CASE_MANAGER": "21000000",
+                            "EXECUTOR": "15000000", "ASSISTANT": "0"}},
+    "periods": ["2026-10", "2026-11"],
+    "by_period": [{"period": "2026-10", "total_amount": "12000000"}, {"period": "2026-11", "total_amount": "31500001"}],
     "by_user": [
         {"user": {"id": "u2", "full_name": "LS. Mai Linh", "department_name": "Phòng Sở Hữu Trí Tuệ"},
-         "total_amount": "42000000", "accumulated_amount": "12000000", "disbursed_amount": "30000000",
+         "total_amount": "42000000",
          "by_role": {"ORIGINATOR": "0", "SUPERVISOR": "6000000", "CASE_MANAGER": "21000000",
-                     "EXECUTOR": "15000000", "ASSISTANT": "0"}},
+                     "EXECUTOR": "15000000", "ASSISTANT": "0"},
+         "by_period": [{"period": "2026-10", "total_amount": "12000000"}, {"period": "2026-11", "total_amount": "30000000"}]},
         {"user": {"id": "u3", "full_name": "LS. Trần Hà", "department_name": None},
-         "total_amount": "1500001", "accumulated_amount": "1500001", "disbursed_amount": "0",
+         "total_amount": "1500001",
          "by_role": {"ORIGINATOR": "1500001", "SUPERVISOR": "0", "CASE_MANAGER": "0",
-                     "EXECUTOR": "0", "ASSISTANT": "0"}},
+                     "EXECUTOR": "0", "ASSISTANT": "0"},
+         "by_period": [{"period": "2026-10", "total_amount": "0"}, {"period": "2026-11", "total_amount": "1500001"}]},
     ],
 }
 
@@ -125,22 +131,33 @@ def test_du_lieu_rong_van_co_dong_tieu_de():
 
 
 # ------------------------------------------------------------------ hoa hồng
-def test_commissions_theo_nhan_su():
+def test_commissions_theo_thang_va_nhan_su():
     wb = wb_of("commissions", COMMISSIONS, META_FIRM)
-    assert wb.sheetnames == ["Tổng quan", "Theo nhân sự"]
+    assert wb.sheetnames == ["Tổng quan", "Theo tháng", "Theo nhân sự"]
     s = kv(wb["Tổng quan"])
     assert s["Báo cáo"] == "Hoa hồng"
-    assert (s["Tổng hoa hồng"], s["Tích luỹ"], s["Đã chi"]) == (264000000, 120000000, 144000000)
+    assert (s["Tổng hoa hồng"], s["Số bút toán"]) == (43500001, 7)
+    assert "Tích luỹ" not in s and "Đã chi" not in s  # DEC-09: không có trạng thái chi trả
+
+    ws = wb["Theo tháng"]
+    assert header(ws) == ["Nhân sự", "Phòng ban", "10/2026", "11/2026", "Tổng"]
+    data_rows = rows(ws)
+    assert data_rows[:-1] == [
+        ["LS. Mai Linh", "Phòng Sở Hữu Trí Tuệ", 12000000, 30000000, 42000000],
+        ["LS. Trần Hà", None, 0, 1500001, 1500001],
+    ]
+    assert data_rows[-1] == ["Tổng cộng", None, 12000000, 31500001, 43500001]
+    assert ws.cell(row=ws.max_row, column=1).font.b is True
+
     ws = wb["Theo nhân sự"]
-    assert header(ws) == ["Nhân sự", "Phòng ban", "Tổng hoa hồng", "Tích luỹ", "Đã chi", "Mang khách về",
+    assert header(ws) == ["Nhân sự", "Phòng ban", "Tổng hoa hồng", "Mang khách về",
                           "Giám sát", "Quản lý vụ việc", "Thực hiện", "Hỗ trợ"]
     data_rows = rows(ws)
     assert data_rows[:-1] == [
-        ["LS. Mai Linh", "Phòng Sở Hữu Trí Tuệ", 42000000, 12000000, 30000000, 0, 6000000, 21000000, 15000000, 0],
-        ["LS. Trần Hà", None, 1500001, 1500001, 0, 1500001, 0, 0, 0, 0],
+        ["LS. Mai Linh", "Phòng Sở Hữu Trí Tuệ", 42000000, 0, 6000000, 21000000, 15000000, 0],
+        ["LS. Trần Hà", None, 1500001, 1500001, 0, 0, 0, 0],
     ]
-    # dòng cuối: tổng cộng từng cột tiền, cộng bằng Decimal, khớp từng đồng
-    assert data_rows[-1] == ["Tổng cộng", None, 43500001, 13500001, 30000000, 1500001, 6000000, 21000000, 15000000, 0]
+    assert data_rows[-1] == ["Tổng cộng", None, 43500001, 1500001, 6000000, 21000000, 15000000, 0]
     assert ws.cell(row=ws.max_row, column=1).font.b is True
 
 

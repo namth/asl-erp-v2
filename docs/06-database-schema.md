@@ -425,7 +425,7 @@ Mỗi lần Kế toán xác nhận một khoản tiền về. **Chỉ INSERT.** 
 | `confirmed_at` | `TIMESTAMPTZ` | DEFAULT `NOW()` | |
 
 #### `commission_transactions`
-Sổ cái hoa hồng. **Chỉ INSERT**, trừ cột `payout_status` (cập nhật qua hàm `SECURITY DEFINER` duy nhất, có ghi audit). **Không có bút toán đảo** (DEC-06).
+Sổ cái hoa hồng. **Chỉ INSERT** tuyệt đối — trigger chặn mọi UPDATE/DELETE. **Không có bút toán đảo** (DEC-06). Chi trả làm ngoài hệ thống (DEC-09): cột `payout_status` chỉ còn giá trị mặc định, không dùng trong nghiệp vụ.
 
 | Cột | Kiểu | Ràng buộc | Mô tả |
 | :--- | :--- | :--- | :--- |

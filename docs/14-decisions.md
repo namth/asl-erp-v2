@@ -103,6 +103,15 @@ Dù ở chế độ nào, không có thay đổi nào ngoài template mà không
 - Neo4j Community không sao lưu online được → sao lưu bằng `neo4j-admin database dump` trong cửa sổ dừng ngắn lúc 02:00, hoặc dựng lại đồ thị từ PostgreSQL (khuyến nghị: Postgres là nguồn sự thật, đồ thị dựng lại được).
 - `11`: thêm task "Sao lưu off-site & diễn tập khôi phục" kèm lệnh xác minh khôi phục vào môi trường trống.
 
+## DEC-09 · Không chi trả hoa hồng trên hệ thống — 12/11/2026
+
+**Quyết định (chủ dự án):** hệ thống chỉ làm tới bước **chia hoa hồng** (bút toán khi Kế toán xác nhận thực thu) và **thống kê theo từng tháng**. Việc chi trả hoa hồng làm riêng trên sổ sách bên ngoài; hệ thống không ghi nhận đã chi hay chưa.
+
+**Hệ quả:**
+- Bỏ `POST /finance/commissions/disburse`; bỏ khái niệm "Tích luỹ / Đã chi" ở mọi màn hình, báo cáo và tệp xuất. `commission_transactions` **chỉ INSERT** tuyệt đối (giữ trigger chặn UPDATE/DELETE); cột `payout_status` giữ nguyên giá trị mặc định `ACCUMULATED`, không đọc/ghi trong nghiệp vụ.
+- Báo cáo hoa hồng (`07` §3.9) đổi sang thống kê **theo tháng**: tổng theo tháng và theo nhân sự × tháng; tệp Excel dùng để đối chiếu chi trả ngoài hệ thống.
+- `12` §3.5, `06` (`commission_transactions`), `02` mục Kế toán, `03` SCR-12/SCR-18 cập nhật theo.
+
 ---
 
 ## Câu hỏi còn mở

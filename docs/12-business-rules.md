@@ -171,7 +171,7 @@ Với $R_o, R_m, R_e$ là tỷ lệ phát triển thị trường, quản lý, t
 **Ví dụ:** $A$ = 33.333.333đ, $R_e$ = 8% → $F$ = 2.666.666đ; 3 task trọng số bằng nhau → 888.888,67đ mỗi task → làm tròn xuống 888.888đ × 3 = 2.666.664đ, dư 2đ → task 1 và 2 nhận 888.889đ, task 3 nhận 888.888đ.
 
 ### 3.5. Không đảo hoa hồng
-Hoàn tiền, huỷ hợp đồng, thu thừa được trả lại: **không** sinh bút toán đảo trong hệ thống (DEC-06). `commission_transactions` chỉ thêm mới; chỉ `payout_status` được đổi `ACCUMULATED → DISBURSED` khi chi lương.
+Hoàn tiền, huỷ hợp đồng, thu thừa được trả lại: **không** sinh bút toán đảo trong hệ thống (DEC-06). `commission_transactions` chỉ thêm mới, không sửa/xoá. Chi trả hoa hồng làm ngoài hệ thống (DEC-09).
 
 ### 3.6. Hoa hồng lịch sử
 Dữ liệu chuyển từ hệ thống cũ nhập nguyên số đã ghi nhận, `source = 'LEGACY'`, không tính lại.

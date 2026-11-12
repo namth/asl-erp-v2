@@ -121,7 +121,7 @@ Cột "Milestone" theo lộ trình `11`. Endpoint M1–M2 có đặc tả chi ti
 | Phê duyệt | `GET /approvals?status=PENDING` · `POST /approvals/{id}/decide` | người có thẩm quyền | M3 |
 | Tài chính vụ việc | `GET/PUT /cases/{id}/commission-policy` · `GET/POST /cases/{id}/milestones` · `PATCH /cases/{id}/milestones/{mid}` · `POST /cases/{id}/milestones/{mid}/cancel` | `finance` | M4 |
 | Kế toán | `GET /accounting/inbox` · `POST /accounting/confirm-payment` | ACCOUNTANT | M4 |
-| Hoa hồng | `GET /finance/commissions` · `GET /finance/commissions/export` · `POST /finance/commissions/disburse` | MANAGER, ACCOUNTANT; ATTORNEY chỉ của mình | M4 |
+| Hoa hồng | `GET /finance/commissions` · `GET /finance/commissions/export` (không có chi trả — DEC-09) | MANAGER, ACCOUNTANT; ATTORNEY chỉ của mình | M4 |
 | Tài liệu | `GET/POST /cases/{id}/documents` · `GET/POST /documents/{id}/versions` · `GET /documents/{id}/versions/{vid}/download` · `POST /documents/{id}/archive` | `professional` (`finance` với thư mục Hợp đồng) | M5 |
 | Thông báo | `GET /notifications` · `POST /notifications/{id}/read` · `POST /notifications/read-all` · `WS /ws/notifications` · `POST /me/telegram/link` (§3.10) | mọi người | M5 |
 | Trợ lý AI | `POST /ai/chat` | mọi người, dữ liệu trong phạm vi | M5 |
@@ -464,10 +464,10 @@ Header bắt buộc: `Idempotency-Key`.
 #### `GET /api/v1/accounting/inbox?status=AWAITING_PAYMENT,PARTIALLY_PAID&q=&page=` (ACCOUNTANT)
 Hàng chờ đợt thu cần đối soát (phạm vi `finance`): `[{milestone_id, case {id, case_code, title, client_name}, name, amount, received_total, remaining, status, awaiting_since, payments: [{received_amount, misa_invoice_no, bank_ref_code, confirmed_at, confirmed_by {full_name}}]}]` + `meta`. Tiền là chuỗi.
 
-#### `GET /api/v1/finance/commissions?case_id=&user_id=&role_type=&payout_status=&from=&to=&page=1&limit=20`
-Sổ hoa hồng (`commission_transactions`, chỉ đọc): `data` = `[{id, case {id, case_code}, milestone {id, name}|null, user {id, full_name}, role_type: ORIGINATOR|SUPERVISOR|CASE_MANAGER|EXECUTOR|ASSISTANT, task {id, title}|null, base_amount, rate_pct, amount, payout_status, created_at}]`, mới nhất trước (`created_at DESC, id`); tiền và tỷ lệ là chuỗi số. `meta` = §1.2 (`page, limit, total_records, total_pages`) + `summary: {total_amount, by_role: {đủ 5 vai trò, vai trò không có dòng = "0"}}` tính trên **toàn bộ** kết quả sau lọc (không chỉ trang hiện tại). `GET /finance/commissions/export` cùng tham số → tệp `.xlsx` (làm sau).
+#### `GET /api/v1/finance/commissions?case_id=&user_id=&role_type=&from=&to=&page=1&limit=20`
+Sổ hoa hồng (`commission_transactions`, chỉ đọc): `data` = `[{id, case {id, case_code}, milestone {id, name}|null, user {id, full_name}, role_type: ORIGINATOR|SUPERVISOR|CASE_MANAGER|EXECUTOR|ASSISTANT, task {id, title}|null, base_amount, rate_pct, amount, created_at}]`, mới nhất trước (`created_at DESC, id`); tiền và tỷ lệ là chuỗi số. `meta` = §1.2 (`page, limit, total_records, total_pages`) + `summary: {total_amount, by_role: {đủ 5 vai trò, vai trò không có dòng = "0"}}` tính trên **toàn bộ** kết quả sau lọc (không chỉ trang hiện tại). `GET /finance/commissions/export` cùng tham số → tệp `.xlsx` (làm sau). Không có trạng thái chi trả (DEC-09).
 - Phạm vi theo bảng DEC-04 ở §3.9 cột `commissions`: Giám đốc & Kế toán toàn hãng; Trưởng phòng chỉ dòng của nhân sự (`users.department_id`) thuộc phòng mình phụ trách (`department_leaders`), không phụ trách phòng nào → rỗng; Luật sư chỉ dòng của chính mình (`user_id` khác bị bỏ qua); Quản trị viên → `403 FORBIDDEN_ROLE`.
-- `from`/`to` tuỳ chọn (`YYYY-MM-DD`, tính theo ngày giờ Việt Nam của `created_at`, bao gồm hai đầu; không truyền = không giới hạn). Sai định dạng, `from > to`, `case_id`/`user_id` không phải UUID, `role_type`/`payout_status` ngoài tập giá trị, `page < 1`, `limit` ngoài 1–100 → `422 VALIDATION_ERROR`.
+- `from`/`to` tuỳ chọn (`YYYY-MM-DD`, tính theo ngày giờ Việt Nam của `created_at`, bao gồm hai đầu; không truyền = không giới hạn). Sai định dạng, `from > to`, `case_id`/`user_id` không phải UUID, `role_type` ngoài tập giá trị, `page < 1`, `limit` ngoài 1–100 → `422 VALIDATION_ERROR`.
 
 #### `GET /api/v1/cases/{id}/milestones` · `GET/PUT /cases/{id}/commission-policy` (phạm vi `finance`)
 Đợt thu của vụ việc (`[{id, order_index, name, amount, received_total, status, triggered_by_task {title}?}]`) và chính sách hoa hồng (`{originator_rate, management_rate, supervisor_share_pct, execution_rate, locked_at}`); `PUT` chỉ Quản lý, trước lần thu đầu (`409 COMMISSION_POLICY_LOCKED`), tổng ≤ 100 (`422 COMMISSION_RATES_EXCEED_100`).
@@ -588,7 +588,7 @@ Tham số chung: `from`, `to` (ngày `YYYY-MM-DD`, bao gồm cả hai đầu, m�
 `meta.scope` trả `FIRM` | `DEPARTMENT` | `SELF` để giao diện hiện đúng nhãn phạm vi; `meta.departments` liệt kê các phòng người xem được lọc (rỗng nếu không lọc được).
 
 **Quy ước chi tiết (chốt khi làm TASK-038):**
-- Ngày tính theo giờ Việt Nam (`Asia/Ho_Chi_Minh`): một mốc thời gian thuộc kỳ khi ngày giờ VN của nó nằm trong `[from, to]`. Mặc định `from` = ngày đầu quý hiện tại, `to` = hôm nay (giờ VN). `from`/`to` sai định dạng `YYYY-MM-DD`, `department_id` không phải UUID, `group_by` ∉ {`month`, `quarter`}, `payout_status` ∉ {`ACCUMULATED`, `DISBURSED`} → `422 VALIDATION_ERROR`. Khoảng tối đa 366 ngày tính cả hai đầu.
+- Ngày tính theo giờ Việt Nam (`Asia/Ho_Chi_Minh`): một mốc thời gian thuộc kỳ khi ngày giờ VN của nó nằm trong `[from, to]`. Mặc định `from` = ngày đầu quý hiện tại, `to` = hôm nay (giờ VN). `from`/`to` sai định dạng `YYYY-MM-DD`, `department_id` không phải UUID, `group_by` ∉ {`month`, `quarter`} → `422 VALIDATION_ERROR`. Khoảng tối đa 366 ngày tính cả hai đầu.
 - Trưởng phòng = `MANAGER` không phải `is_executive`; phòng mình quản lý lấy từ bảng `department_leaders`. Quản lý chưa phụ trách phòng nào → `scope = DEPARTMENT`, `departments = []`, dữ liệu rỗng/bằng 0.
 - Luật sư: "vụ việc mình được phân công" = có dòng `case_assignments` với `unassigned_at IS NULL`.
 - Lọc theo phòng: doanh thu và vận hành lọc theo `cases.department_id`; hoa hồng lọc theo `users.department_id` của người nhận; chuyển đổi cơ hội lọc theo phòng của `opportunities.originator_id` (luật sư: cơ hội do chính mình mang về).
@@ -614,23 +614,30 @@ Doanh thu **thực thu** = tổng `misa_transactions.received_amount` có `confi
 - `contract_value_total` = tổng giá trị hợp đồng của các vụ việc có ít nhất một khoản thu trong kỳ; `collection_rate_pct` = `received_total / contract_value_total × 100`, 2 chữ số thập phân, `contract_value_total = 0` → `"0.00"`.
 - `by_period` đủ mọi tháng/quý trong kỳ (kỳ không có thu → `"0"`), sắp tăng dần; `by_department`, `by_matter_type` sắp giảm dần theo `received_total`.
 
-#### `GET /api/v1/reports/commissions?from=&to=&department_id=&payout_status=ACCUMULATED|DISBURSED`
-Tổng hợp từ `commission_transactions` (`created_at` trong kỳ) theo nhân sự:
+#### `GET /api/v1/reports/commissions?from=&to=&department_id=`
+Thống kê hoa hồng **theo tháng** từ `commission_transactions` (`created_at` trong kỳ, tháng theo giờ VN). Không có "tích luỹ / đã chi" — chi trả làm ngoài hệ thống (DEC-09).
 ```json
 {
   "success": true,
   "data": {
-    "summary": { "total_amount": "264000000", "accumulated_amount": "120000000", "disbursed_amount": "144000000" },
+    "summary": { "total_amount": "264000000", "transaction_count": 57,
+                 "by_role": { "ORIGINATOR": "40000000", "SUPERVISOR": "30000000", "CASE_MANAGER": "90000000", "EXECUTOR": "104000000", "ASSISTANT": "0" } },
+    "periods": ["2026-10", "2026-11"],
+    "by_period": [ { "period": "2026-10", "total_amount": "120000000" }, { "period": "2026-11", "total_amount": "144000000" } ],
     "by_user": [
       { "user": { "id": "u2", "full_name": "LS. Mai Linh", "department_name": "Phòng Sở Hữu Trí Tuệ" },
-        "total_amount": "42000000", "accumulated_amount": "12000000", "disbursed_amount": "30000000",
-        "by_role": { "ORIGINATOR": "0", "SUPERVISOR": "6000000", "CASE_MANAGER": "21000000", "EXECUTOR": "15000000", "ASSISTANT": "0" } }
+        "total_amount": "42000000",
+        "by_role": { "ORIGINATOR": "0", "SUPERVISOR": "6000000", "CASE_MANAGER": "21000000", "EXECUTOR": "15000000", "ASSISTANT": "0" },
+        "by_period": [ { "period": "2026-10", "total_amount": "12000000" }, { "period": "2026-11", "total_amount": "30000000" } ] }
     ]
   },
   "meta": { "scope": "FIRM", "departments": [], "from": "2026-10-01", "to": "2026-11-11" }
 }
 ```
-Tách theo `commission_transactions.payout_status` (`ACCUMULATED` tích luỹ, `DISBURSED` đã chi); `by_user` sắp giảm dần theo `total_amount`.
+- `periods`: mọi tháng (`YYYY-MM`) giao với `[from, to]`, tăng dần; `by_period` (toàn bảng) và `by_user[].by_period` có **đủ** các tháng đó, tháng không có bút toán → `"0"`.
+- `by_user` sắp giảm dần theo `total_amount`, cùng tổng thì theo `full_name`; tổng các `by_user[].total_amount` = `summary.total_amount` = tổng `by_period` (khớp từng đồng). `by_role` đủ 5 khoá.
+- Tham số `payout_status` không còn; gửi lên bị bỏ qua (không lỗi).
+- `GET /reports/commissions/export`: tệp `.xlsx` 3 sheet — "Tổng quan" (Báo cáo = Hoa hồng, Tổng hoa hồng, Số bút toán), "Theo tháng" (cột `Nhân sự`, `Phòng ban`, mỗi tháng một cột tiêu đề `MM/YYYY`, `Tổng`), "Theo nhân sự" (`Nhân sự`, `Phòng ban`, `Tổng hoa hồng`, `Mang khách về`, `Giám sát`, `Quản lý vụ việc`, `Thực hiện`, `Hỗ trợ`). Hai sheet sau có dòng cuối "Tổng cộng" (in đậm, cộng bằng `Decimal`). Tiền là số nguyên trong ô.
 
 #### `GET /api/v1/reports/operations?from=&to=&department_id=`
 ```json

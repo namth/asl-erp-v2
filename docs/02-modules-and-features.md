@@ -61,7 +61,7 @@
 - **4.3. Động cơ Phân bổ Dòng tiền Thực thu (Cash-basis Engine):**
   - Mỗi lần Kế toán xác nhận một khoản tiền về (kể cả thu một phần): hệ thống tính và ghi nhận hoa hồng **trên số tiền thực về của lần đó**. Quy trình chỉ mở khoá khi đợt thu đủ.
   - Hoàn tiền / huỷ hợp đồng: **không** đảo hoa hồng đã ghi nhận; Quản lý xử lý ngoài hệ thống (DEC-06).
-  - Xuất bảng tổng hợp hoa hồng nhân sự phục vụ chi trả lương thưởng hàng tháng.
+  - Thống kê và xuất bảng tổng hợp hoa hồng nhân sự **theo từng tháng** để đối chiếu khi chi trả (việc chi trả làm ngoài hệ thống — DEC-09).
 
 ---
 

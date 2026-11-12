@@ -321,37 +321,51 @@ async def test_revenue_quan_ly_chua_phu_trach_phong_nao_rong():
 
 
 # ================================================================== HOA HỒNG
-async def test_commissions_loc_phong_ban_dung_tung_dong():
+async def test_commissions_theo_thang_loc_phong_ban_dung_tung_dong():
+    """DEC-09: thống kê theo tháng, không còn tích luỹ/đã chi. 31/3 23:00 giờ VN vẫn thuộc tháng 3."""
     W = world()
+    Y = W["Y"]
+    m1, m2, m3 = f"{Y}-01", f"{Y}-02", f"{Y}-03"
     r = await get(W["exe"], "/api/v1/reports/commissions", **period(W, department_id=W["dA"]["id"]))
     assert r.status_code == 200, r.text
     d = r.json()["data"]
     assert r.json()["meta"]["scope"] == "DEPARTMENT"
-    assert d["summary"] == {"total_amount": "6833333", "accumulated_amount": "5333333", "disbursed_amount": "1500000"}
+    assert d["summary"] == {"total_amount": "6833333", "transaction_count": 4,
+                            "by_role": {**ZERO_ROLES, "CASE_MANAGER": "3000000", "EXECUTOR": "1500000",
+                                        "SUPERVISOR": "2000000", "ASSISTANT": "333333"}}
+    assert d["periods"] == [m1, m2, m3]
+    assert d["by_period"] == [{"period": m1, "total_amount": "3333333"}, {"period": m2, "total_amount": "1500000"},
+                              {"period": m3, "total_amount": "2000000"}]
     assert d["by_user"] == [
         {"user": {"id": W["u1"]["id"], "full_name": W["u1"]["full_name"], "department_name": W["dA"]["name"]},
-         "total_amount": "4500000", "accumulated_amount": "3000000", "disbursed_amount": "1500000",
-         "by_role": {**ZERO_ROLES, "CASE_MANAGER": "3000000", "EXECUTOR": "1500000"}},
+         "total_amount": "4500000",
+         "by_role": {**ZERO_ROLES, "CASE_MANAGER": "3000000", "EXECUTOR": "1500000"},
+         "by_period": [{"period": m1, "total_amount": "3000000"}, {"period": m2, "total_amount": "1500000"},
+                       {"period": m3, "total_amount": "0"}]},
         {"user": {"id": W["u2"]["id"], "full_name": W["u2"]["full_name"], "department_name": W["dA"]["name"]},
-         "total_amount": "2333333", "accumulated_amount": "2333333", "disbursed_amount": "0",
-         "by_role": {**ZERO_ROLES, "SUPERVISOR": "2000000", "ASSISTANT": "333333"}},
+         "total_amount": "2333333",
+         "by_role": {**ZERO_ROLES, "SUPERVISOR": "2000000", "ASSISTANT": "333333"},
+         "by_period": [{"period": m1, "total_amount": "333333"}, {"period": m2, "total_amount": "0"},
+                       {"period": m3, "total_amount": "2000000"}]},
     ]
 
 
-async def test_commissions_loc_payout_status():
+async def test_commissions_bo_qua_payout_status_va_ky_cat_ngang_thang():
     W = world()
+    Y = W["Y"]
+    base = period(W, department_id=W["dA"]["id"])
+    r0 = await get(W["exe"], "/api/v1/reports/commissions", **base)
+    r1 = await get(W["exe"], "/api/v1/reports/commissions", **base, payout_status="DISBURSED")
+    assert r1.status_code == 200, r1.text
+    assert r1.json()["data"] == r0.json()["data"], "payout_status không còn tác dụng (DEC-09)"
+    # kỳ 15/1 → 10/2: đủ 2 tháng, chỉ tính bút toán trong khoảng ngày
     r = await get(W["exe"], "/api/v1/reports/commissions",
-                  **period(W, department_id=W["dA"]["id"], payout_status="DISBURSED"))
-    assert r.status_code == 200, r.text
+                  **{"from": f"{Y}-01-15", "to": f"{Y}-02-10", "department_id": W["dA"]["id"]})
     d = r.json()["data"]
-    assert d["summary"] == {"total_amount": "1500000", "accumulated_amount": "0", "disbursed_amount": "1500000"}
-    assert [(x["user"]["id"], x["total_amount"], x["by_role"]) for x in d["by_user"]] == [
-        (W["u1"]["id"], "1500000", {**ZERO_ROLES, "EXECUTOR": "1500000"})]
-    r = await get(W["exe"], "/api/v1/reports/commissions",
-                  **period(W, department_id=W["dA"]["id"], payout_status="ACCUMULATED"))
-    d = r.json()["data"]
-    assert [(x["user"]["id"], x["total_amount"]) for x in d["by_user"]] == [
-        (W["u1"]["id"], "3000000"), (W["u2"]["id"], "2333333")]
+    assert d["periods"] == [f"{Y}-01", f"{Y}-02"]
+    assert d["by_period"] == [{"period": f"{Y}-01", "total_amount": "3000000"},
+                              {"period": f"{Y}-02", "total_amount": "0"}]
+    assert d["summary"]["total_amount"] == "3000000" and d["summary"]["transaction_count"] == 1
 
 
 async def test_commissions_pham_vi_theo_vai_tro():
@@ -479,7 +493,7 @@ async def test_tham_so_sai_422(params):
 
 async def test_tham_so_sai_422_rieng_tung_bao_cao():
     W = world()
-    r = await get(W["exe"], "/api/v1/reports/commissions", payout_status="PAID")
+    r = await get(W["exe"], "/api/v1/reports/commissions", **{"from": "2026-13-01"})
     assert r.status_code == 422 and err(r) == "VALIDATION_ERROR"
     r = await get(W["exe"], "/api/v1/reports/operations", **{"from": "2026-03-01", "to": "2026-02-01"})
     assert r.status_code == 422 and err(r) == "VALIDATION_ERROR"
@@ -536,6 +550,10 @@ async def test_export_pham_vi_theo_nguoi_xem():
     ws = wb["Theo nhân sự"]
     assert ws["A2"].value == W["u1"]["full_name"] and ws["C2"].value == 4500000
     assert ws["A4"].value == "Tổng cộng" and ws["C4"].value == 6833333
+    ws = wb["Theo tháng"]
+    Y = W["Y"]
+    assert [c.value for c in ws[1]] == ["Nhân sự", "Phòng ban", f"01/{Y}", f"02/{Y}", f"03/{Y}", "Tổng"]
+    assert [c.value for c in ws[2]] == [W["u1"]["full_name"], W["dA"]["name"], 3000000, 1500000, 0, 4500000]
 
     r = await get(W["law"], "/api/v1/reports/revenue/export", **period(W))
     assert r.status_code == 200, r.text
