@@ -1,7 +1,7 @@
 {
   "id": "TASK-031",
   "title": "Báo cáo & thống kê (SCR-18)",
-  "status": "submitted",
+  "status": "accepted",
   "conversation_id": "64c39fe0-a5d0-43d2-b438-c6a7b1398cb4",
   "history": [
     {
@@ -33,6 +33,11 @@
       "at": "2026-11-12T01:37:34",
       "status": "submitted",
       "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-12T07:20:08",
+      "status": "accepted",
+      "note": "Claude nghiệm thu"
     }
   ],
   "agents": {
