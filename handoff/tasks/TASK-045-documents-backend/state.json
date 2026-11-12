@@ -1,18 +1,49 @@
 {
   "id": "TASK-045",
   "title": "Backend tài liệu vụ việc: tải lên, phiên bản, mã hoá, quét virus (TSK-20, SCR-17)",
-  "status": "draft",
-  "conversation_id": null,
+  "status": "accepted",
+  "conversation_id": "0ebd0d56-8e66-4ae7-a5a5-31310ade8fae",
   "history": [
     {
       "at": "2026-11-12T18:57:52",
       "status": "draft",
       "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-12T19:02:00",
+      "status": "assigned",
+      "note": "giao code qua agy cho agy1 (gemini-3.8-flash-high)"
+    },
+    {
+      "at": "2026-11-12T19:04:00",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-12T19:55:30",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-12T20:33:36",
+      "status": "accepted",
+      "note": "Claude nghiệm thu"
     }
   ],
   "locked_files": [
     "handoff/tasks/TASK-045-documents-backend/verify.sh",
     "backend/tests/test_documents.py",
     "handoff/tasks/TASK-045-documents-backend/verify.sh"
-  ]
+  ],
+  "agents": {
+    "tester": {
+      "account": null,
+      "conversation_id": null
+    },
+    "coder": {
+      "account": "agy1",
+      "conversation_id": "0ebd0d56-8e66-4ae7-a5a5-31310ade8fae"
+    }
+  },
+  "via": "agy"
 }
