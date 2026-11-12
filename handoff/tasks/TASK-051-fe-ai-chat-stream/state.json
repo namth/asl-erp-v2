@@ -1,0 +1,18 @@
+{
+  "id": "TASK-051",
+  "title": "Khung chat AI hiện chữ dần theo stream SSE",
+  "status": "draft",
+  "conversation_id": null,
+  "history": [
+    {
+      "at": "2026-11-12T23:35:52",
+      "status": "draft",
+      "note": "Claude tạo task"
+    }
+  ],
+  "locked_files": [
+    "handoff/tasks/TASK-051-fe-ai-chat-stream/verify.sh",
+    "frontend/tests/ai/use-ai-chat.test.tsx",
+    "handoff/tasks/TASK-051-fe-ai-chat-stream/verify.sh"
+  ]
+}
