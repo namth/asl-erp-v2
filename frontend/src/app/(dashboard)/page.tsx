@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import { useQueryClient, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useMe } from '@/hooks/use-auth';
 import { useMyTasks } from '@/hooks/use-my-tasks';
-import type { MyTaskItem } from '@/hooks/use-my-tasks';
 import { useApprovals } from '@/hooks/use-approvals';
 import { useCases } from '@/hooks/use-cases';
 import { useAccountingInbox } from '@/hooks/use-accounting';
