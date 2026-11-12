@@ -61,6 +61,12 @@ class Settings(BaseSettings):
     CLAMAV_PORT: int = int(os.getenv("CLAMAV_PORT", "3310"))
     MAX_UPLOAD_SIZE_MB: int = int(os.getenv("MAX_UPLOAD_SIZE_MB", "50"))
 
+    # Outbound Channels (DEC-03)
+    ERP_PUBLIC_URL: str = os.getenv("ERP_PUBLIC_URL", "https://erp.asllaw.vn")
+    OUTBOUND_ALLOWED_HOSTS: str = os.getenv("OUTBOUND_ALLOWED_HOSTS", "api.telegram.org,openapi.zalo.me")
+    TELEGRAM_BOT_TOKEN: str = os.getenv("TELEGRAM_BOT_TOKEN", "")
+    ZALO_OA_ACCESS_TOKEN: str = os.getenv("ZALO_OA_ACCESS_TOKEN", "")
+
     @model_validator(mode="after")
     def _require_data_key_outside_dev(self):
         if not self.DATA_ENCRYPTION_MASTER_KEY:
