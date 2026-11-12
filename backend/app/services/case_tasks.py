@@ -9,6 +9,7 @@ from backend.app.db.postgres import engine
 from backend.app.services.audit import log_audit_event
 from backend.app.services.cases import check_case_access
 from backend.app.schemas.cases import TaskPatchRequest
+from backend.app.services.floorplan import notify_task_status_changed, notify_approval_submitted
 
 def record_task_audit(user_id: str, task_id: str, action: str):
     try:
@@ -111,6 +112,7 @@ async def complete_task_side_effects(
                     INSERT INTO approval_requests (id, case_id, subject_type, subject_id, requested_by, status, requested_at)
                     VALUES (:aid, :cid, 'STAGE_GATE', :sid, :uid, 'PENDING', NOW())
                 """), {"aid": appr_id, "cid": case_id, "sid": stage_id, "uid": uuid.UUID(current_user_id)})
+                return appr_id
             else:
                 await conn.execute(text("""
                     UPDATE case_stages
@@ -119,6 +121,7 @@ async def complete_task_side_effects(
                 """), {"sid": stage_id})
 
                 await complete_stage_and_unlock_next(conn, case_id, st.order_index)
+    return None
 
 async def get_case_tasks(
     case_id: str,
@@ -197,9 +200,11 @@ async def patch_task(
 ) -> Dict[str, Any]:
     await check_case_access(current_user["id"], case_id, "professional")
 
+    old_assigned_to = None
+    new_assigned_to = None
     async with engine.begin() as conn:
         res = await conn.execute(text("""
-            SELECT t.id, t.case_id, c.is_legacy
+            SELECT t.id, t.case_id, t.assigned_to, c.is_legacy
             FROM case_tasks t
             JOIN cases c ON t.case_id = c.id
             WHERE t.id = :tid AND t.case_id = :cid
@@ -211,7 +216,9 @@ async def patch_task(
         if row.is_legacy:
             raise AppException(409, "LEGACY_CASE_READ_ONLY", "Vụ việc lịch sử chỉ đọc")
 
+        old_assigned_to = row.assigned_to
         if patch_data.assigned_to is not None:
+            new_assigned_to = patch_data.assigned_to
             # Verify assigned_to is in case
             assign_res = await conn.execute(text("""
                 SELECT 1 FROM case_assignments
@@ -236,6 +243,11 @@ async def patch_task(
             sql = f"UPDATE case_tasks SET {', '.join(updates)} WHERE id = :tid"
             await conn.execute(text(sql), params)
 
+    if new_assigned_to is not None:
+        if old_assigned_to and str(old_assigned_to) != str(new_assigned_to):
+            await notify_task_status_changed(old_assigned_to)
+        await notify_task_status_changed(new_assigned_to)
+
     return {"id": task_id, "message": "Cập nhật tác vụ thành công"}
 
 async def update_task_status(
@@ -247,9 +259,12 @@ async def update_task_status(
 ) -> Dict[str, Any]:
     await check_case_access(current_user["id"], case_id, "professional")
 
+    created_appr_id = None
+    stage_appr_id = None
     async with engine.begin() as conn:
         res = await conn.execute(text("""
             SELECT t.id, t.case_id, t.stage_id, t.status, t.requires_approval, t.triggers_milestone_id,
+                   t.assigned_to,
                    s.status AS stage_status, s.requires_approval AS stage_requires_approval, s.order_index AS stage_order_index,
                    c.status AS case_status, c.is_legacy AS case_is_legacy
             FROM case_tasks t
@@ -309,12 +324,13 @@ async def update_task_status(
                 INSERT INTO approval_requests (id, case_id, subject_type, subject_id, requested_by, status, requested_at)
                 VALUES (:aid, :cid, 'TASK', :tid, :uid, 'PENDING', NOW())
             """), {"aid": appr_id, "cid": t.case_id, "tid": t.id, "uid": uuid.UUID(current_user["id"])})
+            created_appr_id = appr_id
 
         elif current_status == "IN_PROGRESS" and new_status == "COMPLETED":
             if t.requires_approval:
                 raise AppException(409, "INVALID_STATE_TRANSITION", "Tác vụ yêu cầu phê duyệt không thể chuyển thẳng hoàn thành")
 
-            await complete_task_side_effects(
+            stage_appr_id = await complete_task_side_effects(
                 conn=conn,
                 task_id=t.id,
                 case_id=t.case_id,
@@ -326,6 +342,15 @@ async def update_task_status(
             raise AppException(409, "INVALID_STATE_TRANSITION", f"Chuyển trạng thái task không hợp lệ: {current_status} -> {new_status}")
 
     record_task_audit(current_user["id"], task_id, "TASK_STATUS_CHANGED")
+
+    if t and t.assigned_to:
+        await notify_task_status_changed(t.assigned_to)
+
+    if created_appr_id:
+        await notify_approval_submitted(created_appr_id)
+
+    if stage_appr_id:
+        await notify_approval_submitted(stage_appr_id)
 
     return {"id": task_id, "status": new_status}
 

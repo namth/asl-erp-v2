@@ -11,6 +11,7 @@ from backend.app.db.neo4j import get_neo4j_driver
 from backend.app.guards.need_to_know import query_need_to_know_facts
 from backend.app.services.audit import log_audit_event
 from backend.app.services.case_tasks import complete_task_side_effects, complete_stage_and_unlock_next
+from backend.app.services.floorplan import notify_approval_decided, notify_task_status_changed
 
 def record_approval_audit(user_id: str, approval_id: str, action: str):
     try:
@@ -186,6 +187,7 @@ async def decide_approval(
 
     appr_uuid = uuid.UUID(approval_id)
 
+    task_assignee_id = None
     async with engine.begin() as conn:
         res = await conn.execute(text("""
             SELECT ar.id, ar.case_id, ar.subject_type, ar.subject_id, ar.requested_by, ar.status,
@@ -233,11 +235,12 @@ async def decide_approval(
         # Side effects
         if ar.subject_type == "TASK":
             t_res = await conn.execute(text("""
-                SELECT id, case_id, stage_id, triggers_milestone_id
+                SELECT id, case_id, stage_id, triggers_milestone_id, assigned_to
                 FROM case_tasks WHERE id = :tid
             """), {"tid": ar.subject_id})
             t = t_res.fetchone()
             if t:
+                task_assignee_id = t.assigned_to
                 if action == "APPROVE":
                     await complete_task_side_effects(
                         conn=conn,
@@ -291,6 +294,7 @@ async def decide_approval(
                 if action == "APPROVE":
                     prop = cr.proposal if isinstance(cr.proposal, dict) else json.loads(cr.proposal or "{}")
                     new_task_id = uuid.uuid4()
+                    task_assignee_id = prop.get("assigned_to")
                     await conn.execute(text("""
                         INSERT INTO case_tasks (
                             id, case_id, stage_id, title, status, assigned_to,
@@ -311,5 +315,10 @@ async def decide_approval(
                     })
 
     record_approval_audit(current_user["id"], approval_id, action)
+
+    await notify_approval_decided(ar.id, new_appr_status)
+
+    if task_assignee_id:
+        await notify_task_status_changed(task_assignee_id)
 
     return {"id": approval_id, "action": action, "status": new_appr_status}
