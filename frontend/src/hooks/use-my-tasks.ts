@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { apiFetch } from '@/lib/api-client';
+import { apiFetchList, type ListMeta } from '@/lib/api-client';
 
 export interface MyTaskItem {
   id: string;
@@ -33,15 +33,13 @@ export interface MyTasksFilters {
   limit?: number;
 }
 
+// docs/07: GET /me/tasks trả data[] + meta (§1.2) có summary nằm trong meta.
+export type MyTasksMeta = ListMeta & { summary: MyTasksSummary };
+
 export interface MyTasksResponse {
   data: MyTaskItem[];
+  meta: MyTasksMeta;
   summary: MyTasksSummary;
-  meta?: {
-    total: number;
-    page: number;
-    limit: number;
-    total_pages: number;
-  };
 }
 
 export function useMyTasks(filters?: MyTasksFilters) {
@@ -65,6 +63,10 @@ export function useMyTasks(filters?: MyTasksFilters) {
 
   return useQuery<MyTasksResponse>({
     queryKey: ['my-tasks', filters],
-    queryFn: () => apiFetch<MyTasksResponse>(endpoint),
+    queryFn: async () => {
+      const { data, meta } = await apiFetchList<MyTaskItem>(endpoint);
+      const m = meta as MyTasksMeta;
+      return { data, meta: m, summary: m.summary };
+    },
   });
 }

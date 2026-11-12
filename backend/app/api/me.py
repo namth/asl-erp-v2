@@ -10,6 +10,11 @@ from backend.app.services.cases import get_accessible_case_ids
 
 router = APIRouter(prefix="/me", tags=["Me"])
 
+
+def _list_meta(total: int, summary: Dict[str, int]) -> Dict[str, Any]:
+    """meta theo docs/07 §1.2; /me/tasks trả trọn danh sách trong một trang, summary nằm trong meta."""
+    return {"page": 1, "limit": total, "total_records": total, "total_pages": 1 if total else 0, "summary": summary}
+
 @router.get("/tasks")
 async def get_my_tasks(
     status: Optional[str] = None,
@@ -21,7 +26,7 @@ async def get_my_tasks(
         return {
             "success": True,
             "data": [],
-            "summary": {"todo": 0, "in_progress": 0, "waiting_approval": 0, "overdue": 0}
+            "meta": _list_meta(0, {"todo": 0, "in_progress": 0, "waiting_approval": 0, "overdue": 0}),
         }
 
     conditions = ["t.assigned_to = :uid", "t.status != 'COMPLETED'"]
@@ -127,5 +132,5 @@ async def get_my_tasks(
         return {
             "success": True,
             "data": filtered_tasks,
-            "summary": summary
+            "meta": _list_meta(len(filtered_tasks), summary),
         }

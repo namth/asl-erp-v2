@@ -900,7 +900,7 @@ async def test_get_me_tasks_filters_and_summary():
             assert t5 not in task_ids, "Task 5 (unauthorized case) must not be in me/tasks"
 
             # 2. Check summary
-            summary = body.get("summary") or {}
+            summary = body["meta"]["summary"]  # docs/07: summary nằm trong meta
             assert summary.get("todo") == 1
             assert summary.get("in_progress") == 1
             assert summary.get("waiting_approval") == 1

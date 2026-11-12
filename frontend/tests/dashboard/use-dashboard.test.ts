@@ -41,18 +41,13 @@ describe('Hooks dữ liệu cho Dashboard & Cài đặt (brief mục 3, 4, 5)', 
             blocked_by_count: 0,
           },
         ],
-        summary: {
-          todo: 1,
-          in_progress: 2,
-          waiting_approval: 0,
-          overdue: 0,
+        meta: {
+          page: 1, limit: 1, total_records: 1, total_pages: 1,
+          summary: { todo: 1, in_progress: 2, waiting_approval: 0, overdue: 0 },
         },
-        meta: { total: 1, page: 1, limit: 20, total_pages: 1 },
       };
 
-      const apiListSpy = vi.fn().mockResolvedValue(mockResponse);
-      vi.spyOn(apiClient, "apiFetchList").mockImplementation(apiListSpy);
-      const apiSpy = vi.spyOn(apiClient, 'apiFetch').mockResolvedValue(mockResponse as any);
+      const apiListSpy = vi.spyOn(apiClient, 'apiFetchList').mockResolvedValue(mockResponse as any);
 
       const { result } = renderHook(() => useMyTasks(), {
         wrapper: createWrapper(),
@@ -60,20 +55,18 @@ describe('Hooks dữ liệu cho Dashboard & Cài đặt (brief mục 3, 4, 5)', 
 
       await waitFor(() => expect(result.current.isLoading).toBe(false));
 
-      const calledUrl = apiListSpy.mock.calls[0]?.[0] || apiSpy.mock.calls[0]?.[0];
-      expect(calledUrl).toMatch(/^\/me\/tasks(\?.*)?$/);
-      expect(result.current.data).toEqual(mockResponse);
+      expect(apiListSpy.mock.calls[0][0]).toMatch(/^\/me\/tasks(\?.*)?$/);
+      expect(result.current.data).toEqual({ ...mockResponse, summary: mockResponse.meta.summary });
     });
 
     it('truyền đúng query parameters khi lọc theo due (overdue/today/week), status và page', async () => {
       const mockResponse = {
         data: [],
-        summary: { todo: 0, in_progress: 0, waiting_approval: 0, overdue: 0 },
+        meta: { page: 2, limit: 0, total_records: 0, total_pages: 0,
+                summary: { todo: 0, in_progress: 0, waiting_approval: 0, overdue: 0 } },
       };
 
-      const apiListSpy = vi.fn().mockResolvedValue(mockResponse);
-      vi.spyOn(apiClient, "apiFetchList").mockImplementation(apiListSpy);
-      const apiSpy = vi.spyOn(apiClient, 'apiFetch').mockResolvedValue(mockResponse as any);
+      const apiSpy = vi.spyOn(apiClient, 'apiFetchList').mockResolvedValue(mockResponse as any);
 
       const { result } = renderHook(
         () => useMyTasks({ due: 'overdue', status: 'TODO', page: 2 }),

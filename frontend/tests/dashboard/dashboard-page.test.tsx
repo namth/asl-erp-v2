@@ -233,7 +233,7 @@ describe('Màn hình Bàn làm việc cá nhân - dashboard/page.tsx (SCR-02 & b
       // Khi overdue = 0: không được mang class cảnh báo đỏ nguy cấp
       vi.spyOn(myTasksHooks, 'useMyTasks').mockReturnValue({
         data: {
-          items: sampleMyTasks,
+          data: sampleMyTasks,
           summary: { ...sampleTasksSummary, overdue: 0 },
         },
         isLoading: false,
@@ -415,7 +415,7 @@ describe('Màn hình Bàn làm việc cá nhân - dashboard/page.tsx (SCR-02 & b
       // myTasks và cases vẫn bình thường
       vi.spyOn(myTasksHooks, 'useMyTasks').mockReturnValue({
         data: {
-          items: sampleMyTasks,
+          data: sampleMyTasks,
           summary: sampleTasksSummary,
         },
         isLoading: false,
@@ -440,7 +440,7 @@ describe('Màn hình Bàn làm việc cá nhân - dashboard/page.tsx (SCR-02 & b
     it('hiển thị EmptyState khi danh sách tác vụ hoặc vụ việc trống', () => {
       vi.spyOn(myTasksHooks, 'useMyTasks').mockReturnValue({
         data: {
-          items: [],
+          data: [],
           summary: { todo: 0, in_progress: 0, waiting_approval: 0, overdue: 0 },
         },
         isLoading: false,

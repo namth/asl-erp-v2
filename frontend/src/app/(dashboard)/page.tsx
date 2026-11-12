@@ -166,7 +166,7 @@ function AttorneyManagerDashboardView({ user }: { user?: User | null }) {
       />
 
       <MyTasksList
-        items={myTasksData?.data ?? (Object.values(myTasksData || {}).find(Array.isArray) as MyTaskItem[] | undefined)}
+        items={myTasksData?.data}
         isLoading={isLoadingTasks}
         isError={isErrorTasks}
         onRetry={() => refetchTasks()}

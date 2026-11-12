@@ -84,7 +84,7 @@ async def api_list_clients(
     result = await list_clients(q=q, category_group=category_group, page=page, limit=limit)
     return {
         "success": True,
-        "data": result,
+        "data": result["items"],
         "meta": result["meta"]
     }
 

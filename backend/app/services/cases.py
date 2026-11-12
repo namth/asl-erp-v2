@@ -105,7 +105,7 @@ async def list_cases(
 ) -> Dict[str, Any]:
     accessible_ids = await get_accessible_case_ids(current_user)
     if accessible_ids is not None and len(accessible_ids) == 0:
-        return {"data": [], "meta": {"total": 0, "page": page, "limit": limit}}
+        return {"data": [], "meta": {"page": page, "limit": limit, "total_records": 0, "total_pages": 0}}
 
     conditions = []
     params: Dict[str, Any] = {}
@@ -141,7 +141,14 @@ async def list_cases(
         params["offset"] = offset
 
         sql = text(f"""
-            SELECT c.id, c.case_code, c.title, c.status, c.workflow_mode, c.current_stage_id,
+            SELECT c.id, c.case_code, c.title, c.status, c.workflow_mode,
+                   COALESCE(c.current_stage_id, (
+                       SELECT s.id FROM case_stages s
+                       WHERE s.case_id = c.id AND s.status NOT IN ('LOCKED', 'COMPLETED')
+                       ORDER BY s.order_index LIMIT 1
+                   )) AS current_stage_id,
+                   (SELECT MIN(t.due_at) FROM case_tasks t
+                    WHERE t.case_id = c.id AND t.status <> 'COMPLETED') AS due_at_nearest,
                    c.department_id, cl.name AS client_name,
                    (SELECT role_in_case FROM case_assignments WHERE case_id = c.id AND user_id = :curr_uid AND unassigned_at IS NULL LIMIT 1) AS my_role
             FROM cases c
@@ -186,10 +193,11 @@ async def list_cases(
                 "workflow_mode": r.workflow_mode,
                 "current_stage": stage_info,
                 "progress_pct": pct,
+                "due_at_nearest": r.due_at_nearest.isoformat() if r.due_at_nearest else None,
                 "my_role_in_case": r.my_role
             })
 
-    return {"data": items, "meta": {"total": total, "page": page, "limit": limit}}
+    return {"data": items, "meta": {"page": page, "limit": limit, "total_records": total, "total_pages": -(-total // limit) if total else 0}}
 
 async def get_case_detail(case_id: str, view: Optional[str], current_user: Dict[str, Any]) -> Dict[str, Any]:
     scope = "progress" if view == "progress" else "professional"
@@ -198,7 +206,12 @@ async def get_case_detail(case_id: str, view: Optional[str], current_user: Dict[
     async with engine.connect() as conn:
         res = await conn.execute(text("""
             SELECT c.id, c.case_code, c.title, c.status, c.workflow_mode, c.contract_value,
-                   c.is_legacy, c.custom_data, c.current_stage_id, c.client_id,
+                   c.is_legacy, c.custom_data, c.client_id,
+                   COALESCE(c.current_stage_id, (
+                       SELECT s.id FROM case_stages s
+                       WHERE s.case_id = c.id AND s.status NOT IN ('LOCKED', 'COMPLETED')
+                       ORDER BY s.order_index LIMIT 1
+                   )) AS current_stage_id,
                    cl.name AS client_name, cl.tax_code AS client_tax_code
             FROM cases c
             LEFT JOIN clients cl ON c.client_id = cl.id
