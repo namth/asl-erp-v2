@@ -1,7 +1,7 @@
 {
   "id": "TASK-032",
   "title": "Trung tâm thông báo trên thanh đầu trang",
-  "status": "submitted",
+  "status": "accepted",
   "conversation_id": "11c47f48-ded1-48b7-a272-87d4a03f1bac",
   "history": [
     {
@@ -33,6 +33,11 @@
       "at": "2026-11-12T07:14:44",
       "status": "submitted",
       "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-12T07:20:34",
+      "status": "accepted",
+      "note": "Claude nghiệm thu"
     }
   ],
   "agents": {
