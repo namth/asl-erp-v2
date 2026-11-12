@@ -35,7 +35,7 @@ describe('Hooks dữ liệu CRM - use-crm.ts (TanStack Query & brief mục 4)', 
   describe('useClients hook', () => {
     it('gọi GET /crm/clients với đầy đủ query parameters (q, category_group, page, limit=20)', async () => {
       const mockResponse = {
-        items: [
+        data: [
           {
             id: 'client-1',
             client_type: 'ENTERPRISE',
@@ -48,6 +48,8 @@ describe('Hooks dữ liệu CRM - use-crm.ts (TanStack Query & brief mục 4)', 
         meta: { page: 2, limit: 20, total_records: 45, total_pages: 3 },
       };
 
+      const apiListSpy = vi.fn().mockResolvedValue(mockResponse);
+      vi.spyOn(apiClient, "apiFetchList").mockImplementation(apiListSpy);
       const apiSpy = vi.spyOn(apiClient, 'apiFetch').mockResolvedValue(mockResponse as any);
 
       const { result } = renderHook(
@@ -57,23 +59,27 @@ describe('Hooks dữ liệu CRM - use-crm.ts (TanStack Query & brief mục 4)', 
 
       await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
-      expect(apiSpy).toHaveBeenCalledWith(
-        expect.stringMatching(/\/crm\/clients\?(?=.*q=ASL\+Tech|q=ASL%20Tech)(?=.*category_group=VIP)(?=.*page=2)(?=.*limit=20)/)
+      const lastUrl = apiListSpy.mock.calls[0]?.[0] || apiSpy.mock.calls[0]?.[0];
+      expect(lastUrl).toMatch(
+        /\/crm\/clients\?(?=.*q=ASL\+Tech|q=ASL%20Tech)(?=.*category_group=VIP)(?=.*page=2)(?=.*limit=20)/
       );
       expect(result.current.data).toEqual(mockResponse);
     });
 
     it('gọi GET /crm/clients với giá trị mặc định khi không truyền filter', async () => {
       const mockResponse = {
-        items: [],
+        data: [],
         meta: { page: 1, limit: 20, total_records: 0, total_pages: 0 },
       };
+      const apiListSpy = vi.fn().mockResolvedValue(mockResponse);
+      vi.spyOn(apiClient, "apiFetchList").mockImplementation(apiListSpy);
       const apiSpy = vi.spyOn(apiClient, 'apiFetch').mockResolvedValue(mockResponse as any);
 
       const { result } = renderHook(() => useClients(), { wrapper: createWrapper() });
 
       await waitFor(() => expect(result.current.isSuccess).toBe(true));
-      expect(apiSpy).toHaveBeenCalledWith(expect.stringContaining('/crm/clients'));
+      const lastUrl = apiListSpy.mock.calls[0]?.[0] || apiSpy.mock.calls[0]?.[0];
+      expect(lastUrl).toContain('/crm/clients');
     });
   });
 

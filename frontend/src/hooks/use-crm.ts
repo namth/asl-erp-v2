@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient, QueryClient } from '@tanstack/react-query';
-import { apiFetch } from '@/lib/api-client';
+import { apiFetch, apiFetchList } from '@/lib/api-client';
 import {
   Client,
   ClientsResponse,
@@ -41,7 +41,7 @@ export function useClients(params?: ClientFilterParams) {
         }
         searchParams.set('page', String(params?.page || 1));
         searchParams.set('limit', String(params?.limit || 20));
-        return apiFetch<ClientsResponse>(`/crm/clients?${searchParams.toString()}`);
+        return apiFetchList<Client>(`/crm/clients?${searchParams.toString()}`);
       },
     },
     queryClient

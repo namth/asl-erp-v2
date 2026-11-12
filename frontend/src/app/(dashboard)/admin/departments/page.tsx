@@ -53,7 +53,7 @@ export default function DepartmentsPage() {
 
   // Filter candidates: strictly active managers only
   const managerCandidates =
-    usersData?.items?.filter((u) => u.system_role === 'MANAGER' && u.is_active) || [];
+    usersData?.data?.filter((u) => u.system_role === 'MANAGER' && u.is_active) || [];
 
   const handleOpenCreate = () => {
     setDeptCode('');

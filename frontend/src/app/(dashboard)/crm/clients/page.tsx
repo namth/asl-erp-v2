@@ -220,7 +220,7 @@ export default function ClientsPage() {
           message={error?.message || 'Có lỗi xảy ra'}
           onRetry={() => refetch()}
         />
-      ) : !data || data.items.length === 0 ? (
+      ) : !data || data.data.length === 0 ? (
         <EmptyState
           title="Chưa có khách hàng"
           description="Hiện chưa có dữ liệu nào trong danh bạ."
@@ -240,7 +240,7 @@ export default function ClientsPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
-                  {data.items.map((client) => (
+                  {data.data.map((client) => (
                     <tr
                       key={client.id}
                       onClick={() => router.push(`/crm/clients/${client.id}`)}
@@ -274,7 +274,7 @@ export default function ClientsPage() {
             {/* Pagination footer */}
             <div className="flex flex-col sm:flex-row items-center justify-between px-6 py-4 bg-slate-50 dark:bg-slate-900/50 border-t border-slate-200 dark:border-slate-700 text-xs text-slate-600 dark:text-slate-400 gap-3">
               <div>
-                Tổng số: <span className="font-semibold text-slate-900 dark:text-slate-100">{totalRecords}</span> khách hàng (Trang {currentPage} / {totalPages})
+                Tổng số: <span className="font-semibold text-slate-900 dark:text-slate-100">{totalRecords} khách hàng</span> (Trang {currentPage} / {totalPages})
               </div>
               <div className="flex items-center gap-2">
                 <button

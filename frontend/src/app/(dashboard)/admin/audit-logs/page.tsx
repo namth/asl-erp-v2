@@ -105,8 +105,10 @@ export default function AuditLogsPage() {
     });
   };
 
+  const items = auditData?.data || [];
+
   const handleJumpToBrokenId = (brokenId: number) => {
-    const foundLog = auditData?.items.find((item) => item.id === brokenId);
+    const foundLog = items.find((item) => item.id === brokenId);
     if (foundLog) {
       setSelectedLog(foundLog);
     }
@@ -130,7 +132,6 @@ export default function AuditLogsPage() {
     );
   }
 
-  const items = auditData?.items || [];
   const meta = auditData?.meta;
   const totalPages = meta?.total_pages || 1;
   const currentPage = meta?.page || currentFilters.page || 1;

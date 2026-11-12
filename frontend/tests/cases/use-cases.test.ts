@@ -35,7 +35,7 @@ describe('Hooks dữ liệu Vụ việc - use-cases.ts (TanStack Query & brief m
   describe('useCases hook', () => {
     it('gọi GET /cases với đầy đủ query parameters (q, status, department_id, mine=true, page, limit=20)', async () => {
       const mockResponse = {
-        items: [
+        data: [
           {
             id: 'case-001',
             case_code: 'ASL-2026-TM-0045',
@@ -56,6 +56,8 @@ describe('Hooks dữ liệu Vụ việc - use-cases.ts (TanStack Query & brief m
         meta: { page: 2, limit: 20, total_records: 25, total_pages: 2 },
       };
 
+      const apiListSpy = vi.fn().mockResolvedValue(mockResponse);
+      vi.spyOn(apiClient, "apiFetchList").mockImplementation(apiListSpy);
       const apiSpy = vi.spyOn(apiClient, 'apiFetch').mockResolvedValue(mockResponse as any);
 
       const { result } = renderHook(
@@ -73,19 +75,20 @@ describe('Hooks dữ liệu Vụ việc - use-cases.ts (TanStack Query & brief m
 
       await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
-      expect(apiSpy).toHaveBeenCalledWith(
-        expect.stringMatching(
-          /\/cases\?(?=.*q=ASL(\+|%20)GATEWAY)(?=.*status=ACTIVE)(?=.*department_id=dept-ip)(?=.*mine=true)(?=.*page=2)(?=.*limit=20)/
-        )
+      const lastCalledUrl = apiListSpy.mock.calls[0]?.[0] || apiSpy.mock.calls[0]?.[0];
+      expect(lastCalledUrl).toMatch(
+        /\/cases\?(?=.*q=ASL(\+|%20)GATEWAY)(?=.*status=ACTIVE)(?=.*department_id=dept-ip)(?=.*mine=true)(?=.*page=2)(?=.*limit=20)/
       );
       expect(result.current.data).toEqual(mockResponse);
     });
 
     it('bỏ qua các tham số rỗng (q="", status="") và chỉ gửi tham số có giá trị', async () => {
       const mockResponse = {
-        items: [],
+        data: [],
         meta: { page: 1, limit: 20, total_records: 0, total_pages: 0 },
       };
+      const apiListSpy = vi.fn().mockResolvedValue(mockResponse);
+      vi.spyOn(apiClient, "apiFetchList").mockImplementation(apiListSpy);
       const apiSpy = vi.spyOn(apiClient, 'apiFetch').mockResolvedValue(mockResponse as any);
 
       const { result } = renderHook(
@@ -101,26 +104,27 @@ describe('Hooks dữ liệu Vụ việc - use-cases.ts (TanStack Query & brief m
 
       await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
-      expect(apiSpy).toHaveBeenCalledWith(
-        expect.stringMatching(/\/cases\?(?=.*department_id=dept-corporate)(?=.*page=1)/)
-      );
+      const calledUrl = apiListSpy.mock.calls[0]?.[0] || apiSpy.mock.calls[0]?.[0];
+      expect(calledUrl).toMatch(/\/cases\?(?=.*department_id=dept-corporate)(?=.*page=1)/);
       // Không được chứa q= hoặc status=
-      const calledUrl = apiSpy.mock.calls[0][0];
       expect(calledUrl).not.toContain('q=');
       expect(calledUrl).not.toContain('status=');
     });
 
     it('gọi GET /cases với giá trị mặc định khi không truyền filter', async () => {
       const mockResponse = {
-        items: [],
+        data: [],
         meta: { page: 1, limit: 20, total_records: 0, total_pages: 0 },
       };
+      const apiListSpy = vi.fn().mockResolvedValue(mockResponse);
+      vi.spyOn(apiClient, "apiFetchList").mockImplementation(apiListSpy);
       const apiSpy = vi.spyOn(apiClient, 'apiFetch').mockResolvedValue(mockResponse as any);
 
       const { result } = renderHook(() => useCases(), { wrapper: createWrapper() });
 
       await waitFor(() => expect(result.current.isSuccess).toBe(true));
-      expect(apiSpy).toHaveBeenCalledWith(expect.stringMatching(/\/cases(\?.*)?$/));
+      const calledUrl = apiListSpy.mock.calls[0]?.[0] || apiSpy.mock.calls[0]?.[0];
+      expect(calledUrl).toMatch(/\/cases(\?.*)?$/);
     });
   });
 

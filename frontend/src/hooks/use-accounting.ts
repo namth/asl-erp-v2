@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { apiFetch } from '@/lib/api-client';
+import { apiFetch, apiFetchList } from '@/lib/api-client';
 import {
   AccountingInboxFilters,
   AccountingInboxResponse,
@@ -28,7 +28,7 @@ export function useAccountingInbox(filters?: AccountingInboxFilters) {
 
   return useQuery<AccountingInboxResponse>({
     queryKey: ['accounting-inbox', filters],
-    queryFn: () => apiFetch<AccountingInboxResponse>(endpoint),
+    queryFn: () => apiFetchList(endpoint),
   });
 }
 

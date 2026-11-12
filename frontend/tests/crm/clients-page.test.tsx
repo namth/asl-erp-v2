@@ -60,7 +60,7 @@ describe('Màn hình Quản lý Khách hàng (SCR-03 & brief mục 4, 5)', () =>
     it('trạng thái trống (Empty state): hiển thị thông điệp khi danh sách khách hàng rỗng', () => {
       vi.spyOn(crmHooks, 'useClients').mockReturnValue({
         data: {
-          items: [],
+          data: [],
           meta: { page: 1, limit: 20, total_records: 0, total_pages: 0 },
         },
         isLoading: false,
@@ -96,7 +96,7 @@ describe('Màn hình Quản lý Khách hàng (SCR-03 & brief mục 4, 5)', () =>
     it('trạng thái thành công: hiển thị bảng danh sách khách hàng đầy đủ thông tin', () => {
       vi.spyOn(crmHooks, 'useClients').mockReturnValue({
         data: {
-          items: [
+          data: [
             {
               id: 'client-1',
               name: 'Công ty Cổ phần Alpha Gate',
@@ -132,7 +132,7 @@ describe('Màn hình Quản lý Khách hàng (SCR-03 & brief mục 4, 5)', () =>
         currentParams = params || currentParams;
         return {
           data: {
-            items: [],
+            data: [],
             meta: { page: 1, limit: 20, total_records: 0, total_pages: 0 },
           },
           isLoading: false,
@@ -163,7 +163,7 @@ describe('Màn hình Quản lý Khách hàng (SCR-03 & brief mục 4, 5)', () =>
         capturedPage = params?.page || 1;
         return {
           data: {
-            items: [
+            data: [
               {
                 id: 'c-1',
                 name: 'Công ty Trang 1',
@@ -203,7 +203,7 @@ describe('Màn hình Quản lý Khách hàng (SCR-03 & brief mục 4, 5)', () =>
       } as any);
 
       vi.spyOn(crmHooks, 'useClients').mockReturnValue({
-        data: { items: [], meta: { page: 1, limit: 20, total_records: 0, total_pages: 0 } },
+        data: { data: [], meta: { page: 1, limit: 20, total_records: 0, total_pages: 0 } },
         isLoading: false,
         isError: false,
       } as any);
@@ -232,7 +232,7 @@ describe('Màn hình Quản lý Khách hàng (SCR-03 & brief mục 4, 5)', () =>
 
     it('INDIVIDUAL: chọn cá nhân thì nhập identity_no (CCCD/Hộ chiếu) thay vì MST', async () => {
       vi.spyOn(crmHooks, 'useClients').mockReturnValue({
-        data: { items: [], meta: { page: 1, limit: 20, total_records: 0, total_pages: 0 } },
+        data: { data: [], meta: { page: 1, limit: 20, total_records: 0, total_pages: 0 } },
         isLoading: false,
         isError: false,
       } as any);
@@ -262,7 +262,7 @@ describe('Màn hình Quản lý Khách hàng (SCR-03 & brief mục 4, 5)', () =>
       } as any);
 
       vi.spyOn(crmHooks, 'useClients').mockReturnValue({
-        data: { items: [], meta: { page: 1, limit: 20, total_records: 0, total_pages: 0 } },
+        data: { data: [], meta: { page: 1, limit: 20, total_records: 0, total_pages: 0 } },
         isLoading: false,
         isError: false,
       } as any);
@@ -306,7 +306,7 @@ describe('Màn hình Quản lý Khách hàng (SCR-03 & brief mục 4, 5)', () =>
       } as any);
 
       vi.spyOn(crmHooks, 'useClients').mockReturnValue({
-        data: { items: [], meta: { page: 1, limit: 20, total_records: 0, total_pages: 0 } },
+        data: { data: [], meta: { page: 1, limit: 20, total_records: 0, total_pages: 0 } },
         isLoading: false,
         isError: false,
       } as any);
@@ -349,7 +349,7 @@ describe('Màn hình Quản lý Khách hàng (SCR-03 & brief mục 4, 5)', () =>
 
       vi.spyOn(crmHooks, 'useClients').mockReturnValue({
         data: {
-          items: [
+          data: [
             {
               id: 'client-1',
               name: 'Công ty Cổ phần Alpha Gate',

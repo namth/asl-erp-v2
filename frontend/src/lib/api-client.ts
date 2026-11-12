@@ -1,3 +1,15 @@
+export interface ListMeta {
+  page: number;
+  limit: number;
+  total_records: number;
+  total_pages: number;
+}
+
+export interface ListResponse<T> {
+  data: T[];
+  meta: ListMeta;
+}
+
 export class ApiError extends Error {
   status: number;
   code: string;
@@ -23,11 +35,11 @@ function getCsrfTokenFromCookie(): string | null {
   return match ? decodeURIComponent(match[1]) : null;
 }
 
-export async function apiFetch<T = unknown>(
+async function requestJson(
   path: string,
   init?: RequestInit,
   isRetry = false
-): Promise<T> {
+): Promise<Record<string, unknown> | null> {
   const base = process.env.NEXT_PUBLIC_API_BASE || '/api/v1';
   const normalizedPath = path.startsWith('/') ? path : `/${path}`;
   const url = normalizedPath.startsWith('http') ? normalizedPath : `${base}${normalizedPath}`;
@@ -76,7 +88,7 @@ export async function apiFetch<T = unknown>(
     if (is401AuthError && !isAuthEndpoint && !isRetry) {
       try {
         await apiFetch('/auth/refresh', { method: 'POST' }, true);
-        return await apiFetch<T>(path, init, true);
+        return await requestJson(path, init, true);
       } catch {
         throw apiError;
       }
@@ -85,9 +97,37 @@ export async function apiFetch<T = unknown>(
     throw apiError;
   }
 
+  return json;
+}
+
+export async function apiFetch<T = unknown>(
+  path: string,
+  init?: RequestInit,
+  isRetry = false
+): Promise<T> {
+  const json = await requestJson(path, init, isRetry);
+
   if (json && typeof json === 'object' && 'data' in json && json.success !== false) {
     return json.data as T;
   }
 
   return json as unknown as T;
+}
+
+export async function apiFetchList<T = unknown>(
+  path: string,
+  init?: RequestInit,
+  isRetry = false
+): Promise<ListResponse<T>> {
+  const json = await requestJson(path, init, isRetry);
+
+  const data = (json && Array.isArray(json.data) ? json.data : []) as T[];
+  const meta = (json?.meta as ListMeta) || {
+    page: 1,
+    limit: data.length,
+    total_records: data.length,
+    total_pages: 1,
+  };
+
+  return { data, meta };
 }

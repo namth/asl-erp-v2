@@ -38,7 +38,7 @@ describe('Quy trình Tạo Người Dùng Mới (brief mục 4, 5)', () => {
 
     vi.spyOn(adminHooks, 'useUsers').mockReturnValue({
       data: {
-        items: [],
+        data: [],
         meta: { page: 1, limit: 20, total_records: 0, total_pages: 0 },
       },
       isLoading: false,

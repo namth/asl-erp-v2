@@ -52,14 +52,16 @@ export interface CreateClientPayload {
   category_group?: ClientCategoryGroup;
 }
 
+export interface ListMeta {
+  page: number;
+  limit: number;
+  total_records: number;
+  total_pages: number;
+}
+
 export interface ClientsResponse {
-  items: Client[];
-  meta: {
-    page: number;
-    limit: number;
-    total_records: number;
-    total_pages: number;
-  };
+  data: Client[];
+  meta: ListMeta;
 }
 
 export interface ClientFilterParams {

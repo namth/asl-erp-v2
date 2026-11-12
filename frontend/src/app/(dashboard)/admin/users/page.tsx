@@ -301,7 +301,7 @@ export default function UsersPage() {
             onRetry={refetch}
           />
         </div>
-      ) : !usersData?.items || usersData.items.length === 0 ? (
+      ) : !usersData?.data || usersData.data.length === 0 ? (
         <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800">
           <EmptyState
             title="Không tìm thấy nhân sự"
@@ -323,7 +323,7 @@ export default function UsersPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
-                {usersData.items.map((user) => {
+                {usersData.data.map((user) => {
                   const isSelf = currentUser?.id === user.id;
 
                   return (
@@ -430,7 +430,7 @@ export default function UsersPage() {
           {usersData.meta && usersData.meta.total_pages > 1 && (
             <div className="flex items-center justify-between px-6 py-4 border-t border-slate-200 dark:border-slate-800">
               <div className="text-xs text-slate-500">
-                Hiển thị {usersData.items.length} trên tổng số {usersData.meta.total_records} nhân sự
+                Hiển thị {usersData.data.length} trên tổng số {usersData.meta.total_records} nhân sự
               </div>
               <div className="flex gap-2">
                 <button

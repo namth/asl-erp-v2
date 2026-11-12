@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useCases } from '@/hooks/use-cases';
 import { useMe } from '@/hooks/use-auth';
 import { CaseStatusBadge, StageStatusBadge, CaseRoleBadge } from '@/components/cases/case-badge';
+import type { CaseListItem } from '@/types/cases';
 import { LoadingSkeleton } from '@/components/ui/loading-skeleton';
 import { EmptyState } from '@/components/ui/empty-state';
 import { ErrorState } from '@/components/ui/error-state';
@@ -101,7 +102,7 @@ export default function CasesPage() {
     updateUrl(searchQuery, statusFilter, departmentFilter, mineOnly, newPage);
   };
 
-  const items = data?.items || [];
+  const items = data?.data || [];
   const meta = data?.meta || { page: 1, limit: 20, total_records: 0, total_pages: 0 };
 
   return (
@@ -192,7 +193,7 @@ export default function CasesPage() {
           }
           onRetry={() => refetch()}
         />
-      ) : items.length === 0 ? (
+      ) : !items.length && (!meta.total_records || meta.total_records === 0) ? (
         <EmptyState
           title="Chưa có vụ việc"
           description="Hiện tại không tìm thấy vụ việc nào phù hợp với bộ lọc tìm kiếm của bạn."
@@ -215,7 +216,7 @@ export default function CasesPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-xs">
-                  {items.map((item) => (
+                  {items.map((item: CaseListItem) => (
                     <tr
                       key={item.id}
                       className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition-colors"

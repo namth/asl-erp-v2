@@ -140,7 +140,7 @@ describe('Ngăn bên xem khác biệt trước-sau (JSON Diff Viewer & brief m�
 
   it('bấm vào một dòng trong bảng hiển thị ngăn bên/drawer xem diff chi tiết', () => {
     vi.spyOn(auditHooks, 'useAuditLogs').mockReturnValue({
-      data: { items: [sampleLogWithDiff], meta: { page: 1, limit: 50, total_records: 1, total_pages: 1 } },
+      data: { data: [sampleLogWithDiff], meta: { page: 1, limit: 50, total_records: 1, total_pages: 1 } },
       isLoading: false,
       isError: false,
     } as any);
@@ -161,7 +161,7 @@ describe('Ngăn bên xem khác biệt trước-sau (JSON Diff Viewer & brief m�
 
   it('diff chính xác: khoá thêm (mới), khoá bỏ (xoá), khoá đổi (cũ -> mới)', () => {
     vi.spyOn(auditHooks, 'useAuditLogs').mockReturnValue({
-      data: { items: [sampleLogWithDiff], meta: { page: 1, limit: 50, total_records: 1, total_pages: 1 } },
+      data: { data: [sampleLogWithDiff], meta: { page: 1, limit: 50, total_records: 1, total_pages: 1 } },
       isLoading: false,
       isError: false,
     } as any);
@@ -188,7 +188,7 @@ describe('Ngăn bên xem khác biệt trước-sau (JSON Diff Viewer & brief m�
 
   it('JSON lồng nhau được hiển thị theo đường dẫn chấm (a.b.c)', () => {
     vi.spyOn(auditHooks, 'useAuditLogs').mockReturnValue({
-      data: { items: [sampleLogWithDiff], meta: { page: 1, limit: 50, total_records: 1, total_pages: 1 } },
+      data: { data: [sampleLogWithDiff], meta: { page: 1, limit: 50, total_records: 1, total_pages: 1 } },
       isLoading: false,
       isError: false,
     } as any);
@@ -208,7 +208,7 @@ describe('Ngăn bên xem khác biệt trước-sau (JSON Diff Viewer & brief m�
 
   it('xử lý an toàn khi before_state = null (sự kiện tạo mới) mà không văng lỗi', () => {
     vi.spyOn(auditHooks, 'useAuditLogs').mockReturnValue({
-      data: { items: [sampleLogCreate], meta: { page: 1, limit: 50, total_records: 1, total_pages: 1 } },
+      data: { data: [sampleLogCreate], meta: { page: 1, limit: 50, total_records: 1, total_pages: 1 } },
       isLoading: false,
       isError: false,
     } as any);
@@ -227,7 +227,7 @@ describe('Ngăn bên xem khác biệt trước-sau (JSON Diff Viewer & brief m�
 
   it('xử lý an toàn khi after_state = null (sự kiện xoá/thu hồi) mà không văng lỗi', () => {
     vi.spyOn(auditHooks, 'useAuditLogs').mockReturnValue({
-      data: { items: [sampleLogDelete], meta: { page: 1, limit: 50, total_records: 1, total_pages: 1 } },
+      data: { data: [sampleLogDelete], meta: { page: 1, limit: 50, total_records: 1, total_pages: 1 } },
       isLoading: false,
       isError: false,
     } as any);
@@ -245,7 +245,7 @@ describe('Ngăn bên xem khác biệt trước-sau (JSON Diff Viewer & brief m�
 
   it('xử lý an toàn khi cả before_state và after_state đều là null (không có diff)', () => {
     vi.spyOn(auditHooks, 'useAuditLogs').mockReturnValue({
-      data: { items: [sampleLogEmptyDiff], meta: { page: 1, limit: 50, total_records: 1, total_pages: 1 } },
+      data: { data: [sampleLogEmptyDiff], meta: { page: 1, limit: 50, total_records: 1, total_pages: 1 } },
       isLoading: false,
       isError: false,
     } as any);
@@ -269,7 +269,7 @@ describe('Ngăn bên xem khác biệt trước-sau (JSON Diff Viewer & brief m�
     });
 
     vi.spyOn(auditHooks, 'useAuditLogs').mockReturnValue({
-      data: { items: [sampleLogWithDiff], meta: { page: 1, limit: 50, total_records: 1, total_pages: 1 } },
+      data: { data: [sampleLogWithDiff], meta: { page: 1, limit: 50, total_records: 1, total_pages: 1 } },
       isLoading: false,
       isError: false,
     } as any);

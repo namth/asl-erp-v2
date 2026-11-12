@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { apiFetch } from '@/lib/api-client';
+import { apiFetch, apiFetchList } from '@/lib/api-client';
 import {
   CaseDetail,
   CaseListFilters,
@@ -37,7 +37,7 @@ export function useCases(filters?: CaseListFilters) {
 
   return useQuery<CaseListResponse>({
     queryKey: ['cases', filters],
-    queryFn: () => apiFetch<CaseListResponse>(endpoint),
+    queryFn: () => apiFetchList(endpoint),
   });
 }
 

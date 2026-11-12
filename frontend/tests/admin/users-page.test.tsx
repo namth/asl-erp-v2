@@ -107,7 +107,7 @@ describe('Màn hình Quản lý Người dùng & Nhân sự (SCR-19 & brief mụ
     it('trạng thái trống (Empty state): hiển thị thông điệp khi danh sách nhân sự rỗng', () => {
       vi.spyOn(adminHooks, 'useUsers').mockReturnValue({
         data: {
-          items: [],
+          data: [],
           meta: { page: 1, limit: 20, total_records: 0, total_pages: 0 },
         },
         isLoading: false,
@@ -143,7 +143,7 @@ describe('Màn hình Quản lý Người dùng & Nhân sự (SCR-19 & brief mụ
     it('trạng thái thành công: hiển thị danh sách người dùng với đầy đủ thông tin, huy hiệu trạng thái & 2FA', () => {
       vi.spyOn(adminHooks, 'useUsers').mockReturnValue({
         data: {
-          items: sampleUsers,
+          data: sampleUsers,
           meta: { page: 1, limit: 20, total_records: 3, total_pages: 1 },
         },
         isLoading: false,
@@ -181,7 +181,7 @@ describe('Màn hình Quản lý Người dùng & Nhân sự (SCR-19 & brief mụ
 
       vi.spyOn(adminHooks, 'useUsers').mockReturnValue({
         data: {
-          items: sampleUsers,
+          data: sampleUsers,
           meta: { page: 1, limit: 20, total_records: 3, total_pages: 1 },
         },
         isLoading: false,
@@ -230,7 +230,7 @@ describe('Màn hình Quản lý Người dùng & Nhân sự (SCR-19 & brief mụ
     it('người đang đăng nhập (useMe) KHÔNG thấy nút khoá và nút reset 2FA của chính mình', () => {
       vi.spyOn(adminHooks, 'useUsers').mockReturnValue({
         data: {
-          items: sampleUsers,
+          data: sampleUsers,
           meta: { page: 1, limit: 20, total_records: 3, total_pages: 1 },
         },
         isLoading: false,
@@ -269,7 +269,7 @@ describe('Màn hình Quản lý Người dùng & Nhân sự (SCR-19 & brief mụ
 
       vi.spyOn(adminHooks, 'useUsers').mockReturnValue({
         data: {
-          items: sampleUsers,
+          data: sampleUsers,
           meta: { page: 1, limit: 20, total_records: 3, total_pages: 1 },
         },
         isLoading: false,
@@ -326,7 +326,7 @@ describe('Màn hình Quản lý Người dùng & Nhân sự (SCR-19 & brief mụ
 
       vi.spyOn(adminHooks, 'useUsers').mockReturnValue({
         data: {
-          items: sampleUsers,
+          data: sampleUsers,
           meta: { page: 1, limit: 20, total_records: 3, total_pages: 1 },
         },
         isLoading: false,

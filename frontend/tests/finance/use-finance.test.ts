@@ -34,7 +34,7 @@ describe('Hooks dữ liệu Kế toán & Tài chính (TanStack Query & brief m�
   describe('useAccountingInbox hook', () => {
     it('gọi GET /accounting/inbox với đầy đủ query parameters (status, q, page, limit)', async () => {
       const mockResponse = {
-        items: [
+        data: [
           {
             milestone_id: 'm-1',
             case: {
@@ -55,6 +55,8 @@ describe('Hooks dữ liệu Kế toán & Tài chính (TanStack Query & brief m�
         meta: { page: 1, limit: 20, total_records: 1, total_pages: 1 },
       };
 
+      const apiListSpy = vi.fn().mockResolvedValue(mockResponse);
+      vi.spyOn(apiClient, "apiFetchList").mockImplementation(apiListSpy);
       const apiSpy = vi.spyOn(apiClient, 'apiFetch').mockResolvedValue(mockResponse as any);
 
       const { result } = renderHook(
@@ -64,14 +66,17 @@ describe('Hooks dữ liệu Kế toán & Tài chính (TanStack Query & brief m�
 
       await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
-      expect(apiSpy).toHaveBeenCalledWith(
-        expect.stringMatching(/\/accounting\/inbox\?(?=.*status=AWAITING_PAYMENT)(?=.*q=SmartLogistics)(?=.*page=1)/)
+      const lastUrl = apiListSpy.mock.calls[0]?.[0] || apiSpy.mock.calls[0]?.[0];
+      expect(lastUrl).toMatch(
+        /\/accounting\/inbox\?(?=.*status=AWAITING_PAYMENT)(?=.*q=SmartLogistics)(?=.*page=1)/
       );
       expect(result.current.data).toEqual(mockResponse);
     });
 
     it('bỏ qua các tham số lọc rỗng khi gọi GET /accounting/inbox', async () => {
-      const mockResponse = { items: [], meta: { page: 1, limit: 20, total_records: 0, total_pages: 0 } };
+      const mockResponse = { data: [], meta: { page: 1, limit: 20, total_records: 0, total_pages: 0 } };
+      const apiListSpy = vi.fn().mockResolvedValue(mockResponse);
+      vi.spyOn(apiClient, "apiFetchList").mockImplementation(apiListSpy);
       const apiSpy = vi.spyOn(apiClient, 'apiFetch').mockResolvedValue(mockResponse as any);
 
       const { result } = renderHook(
@@ -81,7 +86,7 @@ describe('Hooks dữ liệu Kế toán & Tài chính (TanStack Query & brief m�
 
       await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
-      const calledUrl = apiSpy.mock.calls[0]?.[0] as string;
+      const calledUrl = (apiListSpy.mock.calls[0]?.[0] || apiSpy.mock.calls[0]?.[0]) as string;
       expect(calledUrl).not.toContain('status=');
       expect(calledUrl).not.toContain('q=');
     });
@@ -138,7 +143,7 @@ describe('Hooks dữ liệu Kế toán & Tài chính (TanStack Query & brief m�
   describe('useCommissions hook', () => {
     it('gọi GET /finance/commissions với đầy đủ tham số lọc (case_id, user_id, from, to)', async () => {
       const mockResponse = {
-        items: [
+        data: [
           {
             id: 'comm-1',
             case: { id: 'c-1', case_code: 'ASL-2026-LD-0001' },
@@ -163,6 +168,8 @@ describe('Hooks dữ liệu Kế toán & Tài chính (TanStack Query & brief m�
         meta: { page: 1, limit: 20, total_records: 1, total_pages: 1 },
       };
 
+      const apiListSpy = vi.fn().mockResolvedValue(mockResponse);
+      vi.spyOn(apiClient, "apiFetchList").mockImplementation(apiListSpy);
       const apiSpy = vi.spyOn(apiClient, 'apiFetch').mockResolvedValue(mockResponse as any);
 
       const { result } = renderHook(

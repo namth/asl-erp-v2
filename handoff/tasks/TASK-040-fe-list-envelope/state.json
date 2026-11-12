@@ -1,13 +1,100 @@
 {
   "id": "TASK-040",
   "title": "Frontend đọc danh sách theo hợp đồng data[] + meta",
-  "status": "draft",
-  "conversation_id": null,
+  "status": "accepted",
+  "conversation_id": "09d2c005-5586-41d8-8f2a-3bea93c2806a",
   "history": [
     {
       "at": "2026-11-12T13:41:55",
       "status": "draft",
       "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-12T13:49:10",
+      "status": "tests_assigned",
+      "note": "giao viết test chéo cho agy2"
+    },
+    {
+      "at": "2026-11-12T14:07:28",
+      "status": "tests_ready",
+      "note": "test chéo đã khoá (17 file), verify đỏ đúng chờ code"
+    },
+    {
+      "at": "2026-11-12T14:07:42",
+      "status": "assigned",
+      "note": "giao code qua agy cho agy3 (model mặc định)"
+    },
+    {
+      "at": "2026-11-12T14:08:10",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-12T16:26:41",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-12T16:27:23",
+      "status": "in_review",
+      "note": "giao nghiệm thu chéo cho agy2"
+    },
+    {
+      "at": "2026-11-12T16:31:09",
+      "status": "changes_requested",
+      "note": "nghiệm thu chéo trả về bởi agy2 (vòng 1)"
+    },
+    {
+      "at": "2026-11-12T16:32:52",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-12T16:38:50",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-12T16:39:50",
+      "status": "accepted",
+      "note": "Claude nghiệm thu"
     }
-  ]
+  ],
+  "agents": {
+    "coder": {
+      "account": "agy3",
+      "conversation_id": "09d2c005-5586-41d8-8f2a-3bea93c2806a"
+    },
+    "tester": {
+      "account": "agy2",
+      "conversation_id": "2bab2aa5-bc6b-4052-b1de-a858adb9fe1c"
+    },
+    "reviewer": {
+      "account": "agy2",
+      "conversation_id": "eb113037-49c6-49bd-ba55-133804a07a49"
+    }
+  },
+  "locked_files": [
+    "handoff/tasks/TASK-040-fe-list-envelope/verify.sh",
+    "frontend/tests/api-fetch-list.test.ts",
+    "frontend/tests/list-envelope-pages.test.tsx",
+    "frontend/tests/cases/cases-page.test.tsx",
+    "frontend/tests/cases/use-cases.test.ts",
+    "frontend/tests/crm/clients-page.test.tsx",
+    "frontend/tests/crm/use-crm.test.ts",
+    "frontend/tests/admin/users-page.test.tsx",
+    "frontend/tests/admin/use-admin.test.ts",
+    "frontend/tests/admin/departments-page.test.tsx",
+    "frontend/tests/admin/user-create.test.tsx",
+    "frontend/tests/audit/audit-page.test.tsx",
+    "frontend/tests/audit/use-audit-logs.test.ts",
+    "frontend/tests/finance/accounting-page.test.tsx",
+    "frontend/tests/finance/commissions-page.test.tsx",
+    "frontend/tests/finance/use-finance.test.ts",
+    "frontend/tests/dashboard/dashboard-page.test.tsx",
+    "frontend/tests/dashboard/use-dashboard.test.ts"
+  ],
+  "via": "agy",
+  "review_fingerprint": "81ad00386948cfb4eecfd1da1b12086040fc0bda80af8f5c3e059f2ccb88e62e",
+  "cross_rounds": 1
 }

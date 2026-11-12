@@ -39,7 +39,7 @@ describe('Hooks quản trị hệ thống - use-admin.ts (TanStack Query & brief
   describe('useUsers hook', () => {
     it('gọi GET /users với đầy đủ query parameters (q, role, department_id, page, limit)', async () => {
       const mockResponse = {
-        items: [
+        data: [
           {
             id: 'u-1',
             email: 'lan.tt@asllaw.vn',
@@ -55,6 +55,8 @@ describe('Hooks quản trị hệ thống - use-admin.ts (TanStack Query & brief
         meta: { page: 2, limit: 20, total_records: 25, total_pages: 2 },
       };
 
+      const apiListSpy = vi.fn().mockResolvedValue(mockResponse);
+      vi.spyOn(apiClient, "apiFetchList").mockImplementation(apiListSpy);
       const apiSpy = vi.spyOn(apiClient, 'apiFetch').mockResolvedValue(mockResponse as any);
 
       const { result } = renderHook(
@@ -64,23 +66,27 @@ describe('Hooks quản trị hệ thống - use-admin.ts (TanStack Query & brief
 
       await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
-      expect(apiSpy).toHaveBeenCalledWith(
-        expect.stringMatching(/\/users\?(?=.*q=Lan)(?=.*role=ACCOUNTANT)(?=.*department_id=dept-1)(?=.*page=2)/)
+      const lastUrl = apiListSpy.mock.calls[0]?.[0] || apiSpy.mock.calls[0]?.[0];
+      expect(lastUrl).toMatch(
+        /\/users\?(?=.*q=Lan)(?=.*role=ACCOUNTANT)(?=.*department_id=dept-1)(?=.*page=2)/
       );
       expect(result.current.data).toEqual(mockResponse);
     });
 
     it('gọi GET /users với giá trị mặc định khi không truyền filter', async () => {
       const mockResponse = {
-        items: [],
+        data: [],
         meta: { page: 1, limit: 20, total_records: 0, total_pages: 0 },
       };
+      const apiListSpy = vi.fn().mockResolvedValue(mockResponse);
+      vi.spyOn(apiClient, "apiFetchList").mockImplementation(apiListSpy);
       const apiSpy = vi.spyOn(apiClient, 'apiFetch').mockResolvedValue(mockResponse as any);
 
       const { result } = renderHook(() => useUsers(), { wrapper: createWrapper() });
 
       await waitFor(() => expect(result.current.isSuccess).toBe(true));
-      expect(apiSpy).toHaveBeenCalledWith(expect.stringContaining('/users'));
+      const lastUrl = apiListSpy.mock.calls[0]?.[0] || apiSpy.mock.calls[0]?.[0];
+      expect(lastUrl).toContain('/users');
     });
   });
 
