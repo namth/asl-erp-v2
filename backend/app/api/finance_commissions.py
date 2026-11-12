@@ -14,7 +14,6 @@ from backend.app.services.commission_ledger import ROLES, get_commission_ledger_
 router = APIRouter(prefix="/finance/commissions", tags=["Finance"])
 
 ALLOWED_ROLES = set(ROLES)
-ALLOWED_PAYOUT_STATUS = {"ACCUMULATED", "DISBURSED"}
 
 
 @router.get("", status_code=status.HTTP_200_OK)
@@ -85,11 +84,7 @@ async def get_commissions_ledger_endpoint(
     if role_type is not None and role_type not in ALLOWED_ROLES:
         fields.append({"field": "role_type", "message": f"Tham số 'role_type' không hợp lệ, phải thuộc {sorted(ALLOWED_ROLES)}"})
 
-    # 7. Kiểm tra payout_status
-    if payout_status is not None and payout_status not in ALLOWED_PAYOUT_STATUS:
-        fields.append({"field": "payout_status", "message": "Tham số 'payout_status' phải là 'ACCUMULATED' hoặc 'DISBURSED'"})
-
-    # 8. Kiểm tra page
+    # 7. Kiểm tra page
     page_int = 1
     try:
         page_int = int(page)
@@ -98,7 +93,7 @@ async def get_commissions_ledger_endpoint(
     except (ValueError, TypeError):
         fields.append({"field": "page", "message": "Tham số 'page' phải là số nguyên"})
 
-    # 9. Kiểm tra limit
+    # 8. Kiểm tra limit
     limit_int = 20
     try:
         limit_int = int(limit)

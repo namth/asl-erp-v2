@@ -14,7 +14,6 @@ from backend.app.services.report_export import (
 )
 from backend.app.services.reports import (
     ALLOWED_GROUP_BY,
-    ALLOWED_PAYOUT_STATUS,
     VALID_REPORT_NAMES,
     execute_commissions_report,
     execute_export_report,
@@ -69,9 +68,6 @@ async def get_commissions_report_endpoint(
     current_user: Dict[str, Any] = Depends(get_current_user),
 ):
     """Báo cáo hoa hồng theo nhân sự, vai trò vụ việc và trạng thái chi trả."""
-    if payout_status is not None and payout_status not in ALLOWED_PAYOUT_STATUS:
-        raise AppException(422, "VALIDATION_ERROR", "payout_status phải là 'ACCUMULATED' hoặc 'DISBURSED'")
-
     f_date, t_date = validate_and_parse_period(from_date, to_date)
 
     data, meta = await asyncio.to_thread(
@@ -79,7 +75,6 @@ async def get_commissions_report_endpoint(
         current_user,
         f_date,
         t_date,
-        payout_status,
         department_id,
     )
 
@@ -136,9 +131,6 @@ async def export_report_endpoint(
     if name == "revenue":
         if group_by is not None and group_by not in ALLOWED_GROUP_BY:
             raise AppException(422, "VALIDATION_ERROR", "group_by phải là 'month' hoặc 'quarter'")
-    elif name == "commissions":
-        if payout_status is not None and payout_status not in ALLOWED_PAYOUT_STATUS:
-            raise AppException(422, "VALIDATION_ERROR", "payout_status phải là 'ACCUMULATED' hoặc 'DISBURSED'")
 
     f_date, t_date = validate_and_parse_period(from_date, to_date)
 
@@ -150,7 +142,6 @@ async def export_report_endpoint(
         t_date,
         department_id,
         group_by or "month",
-        payout_status,
     )
 
     filename = export_filename(name, meta_from, meta_to)
