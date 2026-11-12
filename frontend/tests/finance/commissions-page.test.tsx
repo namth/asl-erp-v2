@@ -32,7 +32,6 @@ describe('Màn hình Sổ hoa hồng thực thu (SCR-12 & brief mục 4, 5)', ()
       rate_pct: '5.00',
       amount: '1500000',
       created_at: '2026-10-30T10:00:00Z',
-      disbursed_at: null,
     },
     {
       id: 'comm-02',
@@ -45,7 +44,6 @@ describe('Màn hình Sổ hoa hồng thực thu (SCR-12 & brief mục 4, 5)', ()
       rate_pct: '4.20',
       amount: '1260000',
       created_at: '2026-10-30T10:00:00Z',
-      disbursed_at: null,
     },
     {
       id: 'comm-03',
@@ -58,7 +56,6 @@ describe('Màn hình Sổ hoa hồng thực thu (SCR-12 & brief mục 4, 5)', ()
       rate_pct: '8.00',
       amount: '2400000',
       created_at: '2026-10-30T10:00:00Z',
-      disbursed_at: null,
     },
   ];
 

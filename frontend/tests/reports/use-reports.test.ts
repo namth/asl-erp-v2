@@ -94,20 +94,29 @@ describe('Hooks quản lý dữ liệu Báo cáo & Thống kê - hooks/use-repor
     });
   });
 
-  describe('useCommissionsReport: truy vấn dữ liệu Báo cáo Hoa hồng', () => {
-    it('gọi đúng endpoint GET /reports/commissions kèm các tham số', async () => {
+  describe('useCommissionsReport: truy vấn dữ liệu Báo cáo Hoa hồng (DEC-09 & brief mục 5)', () => {
+    it('gọi đúng endpoint GET /reports/commissions kèm các tham số và không gửi payout_status', async () => {
       const mockCommissions = {
         summary: {
           total_amount: '264000000',
-          accumulated_amount: '120000000',
-          disbursed_amount: '144000000',
+          transaction_count: 57,
+          by_role: {
+            ORIGINATOR: '40000000',
+            SUPERVISOR: '30000000',
+            CASE_MANAGER: '90000000',
+            EXECUTOR: '104000000',
+            ASSISTANT: '0',
+          },
         },
+        periods: ['2026-10', '2026-11'],
+        by_period: [
+          { period: '2026-10', total_amount: '120000000' },
+          { period: '2026-11', total_amount: '144000000' },
+        ],
         by_user: [
           {
             user: { id: 'u2', full_name: 'LS. Mai Linh', department_name: 'Phòng Sở Hữu Trí Tuệ' },
             total_amount: '42000000',
-            accumulated_amount: '12000000',
-            disbursed_amount: '30000000',
             by_role: {
               ORIGINATOR: '0',
               SUPERVISOR: '6000000',
@@ -115,6 +124,10 @@ describe('Hooks quản lý dữ liệu Báo cáo & Thống kê - hooks/use-repor
               EXECUTOR: '15000000',
               ASSISTANT: '0',
             },
+            by_period: [
+              { period: '2026-10', total_amount: '12000000' },
+              { period: '2026-11', total_amount: '30000000' },
+            ],
           },
         ],
         meta: { scope: 'FIRM', departments: [], from: '2026-10-01', to: '2026-11-11' },
@@ -125,7 +138,7 @@ describe('Hooks quản lý dữ liệu Báo cáo & Thống kê - hooks/use-repor
       const params = {
         from: '2026-10-01',
         to: '2026-11-11',
-        payout_status: 'ACCUMULATED' as const,
+        department_id: 'dept-ip',
       };
 
       const { result } = renderHook(() => useCommissionsReport(params), {
@@ -137,13 +150,30 @@ describe('Hooks quản lý dữ liệu Báo cáo & Thống kê - hooks/use-repor
       expect(spyApi).toHaveBeenCalledTimes(1);
       const calledUrl = spyApi.mock.calls[0][0];
       expect(calledUrl).toContain('/reports/commissions');
-      expect(calledUrl).toContain('payout_status=ACCUMULATED');
+      expect(calledUrl).toContain('from=2026-10-01');
+      expect(calledUrl).toContain('to=2026-11-11');
+      expect(calledUrl).toContain('department_id=dept-ip');
+      // DEC-09: tuyệt đối không gửi payout_status
+      expect(calledUrl).not.toContain('payout_status=');
+      expect(calledUrl).not.toContain('payout');
       expect(result.current.data).toEqual(mockCommissions);
     });
 
-    it('không gửi payout_status khi ở trạng thái mặc định (Tất cả)', async () => {
+    it('không gửi payout_status theo tiêu chí nghiệm thu 3 (bỏ trạng thái chi trả)', async () => {
       const spyApi = vi.spyOn(apiClient, 'apiFetch').mockResolvedValue({
-        summary: { total_amount: '0', accumulated_amount: '0', disbursed_amount: '0' },
+        summary: {
+          total_amount: '0',
+          transaction_count: 0,
+          by_role: {
+            ORIGINATOR: '0',
+            SUPERVISOR: '0',
+            CASE_MANAGER: '0',
+            EXECUTOR: '0',
+            ASSISTANT: '0',
+          },
+        },
+        periods: [],
+        by_period: [],
         by_user: [],
         meta: { scope: 'FIRM', departments: [], from: '2026-10-01', to: '2026-11-11' },
       });
@@ -160,7 +190,8 @@ describe('Hooks quản lý dữ liệu Báo cáo & Thống kê - hooks/use-repor
       await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
       const calledUrl = spyApi.mock.calls[0][0];
-      expect(calledUrl).not.toContain('payout_status=');
+      expect(calledUrl).not.toContain('payout_status');
+      expect(calledUrl).not.toContain('disburs');
     });
   });
 

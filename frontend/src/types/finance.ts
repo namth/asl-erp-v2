@@ -110,7 +110,6 @@ export interface CommissionTransaction {
   rate_pct: string;
   amount: string;
   created_at: string;
-  disbursed_at?: string | null;
 }
 
 export interface CommissionsSummary {

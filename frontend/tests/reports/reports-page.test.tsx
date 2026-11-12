@@ -60,15 +60,24 @@ const sampleRevenueData = {
 const sampleCommissionsData = {
   summary: {
     total_amount: '264000000',
-    accumulated_amount: '120000000',
-    disbursed_amount: '144000000',
+    transaction_count: 57,
+    by_role: {
+      ORIGINATOR: '40000000',
+      SUPERVISOR: '30000000',
+      CASE_MANAGER: '90000000',
+      EXECUTOR: '104000000',
+      ASSISTANT: '0',
+    },
   },
+  periods: ['2026-10', '2026-11'],
+  by_period: [
+    { period: '2026-10', total_amount: '120000000' },
+    { period: '2026-11', total_amount: '144000000' },
+  ],
   by_user: [
     {
       user: { id: 'u2', full_name: 'LS. Mai Linh', department_name: 'Phòng Sở Hữu Trí Tuệ' },
       total_amount: '42000000',
-      accumulated_amount: '12000000',
-      disbursed_amount: '30000000',
       by_role: {
         ORIGINATOR: '0',
         SUPERVISOR: '6000000',
@@ -76,6 +85,10 @@ const sampleCommissionsData = {
         EXECUTOR: '15000000',
         ASSISTANT: '0',
       },
+      by_period: [
+        { period: '2026-10', total_amount: '12000000' },
+        { period: '2026-11', total_amount: '30000000' },
+      ],
     },
   ],
   meta: {
@@ -379,19 +392,31 @@ describe('Màn hình Báo cáo & Thống kê - /reports (brief mục 4 & 5, DoD 
     });
   });
 
-  describe('5. Tab Hoa hồng (brief mục 4 & 5)', () => {
+  describe('5. Tab Hoa hồng (DEC-09 & brief mục 4, 5)', () => {
     beforeEach(() => {
       render(<ReportsPage />);
       fireEvent.click(screen.getByRole('tab', { name: /hoa hồng/i }));
     });
 
-    it('hiển thị 3 thẻ chỉ số: tổng, tích luỹ, đã chi', () => {
+    it('hiển thị 2 thẻ chỉ số: Tổng hoa hồng và Số bút toán, không có Tích luỹ/Đã chi', () => {
       expect(screen.getAllByText('264.000.000 ₫').length).toBeGreaterThan(0);
+      expect(screen.getAllByText('57').length).toBeGreaterThan(0);
+      expect(screen.queryByText(/^Tích luỹ$/i)).toBeNull();
+      expect(screen.queryByText(/^Đã chi$/i)).toBeNull();
+    });
+
+    it('hiển thị bảng hoa hồng theo tháng với cột MM/YYYY và dòng Tổng cộng', () => {
+      expect(screen.getAllByText('10/2026').length).toBeGreaterThan(0);
+      expect(screen.getAllByText('11/2026').length).toBeGreaterThan(0);
+      expect(screen.getAllByText('LS. Mai Linh').length).toBeGreaterThan(0);
+      expect(screen.getAllByText('12.000.000 ₫').length).toBeGreaterThan(0);
+      expect(screen.getAllByText('30.000.000 ₫').length).toBeGreaterThan(0);
+      expect(screen.getAllByText('42.000.000 ₫').length).toBeGreaterThan(0);
       expect(screen.getAllByText('120.000.000 ₫').length).toBeGreaterThan(0);
       expect(screen.getAllByText('144.000.000 ₫').length).toBeGreaterThan(0);
     });
 
-    it('hiển thị bảng theo nhân sự với cột từng vai trò (Mang khách về, Giám sát, Quản lý vụ việc, Thực hiện, Hỗ trợ)', () => {
+    it('hiển thị bảng theo vai trò với cột từng vai trò (Mang khách về, Giám sát, Quản lý vụ việc, Thực hiện, Hỗ trợ)', () => {
       expect(screen.getAllByText('LS. Mai Linh').length).toBeGreaterThan(0);
 
       // Kiểm tra tiêu đề các cột vai trò tiếng Việt
@@ -407,16 +432,9 @@ describe('Màn hình Báo cáo & Thống kê - /reports (brief mục 4 & 5, DoD 
       expect(screen.getAllByText('15.000.000 ₫').length).toBeGreaterThan(0);
     });
 
-    it('bộ lọc trạng thái chi trả payout_status (Tích luỹ / Đã chi / Tất cả)', () => {
-      const payoutFilter = screen.getByRole('combobox', { name: /trạng thái chi trả/i });
-      expect(payoutFilter).toBeTruthy();
-
-      fireEvent.change(payoutFilter, { target: { value: 'ACCUMULATED' } });
-
-      expect(reportsHooks.useCommissionsReport).toHaveBeenCalledWith(
-        expect.objectContaining({ payout_status: 'ACCUMULATED' }),
-        expect.anything()
-      );
+    it('không còn bộ lọc trạng thái chi trả (payout_status) (DEC-09)', () => {
+      expect(screen.queryByLabelText(/trạng thái chi trả/i)).toBeNull();
+      expect(screen.queryByRole('combobox', { name: /trạng thái chi trả/i })).toBeNull();
     });
   });
 

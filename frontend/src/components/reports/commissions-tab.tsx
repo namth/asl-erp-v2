@@ -1,58 +1,38 @@
 import React from 'react';
 import type { CommissionsReportData } from '@/types/reports';
-import { formatVnd } from '@/lib/reports';
+import { formatVnd } from '@/lib/format';
 import { EmptyState } from '@/components/ui/empty-state';
 
 export interface CommissionsTabProps {
   data: CommissionsReportData;
-  payoutStatus: 'ACCUMULATED' | 'DISBURSED' | '';
-  onPayoutStatusChange: (val: 'ACCUMULATED' | 'DISBURSED' | '') => void;
 }
 
-export function CommissionsTab({
-  data,
-  payoutStatus,
-  onPayoutStatusChange,
-}: CommissionsTabProps) {
-  const isDataEmpty =
-    data.summary.total_amount === '0' &&
-    data.summary.accumulated_amount === '0' &&
-    data.summary.disbursed_amount === '0' &&
-    data.by_user.length === 0;
+function formatPeriod(period: string): string {
+  const parts = period.split('-');
+  if (parts.length === 2) {
+    return `${parts[1]}/${parts[0]}`;
+  }
+  return period;
+}
+
+export function CommissionsTab({ data }: CommissionsTabProps) {
+  const isDataEmpty = !data?.by_user || data.by_user.length === 0;
 
   if (isDataEmpty) {
     return (
       <EmptyState
         title="Chưa có số liệu trong kỳ này"
-        description="Không tìm thấy dữ liệu phát sinh hoa hồng trong khoảng thời gian đã chọn."
+        description="Dữ liệu hoa hồng trống trong khoảng thời gian đã chọn."
       />
     );
   }
 
+  const periods = data.periods || [];
+
   return (
     <div className="space-y-6">
-      {/* 3 KPI Cards & Payout Filter */}
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <div className="flex items-center gap-2">
-          <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
-            Trạng thái chi trả
-          </span>
-          <select
-            aria-label="Trạng thái chi trả"
-            value={payoutStatus}
-            onChange={(e) =>
-              onPayoutStatusChange(e.target.value as 'ACCUMULATED' | 'DISBURSED' | '')
-            }
-            className="px-3 py-1.5 text-xs font-medium rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-500"
-          >
-            <option value="">Tất cả</option>
-            <option value="ACCUMULATED">Tích luỹ</option>
-            <option value="DISBURSED">Đã chi</option>
-          </select>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      {/* 2 KPI Cards: Tổng hoa hồng & Số bút toán */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="p-5 rounded-2xl bg-gradient-to-br from-[#002D54] to-[#00487C] text-white shadow-md">
           <div className="text-xs font-semibold uppercase tracking-wider text-sky-200">
             Tổng hoa hồng
@@ -64,39 +44,91 @@ export function CommissionsTab({
         </div>
 
         <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
-          <div className="text-xs font-semibold uppercase tracking-wider text-amber-600 dark:text-amber-400">
-            Tích luỹ
+          <div className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+            Số bút toán
           </div>
           <div className="text-2xl sm:text-3xl font-extrabold mt-2 text-slate-900 dark:text-slate-100 font-mono">
-            {formatVnd(data.summary.accumulated_amount)}
+            {data.summary.transaction_count}
           </div>
-          <div className="text-xs text-slate-500 dark:text-slate-400 mt-2">Chưa chi trả</div>
-        </div>
-
-        <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
-          <div className="text-xs font-semibold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
-            Đã chi
+          <div className="text-xs text-slate-500 dark:text-slate-400 mt-2">
+            Giao dịch ghi nhận trong kỳ
           </div>
-          <div className="text-2xl sm:text-3xl font-extrabold mt-2 text-slate-900 dark:text-slate-100 font-mono">
-            {formatVnd(data.summary.disbursed_amount)}
-          </div>
-          <div className="text-xs text-slate-500 dark:text-slate-400 mt-2">Đã thực hiện chi trả</div>
         </div>
       </div>
 
-      {/* Table by User */}
+      {/* Bảng 1: Hoa hồng theo tháng */}
       <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm">
         <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 mb-3">
-          Hoa hồng theo nhân sự
+          Hoa hồng theo tháng
         </h3>
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead className="border-b border-slate-200 dark:border-slate-800 text-slate-500">
               <tr>
                 <th className="py-2.5 font-semibold">Nhân sự</th>
-                <th className="py-2.5 font-semibold text-right">Tổng hoa hồng</th>
-                <th className="py-2.5 font-semibold text-right">Tích luỹ</th>
-                <th className="py-2.5 font-semibold text-right">Đã chi</th>
+                <th className="py-2.5 font-semibold">Phòng ban</th>
+                {periods.map((p) => (
+                  <th key={p} className="py-2.5 font-semibold text-right">
+                    {formatPeriod(p)}
+                  </th>
+                ))}
+                <th className="py-2.5 font-semibold text-right">Tổng</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+              {data.by_user.map((item) => (
+                <tr key={item.user.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                  <td className="py-2.5 font-semibold text-slate-900 dark:text-slate-100">
+                    {item.user.full_name}
+                  </td>
+                  <td className="py-2.5 text-slate-500 dark:text-slate-400">
+                    {item.user.department_name || '—'}
+                  </td>
+                  {periods.map((p) => {
+                    const periodItem = item.by_period?.find((bp) => bp.period === p);
+                    return (
+                      <td key={p} className="py-2.5 text-right font-mono text-slate-700 dark:text-slate-300">
+                        {formatVnd(periodItem?.total_amount || '0')}
+                      </td>
+                    );
+                  })}
+                  <td className="py-2.5 text-right font-mono font-bold text-slate-900 dark:text-slate-100">
+                    {formatVnd(item.total_amount)}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+            <tfoot className="border-t-2 border-slate-300 dark:border-slate-700 font-bold">
+              <tr className="bg-slate-50/50 dark:bg-slate-800/30">
+                <td className="py-2.5 text-slate-900 dark:text-slate-100">Tổng cộng</td>
+                <td className="py-2.5 text-slate-500 dark:text-slate-400">—</td>
+                {periods.map((p) => {
+                  const periodItem = data.by_period?.find((bp) => bp.period === p);
+                  return (
+                    <td key={p} className="py-2.5 text-right font-mono text-slate-900 dark:text-slate-100">
+                      {formatVnd(periodItem?.total_amount || '0')}
+                    </td>
+                  );
+                })}
+                <td className="py-2.5 text-right font-mono text-slate-900 dark:text-slate-100">
+                  {formatVnd(data.summary?.total_amount || '0')}
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+
+      {/* Bảng 2: Theo vai trò */}
+      <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm">
+        <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 mb-3">
+          Theo vai trò
+        </h3>
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-xs">
+            <thead className="border-b border-slate-200 dark:border-slate-800 text-slate-500">
+              <tr>
+                <th className="py-2.5 font-semibold">Nhân sự</th>
                 <th className="py-2.5 font-semibold text-right">Mang khách về</th>
                 <th className="py-2.5 font-semibold text-right">Giám sát</th>
                 <th className="py-2.5 font-semibold text-right">Quản lý vụ việc</th>
@@ -107,24 +139,8 @@ export function CommissionsTab({
             <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
               {data.by_user.map((item) => (
                 <tr key={item.user.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
-                  <td className="py-2.5">
-                    <div className="font-semibold text-slate-900 dark:text-slate-100">
-                      {item.user.full_name}
-                    </div>
-                    {item.user.department_name && (
-                      <div className="text-[10px] text-slate-500">
-                        {item.user.department_name}
-                      </div>
-                    )}
-                  </td>
-                  <td className="py-2.5 text-right font-mono font-bold text-slate-900 dark:text-slate-100">
-                    {formatVnd(item.total_amount)}
-                  </td>
-                  <td className="py-2.5 text-right font-mono text-amber-600 dark:text-amber-400">
-                    {formatVnd(item.accumulated_amount)}
-                  </td>
-                  <td className="py-2.5 text-right font-mono text-emerald-600 dark:text-emerald-400">
-                    {formatVnd(item.disbursed_amount)}
+                  <td className="py-2.5 font-semibold text-slate-900 dark:text-slate-100">
+                    {item.user.full_name} {item.user.department_name ? `(${item.user.department_name})` : ''}
                   </td>
                   <td className="py-2.5 text-right font-mono text-slate-600 dark:text-slate-400">
                     {formatVnd(item.by_role?.ORIGINATOR || '0')}
