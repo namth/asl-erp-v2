@@ -1,13 +1,79 @@
 {
   "id": "TASK-044",
   "title": "Giao diện báo cáo hoa hồng theo tháng, bỏ Tích luỹ/Đã chi (DEC-09)",
-  "status": "draft",
-  "conversation_id": null,
+  "status": "accepted",
+  "conversation_id": "86f5d8a1-d371-4f77-b2a7-aa3749fd8e28",
   "history": [
     {
       "at": "2026-11-12T17:55:44",
       "status": "draft",
       "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-12T18:04:03",
+      "status": "tests_assigned",
+      "note": "giao viết test chéo cho agy2"
+    },
+    {
+      "at": "2026-11-12T18:14:03",
+      "status": "tests_ready",
+      "note": "test chéo đã khoá (4 file), verify đỏ đúng chờ code"
+    },
+    {
+      "at": "2026-11-12T18:14:23",
+      "status": "assigned",
+      "note": "giao code qua agy cho agy3 (model mặc định)"
+    },
+    {
+      "at": "2026-11-12T18:21:51",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-12T19:33:35",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-12T19:34:38",
+      "status": "in_review",
+      "note": "giao nghiệm thu chéo cho agy2"
+    },
+    {
+      "at": "2026-11-12T19:38:19",
+      "status": "changes_requested",
+      "note": "nghiệm thu chéo trả về bởi agy2 (vòng 1)"
+    },
+    {
+      "at": "2026-11-12T19:40:05",
+      "status": "accepted",
+      "note": "Claude nghiệm thu"
     }
-  ]
+  ],
+  "agents": {
+    "coder": {
+      "account": "agy3",
+      "conversation_id": "86f5d8a1-d371-4f77-b2a7-aa3749fd8e28"
+    },
+    "tester": {
+      "account": "agy2",
+      "conversation_id": "74f74227-0028-47a1-8434-b4d2b8bb10a9"
+    },
+    "reviewer": {
+      "account": "agy2",
+      "conversation_id": "32555150-2be9-4574-bc1e-f4b9ca556f72"
+    }
+  },
+  "via": "agy",
+  "locked_files": [
+    "handoff/tasks/TASK-044-fe-commissions-monthly/verify.sh",
+    "handoff/tasks/TASK-044-fe-commissions-monthly/verify.sh",
+    "handoff/tasks/TASK-044-fe-commissions-monthly/verify.sh",
+    "frontend/tests/reports/commissions-monthly.test.tsx",
+    "frontend/tests/reports/reports-page.test.tsx",
+    "frontend/tests/reports/use-reports.test.ts",
+    "frontend/tests/finance/commissions-page.test.tsx"
+  ],
+  "review_fingerprint": "f06200aa1e30c47e1e33773a05351224e0bb9eb146d32f695b4612aa2d53b14a",
+  "cross_rounds": 1
 }

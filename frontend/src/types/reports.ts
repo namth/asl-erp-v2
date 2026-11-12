@@ -58,13 +58,12 @@ export interface RevenueReportParams {
   group_by?: 'month' | 'quarter';
 }
 
-export interface CommissionsSummary {
+export interface CommissionPeriodTotal {
+  period: string;
   total_amount: string;
-  accumulated_amount: string;
-  disbursed_amount: string;
 }
 
-export interface CommissionUserRoleBreakdown {
+export interface CommissionRoleBreakdown {
   ORIGINATOR?: string;
   SUPERVISOR?: string;
   CASE_MANAGER?: string;
@@ -73,20 +72,29 @@ export interface CommissionUserRoleBreakdown {
   [key: string]: string | undefined;
 }
 
+export type CommissionUserRoleBreakdown = CommissionRoleBreakdown;
+
+export interface CommissionsSummary {
+  total_amount: string;
+  transaction_count: number;
+  by_role: CommissionRoleBreakdown;
+}
+
 export interface CommissionByUser {
   user: {
     id: string;
     full_name: string;
-    department_name?: string;
+    department_name?: string | null;
   };
   total_amount: string;
-  accumulated_amount: string;
-  disbursed_amount: string;
-  by_role: CommissionUserRoleBreakdown;
+  by_role: CommissionRoleBreakdown;
+  by_period: CommissionPeriodTotal[];
 }
 
 export interface CommissionsReportData {
   summary: CommissionsSummary;
+  periods: string[];
+  by_period: CommissionPeriodTotal[];
   by_user: CommissionByUser[];
   meta: ReportMeta;
 }
@@ -95,7 +103,6 @@ export interface CommissionsReportParams {
   from?: string;
   to?: string;
   department_id?: string;
-  payout_status?: 'ACCUMULATED' | 'DISBURSED';
 }
 
 export interface CasesByStatus {

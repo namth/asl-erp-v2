@@ -40,7 +40,6 @@ export function useCommissionsReport(
   if (params.from) searchParams.set('from', params.from);
   if (params.to) searchParams.set('to', params.to);
   if (params.department_id) searchParams.set('department_id', params.department_id);
-  if (params.payout_status) searchParams.set('payout_status', params.payout_status);
 
   const qs = searchParams.toString();
   const path = qs ? `/reports/commissions?${qs}` : '/reports/commissions';

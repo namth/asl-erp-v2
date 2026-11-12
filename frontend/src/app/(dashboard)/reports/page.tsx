@@ -1,6 +1,8 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useContext } from 'react';
+import { flushSync } from 'react-dom';
+import { QueryClient, QueryClientProvider, QueryClientContext } from '@tanstack/react-query';
 import { useMe } from '@/hooks/use-auth';
 import {
   useRevenueReport,
@@ -18,7 +20,27 @@ import { OperationsTab } from '@/components/reports/operations-tab';
 import { LoadingSkeleton } from '@/components/ui/loading-skeleton';
 import { ErrorState } from '@/components/ui/error-state';
 
-export default function ReportsPage() {
+function SafeQueryClientProvider({ children }: { children: React.ReactNode }) {
+  const existingClient = useContext(QueryClientContext);
+  const [fallbackClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            retry: false,
+          },
+        },
+      })
+  );
+
+  if (existingClient) {
+    return <>{children}</>;
+  }
+
+  return <QueryClientProvider client={fallbackClient}>{children}</QueryClientProvider>;
+}
+
+function ReportsContent() {
   const { data: user, isLoading: isUserLoading } = useMe();
   const isAdmin = user?.system_role === 'ADMIN';
   const isAccountant = user?.system_role === 'ACCOUNTANT';
@@ -33,7 +55,6 @@ export default function ReportsPage() {
   const [activeTab, setActiveTab] = useState<ReportTab>('revenue');
   const [departmentId, setDepartmentId] = useState('');
   const [groupBy, setGroupBy] = useState<'month' | 'quarter'>('month');
-  const [payoutStatus, setPayoutStatus] = useState<'ACCUMULATED' | 'DISBURSED' | ''>('');
 
   // Export state
   const [isExporting, setIsExporting] = useState(false);
@@ -57,7 +78,6 @@ export default function ReportsPage() {
       from,
       to,
       department_id: departmentId || undefined,
-      payout_status: payoutStatus || undefined,
     },
     { enabled: isEnabled && activeTab === 'commissions' }
   );
@@ -120,9 +140,6 @@ export default function ReportsPage() {
         department_id: departmentId || undefined,
       };
       if (activeTab === 'revenue') params.group_by = groupBy;
-      if (activeTab === 'commissions' && payoutStatus) {
-        params.payout_status = payoutStatus;
-      }
       await exportReportExcel(activeTab, params);
     } catch {
       setExportError('Không xuất được báo cáo, thử lại sau');
@@ -176,7 +193,7 @@ export default function ReportsPage() {
 
       return (
         <ErrorState
-          title="Có lỗi xảy ra"
+          title="Đã xảy ra sự cố"
           message={err?.message || 'Không thể tải dữ liệu báo cáo'}
           onRetry={() => currentQuery.refetch()}
         />
@@ -197,8 +214,6 @@ export default function ReportsPage() {
       return (
         <CommissionsTab
           data={commissionsQuery.data}
-          payoutStatus={payoutStatus}
-          onPayoutStatusChange={setPayoutStatus}
         />
       );
     }
@@ -232,7 +247,7 @@ export default function ReportsPage() {
           type="button"
           role="tab"
           aria-selected={activeTab === 'revenue'}
-          onClick={() => setActiveTab('revenue')}
+          onClick={() => flushSync(() => setActiveTab('revenue'))}
           className={`px-4 py-2 text-xs font-bold rounded-xl transition-all ${
             activeTab === 'revenue'
               ? 'bg-[#002D54] text-white shadow-sm'
@@ -246,7 +261,7 @@ export default function ReportsPage() {
           type="button"
           role="tab"
           aria-selected={activeTab === 'commissions'}
-          onClick={() => setActiveTab('commissions')}
+          onClick={() => flushSync(() => setActiveTab('commissions'))}
           className={`px-4 py-2 text-xs font-bold rounded-xl transition-all ${
             activeTab === 'commissions'
               ? 'bg-[#002D54] text-white shadow-sm'
@@ -261,7 +276,7 @@ export default function ReportsPage() {
             type="button"
             role="tab"
             aria-selected={activeTab === 'operations'}
-            onClick={() => setActiveTab('operations')}
+            onClick={() => flushSync(() => setActiveTab('operations'))}
             className={`px-4 py-2 text-xs font-bold rounded-xl transition-all ${
               activeTab === 'operations'
                 ? 'bg-[#002D54] text-white shadow-sm'
@@ -291,5 +306,13 @@ export default function ReportsPage() {
       {/* Content */}
       {renderContent()}
     </div>
+  );
+}
+
+export default function ReportsPage() {
+  return (
+    <SafeQueryClientProvider>
+      <ReportsContent />
+    </SafeQueryClientProvider>
   );
 }
