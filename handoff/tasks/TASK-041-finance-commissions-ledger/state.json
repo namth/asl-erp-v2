@@ -1,17 +1,48 @@
 {
   "id": "TASK-041",
   "title": "Backend sổ hoa hồng GET /finance/commissions (SCR-12)",
-  "status": "draft",
-  "conversation_id": null,
+  "status": "accepted",
+  "conversation_id": "be9687d6-73da-408c-a0cb-ba5b3fde5f50",
   "history": [
     {
       "at": "2026-11-12T13:52:43",
       "status": "draft",
       "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-12T13:53:13",
+      "status": "assigned",
+      "note": "giao code qua agy cho agy1 (gemini-3.8-flash-high)"
+    },
+    {
+      "at": "2026-11-12T13:54:09",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-12T14:30:59",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-12T14:58:10",
+      "status": "accepted",
+      "note": "Claude nghiệm thu"
     }
   ],
   "locked_files": [
     "handoff/tasks/TASK-041-finance-commissions-ledger/verify.sh",
     "backend/tests/test_finance_commissions_api.py"
-  ]
+  ],
+  "agents": {
+    "tester": {
+      "account": null,
+      "conversation_id": null
+    },
+    "coder": {
+      "account": "agy1",
+      "conversation_id": "be9687d6-73da-408c-a0cb-ba5b3fde5f50"
+    }
+  },
+  "via": "agy"
 }
