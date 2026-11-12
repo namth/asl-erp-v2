@@ -69,6 +69,11 @@ function AiChatDrawerPanel() {
   const isTooLong = input.length > 2000;
   const isSendDisabled = !input.trim() || isTooLong || isPending;
 
+  const lastAssistant = [...messages].reverse().find((m) => m.role === 'assistant');
+  const lastAssistantText =
+    lastAssistant?.response_text || lastAssistant?.content || lastAssistant?.text || '';
+  const showTypingIndicator = isPending && !lastAssistantText.trim();
+
   return (
     <div
       role="dialog"
@@ -197,6 +202,10 @@ function AiChatDrawerPanel() {
               );
             }
 
+            if (msg.isPending && !rawContent.trim() && !msg.isError) {
+              return null;
+            }
+
             return (
               <div key={msg.id || index} className="flex flex-col items-start gap-2">
                 <div
@@ -258,7 +267,7 @@ function AiChatDrawerPanel() {
         )}
 
         {/* Pending Typing Indicator Bubble */}
-        {isPending && (
+        {showTypingIndicator && (
           <div className="flex items-start gap-2.5">
             <div className="rounded-2xl rounded-tl-none p-3 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 text-xs flex items-center gap-2 shadow-xs">
               <span className="w-2 h-2 rounded-full bg-[#0082B4] animate-ping" />
