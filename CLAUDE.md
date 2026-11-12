@@ -39,6 +39,13 @@ Khi bắt đầu code thật, theo đúng cấu trúc monorepo trong `docs/09-co
 # Xem prototype cục bộ
 python3 -m http.server 8080 --directory prototype   # mở http://localhost:8080
 
+# Demo app thật (DB riêng trong Docker, không đụng DB test dùng chung)
+scripts/demo.sh up         # bật Postgres/Neo4j/Redis demo + dữ liệu mẫu (reset = dựng lại từ đầu)
+scripts/demo.sh backend    # API cổng 8000 — hoặc preview "demo-backend"
+scripts/demo.sh frontend   # giao diện http://localhost:3100 — hoặc preview "demo-frontend"
+scripts/demo.sh otp        # mã 2FA cho tài khoản Admin/Quản lý/Kế toán demo
+# Tài khoản: <key>@asllaw.vn / Demo@2026 — key xem USERS trong backend/app/scripts/seed_demo.py
+
 # Kiểm tra link nội bộ & quy ước prototype
 python3 scripts/check-prototype.py            # thêm --strict để soát cả link thiếu ?role=
 ```

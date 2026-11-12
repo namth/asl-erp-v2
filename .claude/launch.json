@@ -4,8 +4,32 @@
     {
       "name": "prototype",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "8080", "--directory", "prototype"],
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8080",
+        "--directory",
+        "prototype"
+      ],
       "port": 8080
+    },
+    {
+      "name": "demo-backend",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [
+        "scripts/demo.sh",
+        "backend"
+      ],
+      "port": 8000
+    },
+    {
+      "name": "demo-frontend",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [
+        "scripts/demo.sh",
+        "frontend"
+      ],
+      "port": 3100
     }
   ]
 }

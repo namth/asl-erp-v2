@@ -1,0 +1,45 @@
+# Bộ dịch vụ dữ liệu cho môi trường DEMO cục bộ (tách khỏi DB test dùng chung).
+# Chạy: scripts/demo.sh up · Dừng: scripts/demo.sh down · Dựng lại từ đầu: scripts/demo.sh reset
+# Mật khẩu dưới đây chỉ dành cho demo trên máy cá nhân, chỉ mở cổng ở 127.0.0.1.
+name: asl-demo
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: asl_demo
+      POSTGRES_USER: asl_demo
+      POSTGRES_PASSWORD: asl_demo_local
+    ports:
+      - "127.0.0.1:55432:5432"
+    volumes:
+      - pg_demo:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U asl_demo -d asl_demo"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  neo4j:
+    image: neo4j:5.26-community
+    environment:
+      NEO4J_AUTH: neo4j/asl_demo_local
+    ports:
+      - "127.0.0.1:7475:7474"
+      - "127.0.0.1:7688:7687"
+    volumes:
+      - neo4j_demo:/data
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://127.0.0.1:7474 || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  redis:
+    image: redis:7.4-alpine
+    ports:
+      - "127.0.0.1:6380:6379"
+
+volumes:
+  pg_demo:
+  neo4j_demo:

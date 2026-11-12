@@ -35,6 +35,11 @@ export async function apiFetch<T = unknown>(
   const method = (init?.method || 'GET').toUpperCase();
   const headers = new Headers(init?.headers);
 
+  // Body chuỗi (JSON.stringify) mà thiếu Content-Type thì trình duyệt gửi text/plain → FastAPI trả 422.
+  if (typeof init?.body === 'string' && !headers.has('Content-Type')) {
+    headers.set('Content-Type', 'application/json');
+  }
+
   if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(method)) {
     const csrfToken = getCsrfTokenFromCookie();
     if (csrfToken && !headers.has('X-CSRF-Token')) {

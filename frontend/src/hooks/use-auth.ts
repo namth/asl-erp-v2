@@ -5,7 +5,8 @@ import { User } from '@/types/auth';
 export function useMe() {
   return useQuery<User>({
     queryKey: ['auth', 'me'],
-    queryFn: () => apiFetch<User>('/auth/me'),
+    // Hợp đồng docs/07 §3.1: GET /auth/me trả { data: { user } }.
+    queryFn: async () => (await apiFetch<{ user: User }>('/auth/me')).user,
     retry: false,
   });
 }
