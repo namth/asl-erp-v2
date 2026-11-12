@@ -1,18 +1,49 @@
 {
   "id": "TASK-034",
   "title": "Động cơ tính hoa hồng theo tiền thực thu (TSK-10, phần thuần)",
-  "status": "draft",
-  "conversation_id": null,
+  "status": "accepted",
+  "conversation_id": "06277372-c18f-4f78-8e57-2bbda46bbcee",
   "history": [
     {
       "at": "2026-11-12T07:15:19",
       "status": "draft",
       "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-12T07:18:35",
+      "status": "assigned",
+      "note": "giao code qua agy cho agy3 (model mặc định)"
+    },
+    {
+      "at": "2026-11-12T07:18:47",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-12T07:23:37",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-12T07:25:01",
+      "status": "accepted",
+      "note": "Claude nghiệm thu"
     }
   ],
   "locked_files": [
     "handoff/tasks/TASK-034-dong-co-hoa-hong/verify.sh",
     "backend/tests/test_commission_calculation.py",
     "backend/tests/test_no_test_hooks_in_app.py"
-  ]
+  ],
+  "agents": {
+    "tester": {
+      "account": null,
+      "conversation_id": null
+    },
+    "coder": {
+      "account": "agy3",
+      "conversation_id": "06277372-c18f-4f78-8e57-2bbda46bbcee"
+    }
+  },
+  "via": "agy"
 }
