@@ -30,7 +30,7 @@ case "$HOST" in
   macbook)
     REMOTE="namtran@${MACBOOK_HOST:-nams-macbook-air.local}"  # IP đổi theo mạng → dùng tên .local; khoá host đối chiếu theo alias cũ
     SSH_KEY="$HOME/.ssh/id_macbook_agy"
-    REMOTE_REPO="~/agy-farm/$(basename "$(dirname "$(git rev-parse --git-common-dir)")" 2>/dev/null || echo repo)"
+    REMOTE_REPO="~/agy-farm/$(basename "$(dirname "$(git rev-parse --path-format=absolute --git-common-dir)")" 2>/dev/null || echo repo)"
     REMOTE_WT_BASE="~/agy-farm/worktrees"
     REMOTE_AGY_HOME="\$HOME/.agy-worker"  # tài khoản cuối cùng vẫn do --coder/--checker chọn trong handoff.py (accounts.json của máy thợ)
     GIT_REMOTE="macbook"

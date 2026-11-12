@@ -1,6 +1,6 @@
 """Matter type commission defaults migration (TSK-05 / TASK-019)
 
-Revision ID: 0003_matter_type_commission_defaults
+Revision ID: 0003_mt_commission_defaults
 Revises: 0002_roles_and_grants
 Create Date: 2026-11-11
 
@@ -11,7 +11,8 @@ from typing import Sequence, Union
 from alembic import op
 
 # revision identifiers, used by Alembic.
-revision: str = "0003_matter_type_commission_defaults"
+# alembic_version.version_num là varchar(32) → mã revision phải ≤ 32 ký tự.
+revision: str = "0003_mt_commission_defaults"
 down_revision: Union[str, None] = "0002_roles_and_grants"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -22,7 +23,8 @@ def upgrade() -> None:
     sql_path = Path(__file__).resolve().parent / "003_matter_type_commission_defaults.sql"
     if sql_path.exists():
         sql_content = sql_path.read_text(encoding="utf-8")
-        conn.exec_driver_sql(sql_content)
+        # exec_driver_sql coi % là ký hiệu tham số của psycopg → nhân đôi.
+        conn.exec_driver_sql(sql_content.replace("%", "%%"))
     else:
         conn.exec_driver_sql("""
         ALTER TABLE matter_types

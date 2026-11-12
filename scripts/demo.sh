@@ -24,11 +24,9 @@ PY=.venv/bin/python
 psql_demo() { "${COMPOSE[@]}" exec -T postgres psql -q -v ON_ERROR_STOP=1 -U asl_demo -d asl_demo "$@"; }
 
 apply_schema() {
-  # Áp các file schema theo thứ tự (chuỗi alembic hiện chưa chạy được trên DB mới).
-  for f in backend/alembic/versions/0*.sql; do
-    echo "  schema: $(basename "$f")"
-    psql_demo < "$f" > /dev/null
-  done
+  # Chuỗi migration alembic (0001 → head). Mật khẩu vai trò asl_owner/asl_app chỉ dùng cho DB demo.
+  (cd backend && ASL_OWNER_PASSWORD=asl_demo_owner ASL_APP_PASSWORD=asl_demo_app PYTHONPATH=.. \
+     ../.venv/bin/alembic upgrade head 2>&1 | grep -vE "migration\] (Context impl|Will assume)")
 }
 
 wipe() {
