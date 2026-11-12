@@ -1,18 +1,49 @@
 {
   "id": "TASK-050",
   "title": "Trợ lý AI trả lời dạng stream SSE (POST /ai/chat/stream)",
-  "status": "draft",
-  "conversation_id": null,
+  "status": "accepted",
+  "conversation_id": "c2b327c9-d768-4535-847e-49f74299eb92",
   "history": [
     {
       "at": "2026-11-12T23:32:06",
       "status": "draft",
       "note": "Claude tạo task"
+    },
+    {
+      "at": "2026-11-12T23:33:56",
+      "status": "assigned",
+      "note": "giao code qua agy cho agy3 (model mặc định)"
+    },
+    {
+      "at": "2026-11-12T23:37:31",
+      "status": "in_progress",
+      "note": "Antigravity nhận việc"
+    },
+    {
+      "at": "2026-11-13T02:09:08",
+      "status": "submitted",
+      "note": "Antigravity nộp, verify.sh đạt"
+    },
+    {
+      "at": "2026-11-13T02:13:00",
+      "status": "accepted",
+      "note": "Claude nghiệm thu"
     }
   ],
   "locked_files": [
     "handoff/tasks/TASK-050-ai-chat-stream/verify.sh",
     "backend/tests/test_ai_stream.py",
     "handoff/tasks/TASK-050-ai-chat-stream/verify.sh"
-  ]
+  ],
+  "agents": {
+    "tester": {
+      "account": null,
+      "conversation_id": null
+    },
+    "coder": {
+      "account": "agy3",
+      "conversation_id": "c2b327c9-d768-4535-847e-49f74299eb92"
+    }
+  },
+  "via": "agy"
 }
