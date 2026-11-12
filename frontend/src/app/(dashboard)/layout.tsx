@@ -29,8 +29,8 @@ import {
   ChevronRight,
   Sun,
   Moon,
-  Bell,
 } from 'lucide-react';
+import { NotificationBell } from '@/components/notifications/notification-bell';
 
 function getIcon(name?: string) {
   switch (name) {
@@ -257,14 +257,7 @@ export default function DashboardLayout({
               {isDark ? <Sun className="w-5 h-5 text-amber-300" /> : <Moon className="w-5 h-5" />}
             </button>
 
-            <button
-              type="button"
-              className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-colors relative"
-              title="Thông báo"
-            >
-              <Bell className="w-5 h-5" />
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#FF7A00]" />
-            </button>
+            <NotificationBell />
 
             {/* User Profile */}
             <div className="flex items-center gap-3 pl-3 border-l border-white/20">
