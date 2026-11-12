@@ -125,7 +125,7 @@ Cột "Milestone" theo lộ trình `11`. Endpoint M1–M2 có đặc tả chi ti
 | Hoa hồng | `GET /finance/commissions` · `GET /finance/commissions/export` (không có chi trả — DEC-09) | MANAGER, ACCOUNTANT; ATTORNEY chỉ của mình | M4 |
 | Tài liệu | `GET/POST /cases/{id}/documents` · `GET/POST /documents/{id}/versions` · `GET /documents/{id}/versions/{vid}/download` · `POST /documents/{id}/archive` | `professional` (`finance` với thư mục Hợp đồng) | M5 |
 | Thông báo | `GET /notifications` · `POST /notifications/{id}/read` · `POST /notifications/read-all` · `WS /ws/notifications` · `POST /me/telegram/link` (§3.10) | mọi người | M5 |
-| Trợ lý AI | `POST /ai/chat` | mọi người, dữ liệu trong phạm vi | M5 |
+| Trợ lý AI | `POST /ai/chat` · `POST /ai/chat/stream` (SSE) | mọi người, dữ liệu trong phạm vi | M5 |
 | Báo cáo | `GET /reports/revenue` · `GET /reports/commissions` · `GET /reports/operations` · `GET /reports/{name}/export` (§3.9) | theo `02` Phân hệ 10 | M5 |
 | Văn phòng số | `GET /operations/floorplan` · `WS /ws/operations/floorplan?department_id=` (§3.7) | MANAGER | M6 |
 | Cài đặt | `GET/PUT /settings/holidays` · `GET/PUT /settings/commission-defaults` | ADMIN | M3 |
@@ -481,7 +481,7 @@ Sổ hoa hồng (`commission_transactions`, chỉ đọc): `data` = `[{id, case 
 ```
 - Công cụ chỉ trả dữ liệu trong phạm vi người hỏi. Trước khi gửi kết quả công cụ lên LLM: thay tên khách hàng, MST/CCCD, điện thoại, email bằng mã giả; khôi phục khi trả về người dùng (DEC-03, `08` §4.3).
 - `message` 1–2000 ký tự, `session_id` tuỳ chọn (chưa lưu lịch sử hội thoại — mỗi câu hỏi độc lập). Công cụ: `get_urgent_tasks`, `lookup_case_status` (`08` §4.3); tối đa 5 lượt gọi LLM mỗi câu hỏi. Audit `AI_QUERY` lưu câu hỏi đã che.
-- Hiện trả bản không stream (stream SSE làm sau):
+- Bản trả một lần (bản stream xem `POST /api/v1/ai/chat/stream` ngay dưới):
 
 ```json
 {
@@ -495,6 +495,24 @@ Sổ hoa hồng (`commission_transactions`, chỉ đọc): `data` = `[{id, case 
   }
 }
 ```
+
+#### `POST /api/v1/ai/chat/stream`
+Cùng body, kiểm tra đầu vào, phạm vi dữ liệu, che PII, giới hạn 5 lượt và audit `AI_QUERY` như `/ai/chat`. Lỗi trước khi bắt đầu stream (`422`, `401`, `503 AI_UNAVAILABLE` khi chưa cấu hình LLM) trả JSON lỗi thường. Còn lại trả `200`, `Content-Type: text/event-stream`, `Cache-Control: no-cache`, gồm các sự kiện:
+
+```text
+event: delta
+data: {"text": "Tuần này bạn có 2 vụ việc "}
+
+event: delta
+data: {"text": "SHTT sắp tới hạn: ..."}
+
+event: done
+data: {"session_id": "ai-sess-8f3a1b2c", "suggested_actions": [{"label": "Mở ASL-2026-TM-0012", "action_url": "/cases/c1"}]}
+```
+
+- `delta`: phần chữ mới, đã khôi phục tên thật. Mã giả `KH-xxx` bị LLM cắt ra nhiều mảnh được giữ lại tới khi đủ để khôi phục, không bao giờ gửi tới người dùng. Ghép mọi `delta` thành câu trả lời đầy đủ (gồm cả chữ LLM viết kèm lượt gọi công cụ).
+- `done`: sự kiện cuối khi thành công, một lần.
+- `error`: `data: {"code": "AI_UNAVAILABLE" | "INTERNAL_ERROR", "message": "..."}`. Đây là sự kiện cuối khi LLM lỗi giữa chừng, không có `done` đi kèm. Lỗi bất ngờ không lộ chi tiết.
 
 ### 3.7. Văn phòng số (M6)
 
