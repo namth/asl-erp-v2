@@ -20,4 +20,4 @@ redis==6.2.0
 SQLAlchemy==2.1.8
 uvicorn==0.54.0
 python-multipart
-
+celery==5.4.0

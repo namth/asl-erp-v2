@@ -190,6 +190,7 @@ Dữ liệu chuyển từ hệ thống cũ nhập nguyên số đã ghi nhận, 
 - Còn ≤ 24 giờ làm việc mà task ở `TODO`/`IN_PROGRESS`: cảnh báo cấp 1 tới người thực hiện.
 - Quá hạn > 4 giờ làm việc: cảnh báo cấp 2 tới `CASE_MANAGER` và `SUPERVISOR` của vụ việc.
 - Mỗi (task, cấp, kênh) gửi **tối đa một lần** (`notification_deliveries.dedupe_key`). Vụ việc `PAUSED` không cảnh báo.
+- **Lịch quét:** Celery beat chạy `deadlines.scan_and_send` mỗi 15 phút, 07:00–17:59 thứ Hai–Sáu (giờ VN), để không nhắn đêm/cuối tuần. Có khoá Redis nên hai lượt không chạy chồng. Chạy tay: `python -m backend.app.scripts.run_deadline_scan`.
 
 ### 4.3. Tin nhắn ra dịch vụ ngoài (DEC-03)
 Telegram/Zalo/Email chỉ chứa: mã vụ việc, tên task, hạn chót, deep-link. Không chứa tên khách hàng, tên vụ việc, tên nhãn hiệu/tài sản, số tiền, nội dung tài liệu.
