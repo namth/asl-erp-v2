@@ -44,8 +44,10 @@ export interface PaginationMeta {
   total_pages: number;
 }
 
+export type ListMeta = PaginationMeta;
+
 export interface AccountingInboxResponse {
-  items: AccountingInboxItem[];
+  data: AccountingInboxItem[];
   meta: PaginationMeta;
 }
 
@@ -123,7 +125,7 @@ export interface CommissionsSummary {
 }
 
 export interface CommissionsResponse {
-  items: CommissionTransaction[];
+  data: CommissionTransaction[];
   summary: CommissionsSummary;
   meta: PaginationMeta;
 }

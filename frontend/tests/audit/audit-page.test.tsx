@@ -125,7 +125,7 @@ describe('Màn hình Nhật ký Kiểm toán - Audit Logs (SCR-13 & brief mục 
       } as any);
 
       vi.spyOn(auditHooks, 'useAuditLogs').mockReturnValue({
-        data: { items: sampleAuditLogs, meta: { page: 1, limit: 50, total_records: 3, total_pages: 1 } },
+        data: { data: sampleAuditLogs, meta: { page: 1, limit: 50, total_records: 3, total_pages: 1 } },
         isLoading: false,
         isError: false,
       } as any);
@@ -138,7 +138,7 @@ describe('Màn hình Nhật ký Kiểm toán - Audit Logs (SCR-13 & brief mục 
 
     it('không có bất kỳ nút sửa (Edit) hoặc xoá (Delete) nào trong toàn bộ giao diện', () => {
       vi.spyOn(auditHooks, 'useAuditLogs').mockReturnValue({
-        data: { items: sampleAuditLogs, meta: { page: 1, limit: 50, total_records: 3, total_pages: 1 } },
+        data: { data: sampleAuditLogs, meta: { page: 1, limit: 50, total_records: 3, total_pages: 1 } },
         isLoading: false,
         isError: false,
       } as any);
@@ -192,7 +192,7 @@ describe('Màn hình Nhật ký Kiểm toán - Audit Logs (SCR-13 & brief mục 
 
     it('trạng thái trống (Empty): hiển thị EmptyState khi danh sách nhật ký rỗng', () => {
       vi.spyOn(auditHooks, 'useAuditLogs').mockReturnValue({
-        data: { items: [], meta: { page: 1, limit: 50, total_records: 0, total_pages: 0 } },
+        data: { data: [], meta: { page: 1, limit: 50, total_records: 0, total_pages: 0 } },
         isLoading: false,
         isError: false,
         refetch: vi.fn(),
@@ -205,7 +205,7 @@ describe('Màn hình Nhật ký Kiểm toán - Audit Logs (SCR-13 & brief mục 
 
     it('trạng thái thành công (Success): hiển thị bảng dữ liệu nhật ký kiểm toán', () => {
       vi.spyOn(auditHooks, 'useAuditLogs').mockReturnValue({
-        data: { items: sampleAuditLogs, meta: { page: 1, limit: 50, total_records: 3, total_pages: 1 } },
+        data: { data: sampleAuditLogs, meta: { page: 1, limit: 50, total_records: 3, total_pages: 1 } },
         isLoading: false,
         isError: false,
         refetch: vi.fn(),
@@ -222,7 +222,7 @@ describe('Màn hình Nhật ký Kiểm toán - Audit Logs (SCR-13 & brief mục 
   describe('Định dạng hiển thị bảng dữ liệu (Thời gian GMT+7 & 3 trường hợp Actor)', () => {
     beforeEach(() => {
       vi.spyOn(auditHooks, 'useAuditLogs').mockReturnValue({
-        data: { items: sampleAuditLogs, meta: { page: 1, limit: 50, total_records: 3, total_pages: 1 } },
+        data: { data: sampleAuditLogs, meta: { page: 1, limit: 50, total_records: 3, total_pages: 1 } },
         isLoading: false,
         isError: false,
         refetch: vi.fn(),
@@ -276,7 +276,7 @@ describe('Màn hình Nhật ký Kiểm toán - Audit Logs (SCR-13 & brief mục 
       vi.spyOn(auditHooks, 'useAuditLogs').mockImplementation((params: any) => {
         capturedParams = params || capturedParams;
         return {
-          data: { items: sampleAuditLogs, meta: { page: capturedParams.page || 1, limit: 50, total_records: 3, total_pages: 1 } },
+          data: { data: sampleAuditLogs, meta: { page: capturedParams.page || 1, limit: 50, total_records: 3, total_pages: 1 } },
           isLoading: false,
           isError: false,
           refetch: vi.fn(),
@@ -311,7 +311,7 @@ describe('Màn hình Nhật ký Kiểm toán - Audit Logs (SCR-13 & brief mục 
       vi.spyOn(auditHooks, 'useAuditLogs').mockImplementation((filters: any) => {
         capturedFilters = filters;
         return {
-          data: { items: sampleAuditLogs, meta: { page: 2, limit: 50, total_records: 3, total_pages: 1 } },
+          data: { data: sampleAuditLogs, meta: { page: 2, limit: 50, total_records: 3, total_pages: 1 } },
           isLoading: false,
           isError: false,
         } as any;

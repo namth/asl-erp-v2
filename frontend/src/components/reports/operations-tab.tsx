@@ -82,6 +82,7 @@ export function OperationsTab({ data }: OperationsTabProps) {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+              {/* Endpoint GET /reports/operations trả về { overdue_tasks: { count, items: [...] } } theo hợp đồng backend */}
               {data.overdue_tasks.items.map((item) => (
                 <tr key={item.task_id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
                   <td className="py-2.5 font-medium text-slate-800 dark:text-slate-200">

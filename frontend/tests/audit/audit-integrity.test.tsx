@@ -66,7 +66,7 @@ describe('Huy hiệu & Xác minh Chuỗi băm Toàn vẹn (Integrity Badge & bri
     } as any);
 
     vi.spyOn(auditHooks, 'useAuditLogs').mockReturnValue({
-      data: { items: sampleAuditLogs, meta: { page: 1, limit: 50, total_records: 2, total_pages: 1 } },
+      data: { data: sampleAuditLogs, meta: { page: 1, limit: 50, total_records: 2, total_pages: 1 } },
       isLoading: false,
       isError: false,
     } as any);

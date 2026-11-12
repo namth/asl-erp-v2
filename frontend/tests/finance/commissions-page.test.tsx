@@ -111,7 +111,7 @@ describe('Màn hình Sổ hoa hồng thực thu (SCR-12 & brief mục 4, 5)', ()
 
     it('trạng thái trống (Empty state): hiển thị thông điệp khi sổ hoa hồng rỗng', () => {
       vi.spyOn(financeHooks, 'useCommissions').mockReturnValue({
-        data: { items: [], summary: { total_amount: '0', by_role: {} }, meta: { page: 1, limit: 20, total_records: 0, total_pages: 0 } },
+        data: { data: [], summary: { total_amount: '0', by_role: {} }, meta: { page: 1, limit: 20, total_records: 0, total_pages: 0 } },
         isLoading: false,
         isError: false,
         refetch: vi.fn(),
@@ -125,7 +125,7 @@ describe('Màn hình Sổ hoa hồng thực thu (SCR-12 & brief mục 4, 5)', ()
     it('trạng thái thành công: hiển thị bảng hoa hồng và dải tổng summary theo vai trò', () => {
       vi.spyOn(financeHooks, 'useCommissions').mockReturnValue({
         data: {
-          items: sampleCommissions,
+          data: sampleCommissions,
           summary: sampleSummary,
           meta: { page: 1, limit: 20, total_records: 3, total_pages: 1 },
         },
@@ -193,7 +193,7 @@ describe('Màn hình Sổ hoa hồng thực thu (SCR-12 & brief mục 4, 5)', ()
 
       vi.spyOn(financeHooks, 'useCommissions').mockReturnValue({
         data: {
-          items: sampleCommissions,
+          data: sampleCommissions,
           summary: sampleSummary,
           meta: { page: 1, limit: 20, total_records: 3, total_pages: 1 },
         },
@@ -217,7 +217,7 @@ describe('Màn hình Sổ hoa hồng thực thu (SCR-12 & brief mục 4, 5)', ()
     it('hiển thị nút "Xuất Excel" không chứa emoji và tải đúng URL kèm tham số lọc', () => {
       vi.spyOn(financeHooks, 'useCommissions').mockReturnValue({
         data: {
-          items: sampleCommissions,
+          data: sampleCommissions,
           summary: sampleSummary,
           meta: { page: 1, limit: 20, total_records: 3, total_pages: 1 },
         },

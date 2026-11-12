@@ -29,7 +29,7 @@ describe('Hooks dữ liệu cho Dashboard & Cài đặt (brief mục 3, 4, 5)', 
   describe('useMyTasks hook (GET /me/tasks)', () => {
     it('gọi GET /me/tasks mặc định khi không truyền bộ lọc', async () => {
       const mockResponse = {
-        items: [
+        data: [
           {
             id: 'task-1',
             title: 'Soạn thảo hợp đồng dịch vụ pháp lý',
@@ -50,6 +50,8 @@ describe('Hooks dữ liệu cho Dashboard & Cài đặt (brief mục 3, 4, 5)', 
         meta: { total: 1, page: 1, limit: 20, total_pages: 1 },
       };
 
+      const apiListSpy = vi.fn().mockResolvedValue(mockResponse);
+      vi.spyOn(apiClient, "apiFetchList").mockImplementation(apiListSpy);
       const apiSpy = vi.spyOn(apiClient, 'apiFetch').mockResolvedValue(mockResponse as any);
 
       const { result } = renderHook(() => useMyTasks(), {
@@ -58,16 +60,19 @@ describe('Hooks dữ liệu cho Dashboard & Cài đặt (brief mục 3, 4, 5)', 
 
       await waitFor(() => expect(result.current.isLoading).toBe(false));
 
-      expect(apiSpy).toHaveBeenCalledWith(expect.stringMatching(/^\/me\/tasks(\?.*)?$/));
+      const calledUrl = apiListSpy.mock.calls[0]?.[0] || apiSpy.mock.calls[0]?.[0];
+      expect(calledUrl).toMatch(/^\/me\/tasks(\?.*)?$/);
       expect(result.current.data).toEqual(mockResponse);
     });
 
     it('truyền đúng query parameters khi lọc theo due (overdue/today/week), status và page', async () => {
       const mockResponse = {
-        items: [],
+        data: [],
         summary: { todo: 0, in_progress: 0, waiting_approval: 0, overdue: 0 },
       };
 
+      const apiListSpy = vi.fn().mockResolvedValue(mockResponse);
+      vi.spyOn(apiClient, "apiFetchList").mockImplementation(apiListSpy);
       const apiSpy = vi.spyOn(apiClient, 'apiFetch').mockResolvedValue(mockResponse as any);
 
       const { result } = renderHook(

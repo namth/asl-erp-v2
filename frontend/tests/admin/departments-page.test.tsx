@@ -70,7 +70,7 @@ describe('Màn hình Quản trị Phòng Ban (SCR-19 & brief mục 4, 5)', () =>
 
     vi.spyOn(adminHooks, 'useUsers').mockReturnValue({
       data: {
-        items: candidateUsers,
+        data: candidateUsers,
         meta: { page: 1, limit: 100, total_records: candidateUsers.length, total_pages: 1 },
       },
       isLoading: false,

@@ -130,7 +130,7 @@ describe('Màn hình Bàn làm việc cá nhân - dashboard/page.tsx (SCR-02 & b
   ];
 
   const sampleAccountingInbox = {
-    items: [
+    data: [
       {
         milestone_id: 'm-1',
         case: { id: 'c-1', case_code: 'ASL-2026-TM-0045', title: 'Đăng ký nhãn hiệu ASL', client_name: 'ASL Gate' },
@@ -158,7 +158,7 @@ describe('Màn hình Bàn làm việc cá nhân - dashboard/page.tsx (SCR-02 & b
 
     vi.spyOn(myTasksHooks, 'useMyTasks').mockReturnValue({
       data: {
-        items: sampleMyTasks,
+        data: sampleMyTasks,
         summary: sampleTasksSummary,
       },
       isLoading: false,
@@ -175,7 +175,7 @@ describe('Màn hình Bàn làm việc cá nhân - dashboard/page.tsx (SCR-02 & b
 
     vi.spyOn(casesHooks, 'useCases').mockReturnValue({
       data: {
-        items: sampleCases,
+        data: sampleCases,
         meta: { total: 2, page: 1, limit: 10, total_pages: 1 },
       },
       isLoading: false,

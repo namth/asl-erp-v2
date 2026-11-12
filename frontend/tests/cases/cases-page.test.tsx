@@ -64,7 +64,7 @@ describe('Màn hình Danh sách Vụ việc - cases/page.tsx (SCR-07 & brief m�
     it('trạng thái trống (Empty state): hiển thị thông điệp khi danh sách vụ việc rỗng', () => {
       vi.spyOn(casesHooks, 'useCases').mockReturnValue({
         data: {
-          items: [],
+          data: [],
           meta: { page: 1, limit: 20, total_records: 0, total_pages: 0 },
         },
         isLoading: false,
@@ -100,7 +100,7 @@ describe('Màn hình Danh sách Vụ việc - cases/page.tsx (SCR-07 & brief m�
     it('trạng thái thành công: hiển thị bảng danh sách vụ việc đầy đủ thông tin theo hợp đồng', () => {
       vi.spyOn(casesHooks, 'useCases').mockReturnValue({
         data: {
-          items: [
+          data: [
             {
               id: 'case-001',
               case_code: 'ASL-2026-TM-0045',
@@ -169,7 +169,7 @@ describe('Màn hình Danh sách Vụ việc - cases/page.tsx (SCR-07 & brief m�
     it('gọi hook useCases với tham số tìm kiếm khi người dùng nhập từ khóa', () => {
       const mockUseCases = vi.spyOn(casesHooks, 'useCases').mockReturnValue({
         data: {
-          items: [],
+          data: [],
           meta: { page: 1, limit: 20, total_records: 0, total_pages: 0 },
         },
         isLoading: false,
@@ -193,7 +193,7 @@ describe('Màn hình Danh sách Vụ việc - cases/page.tsx (SCR-07 & brief m�
     it('hỗ trợ lọc "Chỉ vụ việc của tôi" (mine=true)', () => {
       const mockUseCases = vi.spyOn(casesHooks, 'useCases').mockReturnValue({
         data: {
-          items: [],
+          data: [],
           meta: { page: 1, limit: 20, total_records: 0, total_pages: 0 },
         },
         isLoading: false,
@@ -216,7 +216,7 @@ describe('Màn hình Danh sách Vụ việc - cases/page.tsx (SCR-07 & brief m�
     it('bỏ tham số rỗng khi cập nhật bộ lọc và không gửi chuỗi rỗng lên API', () => {
       const mockUseCases = vi.spyOn(casesHooks, 'useCases').mockReturnValue({
         data: {
-          items: [],
+          data: [],
           meta: { page: 1, limit: 20, total_records: 0, total_pages: 0 },
         },
         isLoading: false,
@@ -244,7 +244,7 @@ describe('Màn hình Danh sách Vụ việc - cases/page.tsx (SCR-07 & brief m�
 
       const mockUseCases = vi.spyOn(casesHooks, 'useCases').mockReturnValue({
         data: {
-          items: [],
+          data: [],
           meta: { page: 2, limit: 20, total_records: 30, total_pages: 2 },
         },
         isLoading: false,

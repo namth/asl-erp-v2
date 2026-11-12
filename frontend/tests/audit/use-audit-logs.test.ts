@@ -28,7 +28,7 @@ describe('Hooks nhật ký kiểm toán - use-audit-logs.ts (TanStack Query & br
   describe('useAuditLogs hook', () => {
     it('gọi GET /audit-logs với đầy đủ query parameters (actor_id, actor_type, action, entity_name, entity_id, from, to, page, limit)', async () => {
       const mockResponse = {
-        items: [
+        data: [
           {
             id: 1042,
             created_at: '2026-11-11T09:12:03.120Z',
@@ -51,6 +51,8 @@ describe('Hooks nhật ký kiểm toán - use-audit-logs.ts (TanStack Query & br
         meta: { page: 2, limit: 50, total_records: 1042, total_pages: 21 },
       };
 
+      const apiListSpy = vi.fn().mockResolvedValue(mockResponse);
+      vi.spyOn(apiClient, "apiFetchList").mockImplementation(apiListSpy);
       const apiSpy = vi.spyOn(apiClient, 'apiFetch').mockResolvedValue(mockResponse as any);
 
       const filters = {
@@ -71,18 +73,21 @@ describe('Hooks nhật ký kiểm toán - use-audit-logs.ts (TanStack Query & br
 
       await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
-      expect(apiSpy).toHaveBeenCalledWith(
-        expect.stringMatching(/\/audit-logs\?(?=.*actor_id=c1f8a29e-1f2e-4b7b-8d0a-5c2f3b9d0e1a)(?=.*actor_type=USER)(?=.*action=USER_DEACTIVATED)(?=.*entity_name=users)(?=.*entity_id=u-5f0c)(?=.*from=2026-11-01T00%3A00%3A00Z|from=2026-11-01T00:00:00Z)(?=.*to=2026-11-11T23%3A59%3A59Z|to=2026-11-11T23:59:59Z)(?=.*page=2)(?=.*limit=50)/)
+      const lastUrl = apiListSpy.mock.calls[0]?.[0] || apiSpy.mock.calls[0]?.[0];
+      expect(lastUrl).toMatch(
+        /\/audit-logs\?(?=.*actor_id=c1f8a29e-1f2e-4b7b-8d0a-5c2f3b9d0e1a)(?=.*actor_type=USER)(?=.*action=USER_DEACTIVATED)(?=.*entity_name=users)(?=.*entity_id=u-5f0c)(?=.*from=2026-11-01T00%3A00%3A00Z|from=2026-11-01T00:00:00Z)(?=.*to=2026-11-11T23%3A59%3A59Z|to=2026-11-11T23:59:59Z)(?=.*page=2)(?=.*limit=50)/
       );
       expect(result.current.data).toEqual(mockResponse);
     });
 
     it('bỏ các tham số rỗng ("", undefined, null) khỏi query string', async () => {
       const mockResponse = {
-        items: [],
+        data: [],
         meta: { page: 1, limit: 50, total_records: 0, total_pages: 0 },
       };
 
+      const apiListSpy = vi.fn().mockResolvedValue(mockResponse);
+      vi.spyOn(apiClient, "apiFetchList").mockImplementation(apiListSpy);
       const apiSpy = vi.spyOn(apiClient, 'apiFetch').mockResolvedValue(mockResponse as any);
 
       const { result } = renderHook(

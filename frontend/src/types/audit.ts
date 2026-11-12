@@ -28,8 +28,10 @@ export interface AuditLogMeta {
   total_pages: number;
 }
 
+export type ListMeta = AuditLogMeta;
+
 export interface AuditLogsResponse {
-  items: AuditLogItem[];
+  data: AuditLogItem[];
   meta: AuditLogMeta;
 }
 

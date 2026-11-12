@@ -34,7 +34,7 @@ export interface MyTasksFilters {
 }
 
 export interface MyTasksResponse {
-  items: MyTaskItem[];
+  data: MyTaskItem[];
   summary: MyTasksSummary;
   meta?: {
     total: number;

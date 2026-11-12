@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient, QueryClient } from '@tanstack/react-query';
-import { apiFetch } from '@/lib/api-client';
+import { apiFetch, apiFetchList } from '@/lib/api-client';
 import {
   Department,
   UserSummary,
@@ -43,7 +43,7 @@ export function useUsers(params?: UsersQueryParams) {
   return useQuery<UsersResponse>(
     {
       queryKey: ['admin', 'users', params],
-      queryFn: () => apiFetch<UsersResponse>(endpoint),
+      queryFn: () => apiFetchList(endpoint),
     },
     queryClient
   );

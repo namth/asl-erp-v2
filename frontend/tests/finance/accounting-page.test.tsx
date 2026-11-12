@@ -119,7 +119,7 @@ describe('Màn hình Bàn làm việc Kế toán & Đối soát đợt thu (SCR-
 
     it('trạng thái trống (Empty state): hiển thị thông điệp khi hàng chờ rỗng', () => {
       vi.spyOn(accountingHooks, 'useAccountingInbox').mockReturnValue({
-        data: { items: [], meta: { page: 1, limit: 20, total_records: 0, total_pages: 0 } },
+        data: { data: [], meta: { page: 1, limit: 20, total_records: 0, total_pages: 0 } },
         isLoading: false,
         isError: false,
         refetch: vi.fn(),
@@ -151,7 +151,7 @@ describe('Màn hình Bàn làm việc Kế toán & Đối soát đợt thu (SCR-
     it('trạng thái thành công (Success state): hiển thị danh sách đợt thu và cảnh báo > 7 ngày', () => {
       vi.spyOn(accountingHooks, 'useAccountingInbox').mockReturnValue({
         data: {
-          items: [sampleInboxItem, sampleRecentItem],
+          data: [sampleInboxItem, sampleRecentItem],
           meta: { page: 1, limit: 20, total_records: 2, total_pages: 1 },
         },
         isLoading: false,
@@ -179,7 +179,7 @@ describe('Màn hình Bàn làm việc Kế toán & Đối soát đợt thu (SCR-
     beforeEach(() => {
       vi.spyOn(accountingHooks, 'useAccountingInbox').mockReturnValue({
         data: {
-          items: [sampleInboxItem],
+          data: [sampleInboxItem],
           meta: { page: 1, limit: 20, total_records: 1, total_pages: 1 },
         },
         isLoading: false,
@@ -404,7 +404,7 @@ describe('Màn hình Bàn làm việc Kế toán & Đối soát đợt thu (SCR-
       const mockRefetch = vi.fn();
       vi.spyOn(accountingHooks, 'useAccountingInbox').mockReturnValue({
         data: {
-          items: [sampleInboxItem],
+          data: [sampleInboxItem],
           meta: { page: 1, limit: 20, total_records: 1, total_pages: 1 },
         },
         isLoading: false,

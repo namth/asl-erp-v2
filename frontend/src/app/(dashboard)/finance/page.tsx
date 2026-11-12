@@ -193,7 +193,7 @@ export default function CommissionsPage() {
             onRetry={() => refetch()}
           />
         </div>
-      ) : !commissionsData?.items || commissionsData.items.length === 0 ? (
+      ) : !commissionsData?.data || commissionsData.data.length === 0 ? (
         <div className="p-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
           <EmptyState
             title="Danh sách trống"
@@ -217,7 +217,7 @@ export default function CommissionsPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
-                {commissionsData.items.map((item) => (
+                {commissionsData.data.map((item) => (
                   <tr
                     key={item.id}
                     className="hover:bg-slate-50/50 dark:hover:bg-slate-800/40 transition-colors"

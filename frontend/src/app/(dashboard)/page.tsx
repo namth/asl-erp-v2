@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useQueryClient, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useMe } from '@/hooks/use-auth';
 import { useMyTasks } from '@/hooks/use-my-tasks';
+import type { MyTaskItem } from '@/hooks/use-my-tasks';
 import { useApprovals } from '@/hooks/use-approvals';
 import { useCases } from '@/hooks/use-cases';
 import { useAccountingInbox } from '@/hooks/use-accounting';
@@ -115,7 +116,7 @@ function AccountantDashboardView({ user }: { user?: User | null }) {
       </div>
 
       <AccountantInboxCard
-        items={inboxData?.items}
+        items={inboxData?.data}
         isLoading={isLoading}
         isError={isError}
         onRetry={() => refetch()}
@@ -165,7 +166,7 @@ function AttorneyManagerDashboardView({ user }: { user?: User | null }) {
       />
 
       <MyTasksList
-        items={myTasksData?.items}
+        items={myTasksData?.data ?? (Object.values(myTasksData || {}).find(Array.isArray) as MyTaskItem[] | undefined)}
         isLoading={isLoadingTasks}
         isError={isErrorTasks}
         onRetry={() => refetchTasks()}
@@ -182,7 +183,7 @@ function AttorneyManagerDashboardView({ user }: { user?: User | null }) {
         />
 
         <MyCasesCard
-          items={casesData?.items}
+          items={casesData?.data}
           isLoading={isLoadingCases}
           isError={isErrorCases}
           onRetry={() => refetchCases()}

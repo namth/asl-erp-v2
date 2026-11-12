@@ -116,8 +116,10 @@ export interface PaginationMeta {
   total_pages: number;
 }
 
+export type ListMeta = PaginationMeta;
+
 export interface CaseListResponse {
-  items: CaseListItem[];
+  data: CaseListItem[];
   meta: PaginationMeta;
 }
 

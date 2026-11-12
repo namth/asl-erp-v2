@@ -98,7 +98,7 @@ export default function AccountingInboxPage() {
             onRetry={() => refetch()}
           />
         </div>
-      ) : !inboxData?.items || inboxData.items.length === 0 ? (
+      ) : !inboxData?.data || inboxData.data.length === 0 ? (
         <div className="p-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
           <EmptyState
             title="Danh sách trống"
@@ -121,7 +121,7 @@ export default function AccountingInboxPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
-                {inboxData.items.map((item) => {
+                {inboxData.data.map((item) => {
                   const awaitingDate = new Date(item.awaiting_since);
                   const daysWaiting = Math.floor(
                     (Date.now() - awaitingDate.getTime()) / (24 * 60 * 60 * 1000)

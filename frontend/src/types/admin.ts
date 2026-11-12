@@ -41,8 +41,10 @@ export interface PaginationMeta {
   total_pages: number;
 }
 
+export type ListMeta = PaginationMeta;
+
 export interface UsersResponse {
-  items: UserSummary[];
+  data: UserSummary[];
   meta: PaginationMeta;
 }
 
