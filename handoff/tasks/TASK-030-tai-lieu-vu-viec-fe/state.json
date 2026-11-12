@@ -1,7 +1,7 @@
 {
   "id": "TASK-030",
   "title": "Tài liệu vụ việc (SCR-17)",
-  "status": "submitted",
+  "status": "accepted",
   "conversation_id": "cb355184-9ae0-47e5-b611-0db8e8fc8efa",
   "history": [
     {
@@ -73,6 +73,11 @@
       "at": "2026-11-12T07:19:16",
       "status": "submitted",
       "note": "Claude merge base mới (lỗi review do base cũ), verify đạt — nộp để nghiệm thu"
+    },
+    {
+      "at": "2026-11-12T07:19:42",
+      "status": "accepted",
+      "note": "Claude nghiệm thu"
     }
   ],
   "agents": {
