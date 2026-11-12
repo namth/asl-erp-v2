@@ -1,6 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { apiFetch } from '@/lib/api-client';
+import { apiFetch, apiFetchList } from '@/lib/api-client';
 import type {
+  DocumentItem,
+  DocumentsMeta,
   DocumentsResponse,
   DocumentVersion,
 } from '@/types/documents';
@@ -14,12 +16,14 @@ export function useDocuments(caseId: string, params: UseDocumentsParams) {
   const includeArchived = params.include_archived ?? false;
   return useQuery<DocumentsResponse>({
     queryKey: ['cases', caseId, 'documents', params.folder, includeArchived],
-    queryFn: () => {
+    queryFn: async () => {
       const search = new URLSearchParams({
         folder: params.folder,
         include_archived: String(includeArchived),
       });
-      return apiFetch<DocumentsResponse>(`/cases/${caseId}/documents?${search.toString()}`);
+      // Giữ cả meta (allowed_folders, can_upload) — apiFetch chỉ trả data[] (docs/07 §3.8).
+      const res = await apiFetchList<DocumentItem>(`/cases/${caseId}/documents?${search.toString()}`);
+      return { data: res.data, meta: res.meta as unknown as DocumentsMeta };
     },
     enabled: Boolean(caseId && params.folder),
   });

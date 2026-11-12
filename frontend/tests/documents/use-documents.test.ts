@@ -61,7 +61,7 @@ describe('Hooks dữ liệu Tài liệu - use-documents.ts (brief mục 4 & 5, A
         },
       };
 
-      const apiSpy = vi.spyOn(apiClient, 'apiFetch').mockResolvedValue(mockResponse as any);
+      const apiSpy = vi.spyOn(apiClient, 'apiFetchList').mockResolvedValue(mockResponse as any);
 
       const { result } = renderHook(
         () =>
@@ -73,6 +73,8 @@ describe('Hooks dữ liệu Tài liệu - use-documents.ts (brief mục 4 & 5, A
       );
 
       await waitFor(() => expect(result.current.isSuccess).toBe(true));
+      expect(result.current.data?.meta.can_upload).toBe(true);
+      expect(result.current.data?.data).toHaveLength(1);
 
       expect(apiSpy).toHaveBeenCalledTimes(1);
       const calledUrl = apiSpy.mock.calls[0][0];
@@ -90,7 +92,7 @@ describe('Hooks dữ liệu Tài liệu - use-documents.ts (brief mục 4 & 5, A
         },
       };
 
-      const apiSpy = vi.spyOn(apiClient, 'apiFetch').mockResolvedValue(mockResponse as any);
+      const apiSpy = vi.spyOn(apiClient, 'apiFetchList').mockResolvedValue(mockResponse as any);
 
       const { result } = renderHook(
         () =>
