@@ -570,6 +570,16 @@ Tham số chung: `from`, `to` (ngày `YYYY-MM-DD`, bao gồm cả hai đầu, m�
 
 `meta.scope` trả `FIRM` | `DEPARTMENT` | `SELF` để giao diện hiện đúng nhãn phạm vi; `meta.departments` liệt kê các phòng người xem được lọc (rỗng nếu không lọc được).
 
+**Quy ước chi tiết (chốt khi làm TASK-038):**
+- Ngày tính theo giờ Việt Nam (`Asia/Ho_Chi_Minh`): một mốc thời gian thuộc kỳ khi ngày giờ VN của nó nằm trong `[from, to]`. Mặc định `from` = ngày đầu quý hiện tại, `to` = hôm nay (giờ VN). `from`/`to` sai định dạng `YYYY-MM-DD`, `department_id` không phải UUID, `group_by` ∉ {`month`, `quarter`}, `payout_status` ∉ {`ACCUMULATED`, `DISBURSED`} → `422 VALIDATION_ERROR`. Khoảng tối đa 366 ngày tính cả hai đầu.
+- Trưởng phòng = `MANAGER` không phải `is_executive`; phòng mình quản lý lấy từ bảng `department_leaders`. Quản lý chưa phụ trách phòng nào → `scope = DEPARTMENT`, `departments = []`, dữ liệu rỗng/bằng 0.
+- Luật sư: "vụ việc mình được phân công" = có dòng `case_assignments` với `unassigned_at IS NULL`.
+- Lọc theo phòng: doanh thu và vận hành lọc theo `cases.department_id`; hoa hồng lọc theo `users.department_id` của người nhận; chuyển đổi cơ hội lọc theo phòng của `opportunities.originator_id` (luật sư: cơ hội do chính mình mang về).
+- `meta.departments` (`[{id, name}]`, sắp theo `name`): Giám đốc và Kế toán = mọi phòng; Trưởng phòng = các phòng mình quản lý; Luật sư = `[]`. Đây là danh sách để chọn, không đổi khi đã lọc. `scope` = `DEPARTMENT` khi có `department_id` hoặc người xem là Trưởng phòng; `SELF` với Luật sư; còn lại `FIRM`. Kế toán và Giám đốc lọc `department_id` không tồn tại → `422 VALIDATION_ERROR`.
+- `by_period.period`: tháng `YYYY-MM`, quý `YYYY-Qn`. Tỷ lệ làm tròn `ROUND_HALF_UP` bằng `Decimal`. `by_department`/`by_matter_type`/`by_user` chỉ gồm nhóm có dữ liệu; hoà thì sắp theo tên (`by_matter_type` theo `code`). `user.department_name` = `null` nếu nhân sự không thuộc phòng nào; `by_role` luôn đủ 5 khoá.
+- Vận hành: `overdue_tasks` = task có `status <> 'COMPLETED'` và ngày VN của `due_at` < hôm nay; `due_date` = ngày VN của `due_at`; `days_overdue` = hôm nay − `due_date`; hoà thì theo `task_id`; `assignee` = `null` nếu chưa giao. `stage_durations`: stage có `completed_at` trong kỳ và có `started_at`, nhóm theo `name`, `avg_days` = trung bình `(completed_at − started_at)` tính bằng ngày, sắp theo `stage_name`. `opportunity_conversion`: cơ hội `created_at` trong kỳ; `won_count` = `stage = 'WON'`; `converted_count` = có `converted_case_id`.
+- Export: Excel ghi nhãn phạm vi theo phòng thực sự áp dụng (phòng đã lọc, hoặc các phòng Trưởng phòng quản lý). Audit `REPORT_EXPORTED`: `entity_name = 'reports'`, `entity_id = name`, `after_state = {name, from, to, department_id, scope}`. Bị từ chối hoặc tham số sai thì không ghi audit.
+
 #### `GET /api/v1/reports/revenue?from=&to=&department_id=&group_by=month|quarter`
 Doanh thu **thực thu** = tổng `misa_transactions.received_amount` có `confirmed_at` trong kỳ (không tính hợp đồng chưa thu).
 ```json

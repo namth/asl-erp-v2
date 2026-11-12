@@ -1,0 +1,5 @@
+e1930500bd3f8bddc742d542c7cf7626aa1d89d14961396c8f3f4c2299bc7123  handoff/tasks/TASK-038-bao-cao-be/verify.sh
+262342b698fdc6f0f5213ead17171763e962d68be8c37b2860cdfd58ae4693d8  backend/tests/test_reports_api.py
+441b4340dba6c47084cbfd2a5a7ed7c7972bbb612c87224d7256827a2d0942a2  backend/tests/test_report_export.py
+19db9d56c8b6042f62a70f89c884af4e6f5c46010e2349a5840bca1a7c520e89  backend/tests/test_no_test_hooks_in_app.py
+e1930500bd3f8bddc742d542c7cf7626aa1d89d14961396c8f3f4c2299bc7123  handoff/tasks/TASK-038-bao-cao-be/verify.sh
